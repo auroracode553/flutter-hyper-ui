@@ -57,3 +57,13 @@ npx vitepress dev .
 ```
 
 VitePress 默认 iframe 预览地址为 `http://localhost:4201`。如需调整，可在启动文档时设置 `VITE_PREVIEW_BASE`。
+
+## GitHub Pages
+
+推送 `main` 后，`.github/workflows/docs-pages.yml` 会读取 `ui/pubspec.yaml` 的版本号自动创建 `v版本号` 标签，并构建 `preview/` 与 `vitepress/` 后部署到 GitHub Pages。
+
+首次使用前，在 GitHub 仓库的 `Settings -> Pages` 中把 Source 设置为 `GitHub Actions`，并确认 `Settings -> Actions -> General -> Workflow permissions` 允许 workflow 写入内容，以便创建标签。
+
+## pub.dev 发布
+
+Flutter package 发布流程见 [docs/pubdev-release.md](docs/pubdev-release.md)。

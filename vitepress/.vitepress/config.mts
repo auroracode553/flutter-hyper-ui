@@ -1,8 +1,15 @@
 import { defineConfig } from 'vitepress';
 
+function withTrailingSlash(value: string) {
+  return value.endsWith('/') ? value : `${value}/`;
+}
+
+const siteBase = withTrailingSlash(process.env.VITEPRESS_BASE || '/');
+
 export default defineConfig({
   title: 'Flutter Hyper UI',
   description: '简约 Flutter UI 组件库',
+  base: siteBase,
   cleanUrls: true,
   markdown: {
     lineNumbers: true,

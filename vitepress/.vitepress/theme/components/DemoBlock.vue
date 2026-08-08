@@ -16,7 +16,10 @@ const props = withDefaults(
 );
 
 const copied = ref(false);
-const previewBase = (import.meta.env.VITE_PREVIEW_BASE || 'http://localhost:4201').replace(/\/$/, '');
+const defaultPreviewBase = import.meta.env.DEV
+  ? 'http://localhost:4201'
+  : `${import.meta.env.BASE_URL}preview`;
+const previewBase = (import.meta.env.VITE_PREVIEW_BASE || defaultPreviewBase).replace(/\/$/, '');
 const iframeSrc = computed(() => {
   const component = encodeURIComponent(props.component);
   return `${previewBase}/?component=${component}&mode=docs`;

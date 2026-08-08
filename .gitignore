@@ -8,6 +8,7 @@ node_modules/
 dist/
 vitepress/.vitepress/cache/
 vitepress/.vitepress/dist/
+vitepress/public/preview/
 
 .DS_Store
 Thumbs.db
