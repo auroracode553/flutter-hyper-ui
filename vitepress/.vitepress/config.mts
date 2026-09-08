@@ -8,7 +8,7 @@ const siteBase = withTrailingSlash(process.env.VITEPRESS_BASE || '/');
 
 export default defineConfig({
   title: 'Flutter Hyper UI',
-  description: '简约 Flutter UI 组件库',
+  description: 'Hy 柔光玻璃 Flutter UI 组件库',
   base: siteBase,
   cleanUrls: true,
   markdown: {
@@ -33,6 +33,7 @@ export default defineConfig({
       {
         text: '组件',
         items: [
+          { text: '完整组件与交互', link: '/components/catalog' },
           { text: 'Button 按钮', link: '/components/button' },
           { text: 'Card 卡片', link: '/components/card' },
           { text: 'Input 输入', link: '/components/input' },

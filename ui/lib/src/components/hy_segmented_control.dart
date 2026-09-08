@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../theme/doc_ui_radii.dart';
-import '../theme/doc_ui_spacing.dart';
-import '../theme/doc_ui_theme_tokens.dart';
+import '../theme/hy_ui_radii.dart';
+import '../theme/hy_ui_spacing.dart';
+import '../theme/hy_ui_theme_tokens.dart';
 
-class DocSegmentOption<T> {
+class HySegmentOption<T> {
   final T value;
   final String label;
   final IconData? icon;
   final bool enabled;
 
-  const DocSegmentOption({
+  const HySegmentOption({
     required this.value,
     required this.label,
     this.icon,
@@ -18,13 +18,13 @@ class DocSegmentOption<T> {
   });
 }
 
-class DocSegmentedControl<T> extends StatelessWidget {
-  final List<DocSegmentOption<T>> options;
+class HySegmentedControl<T> extends StatelessWidget {
+  final List<HySegmentOption<T>> options;
   final T selectedValue;
   final ValueChanged<T> onChanged;
   final bool equalWidth;
 
-  const DocSegmentedControl({
+  const HySegmentedControl({
     super.key,
     required this.options,
     required this.selectedValue,
@@ -34,9 +34,9 @@ class DocSegmentedControl<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
     final children = options.map((option) {
-      final item = _DocSegmentItem<T>(
+      final item = _HySegmentItem<T>(
         option: option,
         selected: option.value == selectedValue,
         onSelected: onChanged,
@@ -49,7 +49,7 @@ class DocSegmentedControl<T> extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: tokens.muted,
-        borderRadius: BorderRadius.circular(DocUiRadii.sm),
+        borderRadius: BorderRadius.circular(HyUiRadii.sm),
       ),
       child: Row(
         mainAxisSize: equalWidth ? MainAxisSize.max : MainAxisSize.min,
@@ -59,13 +59,13 @@ class DocSegmentedControl<T> extends StatelessWidget {
   }
 }
 
-class _DocSegmentItem<T> extends StatelessWidget {
-  final DocSegmentOption<T> option;
+class _HySegmentItem<T> extends StatelessWidget {
+  final HySegmentOption<T> option;
   final bool selected;
   final ValueChanged<T> onSelected;
   final bool constrainLabel;
 
-  const _DocSegmentItem({
+  const _HySegmentItem({
     required this.option,
     required this.selected,
     required this.onSelected,
@@ -74,7 +74,7 @@ class _DocSegmentItem<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
     final foreground = selected
         ? tokens.primaryForeground
         : option.enabled
@@ -84,13 +84,13 @@ class _DocSegmentItem<T> extends StatelessWidget {
 
     return Material(
       color: background,
-      borderRadius: BorderRadius.circular(DocUiRadii.sm),
+      borderRadius: BorderRadius.circular(HyUiRadii.sm),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: option.enabled ? () => onSelected(option.value) : null,
         child: Container(
           height: 34,
-          padding: const EdgeInsets.symmetric(horizontal: DocUiSpacing.sm),
+          padding: const EdgeInsets.symmetric(horizontal: HyUiSpacing.sm),
           alignment: Alignment.center,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -98,7 +98,7 @@ class _DocSegmentItem<T> extends StatelessWidget {
             children: [
               if (option.icon != null) ...[
                 Icon(option.icon, size: 16, color: foreground),
-                const SizedBox(width: DocUiSpacing.xs),
+                const SizedBox(width: HyUiSpacing.xs),
               ],
               if (constrainLabel)
                 Flexible(child: _buildLabel(foreground))

@@ -7,6 +7,8 @@ import 'examples/feedback_example.dart';
 import 'examples/inputs_example.dart';
 import 'examples/navigation_example.dart';
 import 'examples/overview_example.dart';
+import 'examples/complete_examples.dart';
+import 'examples/interactive_examples.dart';
 
 typedef PreviewBuilder = Widget Function(BuildContext context);
 
@@ -28,10 +30,16 @@ class PreviewCatalog {
   const PreviewCatalog._();
 
   static final List<PreviewItem> items = [
+    PreviewItem(id: 'atoms', title: '基础原子', description: '文字、图标、图片、头像与角标。', builder: (_) => const AtomsExample()),
+    PreviewItem(id: 'layout', title: '布局容器', description: '玻璃卡片、网格、流式布局与骨架。', builder: (_) => const LayoutExample()),
+    PreviewItem(id: 'forms', title: '完整表单', description: '输入、选择、评分、日期与上传。', builder: (_) => const FormsExample()),
+    PreviewItem(id: 'overlays', title: '反馈弹层', description: '轻提示、弹窗、菜单与加载。', builder: (_) => const OverlayExample()),
+    PreviewItem(id: 'full-navigation', title: '导航与列表', description: '悬浮导航、页面联动、刷新分页与吸顶。', builder: (_) => const FullNavigationExample()),
+    PreviewItem(id: 'business', title: '业务组件', description: '设置菜单、搜索、倒计时与时间轴。', builder: (_) => const BusinessExample()),
     PreviewItem(
       id: 'overview',
       title: '组件概览',
-      description: 'Doc UI 的基础控件组合。',
+      description: 'Hy UI 的基础控件组合。',
       builder: (_) => const OverviewExample(),
     ),
     PreviewItem(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'doc_ui_radii.dart';
-import 'doc_ui_spacing.dart';
-import 'doc_ui_theme_tokens.dart';
+import 'hy_ui_radii.dart';
+import 'hy_ui_spacing.dart';
+import 'hy_ui_theme_tokens.dart';
 
-class DocUiTheme {
-  const DocUiTheme._();
+class HyUiTheme {
+  const HyUiTheme._();
 
   static ThemeData light({
     Color? primary,
@@ -13,7 +13,7 @@ class DocUiTheme {
   }) {
     return _buildTheme(
       brightness: Brightness.light,
-      tokens: DocUiThemeTokens.light(primary: primary),
+      tokens: HyUiThemeTokens.light(primary: primary),
       fontFamily: fontFamily,
     );
   }
@@ -24,14 +24,14 @@ class DocUiTheme {
   }) {
     return _buildTheme(
       brightness: Brightness.dark,
-      tokens: DocUiThemeTokens.dark(primary: primary),
+      tokens: HyUiThemeTokens.dark(primary: primary),
       fontFamily: fontFamily,
     );
   }
 
   static ThemeData _buildTheme({
     required Brightness brightness,
-    required DocUiThemeTokens tokens,
+    required HyUiThemeTokens tokens,
     String? fontFamily,
   }) {
     final colorScheme = ColorScheme.fromSeed(
@@ -57,6 +57,19 @@ class DocUiTheme {
       fontFamily: fontFamily,
       scaffoldBackgroundColor: tokens.background,
       extensions: <ThemeExtension<dynamic>>[tokens],
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: tokens.card,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(HyUiRadii.lg)),
+      ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: tokens.card,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(HyUiRadii.lg)),
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: tokens.card,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(HyUiRadii.md)),
+      ),
+      listTileTheme: const ListTileThemeData(minVerticalPadding: 12),
       appBarTheme: AppBarTheme(
         backgroundColor: tokens.background,
         foregroundColor: tokens.foreground,
@@ -69,7 +82,7 @@ class DocUiTheme {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(DocUiRadii.md),
+          borderRadius: BorderRadius.circular(HyUiRadii.md),
           side: BorderSide(color: tokens.border),
         ),
       ),
@@ -82,24 +95,24 @@ class DocUiTheme {
         filled: true,
         fillColor: tokens.muted,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(DocUiRadii.sm),
+          borderRadius: BorderRadius.circular(HyUiRadii.sm),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(DocUiRadii.sm),
+          borderRadius: BorderRadius.circular(HyUiRadii.sm),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(DocUiRadii.sm),
+          borderRadius: BorderRadius.circular(HyUiRadii.sm),
           borderSide: BorderSide(color: tokens.primary),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(DocUiRadii.sm),
+          borderRadius: BorderRadius.circular(HyUiRadii.sm),
           borderSide: BorderSide(color: tokens.error),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: DocUiSpacing.sm,
-          vertical: DocUiSpacing.sm,
+          horizontal: HyUiSpacing.sm,
+          vertical: HyUiSpacing.sm,
         ),
         hintStyle: TextStyle(
           color: tokens.mutedForeground,
@@ -114,7 +127,7 @@ class DocUiTheme {
           fontSize: 14,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(DocUiRadii.sm),
+          borderRadius: BorderRadius.circular(HyUiRadii.sm),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(

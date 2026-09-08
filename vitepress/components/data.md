@@ -17,7 +17,7 @@ import { dataExample } from '../.vitepress/theme/examples';
 
 | 组件 | 说明 |
 | --- | --- |
-| `DocBadge` | 小型语义徽标 |
-| `DocTag` | 可选中标签 |
-| `DocListTile` | 可点击列表项 |
-| `DocProgressBar` | 线性进度条 |
+| `HyBadge` | 小型语义徽标 |
+| `HyTag` | 可选中标签 |
+| `HyListTile` | 可点击列表项 |
+| `HyProgressBar` | 线性进度条 |

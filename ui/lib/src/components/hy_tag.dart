@@ -1,46 +1,48 @@
 import 'package:flutter/material.dart';
 
-import '../theme/doc_ui_radii.dart';
-import '../theme/doc_ui_spacing.dart';
-import '../theme/doc_ui_theme_tokens.dart';
-import 'doc_tone.dart';
+import '../theme/hy_ui_radii.dart';
+import '../theme/hy_ui_spacing.dart';
+import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_tone.dart';
 
-class DocTag extends StatelessWidget {
+class HyTag extends StatelessWidget {
   final String label;
-  final DocUiTone tone;
+  final HyUiTone tone;
   final IconData? icon;
   final bool selected;
   final VoidCallback? onTap;
+  final VoidCallback? onClose;
 
-  const DocTag({
+  const HyTag({
     super.key,
     required this.label,
-    this.tone = DocUiTone.neutral,
+    this.tone = HyUiTone.neutral,
     this.icon,
     this.selected = false,
     this.onTap,
+    this.onClose,
   });
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
     final toneColor = tone.color(tokens);
     final background = selected ? toneColor : tokens.card;
-    final foreground = selected ? tokens.primaryForeground : tokens.foreground;
+    final foreground = selected ? tokens.primaryForeground : toneColor;
     final iconColor = selected ? tokens.primaryForeground : toneColor;
     final borderColor = selected ? toneColor : tokens.border;
 
     return Material(
       color: background,
-      borderRadius: BorderRadius.circular(DocUiRadii.sm),
+      borderRadius: BorderRadius.circular(HyUiRadii.sm),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Container(
           height: 36,
-          padding: const EdgeInsets.symmetric(horizontal: DocUiSpacing.sm),
+          padding: const EdgeInsets.symmetric(horizontal: HyUiSpacing.sm),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(DocUiRadii.sm),
+            borderRadius: BorderRadius.circular(HyUiRadii.sm),
             border: Border.all(color: borderColor),
           ),
           child: Row(
@@ -48,7 +50,7 @@ class DocTag extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 Icon(icon, size: 16, color: iconColor),
-                const SizedBox(width: DocUiSpacing.xs),
+                const SizedBox(width: HyUiSpacing.xs),
               ],
               Text(
                 label,
@@ -60,6 +62,9 @@ class DocTag extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
+              if (onClose != null) SizedBox(width: 28, child: IconButton(
+                padding: EdgeInsets.zero, tooltip: '移除 $label', onPressed: onClose,
+                icon: Icon(Icons.close, size: 14, color: foreground))),
             ],
           ),
         ),

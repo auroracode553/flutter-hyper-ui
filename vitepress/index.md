@@ -4,7 +4,7 @@ import { overviewExample } from './.vitepress/theme/examples';
 
 # Flutter Hyper UI
 
-Flutter Hyper UI 是一个简约风格的 Flutter UI 组件库，样式参考当前 `doc-viewer`：浅灰背景、白色卡片、细边框、蓝色主色与紧凑排版。
+Flutter Hyper UI 是面向移动端的 Hy 柔光玻璃组件库：悬浮胶囊导航、半透明高光材质、柔和阴影与分组设置菜单。完整覆盖基础、布局、表单、反馈、导航、列表、业务组件和工具。
 
 <DemoBlock
   title="组件概览"
@@ -36,8 +36,11 @@ dependencies:
 
 ```dart
 MaterialApp(
-  theme: DocUiTheme.light(),
-  darkTheme: DocUiTheme.dark(),
+  theme: HyUiTheme.light(),
+  darkTheme: HyUiTheme.dark(),
   home: const App(),
 )
 ```
+
+
+[查看完整组件与交互示例](./components/catalog.md)

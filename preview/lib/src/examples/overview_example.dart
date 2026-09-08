@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/doc_ui.dart';
+import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'package:flutter/material.dart';
 
 class OverviewExample extends StatelessWidget {
@@ -6,18 +6,18 @@ class OverviewExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
 
     return Wrap(
-      spacing: DocUiSpacing.sm,
-      runSpacing: DocUiSpacing.sm,
+      spacing: HyUiSpacing.sm,
+      runSpacing: HyUiSpacing.sm,
       children: [
         _OverviewTile(
           title: 'Button',
           subtitle: '动作按钮',
           icon: Icons.touch_app_outlined,
           color: tokens.primary,
-          child: DocButton.filled(
+          child: HyButton.filled(
             label: '打开',
             onPressed: _noop,
           ),
@@ -27,23 +27,23 @@ class OverviewExample extends StatelessWidget {
           subtitle: '输入控件',
           icon: Icons.edit_note_outlined,
           color: tokens.warning,
-          child: const DocTextField(hintText: '搜索文件'),
+          child: const HyTextField(hintText: '搜索文件'),
         ),
         _OverviewTile(
           title: 'Data',
           subtitle: '数据展示',
           icon: Icons.view_list_outlined,
           color: tokens.success,
-          child: const DocProgressBar(value: 0.72),
+          child: const HyProgressBar(value: 0.72),
         ),
         _OverviewTile(
           title: 'Feedback',
           subtitle: '状态反馈',
           icon: Icons.tips_and_updates_outlined,
           color: tokens.info,
-          child: const DocBadge(
+          child: const HyBadge(
             label: '已同步',
-            tone: DocUiTone.success,
+            tone: HyUiTone.success,
           ),
         ),
       ],
@@ -68,11 +68,11 @@ class _OverviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
 
     return SizedBox(
       width: 220,
-      child: DocCard(
+      child: HyCard(
         title: title,
         subtitle: subtitle,
         leading: Container(
@@ -80,7 +80,7 @@ class _OverviewTile extends StatelessWidget {
           height: 40,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(DocUiRadii.sm),
+            borderRadius: BorderRadius.circular(HyUiRadii.sm),
           ),
           child: Icon(
             icon,

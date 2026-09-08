@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'doc_ui_colors.dart';
+import 'hy_ui_colors.dart';
 
 @immutable
-class DocUiThemeTokens extends ThemeExtension<DocUiThemeTokens> {
+class HyUiThemeTokens extends ThemeExtension<HyUiThemeTokens> {
   final Color background;
   final Color foreground;
   final Color card;
@@ -20,7 +20,7 @@ class DocUiThemeTokens extends ThemeExtension<DocUiThemeTokens> {
   final Color error;
   final Color info;
 
-  const DocUiThemeTokens({
+  const HyUiThemeTokens({
     required this.background,
     required this.foreground,
     required this.card,
@@ -38,55 +38,55 @@ class DocUiThemeTokens extends ThemeExtension<DocUiThemeTokens> {
     required this.info,
   });
 
-  factory DocUiThemeTokens.light({Color? primary}) {
-    final effectivePrimary = primary ?? DocUiColors.primary;
-    return DocUiThemeTokens(
-      background: DocUiColors.background,
-      foreground: DocUiColors.foreground,
-      card: DocUiColors.card,
-      cardForeground: DocUiColors.cardForeground,
+  factory HyUiThemeTokens.light({Color? primary}) {
+    final effectivePrimary = primary ?? HyUiColors.primary;
+    return HyUiThemeTokens(
+      background: HyUiColors.background,
+      foreground: HyUiColors.foreground,
+      card: HyUiColors.card,
+      cardForeground: HyUiColors.cardForeground,
       primary: effectivePrimary,
-      primaryForeground: DocUiColors.primaryForeground,
-      muted: DocUiColors.muted,
-      mutedForeground: DocUiColors.mutedForeground,
-      border: DocUiColors.border,
-      input: DocUiColors.input,
-      selectionBackground: DocUiColors.selectionBackground,
-      success: DocUiColors.success,
-      warning: DocUiColors.warning,
-      error: DocUiColors.error,
-      info: DocUiColors.info,
+      primaryForeground: HyUiColors.primaryForeground,
+      muted: HyUiColors.muted,
+      mutedForeground: HyUiColors.mutedForeground,
+      border: HyUiColors.border,
+      input: HyUiColors.input,
+      selectionBackground: HyUiColors.selectionBackground,
+      success: HyUiColors.success,
+      warning: HyUiColors.warning,
+      error: HyUiColors.error,
+      info: HyUiColors.info,
     );
   }
 
-  factory DocUiThemeTokens.dark({Color? primary}) {
-    final effectivePrimary = primary ?? DocUiColors.primary;
-    return DocUiThemeTokens(
-      background: DocUiColors.darkBackground,
-      foreground: DocUiColors.darkForeground,
-      card: DocUiColors.darkCard,
-      cardForeground: DocUiColors.darkForeground,
+  factory HyUiThemeTokens.dark({Color? primary}) {
+    final effectivePrimary = primary ?? HyUiColors.primary;
+    return HyUiThemeTokens(
+      background: HyUiColors.darkBackground,
+      foreground: HyUiColors.darkForeground,
+      card: HyUiColors.darkCard,
+      cardForeground: HyUiColors.darkForeground,
       primary: effectivePrimary,
-      primaryForeground: DocUiColors.primaryForeground,
-      muted: DocUiColors.darkMuted,
-      mutedForeground: DocUiColors.darkMutedForeground,
-      border: DocUiColors.darkBorder,
-      input: DocUiColors.darkBorder,
+      primaryForeground: HyUiColors.primaryForeground,
+      muted: HyUiColors.darkMuted,
+      mutedForeground: HyUiColors.darkMutedForeground,
+      border: HyUiColors.darkBorder,
+      input: HyUiColors.darkBorder,
       selectionBackground: const Color(0xFF142544),
-      success: DocUiColors.success,
-      warning: DocUiColors.warning,
-      error: DocUiColors.error,
-      info: DocUiColors.info,
+      success: HyUiColors.success,
+      warning: HyUiColors.warning,
+      error: HyUiColors.error,
+      info: HyUiColors.info,
     );
   }
 
-  static DocUiThemeTokens of(BuildContext context) {
-    return Theme.of(context).extension<DocUiThemeTokens>() ??
-        DocUiThemeTokens.light();
+  static HyUiThemeTokens of(BuildContext context) {
+    return Theme.of(context).extension<HyUiThemeTokens>() ??
+        HyUiThemeTokens.light();
   }
 
   @override
-  DocUiThemeTokens copyWith({
+  HyUiThemeTokens copyWith({
     Color? background,
     Color? foreground,
     Color? card,
@@ -103,7 +103,7 @@ class DocUiThemeTokens extends ThemeExtension<DocUiThemeTokens> {
     Color? error,
     Color? info,
   }) {
-    return DocUiThemeTokens(
+    return HyUiThemeTokens(
       background: background ?? this.background,
       foreground: foreground ?? this.foreground,
       card: card ?? this.card,
@@ -123,12 +123,12 @@ class DocUiThemeTokens extends ThemeExtension<DocUiThemeTokens> {
   }
 
   @override
-  DocUiThemeTokens lerp(ThemeExtension<DocUiThemeTokens>? other, double t) {
-    if (other is! DocUiThemeTokens) {
+  HyUiThemeTokens lerp(ThemeExtension<HyUiThemeTokens>? other, double t) {
+    if (other is! HyUiThemeTokens) {
       return this;
     }
 
-    return DocUiThemeTokens(
+    return HyUiThemeTokens(
       background: Color.lerp(background, other.background, t)!,
       foreground: Color.lerp(foreground, other.foreground, t)!,
       card: Color.lerp(card, other.card, t)!,

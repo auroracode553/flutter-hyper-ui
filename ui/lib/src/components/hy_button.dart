@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../theme/doc_ui_radii.dart';
-import '../theme/doc_ui_spacing.dart';
-import '../theme/doc_ui_theme_tokens.dart';
 
-enum DocButtonVariant {
+import '../theme/hy_ui_spacing.dart';
+import '../theme/hy_ui_theme_tokens.dart';
+
+enum HyButtonVariant {
   filled,
   tonal,
   outline,
@@ -12,100 +12,107 @@ enum DocButtonVariant {
   danger,
 }
 
-enum DocButtonSize {
+enum HyButtonSize {
   sm,
   md,
   lg,
 }
 
-class DocButton extends StatelessWidget {
+class HyButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
-  final DocButtonVariant variant;
-  final DocButtonSize size;
+  final HyButtonVariant variant;
+  final HyButtonSize size;
   final IconData? icon;
   final IconData? trailingIcon;
   final bool loading;
   final bool expanded;
+  final double radius;
 
-  const DocButton({
+  const HyButton({
     super.key,
     required this.label,
     this.onPressed,
-    this.variant = DocButtonVariant.filled,
-    this.size = DocButtonSize.md,
+    this.variant = HyButtonVariant.filled,
+    this.size = HyButtonSize.md,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
+    this.radius = 16,
   });
 
-  const DocButton.filled({
+  const HyButton.filled({
     super.key,
     required this.label,
     this.onPressed,
-    this.size = DocButtonSize.md,
+    this.size = HyButtonSize.md,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-  }) : variant = DocButtonVariant.filled;
+    this.radius = 16,
+  }) : variant = HyButtonVariant.filled;
 
-  const DocButton.tonal({
+  const HyButton.tonal({
     super.key,
     required this.label,
     this.onPressed,
-    this.size = DocButtonSize.md,
+    this.size = HyButtonSize.md,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-  }) : variant = DocButtonVariant.tonal;
+    this.radius = 16,
+  }) : variant = HyButtonVariant.tonal;
 
-  const DocButton.outline({
+  const HyButton.outline({
     super.key,
     required this.label,
     this.onPressed,
-    this.size = DocButtonSize.md,
+    this.size = HyButtonSize.md,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-  }) : variant = DocButtonVariant.outline;
+    this.radius = 16,
+  }) : variant = HyButtonVariant.outline;
 
-  const DocButton.ghost({
+  const HyButton.ghost({
     super.key,
     required this.label,
     this.onPressed,
-    this.size = DocButtonSize.md,
+    this.size = HyButtonSize.md,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-  }) : variant = DocButtonVariant.ghost;
+    this.radius = 16,
+  }) : variant = HyButtonVariant.ghost;
 
-  const DocButton.danger({
+  const HyButton.danger({
     super.key,
     required this.label,
     this.onPressed,
-    this.size = DocButtonSize.md,
+    this.size = HyButtonSize.md,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-  }) : variant = DocButtonVariant.danger;
+    this.radius = 16,
+  }) : variant = HyButtonVariant.danger;
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
     final disabled = onPressed == null;
     final blocked = disabled || loading;
-    final visual = _DocButtonVisual.resolve(
+    final visual = _HyButtonVisual.resolve(
       tokens: tokens,
       variant: variant,
       disabled: disabled,
     );
-    final metrics = _DocButtonMetrics.resolve(size);
+    final metrics = _HyButtonMetrics.resolve(size);
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -117,16 +124,16 @@ class DocButton extends StatelessWidget {
         height: metrics.height,
         child: Material(
           color: visual.background,
-          borderRadius: BorderRadius.circular(DocUiRadii.sm),
+          borderRadius: BorderRadius.circular(radius),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: blocked ? null : onPressed,
-            borderRadius: BorderRadius.circular(DocUiRadii.sm),
+            borderRadius: BorderRadius.circular(radius),
             child: Container(
               alignment: Alignment.center,
               padding: EdgeInsets.symmetric(horizontal: metrics.horizontal),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(DocUiRadii.sm),
+                borderRadius: BorderRadius.circular(radius),
                 border: Border.all(
                   color: visual.border,
                   width: visual.borderWidth,
@@ -168,14 +175,14 @@ class DocButton extends StatelessWidget {
             valueColor: AlwaysStoppedAnimation<Color>(foreground),
           ),
         ),
-        const SizedBox(width: DocUiSpacing.xs),
+        const SizedBox(width: HyUiSpacing.xs),
       ] else if (icon != null) ...[
         Icon(icon),
-        const SizedBox(width: DocUiSpacing.xs),
+        const SizedBox(width: HyUiSpacing.xs),
       ],
       if (expanded) Flexible(child: text) else text,
       if (trailingIcon != null) ...[
-        const SizedBox(width: DocUiSpacing.xs),
+        const SizedBox(width: HyUiSpacing.xs),
         Icon(trailingIcon),
       ],
     ];
@@ -188,34 +195,34 @@ class DocButton extends StatelessWidget {
   }
 }
 
-class _DocButtonMetrics {
+class _HyButtonMetrics {
   final double height;
   final double minWidth;
   final double horizontal;
   final double fontSize;
 
-  const _DocButtonMetrics({
+  const _HyButtonMetrics({
     required this.height,
     required this.minWidth,
     required this.horizontal,
     required this.fontSize,
   });
 
-  static _DocButtonMetrics resolve(DocButtonSize size) {
+  static _HyButtonMetrics resolve(HyButtonSize size) {
     return switch (size) {
-      DocButtonSize.sm => const _DocButtonMetrics(
+      HyButtonSize.sm => const _HyButtonMetrics(
           height: 32,
           minWidth: 56,
           horizontal: 10,
           fontSize: 13,
         ),
-      DocButtonSize.md => const _DocButtonMetrics(
+      HyButtonSize.md => const _HyButtonMetrics(
           height: 40,
           minWidth: 72,
           horizontal: 14,
           fontSize: 14,
         ),
-      DocButtonSize.lg => const _DocButtonMetrics(
+      HyButtonSize.lg => const _HyButtonMetrics(
           height: 48,
           minWidth: 88,
           horizontal: 18,
@@ -225,27 +232,27 @@ class _DocButtonMetrics {
   }
 }
 
-class _DocButtonVisual {
+class _HyButtonVisual {
   final Color background;
   final Color foreground;
   final Color border;
   final double borderWidth;
 
-  const _DocButtonVisual({
+  const _HyButtonVisual({
     required this.background,
     required this.foreground,
     required this.border,
     required this.borderWidth,
   });
 
-  static _DocButtonVisual resolve({
-    required DocUiThemeTokens tokens,
-    required DocButtonVariant variant,
+  static _HyButtonVisual resolve({
+    required HyUiThemeTokens tokens,
+    required HyButtonVariant variant,
     required bool disabled,
   }) {
     if (disabled) {
-      final isGhost = variant == DocButtonVariant.ghost;
-      return _DocButtonVisual(
+      final isGhost = variant == HyButtonVariant.ghost;
+      return _HyButtonVisual(
         background: isGhost ? Colors.transparent : tokens.muted,
         foreground: tokens.mutedForeground,
         border: isGhost ? Colors.transparent : tokens.border,
@@ -254,31 +261,31 @@ class _DocButtonVisual {
     }
 
     return switch (variant) {
-      DocButtonVariant.filled => _DocButtonVisual(
+      HyButtonVariant.filled => _HyButtonVisual(
           background: tokens.primary,
           foreground: tokens.primaryForeground,
           border: tokens.primary,
           borderWidth: 1,
         ),
-      DocButtonVariant.tonal => _DocButtonVisual(
+      HyButtonVariant.tonal => _HyButtonVisual(
           background: tokens.selectionBackground,
           foreground: tokens.primary,
           border: tokens.selectionBackground,
           borderWidth: 1,
         ),
-      DocButtonVariant.outline => _DocButtonVisual(
+      HyButtonVariant.outline => _HyButtonVisual(
           background: tokens.card,
           foreground: tokens.foreground,
           border: tokens.border,
           borderWidth: 1,
         ),
-      DocButtonVariant.ghost => _DocButtonVisual(
+      HyButtonVariant.ghost => _HyButtonVisual(
           background: Colors.transparent,
           foreground: tokens.foreground,
           border: Colors.transparent,
           borderWidth: 0,
         ),
-      DocButtonVariant.danger => _DocButtonVisual(
+      HyButtonVariant.danger => _HyButtonVisual(
           background: tokens.error,
           foreground: tokens.primaryForeground,
           border: tokens.error,

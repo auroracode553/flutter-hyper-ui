@@ -13,7 +13,7 @@ import { navigationExample } from '../.vitepress/theme/examples';
   :height="360"
 />
 
-## DocTopBar API
+## HyTopBar API
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |

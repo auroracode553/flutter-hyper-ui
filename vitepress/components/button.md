@@ -19,8 +19,8 @@ import { buttonExample } from '../.vitepress/theme/examples';
 | --- | --- | --- | --- |
 | `label` | 按钮文字 | `String` | 必填 |
 | `onPressed` | 点击回调 | `VoidCallback?` | `null` |
-| `variant` | 视觉层级 | `DocButtonVariant` | `filled` |
-| `size` | 尺寸 | `DocButtonSize` | `md` |
+| `variant` | 视觉层级 | `HyButtonVariant` | `filled` |
+| `size` | 尺寸 | `HyButtonSize` | `md` |
 | `icon` | 左侧图标 | `IconData?` | `null` |
 | `trailingIcon` | 右侧图标 | `IconData?` | `null` |
 | `loading` | 加载态 | `bool` | `false` |

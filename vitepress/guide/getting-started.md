@@ -50,13 +50,13 @@ VITE_PREVIEW_BASE=http://localhost:4201 npx vitepress dev .
 ## 主题
 
 ```dart
-import 'package:flutter_hyper_ui/doc_ui.dart';
+import 'package:flutter_hyper_ui/hy_ui.dart';
 
 MaterialApp(
-  theme: DocUiTheme.light(),
-  darkTheme: DocUiTheme.dark(),
+  theme: HyUiTheme.light(),
+  darkTheme: HyUiTheme.dark(),
   home: const App(),
 );
 ```
 
-组件内部默认从 `ThemeData.extensions` 读取 `DocUiThemeTokens`，因此可以通过 `DocUiTheme.light(primary: yourColor)` 统一替换主色。
+组件内部默认从 `ThemeData.extensions` 读取 `HyUiThemeTokens`，因此可以通过 `HyUiTheme.light(primary: yourColor)` 统一替换主色。

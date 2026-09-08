@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../theme/doc_ui_spacing.dart';
-import '../theme/doc_ui_theme_tokens.dart';
+import '../theme/hy_ui_spacing.dart';
+import '../theme/hy_ui_theme_tokens.dart';
 
-class DocTopBar extends StatelessWidget implements PreferredSizeWidget {
+class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String? subtitle;
   final Widget? leading;
   final List<Widget> actions;
   final bool safeArea;
+  final bool automaticallyImplyLeading;
 
-  const DocTopBar({
+  const HyTopBar({
     super.key,
     required this.title,
     this.subtitle,
     this.leading,
     this.actions = const [],
     this.safeArea = true,
+    this.automaticallyImplyLeading = true,
   });
 
   @override
@@ -26,20 +28,22 @@ class DocTopBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final content = Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: DocUiSpacing.pagePadding,
-        vertical: DocUiSpacing.xs,
+        horizontal: HyUiSpacing.pagePadding,
+        vertical: HyUiSpacing.xs,
       ),
       child: Row(
         children: [
+          if (leading == null && automaticallyImplyLeading && Navigator.canPop(context))
+            BackButton(onPressed: () => Navigator.maybePop(context)),
           if (leading != null) ...[
             leading!,
-            const SizedBox(width: DocUiSpacing.sm),
+            const SizedBox(width: HyUiSpacing.sm),
           ],
           Expanded(child: _buildTitle(context)),
           if (actions.isNotEmpty) ...[
-            const SizedBox(width: DocUiSpacing.xs),
+            const SizedBox(width: HyUiSpacing.xs),
             Wrap(
-              spacing: DocUiSpacing.xs,
+              spacing: HyUiSpacing.xs,
               children: actions,
             ),
           ],
@@ -58,7 +62,7 @@ class DocTopBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildTitle(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

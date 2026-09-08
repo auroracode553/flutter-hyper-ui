@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../theme/doc_ui_radii.dart';
-import '../theme/doc_ui_spacing.dart';
-import '../theme/doc_ui_theme_tokens.dart';
+import '../theme/hy_ui_radii.dart';
+import '../theme/hy_ui_spacing.dart';
+import '../theme/hy_ui_theme_tokens.dart';
 
-class DocListTile extends StatelessWidget {
+class HyListTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final String? meta;
@@ -14,8 +14,9 @@ class DocListTile extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
   final bool selected;
+  final bool grouped;
 
-  const DocListTile({
+  const HyListTile({
     super.key,
     required this.title,
     this.subtitle,
@@ -26,32 +27,33 @@ class DocListTile extends StatelessWidget {
     this.trailing,
     this.onTap,
     this.selected = false,
+    this.grouped = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
-    final borderColor = selected ? tokens.primary : tokens.border;
+    final tokens = HyUiThemeTokens.of(context);
+    final borderColor = grouped ? Colors.transparent : selected ? tokens.primary : tokens.border;
     final backgroundColor =
-        selected ? tokens.selectionBackground : tokens.card;
+        selected ? tokens.selectionBackground : grouped ? Colors.transparent : tokens.card.withAlpha(190);
 
     return Material(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(DocUiRadii.md),
+      borderRadius: BorderRadius.circular(HyUiRadii.md),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(DocUiSpacing.cardPadding),
+          padding: const EdgeInsets.all(HyUiSpacing.cardPadding),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(DocUiRadii.md),
+            borderRadius: BorderRadius.circular(HyUiRadii.md),
             border: Border.all(color: borderColor),
           ),
           child: Row(
             children: [
               if (_hasLeading) ...[
                 _buildLeading(tokens),
-                const SizedBox(width: DocUiSpacing.sm),
+                const SizedBox(width: HyUiSpacing.sm),
               ],
               Expanded(
                 child: Column(
@@ -82,7 +84,7 @@ class DocListTile extends StatelessWidget {
                       ),
                     ],
                     if (meta != null) ...[
-                      const SizedBox(height: DocUiSpacing.xxs),
+                      const SizedBox(height: HyUiSpacing.xxs),
                       Text(
                         meta!,
                         style: TextStyle(
@@ -96,7 +98,7 @@ class DocListTile extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: DocUiSpacing.sm),
+              const SizedBox(width: HyUiSpacing.sm),
               trailing ??
                   Icon(
                     Icons.chevron_right,
@@ -112,7 +114,7 @@ class DocListTile extends StatelessWidget {
 
   bool get _hasLeading => leading != null || leadingIcon != null;
 
-  Widget _buildLeading(DocUiThemeTokens tokens) {
+  Widget _buildLeading(HyUiThemeTokens tokens) {
     final customLeading = leading;
     if (customLeading != null) {
       return customLeading;
@@ -129,7 +131,7 @@ class DocListTile extends StatelessWidget {
       height: 40,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(DocUiRadii.sm),
+        borderRadius: BorderRadius.circular(HyUiRadii.sm),
       ),
       child: Icon(
         icon,

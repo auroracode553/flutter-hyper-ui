@@ -13,7 +13,7 @@ import { feedbackExample } from '../.vitepress/theme/examples';
   :height="380"
 />
 
-## DocEmptyState API
+## HyEmptyState API
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |

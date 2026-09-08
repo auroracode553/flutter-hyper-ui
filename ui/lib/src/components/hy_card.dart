@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'hy_glass.dart';
 
-import '../theme/doc_ui_radii.dart';
-import '../theme/doc_ui_spacing.dart';
-import '../theme/doc_ui_theme_tokens.dart';
+import '../theme/hy_ui_radii.dart';
+import '../theme/hy_ui_spacing.dart';
+import '../theme/hy_ui_theme_tokens.dart';
 
-class DocCard extends StatelessWidget {
+class HyCard extends StatelessWidget {
   final Widget? child;
   final String? title;
   final String? subtitle;
@@ -14,8 +15,12 @@ class DocCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final VoidCallback? onTap;
   final bool selected;
+  final double radius;
+  final double blur;
+  final Color? borderColor;
+  final List<BoxShadow>? shadows;
 
-  const DocCard({
+  const HyCard({
     super.key,
     this.child,
     this.title,
@@ -23,9 +28,13 @@ class DocCard extends StatelessWidget {
     this.leading,
     this.actions = const [],
     this.footer,
-    this.padding = const EdgeInsets.all(DocUiSpacing.cardPadding),
+    this.padding = const EdgeInsets.all(HyUiSpacing.cardPadding),
     this.onTap,
     this.selected = false,
+    this.radius = HyUiRadii.md,
+    this.blur = 18,
+    this.borderColor,
+    this.shadows,
   });
 
   bool get _hasHeader {
@@ -37,10 +46,7 @@ class DocCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
-    final backgroundColor =
-        selected ? tokens.selectionBackground : tokens.card;
-    final borderColor = selected ? tokens.primary : tokens.border;
+    final tokens = HyUiThemeTokens.of(context);
     final content = Padding(
       padding: padding,
       child: Column(
@@ -48,44 +54,33 @@ class DocCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_hasHeader) _buildHeader(context),
-          if (_hasHeader && child != null) const SizedBox(height: DocUiSpacing.sm),
+          if (_hasHeader && child != null) const SizedBox(height: HyUiSpacing.sm),
           if (child != null) child!,
           if (footer != null) ...[
-            const SizedBox(height: DocUiSpacing.sm),
+            const SizedBox(height: HyUiSpacing.sm),
             Divider(color: tokens.border),
-            const SizedBox(height: DocUiSpacing.sm),
+            const SizedBox(height: HyUiSpacing.sm),
             footer!,
           ],
         ],
       ),
     );
 
-    return Material(
-      color: backgroundColor,
-      borderRadius: BorderRadius.circular(DocUiRadii.md),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(DocUiRadii.md),
-            border: Border.all(color: borderColor),
-          ),
-          child: content,
-        ),
-      ),
-    );
+    return HyGlass(radius: radius, blur: blur, onTap: onTap,
+      color: selected ? tokens.selectionBackground : null,
+      borderColor: borderColor ?? (selected ? tokens.primary : null),
+      shadows: shadows, child: content);
   }
 
   Widget _buildHeader(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (leading != null) ...[
           leading!,
-          const SizedBox(width: DocUiSpacing.sm),
+          const SizedBox(width: HyUiSpacing.sm),
         ],
         Expanded(
           child: Column(
@@ -121,9 +116,9 @@ class DocCard extends StatelessWidget {
           ),
         ),
         if (actions.isNotEmpty) ...[
-          const SizedBox(width: DocUiSpacing.xs),
+          const SizedBox(width: HyUiSpacing.xs),
           Wrap(
-            spacing: DocUiSpacing.xs,
+            spacing: HyUiSpacing.xs,
             children: actions,
           ),
         ],

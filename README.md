@@ -1,69 +1,36 @@
-# Flutter Hyper UI
+# Hy UI · Flutter Hyper UI
 
-一个简约风格的 Flutter UI 组件库项目，包含：
+面向移动端的柔光玻璃组件库。所有组件使用 `Hy` 前缀，文件使用 `hy_` 命名，入口为 `package:flutter_hyper_ui/hy_ui.dart`。
 
-- `ui/`：Flutter package，存放主题与 UI 组件源码。
-- `preview/`：Flutter Web 预览应用，按 `?component=` 渲染组件示例，供 iframe 引入。
-- `vitepress/`：VitePress 文档站，展示组件说明、使用代码与 iframe 预览。
+视觉参考 fast-buy-flutter 的悬浮 TabBar 和设置菜单：半透明材质、柔和高光、低饱和背景、16 / 24 / 28 dp 圆角与轻阴影。提供明暗主题、导航选中动效及减少动画适配。
 
-## 设计风格
+## 源码结构
 
-项目风格参考当前 `doc-viewer`：
+- `ui/lib/hy_ui.dart`：公共导出入口。
+- `ui/lib/src/theme/`：色彩、主题令牌、间距和圆角。
+- `ui/lib/src/components/`：基础、布局、表单、反馈、导航、列表与业务组件；按功能拆分文件。
+- `ui/lib/src/utils/`：屏幕适配、路由、键盘、安全区与主题控制器。
+- `preview/lib/src/examples/`：可交互示例，含模拟上传与分页失败重试。
+- `vitepress/components/catalog.md`：完整组件映射、使用约定、适配接口与手动验收说明。
 
-- 浅灰页面背景与白色卡片。
-- 细边框、低投影或无投影。
-- 蓝色主色，成功、警告、错误等语义色保持清晰。
-- 8 / 12 / 16 的圆角体系。
-- 紧凑、克制、偏工具型的排版与交互。
+依赖关系：应用 → 公共入口 → 组件 / 工具 → 主题。上传适配器通过构造参数注入，不包含业务 API 或全局状态。
 
-## 目录说明
+## 组件与示例
 
-```text
-flutter-hyper-ui/
-  ui/          Flutter UI 组件库源码
-  preview/     Flutter Web 组件预览应用
-  vitepress/   VitePress 文档站
-```
+覆盖基础原子、布局容器、表单、反馈、导航、列表、业务组件和工具八类需求。完整列表见 [组件文档](vitepress/components/catalog.md)。
+
+预览入口支持 `?component=atoms`、`layout`、`forms`、`overlays`、`full-navigation`、`business`，以及原有按钮、卡片等示例。独立预览右上角可切换明暗主题。
 
 ## 依赖清单
 
-Flutter 侧：
+核心库：Flutter >= 3.32、Dart >= 3.8；没有新增第三方运行时依赖。
 
-- Flutter SDK
-- Dart SDK
-- `flutter_lints`
-- `flutter_hyper_ui` 本地路径依赖，供 `preview` 使用
+现有开发依赖：flutter_test、flutter_lints。文档使用 Node.js、VitePress、Vue。
 
-文档侧：
+可选平台能力：由应用选择相册 / 摄像头 / 文件选择插件及 HTTP 客户端，通过 `HyFilePicker` 和 `HyFileUpload` 接入；本次没有安装依赖或修改系统权限配置。图片默认使用 Flutter 内存缓存，持久缓存可注入 ImageProvider。
 
-- Node.js
-- VitePress
-- Vue
+## 验证状态
 
-## 手动预览方式
+按项目约束仅编辑源码和文档，未运行、编译、打包、部署项目，未执行 Flutter 分析器或测试。已进行源码引用、命名、文件长度与分隔符静态检查。视觉与平台交互仍需使用者手动验证。
 
-以下仅作为手动执行参考：
-
-```bash
-cd D:/my_project/flutter_project/flutter-hyper-ui/preview
-flutter pub get
-flutter run -d chrome --web-port 4201
-```
-
-```bash
-cd D:/my_project/flutter_project/flutter-hyper-ui/vitepress
-npm install
-npx vitepress dev .
-```
-
-VitePress 默认 iframe 预览地址为 `http://localhost:4201`。如需调整，可在启动文档时设置 `VITE_PREVIEW_BASE`。
-
-## GitHub Pages
-
-推送 `main` 后，`.github/workflows/docs-pages.yml` 会读取 `ui/pubspec.yaml` 的版本号自动创建 `v版本号` 标签，并构建 `preview/` 与 `vitepress/` 后部署到 GitHub Pages。
-
-首次使用前，在 GitHub 仓库的 `Settings -> Pages` 中把 Source 设置为 `GitHub Actions`，并确认 `Settings -> Actions -> General -> Workflow permissions` 允许 workflow 写入内容，以便创建标签。
-
-## pub.dev 发布
-
-Flutter package 发布流程见 [docs/pubdev-release.md](docs/pubdev-release.md)。
+上传示例为显式标记的模拟适配器，核心库已实现选择入口、预览、删除、进度、重试和取消信号；实际相册权限、拍照与服务器上传由应用适配器实现。

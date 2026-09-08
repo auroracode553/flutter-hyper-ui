@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../theme/doc_ui_radii.dart';
-import '../theme/doc_ui_theme_tokens.dart';
+import '../theme/hy_ui_radii.dart';
+import '../theme/hy_ui_theme_tokens.dart';
 
-class DocProgressBar extends StatelessWidget {
+class HyProgressBar extends StatelessWidget {
   final double value;
   final double height;
   final Color? color;
   final Color? backgroundColor;
 
-  const DocProgressBar({
+  const HyProgressBar({
     super.key,
     required this.value,
     this.height = 8,
@@ -19,11 +19,11 @@ class DocProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
     final clampedValue = value.clamp(0, 1).toDouble();
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(DocUiRadii.full),
+      borderRadius: BorderRadius.circular(HyUiRadii.full),
       child: SizedBox(
         height: height,
         child: Stack(

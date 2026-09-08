@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/doc_ui.dart';
+import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'package:flutter/material.dart';
 
 class InputsExample extends StatefulWidget {
@@ -17,36 +17,36 @@ class _InputsExampleState extends State<InputsExample> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        DocSegmentedControl<String>(
+        HySegmentedControl<String>(
           selectedValue: _type,
           onChanged: (value) => setState(() => _type = value),
           options: const [
-            DocSegmentOption(
+            HySegmentOption(
               value: 'all',
               label: '全部',
               icon: Icons.all_inbox_outlined,
             ),
-            DocSegmentOption(
-              value: 'doc',
+            HySegmentOption(
+              value: 'note',
               label: '文档',
               icon: Icons.article_outlined,
             ),
-            DocSegmentOption(
+            HySegmentOption(
               value: 'sheet',
               label: '表格',
               icon: Icons.table_chart_outlined,
             ),
           ],
         ),
-        const SizedBox(height: DocUiSpacing.md),
-        const DocTextField(
+        const SizedBox(height: HyUiSpacing.md),
+        const HyTextField(
           label: '搜索',
           hintText: '输入文件名或关键词',
           prefixIcon: Icons.search,
           helperText: '可按标题、标签或正文片段搜索。',
         ),
-        const SizedBox(height: DocUiSpacing.md),
-        const DocTextField(
+        const SizedBox(height: HyUiSpacing.md),
+        const HyTextField(
           label: '备注',
           hintText: '补充说明',
           maxLines: 3,

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-/// Doc UI 默认色彩体系。
-class DocUiColors {
-  const DocUiColors._();
+/// Hy UI 默认色彩体系。
+class HyUiColors {
+  const HyUiColors._();
 
-  static const Color background = Color(0xFFF8F9FB);
+  static const Color background = Color(0xFFF1F3F7);
   static const Color foreground = Color(0xFF1A1D26);
   static const Color card = Color(0xFFFFFFFF);
   static const Color cardForeground = Color(0xFF1A1D26);
-  static const Color primary = Color(0xFF3B82F6);
+  static const Color primary = Color(0xFF476FE8);
   static const Color primaryForeground = Color(0xFFFFFFFF);
   static const Color muted = Color(0xFFF1F3F5);
   static const Color mutedForeground = Color(0xFF6B7280);
-  static const Color border = Color(0xFFE5E7EB);
+  static const Color border = Color(0x18111216);
   static const Color input = Color(0xFFE5E7EB);
   static const Color selectionBackground = Color(0xFFEFF6FF);
 

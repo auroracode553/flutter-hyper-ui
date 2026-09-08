@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../theme/doc_ui_radii.dart';
-import '../theme/doc_ui_spacing.dart';
-import '../theme/doc_ui_theme_tokens.dart';
+import '../theme/hy_ui_radii.dart';
+import '../theme/hy_ui_spacing.dart';
+import '../theme/hy_ui_theme_tokens.dart';
 
-class DocEmptyState extends StatelessWidget {
+class HyEmptyState extends StatelessWidget {
   final IconData icon;
   final String title;
   final String? message;
   final Widget? action;
 
-  const DocEmptyState({
+  const HyEmptyState({
     super.key,
     required this.icon,
     required this.title,
@@ -20,11 +20,11 @@ class DocEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = DocUiThemeTokens.of(context);
+    final tokens = HyUiThemeTokens.of(context);
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(DocUiSpacing.xxl),
+        padding: const EdgeInsets.all(HyUiSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -33,7 +33,7 @@ class DocEmptyState extends StatelessWidget {
               height: 72,
               decoration: BoxDecoration(
                 color: tokens.muted,
-                borderRadius: BorderRadius.circular(DocUiRadii.md),
+                borderRadius: BorderRadius.circular(HyUiRadii.md),
               ),
               child: Icon(
                 icon,
@@ -41,7 +41,7 @@ class DocEmptyState extends StatelessWidget {
                 color: tokens.mutedForeground,
               ),
             ),
-            const SizedBox(height: DocUiSpacing.lg),
+            const SizedBox(height: HyUiSpacing.lg),
             Text(
               title,
               style: TextStyle(
@@ -53,7 +53,7 @@ class DocEmptyState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             if (message != null) ...[
-              const SizedBox(height: DocUiSpacing.xs),
+              const SizedBox(height: HyUiSpacing.xs),
               Text(
                 message!,
                 style: TextStyle(
@@ -65,7 +65,7 @@ class DocEmptyState extends StatelessWidget {
               ),
             ],
             if (action != null) ...[
-              const SizedBox(height: DocUiSpacing.lg),
+              const SizedBox(height: HyUiSpacing.lg),
               action!,
             ],
           ],

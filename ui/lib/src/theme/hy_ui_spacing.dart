@@ -1,6 +1,6 @@
-/// Doc UI 间距体系。
-class DocUiSpacing {
-  const DocUiSpacing._();
+/// Hy UI 间距体系。
+class HyUiSpacing {
+  const HyUiSpacing._();
 
   static const double xxs = 4;
   static const double xs = 8;
