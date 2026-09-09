@@ -15,6 +15,84 @@
 
 依赖关系：应用 → 公共入口 → 组件 / 工具 → 主题。上传适配器通过构造参数注入，不包含业务 API 或全局状态。
 
+## 运行方式
+
+仓库分三部分：`ui/` 是组件库本身（作为依赖被引用，无需单独运行），`preview/` 是 Flutter Web 预览应用，`vitepress/` 是文档站。文档页通过 iframe 内嵌预览应用，因此本地开发需要**同时启动下面两个服务**。
+
+环境要求：Flutter >= 3.32（Dart >= 3.8）、Node.js >= 18（含 npm）。
+
+### 1. 启动 Flutter 预览应用
+
+```bash
+cd preview
+flutter pub get
+flutter run -d chrome --web-port 4201
+```
+
+启动后访问 http://localhost:4201 ，用 `?component=` 切换示例：
+
+- 综合示例：`atoms` 基础原子、`layout` 布局容器、`forms` 完整表单、`overlays` 反馈弹层、`full-navigation` 导航与列表、`business` 业务组件
+- 单项示例：`overview` 组件概览、`buttons`、`cards`、`inputs`、`data`、`feedback`、`navigation`
+
+例如 http://localhost:4201/?component=forms 。不带参数时默认 `atoms`；独立预览右上角可切换明暗主题。若未安装 Chrome，可改用 `flutter run -d web-server --web-port 4201` 后用浏览器打开。
+
+### 2. 启动 VitePress 文档站
+
+另开一个终端：
+
+```bash
+cd vitepress
+npm install
+npm run docs:dev
+```
+
+启动后打开终端输出的本地地址（VitePress 默认 http://localhost:5173）。文档中的 DemoBlock 在开发模式下默认内嵌 `http://localhost:4201`，请**先启动第 1 步的预览应用**，页面里的实时示例才能加载。
+
+如需替换预览地址，可用环境变量覆盖：
+
+```bash
+# Windows PowerShell
+$env:VITE_PREVIEW_BASE="http://localhost:4201"; npm run docs:dev
+# macOS / Linux
+VITE_PREVIEW_BASE=http://localhost:4201 npm run docs:dev
+```
+
+### 3. 生产构建（文档与预览一体）
+
+先把 Flutter Web 构建产物放进文档静态目录，再构建 VitePress：
+
+```bash
+cd preview
+flutter build web --release --base-href "/preview/"
+# 将 build/web 整体拷贝到 ../vitepress/public/preview（目录不存在则新建）
+
+cd ../vitepress
+npm run docs:build      # 产物在 .vitepress/dist
+npm run docs:preview    # 本地预览构建产物
+```
+
+> 拷贝目录：Windows 可用资源管理器把 `preview/build/web` 的内容复制到 `vitepress/public/preview/`；macOS / Linux 可用 `mkdir -p ../vitepress/public/preview && cp -R build/web/. ../vitepress/public/preview/`。
+
+推送到 `main` 分支后，GitHub Actions（[.github/workflows/docs-pages.yml](.github/workflows/docs-pages.yml)）会自动完成上述构建并部署到 GitHub Pages。
+
+### 在自己的应用中使用
+
+```yaml
+dependencies:
+  flutter_hyper_ui:
+    path: ../ui   # 指向本仓库的 ui/ 目录
+```
+
+```dart
+import 'package:flutter_hyper_ui/hy_ui.dart';
+
+MaterialApp(
+  theme: HyUiTheme.light(),
+  darkTheme: HyUiTheme.dark(),
+  home: const App(),
+);
+```
+
 ## 组件与示例
 
 覆盖基础原子、布局容器、表单、反馈、导航、列表、业务组件和工具八类需求。完整列表见 [组件文档](vitepress/components/catalog.md)。
