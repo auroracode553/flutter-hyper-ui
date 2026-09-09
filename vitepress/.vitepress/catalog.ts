@@ -171,6 +171,7 @@ final confirmed = await HyDialog.confirm(
       component('HyLoading', 'hy_feedback.dart', '局部加载状态与自动清理的全局任务遮罩。'),
       component('HyAlert', 'hy_feedback.dart', '可关闭的语义通知。'),
       component('HyBottomSheet', 'hy_bottom_sheet.dart', '适配安全区、键盘与最大高度的自定义底部弹层。'),
+      component('HyDrawer / HyDrawerPlacement', 'hy_drawer.dart', '支持双侧弹出、RTL、自定义宽度、固定底部操作区与泛型返回结果的柔光抽屉。'),
       component('HyActionSheet / HyAction', 'hy_bottom_sheet.dart', '支持危险项与禁用项的底部操作菜单。'),
       component('HyPopover', 'hy_popover.dart', '锚定子组件的补充说明气泡。'),
       component('HyPopupMenu', 'hy_popover.dart', '基于 HyAction 的泛型弹出菜单。'),

@@ -4,6 +4,7 @@ import 'examples/actions_example.dart';
 import 'examples/buttons_example.dart';
 import 'examples/cards_example.dart';
 import 'examples/data_example.dart';
+import 'examples/drawer_example.dart';
 import 'examples/feedback_example.dart';
 import 'examples/inputs_example.dart';
 import 'examples/navigation_example.dart';
@@ -33,6 +34,12 @@ class PreviewCatalog {
   static const defaultId = 'overview';
 
   static final List<PreviewItem> items = [
+    PreviewItem(
+      id: 'drawer',
+      title: 'Drawer 抽屉',
+      description: '侧边导航、筛选与返回结果。',
+      builder: (_) => const DrawerExample(),
+    ),
     PreviewItem(
       id: 'actions',
       title: '按钮与卡片',

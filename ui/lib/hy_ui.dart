@@ -9,6 +9,7 @@ export 'src/components/hy_select.dart';
 export 'src/components/hy_picker.dart';
 export 'src/components/hy_uploader.dart';
 export 'src/components/hy_bottom_sheet.dart';
+export 'src/components/hy_drawer.dart';
 export 'src/components/hy_feedback.dart';
 export 'src/components/hy_popover.dart';
 export 'src/components/hy_navigation.dart';
