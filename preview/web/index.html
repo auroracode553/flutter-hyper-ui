@@ -10,8 +10,40 @@
   <meta name="apple-mobile-web-app-title" content="Hy UI Preview">
   <link rel="manifest" href="manifest.json">
   <title>Hy UI Preview</title>
+  <style>
+    html, body, #flutter-preview-root { width: 100%; height: 100%; margin: 0; background: #f8f9fb; }
+    #flutter-preview-root { position: relative; overflow: hidden; }
+    .preview-loader { position: fixed; inset: 0; display: grid; place-content: center;
+      gap: 12px; color: #6b7280; font: 14px system-ui, sans-serif; text-align: center; }
+    .preview-loader::before { content: ''; width: 24px; height: 24px; margin: auto;
+      border: 2px solid #dbe3ef; border-top-color: #3b82f6; border-radius: 50%;
+      animation: preview-spin .8s linear infinite; }
+    @keyframes preview-spin { to { transform: rotate(360deg); } }
+    @media (prefers-color-scheme: dark) {
+      html, body { background: #111318; }
+      .preview-loader { color: #b8c0cc; }
+    }
+  </style>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+  <div id="flutter-preview-root">
+    <div class="preview-loader" role="status">正在启动 Flutter 实时预览…</div>
+  </div>
+  <script src="flutter_bootstrap.js"></script>
+  <script>
+    const root = document.getElementById('flutter-preview-root');
+    const query = new URLSearchParams(window.location.search);
+    window.loadHyUiPreview('./').then((app) => {
+      root.replaceChildren();
+      app.addView({
+        hostElement: root,
+        initialData: {
+          componentId: query.get('component') || 'overview',
+          embedded: query.get('mode') === 'docs',
+          theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+        },
+      });
+    });
+  </script>
 </body>
 </html>

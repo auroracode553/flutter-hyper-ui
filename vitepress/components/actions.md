@@ -1,0 +1,1 @@
+<ComponentReference group-id="actions" />

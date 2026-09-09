@@ -1,10 +1,15 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitepress';
+import { componentGroups } from './catalog';
+import { validateCatalog } from './catalog-validation';
 
 function withTrailingSlash(value: string) {
   return value.endsWith('/') ? value : `${value}/`;
 }
 
 const siteBase = withTrailingSlash(process.env.VITEPRESS_BASE || '/');
+const repositoryRoot = fileURLToPath(new URL('../..', import.meta.url));
+validateCatalog(repositoryRoot, componentGroups);
 
 export default defineConfig({
   title: 'Flutter Hyper UI',
@@ -14,6 +19,14 @@ export default defineConfig({
   markdown: {
     lineNumbers: true,
   },
+  vite: {
+    server: {
+      fs: {
+        // 分类页以只读方式导入相邻 ui 包源码，修改参数后由 Vite HMR 实时更新 API 签名。
+        allow: [repositoryRoot],
+      },
+    },
+  },
   themeConfig: {
     logo: undefined,
     search: {
@@ -21,25 +34,21 @@ export default defineConfig({
     },
     nav: [
       { text: '指南', link: '/guide/getting-started' },
-      { text: '组件', link: '/components/button' },
+      { text: '组件', link: '/components/catalog' },
     ],
     sidebar: [
       {
         text: '指南',
         items: [
           { text: '快速开始', link: '/guide/getting-started' },
+          { text: '文档与预览架构', link: '/guide/architecture' },
         ],
       },
       {
         text: '组件',
         items: [
-          { text: '完整组件与交互', link: '/components/catalog' },
-          { text: 'Button 按钮', link: '/components/button' },
-          { text: 'Card 卡片', link: '/components/card' },
-          { text: 'Input 输入', link: '/components/input' },
-          { text: 'Data 数据展示', link: '/components/data' },
-          { text: 'Feedback 反馈', link: '/components/feedback' },
-          { text: 'Navigation 导航', link: '/components/navigation' },
+          { text: '组件总览', link: '/components/catalog' },
+          ...componentGroups.map((group) => ({ text: group.navTitle, link: group.page })),
         ],
       },
     ],

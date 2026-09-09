@@ -20,7 +20,7 @@ class PreviewShell extends StatelessWidget {
     final item = PreviewCatalog.byId(componentId);
 
     if (embedded) {
-      return _EmbeddedPreview(item: item);
+      return _EmbeddedPreview(key: ValueKey(item.id), item: item);
     }
 
     return _StandalonePreview(initialSelected: item, onToggleTheme: onToggleTheme);
@@ -30,7 +30,7 @@ class PreviewShell extends StatelessWidget {
 class _EmbeddedPreview extends StatelessWidget {
   final PreviewItem item;
 
-  const _EmbeddedPreview({required this.item});
+  const _EmbeddedPreview({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

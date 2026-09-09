@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import 'examples/actions_example.dart';
 import 'examples/buttons_example.dart';
 import 'examples/cards_example.dart';
 import 'examples/data_example.dart';
@@ -29,13 +30,51 @@ class PreviewItem {
 class PreviewCatalog {
   const PreviewCatalog._();
 
+  static const defaultId = 'overview';
+
   static final List<PreviewItem> items = [
-    PreviewItem(id: 'atoms', title: '基础原子', description: '文字、图标、图片、头像与角标。', builder: (_) => const AtomsExample()),
-    PreviewItem(id: 'layout', title: '布局容器', description: '玻璃卡片、网格、流式布局与骨架。', builder: (_) => const LayoutExample()),
-    PreviewItem(id: 'forms', title: '完整表单', description: '输入、选择、评分、日期与上传。', builder: (_) => const FormsExample()),
-    PreviewItem(id: 'overlays', title: '反馈弹层', description: '轻提示、弹窗、菜单与加载。', builder: (_) => const OverlayExample()),
-    PreviewItem(id: 'full-navigation', title: '导航与列表', description: '悬浮导航、页面联动、刷新分页与吸顶。', builder: (_) => const FullNavigationExample()),
-    PreviewItem(id: 'business', title: '业务组件', description: '设置菜单、搜索、倒计时与时间轴。', builder: (_) => const BusinessExample()),
+    PreviewItem(
+      id: 'actions',
+      title: '按钮与卡片',
+      description: '动作层级、状态与内容容器。',
+      builder: (_) => const ActionsExample(),
+    ),
+    PreviewItem(
+      id: 'atoms',
+      title: '基础原子',
+      description: '文字、图标、图片、头像与角标。',
+      builder: (_) => const AtomsExample(),
+    ),
+    PreviewItem(
+      id: 'layout',
+      title: '布局容器',
+      description: '玻璃卡片、网格、流式布局与骨架。',
+      builder: (_) => const LayoutExample(),
+    ),
+    PreviewItem(
+      id: 'forms',
+      title: '完整表单',
+      description: '输入、选择、评分、日期与上传。',
+      builder: (_) => const FormsExample(),
+    ),
+    PreviewItem(
+      id: 'overlays',
+      title: '反馈弹层',
+      description: '轻提示、弹窗、菜单与加载。',
+      builder: (_) => const OverlayExample(),
+    ),
+    PreviewItem(
+      id: 'full-navigation',
+      title: '导航与列表',
+      description: '悬浮导航、页面联动、刷新分页与吸顶。',
+      builder: (_) => const FullNavigationExample(),
+    ),
+    PreviewItem(
+      id: 'business',
+      title: '业务组件',
+      description: '设置菜单、搜索、倒计时与时间轴。',
+      builder: (_) => const BusinessExample(),
+    ),
     PreviewItem(
       id: 'overview',
       title: '组件概览',
@@ -80,10 +119,12 @@ class PreviewCatalog {
     ),
   ];
 
+  static bool contains(String id) => items.any((item) => item.id == id);
+
   static PreviewItem byId(String id) {
     return items.firstWhere(
       (item) => item.id == id,
-      orElse: () => items.first,
+      orElse: () => items.firstWhere((item) => item.id == defaultId),
     );
   }
 }

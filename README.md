@@ -11,13 +11,16 @@
 - `ui/lib/src/components/`：基础、布局、表单、反馈、导航、列表与业务组件；按功能拆分文件。
 - `ui/lib/src/utils/`：屏幕适配、路由、键盘、安全区与主题控制器。
 - `preview/lib/src/examples/`：可交互示例，含模拟上传与分页失败重试。
-- `vitepress/components/catalog.md`：完整组件映射、使用约定、适配接口与手动验收说明。
+- `vitepress/.vitepress/catalog.ts`：文档分类、侧栏、示例和预览 ID 的单一目录配置。
+- `vitepress/.vitepress/theme/dart-api.ts`：只读提取 Dart 公开签名，避免手写 API 表漂移。
+- `vitepress/.vitepress/theme/preview-runtime.ts`：加载一个 Flutter 引擎，并把多视图挂载到各 Demo DOM 容器。
+- `vitepress/.vitepress/catalog-validation.ts`：文档启动时只读校验预览 ID、源码文件和公共导出契约。
 
 依赖关系：应用 → 公共入口 → 组件 / 工具 → 主题。上传适配器通过构造参数注入，不包含业务 API 或全局状态。
 
 ## 运行方式
 
-仓库分三部分：`ui/` 是组件库本身（作为依赖被引用，无需单独运行），`preview/` 是 Flutter Web 预览应用，`vitepress/` 是文档站。文档页通过 iframe 内嵌预览应用，因此本地开发需要**同时启动下面两个服务**。
+仓库分三部分：`ui/` 是组件库本身（作为依赖被引用，无需单独运行），`preview/` 是 Flutter Web 多视图预览应用，`vitepress/` 是文档站。文档通过 Flutter 官方 embedded multi-view API 将真实 Widget 直接渲染到 Demo 的 DOM 容器；全站共享一个引擎和内存堆，不使用 iframe。本地开发需要**同时启动下面两个服务**。
 
 环境要求：Flutter >= 3.32（Dart >= 3.8）、Node.js >= 18（含 npm）。
 
@@ -31,7 +34,7 @@ flutter run -d chrome --web-port 4201
 
 启动后访问 http://localhost:4201 ，用 `?component=` 切换示例：
 
-- 综合示例：`atoms` 基础原子、`layout` 布局容器、`forms` 完整表单、`overlays` 反馈弹层、`full-navigation` 导航与列表、`business` 业务组件
+- 综合示例：`atoms` 基础原子、`actions` 按钮与卡片、`layout` 布局容器、`forms` 完整表单、`overlays` 反馈弹层、`full-navigation` 导航与列表、`business` 业务组件
 - 单项示例：`overview` 组件概览、`buttons`、`cards`、`inputs`、`data`、`feedback`、`navigation`
 
 例如 http://localhost:4201/?component=forms 。不带参数时默认 `atoms`；独立预览右上角可切换明暗主题。若未安装 Chrome，可改用 `flutter run -d web-server --web-port 4201` 后用浏览器打开。
@@ -46,7 +49,7 @@ npm install
 npm run docs:dev
 ```
 
-启动后打开终端输出的本地地址（VitePress 默认 http://localhost:5173）。文档中的 DemoBlock 在开发模式下默认内嵌 `http://localhost:4201`，请**先启动第 1 步的预览应用**，页面里的实时示例才能加载。
+启动后打开终端输出的本地地址。文档中的 DemoBlock 在开发模式下默认从 `http://localhost:4201` 加载 Flutter 资源，请**先启动第 1 步的预览应用**。首次完成引擎初始化后，各 Demo 仅增加轻量 FlutterView；VitePress 菜单切换不会重新加载引擎。
 
 如需替换预览地址，可用环境变量覆盖：
 
@@ -97,7 +100,7 @@ MaterialApp(
 
 覆盖基础原子、布局容器、表单、反馈、导航、列表、业务组件和工具八类需求。完整列表见 [组件文档](vitepress/components/catalog.md)。
 
-预览入口支持 `?component=atoms`、`layout`、`forms`、`overlays`、`full-navigation`、`business`，以及原有按钮、卡片等示例。独立预览右上角可切换明暗主题。
+预览入口支持 `?component=atoms`、`actions`、`layout`、`forms`、`overlays`、`full-navigation`、`business`，以及原有按钮、卡片等示例。独立预览右上角可切换明暗主题；嵌入文档时每个视图读取 VitePress 当前主题。
 
 ## 依赖清单
 

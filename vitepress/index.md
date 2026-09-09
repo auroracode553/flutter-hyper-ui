@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { overviewExample } from './.vitepress/theme/examples';
+import { getComponentGroup } from './.vitepress/catalog';
+
+const overview = getComponentGroup('utilities');
 </script>
 
 # Flutter Hyper UI
@@ -9,7 +11,7 @@ Flutter Hyper UI 是面向移动端的 Hy 柔光玻璃组件库：悬浮胶囊�
 <DemoBlock
   title="组件概览"
   component="overview"
-  :code="overviewExample"
+  :code="overview.example"
   :height="360"
 />
 
@@ -44,3 +46,5 @@ MaterialApp(
 
 
 [查看完整组件与交互示例](./components/catalog.md)
+
+文档内所有 Demo 共用一个 Flutter Web 引擎，并通过官方 multi-view API 直接渲染到各自的 DOM 容器。路由切换只增删 FlutterView，不再刷新 iframe 或重复启动引擎。
