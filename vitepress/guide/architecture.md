@@ -1,58 +1,54 @@
 # 文档与预览架构
 
-## 重构目标
+## 调研结论
 
-旧结构中，一个 `DemoBlock` 对应一个 iframe。组件总览同时出现多个 Demo 时，浏览器会重复下载资源、初始化 Flutter 引擎和创建独立内存堆；移动 iframe 或使用查询参数切换组件还可能重建 browsing context。与此同时，侧栏、Markdown API 表、示例代码和 Flutter 演示目录分别维护，容易产生名称、参数和预览错位。
+Flutter 可以编译为浏览器执行的 JavaScript / WebAssembly，并保留 Flutter 渲染引擎；这不等于把 Widget 转换成 Vue 组件或普通 HTML/CSS。官方也建议让文字型页面采用 Web 文档结构，把交互体验嵌入其中。[Flutter Web 工作方式](https://docs.flutter.dev/platform-integration/web)
 
-重构后将“文档数据”和“预览运行时”分离：
+| 成熟路线 | 官方文档或实际项目 | 适用情况 |
+| --- | --- | --- |
+| Widgetbook 组件工作台 | [Widgetbook](https://docs.widgetbook.io/)、[Embedding](https://docs.widgetbook.io/essentials/embedding) | 隔离开发、调节组件状态、设计评审；其文档嵌入示例使用 iframe，不符合本项目当前约束 |
+| 整站 Flutter 组件画廊 | [shadcn_flutter](https://github.com/sunarya-thito/shadcn_flutter) 的 `packages/docs/` | 文档与组件都用 Flutter 编写，展示真实 Widget；需要迁移现有 Markdown 文档体系 |
+| Web 文档 + Flutter DOM 直接嵌入 | [Flutter 官方嵌入文档](https://docs.flutter.dev/platform-integration/web/embedding-flutter-web)、[官方 web_embedding 示例](https://github.com/flutter/samples/tree/main/web_embedding) | 保留文档的 HTML、搜索和代码展示，同时在容器内展示真实组件 |
+
+本项目选择第三条路线，并把运行模式收敛为 **同源 release 静态包**。这是一种基于官方接口的项目实现，不是安装一个插件后自动将 Dart 转换为文档组件。
+
+## 与旧实现的区别
+
+旧实现实际上已经使用 multi-view，没有 iframe；但开发模式仍跨站引入 `flutter run` 产物，涉及调试引导、调试连接、外部引擎资源和加载失败缓存。仅检查端口与脚本 HTTP 200 不能证明引擎运行成功。
+
+新实现删除开发服务地址覆盖和代理。开发、发布都读取同一目录结构的 release 产物；CanvasKit 的 JS/Wasm 明确从包内读取。仍需 Flutter 引擎，无法承诺瞬时首屏，但失败会按阶段结束并提示。
+
+## 数据与控制流
 
 ```text
-ui/lib/src/**/*.dart ──只读导入──> 当前公开签名
-          │
-          └── hy_ui.dart 导出契约 ──┐
-                                    ├── catalog-validation
-catalog.ts ──> 侧栏 / 总览 / 分类页 ┤
-                                    └── previewId 契约
-PreviewCatalog ──> Widget builder ──> ViewCollection
-                                           ▲
-VitePress DemoBlock ── addView(hostElement)┘
+Dart UI 组件 → 预览示例 → 使用者手动 Flutter release 构建
+                               ↓
+                 vitepress/public/preview/ 完整静态包
+                               ↓
+DemoBlock → bundle-loader → bootstrap → Flutter 引擎（每页一个）
+    ↓                                  ↓
+preview-view ───── addView(hostElement, initialData) ──→ ViewCollection
+    ↑                                                       ↓
+隐藏加载占位 ←──────────── Dart 首帧提交回调 ─────────── PreviewApp
 ```
 
-## 实时切换流程
+- `contracts.ts` 定义协议、视图参数和错误状态。
+- `bundle-loader.ts` 只负责读取清单、加载启动脚本和启动唯一引擎。
+- `preview-view.ts` 只负责一个 DOM 容器的视图、超时、首帧与销毁。
+- `preview-runtime.ts` 连接页面可见性和主题变化。
+- `preview/web/flutter_bootstrap.js` 使用官方 `_flutter.loader.load` / `initializeEngine` / `runApp`，显式配置资源根目录与 CanvasKit 目录。
+- `PreviewApp` 第一帧提交后调用宿主注入的 `onFirstFrame`；这是渲染流程确认，不是每个异步图片资源都已完成加载的保证。
 
-1. 首个进入预加载区域的 Demo 加载 `flutter_bootstrap.js`，以 `multiViewEnabled: true` 启动唯一引擎。
-2. Dart 入口使用 `runWidget` 启动 `ViewCollection`，等待宿主添加视图。
-3. VitePress 为当前 Demo 调用 `app.addView`，将它自己的容器作为 `hostElement`，同时传入组件 ID 和主题。
-4. Flutter 根据 `FlutterView.viewId` 读取 `initialData`，构建对应的 `PreviewApp` 和真实 UI 组件。
-5. 页面卸载 Demo 时调用 `removeView`；菜单切换只增删视图，Flutter 引擎、运行时和共享内存保持存活。
-6. VitePress 主题变化时重建现有视图，但不会重新下载资源或重启引擎。
+初始化与资源配置依据 [Flutter 官方初始化文档](https://docs.flutter.dev/platform-integration/web/initialization)。
 
-首次 Flutter Web 下载和引擎初始化无法完全消除，但从第二个 Demo 开始只创建轻量 FlutterView。多个 Demo 可以同时显示真实组件，又不会随着数量线性增加引擎和独立内存堆。
+## 生命周期与失败边界
 
-## 为什么不把整套文档改成 Flutter
+清单 12 秒、脚本 15 秒、引擎 60 秒、视图首帧 20 秒分别设置上限。HTTP 200 但返回 HTML 不会通过 JSON 清单检查。启动接口验证构建目标，拒绝 DDC 调试入口。
 
-| 方案 | 优点 | 主要问题 | 结论 |
-| --- | --- | --- | --- |
-| 全 Flutter 文档站 | UI 与组件同技术栈 | 正文、路由、搜索和首屏全部等待引擎；SEO、代码高亮和 Markdown 维护较弱 | 不采用 |
-| Vue 重写演示 | 首屏最快 | 展示的是仿制品，不是真实 Flutter Widget，仍会漂移 | 不采用 |
-| iframe | 隔离简单 | 每个 iframe 独立引擎；切换和移动可能重新加载 | 淘汰 |
-| VitePress + Flutter multi-view | 文档保持 Web 原生，每个 Demo 渲染真实 Widget，所有视图共享引擎 | 首次仍有 Flutter 冷启动；集成代码更复杂 | 采用 |
+加载前失败可以重试。脚本超时、接口不兼容和引擎初始化失败要求刷新，防止复用已经部分初始化的 Flutter 全局状态。卸载 Demo 会断开观察器、移除视图、清理首帧定时器；迟到回调通过实例代次与卸载状态过滤。
 
-## 文档同步规则
+主题切换会重建现有视图，临时交互状态会重置。组件更新时通过 `--output ../vitepress/public/preview` 直接重新构建到文档目录，无需复制。静态目录需要作为完整版本一起发布，协议清单只能检查接口兼容性，不能替代完整包的一致性管理。
 
-- `vitepress/.vitepress/catalog.ts` 只维护分类、说明、示例和预览 ID。
-- 分类页、组件总览和 VitePress 侧栏均从目录生成。
-- `dart-api.ts` 以 raw module 方式读取实际 Dart 文件并提取公开构造器、静态方法、枚举和 typedef；开发态由 Vite HMR 更新。
-- `catalog-validation.ts` 在 VitePress 启动或构建时检查缺失源码、缺失导出、未记录公开 API、重复页面和未注册预览 ID，并尽早失败。
-- `PreviewCatalog` 仅承担演示 ID 到 Widget builder 的适配，不保存文档 API 参数。
+## 验证边界
 
-## 性能边界
-
-- 冷启动：仍取决于 Flutter Web 资源体积、网络和浏览器编译速度，页面提供稳定加载占位。
-- 页面切换：不产生 iframe 导航或新 Flutter 引擎，卸载页面只移除对应 FlutterView。
-- 文档负载：Dart 源码作为文本进入文档构建，体积远小于额外 Flutter 运行时；API 签名默认折叠。
-- 图片演示：外部网络图片仍受第三方响应速度影响，但不会阻塞 Flutter 引擎和其他视图。
-
-## 手动验收建议
-
-按项目约束，由使用者按需手动启动两个开发服务。打开组件总览后可在浏览器开发者工具中确认：页面不存在组件预览 iframe；每个已加载 Demo 内有 Flutter 创建的视图节点；点击 VitePress 菜单后 `flutter_bootstrap.js` 不会再次请求；修改 Dart 构造参数后分类页签名随 Vite 开发更新刷新。
+源码重构不包含构建产物。本次按仓库约束未运行项目、编译、安装或执行测试；实际预览要在使用者完成[手动构建与验收](./getting-started.md)后验证。

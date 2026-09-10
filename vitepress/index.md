@@ -47,4 +47,4 @@ MaterialApp(
 
 [查看完整组件与交互示例](./components/catalog.md)
 
-文档内所有 Demo 共用一个 Flutter Web 引擎，并通过官方 multi-view API 直接渲染到各自的 DOM 容器。路由切换只增删 FlutterView，不再刷新 iframe 或重复启动引擎。
+文档读取同站点的 Flutter Web release 静态包，所有 Demo 共用一个引擎并通过官方 multi-view API 渲染到 DOM 容器。首次使用前请按[快速开始](./guide/getting-started.md)手动准备完整预览包；不需要 4201 开发服务。

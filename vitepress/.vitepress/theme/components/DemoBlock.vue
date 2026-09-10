@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { registerPreview, type PreviewState } from '../preview-runtime';
+import { registerPreview, type PreviewStatus } from '../preview-runtime';
 
 const props = withDefaults(
   defineProps<{
@@ -18,7 +18,7 @@ const props = withDefaults(
 
 const copied = ref(false);
 const previewTarget = ref<HTMLElement>();
-const previewState = ref<PreviewState>('idle');
+const previewStatus = ref<PreviewStatus>({ phase: 'idle', message: '演示尚未加载' });
 let disposePreview: (() => void) | undefined;
 let activatePreview: (() => void) | undefined;
 
@@ -27,13 +27,18 @@ onMounted(() => {
   const registration = registerPreview(
     previewTarget.value,
     props.component,
-    (state) => (previewState.value = state),
+    (status) => { previewStatus.value = status; },
   );
   disposePreview = registration.dispose;
   activatePreview = registration.activate;
 });
 
 onBeforeUnmount(() => disposePreview?.());
+
+function retryPreview() {
+  if (previewStatus.value.reloadRequired) window.location.reload();
+  else activatePreview?.();
+}
 
 async function copyCode() {
   await navigator.clipboard.writeText(props.code);
@@ -56,16 +61,13 @@ async function copyCode() {
     <div
       class="demo-block__preview"
       :style="{ height: `${height}px` }"
-      @click="activatePreview?.()"
     >
       <div ref="previewTarget" class="demo-block__flutter-host" />
-      <div v-if="previewState !== 'ready'" class="demo-block__placeholder">
-        <span v-if="previewState === 'loading'" class="demo-block__spinner" aria-hidden="true" />
-        <span v-if="previewState === 'error'">预览服务未响应，请确认 Flutter Web 已在 4201 端口启动。</span>
-        <span v-else-if="previewState === 'idle'">点击或滚动到这里，复用已启动的 Flutter 预览。</span>
-        <span v-else>Flutter 引擎首次加载中，后续演示将直接复用…</span>
-        <button v-if="previewState === 'idle'" type="button" @click.stop="activatePreview?.()">
-          显示此演示
+      <div v-if="previewStatus.phase !== 'ready'" class="demo-block__placeholder" aria-live="polite">
+        <span v-if="['assets', 'engine', 'view'].includes(previewStatus.phase)" class="demo-block__spinner" aria-hidden="true" />
+        <span :role="previewStatus.phase === 'error' ? 'alert' : 'status'">{{ previewStatus.message }}</span>
+        <button v-if="previewStatus.phase === 'idle' || previewStatus.phase === 'error'" type="button" @click="retryPreview">
+          {{ previewStatus.reloadRequired ? '刷新页面' : previewStatus.phase === 'error' ? '重试加载' : '显示此演示' }}
         </button>
       </div>
     </div>

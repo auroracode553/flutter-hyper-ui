@@ -1,33 +1,39 @@
 {{flutter_js}}
 {{flutter_build_config}}
 
-let hyUiAppPromise;
-
-/** Starts one Flutter engine that can render into multiple host DOM elements. */
-window.loadHyUiPreview = function loadHyUiPreview(assetBase) {
-  if (hyUiAppPromise) return hyUiAppPromise;
-
-  const normalizedBase = assetBase.endsWith('/') ? assetBase : `${assetBase}/`;
-  hyUiAppPromise = new Promise((resolve, reject) => {
-    _flutter.loader.load({
-      config: {
-        entrypointBaseUrl: normalizedBase,
-      },
-      onEntrypointLoaded: async function onEntrypointLoaded(engineInitializer) {
-        try {
-          const engine = await engineInitializer.initializeEngine({
-            assetBase: normalizedBase,
-            entrypointBaseUrl: normalizedBase,
-            multiViewEnabled: true,
-          });
-          const app = await engine.runApp();
-          resolve(app);
-        } catch (error) {
-          reject(error);
+// 唯一宿主接口；脚本加载时不自动启动，避免覆盖文档页面。
+window.hyUiPreviewBundle = (() => {
+  let appPromise;
+  return {
+    protocolVersion: 1,
+    start(assetBase) {
+      if (appPromise) return appPromise;
+      const base = new URL(assetBase, document.baseURI).href;
+      appPromise = new Promise((resolve, reject) => {
+        const builds = _flutter.buildConfig?.builds || [];
+        if (!builds.some((build) => build.compileTarget === 'dart2js')) {
+          reject(new Error('此预览仅接收标准 Flutter Web release 构建，不接收 flutter run 调试产物。'));
+          return;
         }
-      },
-    });
-  });
-
-  return hyUiAppPromise;
-};
+        const config = {
+          entrypointBaseUrl: base,
+          assetBase: base,
+          canvasKitBaseUrl: new URL('canvaskit/', base).href,
+          canvasKitVariant: 'full',
+          renderer: 'canvaskit',
+          multiViewEnabled: true,
+        };
+        Promise.resolve(_flutter.loader.load({
+          config,
+          onEntrypointLoaded: async (initializer) => {
+            try {
+              const runner = await initializer.initializeEngine(config);
+              resolve(await runner.runApp());
+            } catch (error) { reject(error); }
+          },
+        })).catch(reject);
+      });
+      return appPromise;
+    },
+  };
+})();

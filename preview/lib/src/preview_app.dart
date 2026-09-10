@@ -17,6 +17,15 @@ class _PreviewAppState extends State<PreviewApp> {
   late final _theme = HyThemeController(mode: widget.configuration.themeMode);
 
   @override
+  void initState() {
+    super.initState();
+    // 确认 Flutter 已提交该视图的第一帧，宿主此时才隐藏占位。
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.configuration.onFirstFrame?.call();
+    });
+  }
+
+  @override
   void dispose() {
     _theme.dispose();
     super.dispose();
