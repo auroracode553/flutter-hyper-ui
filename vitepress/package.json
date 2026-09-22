@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress dev . --port 9000",
+    "dev:watch": "node ../tools/dev-docs.mjs",
     "build": "vitepress build .",
+    "build:all": "node ../tools/build-docs.mjs",
     "preview": "vitepress preview ."
   },
   "devDependencies": {

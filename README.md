@@ -1,13 +1,12 @@
 # Hy UI · Flutter Hyper UI
 
-本地运行：
-flutter build web --release --no-web-resources-cdn --base-href /preview/ --output ../vitepress/public/preview
+开发文档通过一个 watcher 同时运行 Flutter Web 热重载与 VitePress HMR，不需要手动编译或复制预览产物。完整说明见 `vitepress/guide/getting-started.md`。
 
 面向移动端的柔光玻璃 Flutter 组件库。组件使用 `Hy` 前缀，通过 `package:flutter_hyper_ui/hy_ui.dart` 引用。
 
 ## 文档预览方案
 
-文档采用 **VitePress + Flutter Web release 静态产物 + 官方 DOM 多视图嵌入**。浏览器从文档站自己的 `/preview/` 目录加载真实 Flutter 组件；没有 iframe，也不连接 4201、Flutter 调试服务或开发代理。
+文档采用 **VitePress + Flutter Web + 官方 DOM 多视图嵌入**。开发模式由 Vite 将 `/preview` 同源代理到 Flutter Debug 服务并支持热重载；release 模式读取文档站自己的静态预览包。两种模式都不使用 iframe。
 
 Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm、字体和资源可以随文档一起分发；Dart 源文件不能作为 Vue 组件直接导入。Flutter 渲染仍有首次加载成本。
 
@@ -17,37 +16,37 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 - `ui/lib/src/components/`：组件实现，包括 `HyDrawer`。
 - `preview/lib/src/examples/`：真实组件交互示例。
 - `preview/lib/src/preview_catalog.dart`：演示 ID 和 Widget 映射。
-- `preview/web/flutter_bootstrap.js`：release 产物的启动接口与本地 CanvasKit 配置。
-- `preview/web/hy-preview.json`：预览协议清单，Flutter 构建时随 web 文件一起复制。
+- `preview/web/flutter_bootstrap.js`：Debug/Release 共用的多视图启动接口与 CanvasKit 配置。
+- Flutter 构建生成的 `version.json`：预览包身份检查；自定义协议版本由启动接口校验。
 - `vitepress/.vitepress/theme/preview/contracts.ts`：宿主与 Flutter 接口约定。
-- `vitepress/.vitepress/theme/preview/bundle-loader.ts`：资源清单、脚本和引擎加载，分阶段超时。
+- `vitepress/.vitepress/theme/preview/bundle-loader.ts`：预览包身份、脚本和引擎加载，分阶段超时。
 - `vitepress/.vitepress/theme/preview/preview-view.ts`：单个视图的创建、首帧确认、主题更新和销毁。
 - `vitepress/.vitepress/theme/preview-runtime.ts`：共享引擎与文档演示注册。
-- `vitepress/.vitepress/catalog.ts`：文档分类和源码引用。
+- `vitepress/.vitepress/catalog.ts`：文档分类、场景 Demo 与真实示例源码引用。
+- `vitepress/.vitepress/theme/example-source.ts`：从 `preview/lib/src/examples/` 读取 Demo 的真实 Dart 源码。
+- `tools/dev-docs.mjs`：启动两个开发服务、监听 Dart 并触发热重载。
+- `tools/build-docs.mjs`：构建 release、自动同步产物并构建 VitePress，不部署。
 
-依赖方向：文档 Demo → 视图管理 → 静态包加载 → Flutter 多视图 → 预览示例 → UI 组件。首帧确认通过创建视图时注入的回调返回，不使用轮询或猜测延时。
+依赖方向：文档 Demo → 视图管理 → Debug 代理或 release 静态包 → Flutter 多视图 → 预览示例 → UI 组件。首帧确认通过创建视图时注入的回调返回，不使用轮询或猜测延时。
 
-## 手动准备与查看
+## 本地开发与构建
 
-以下是可选手动操作说明，不会自动执行，也未提供一键构建或启动脚本。
+依赖由使用者自主准备。进入 `vitepress/` 后运行 `npm run dev:watch`，即可同时启动 Flutter Debug 服务与 VitePress；保存 Dart 文件会自动热重载，不生成或复制 release 产物。
 
-1. 确认已有 Flutter 和文档依赖。依赖清单见下方，安装由使用者自行决定。
-2. 在 `preview/` 目录手动执行 `flutter build web --release --no-web-resources-cdn --base-href /preview/ --output ../vitepress/public/preview`。构建直接写入文档预览目录，无需复制。使用标准 JS release 构建，不使用 `--wasm` 或 `flutter run` 调试产物。
-3. 在 `vitepress/` 目录手动执行 `npm run dev`，打开终端输出的文档地址。只需要这一个服务。
-4. 在反馈文档打开抽屉演示；独立组件画廊位于文档站 `/preview/index.html?component=drawer`。
+最终验收时运行 `npm run build:all`。脚本自动构建 Flutter release、同步到 `vitepress/public/preview` 并构建 VitePress，不执行部署。
 
-产物应包含 `hy-preview.json`、`flutter_bootstrap.js`、`main.dart.js`、`assets/` 和 `canvaskit/`。不要把 `preview/web/` 源码直接复制成构建产物，其中 Flutter 模板尚未展开。
+产物应包含 `version.json`、`flutter_bootstrap.js`、`main.dart.js`、`assets/` 和 `canvaskit/`。不要把 `preview/web/` 源码直接复制成构建产物，其中 Flutter 模板尚未展开。
 
 部署到子路径时，Flutter 的 `--base-href` 应对应 `<文档路径>/preview/`，文档 `VITEPRESS_BASE` 应对应 `<文档路径>/`。静态资源由同一站点提供，不再使用 `VITE_PREVIEW_BASE` 或 `FLUTTER_PREVIEW_TARGET`。
 
-修改 Dart 后，重新执行同一条构建指令即可更新文档预览目录，然后刷新页面；无需复制。修改 Markdown/Vue 仍使用文档自身的更新流程。静态预览不提供 Flutter 热重载。
+开发模式下，修改 Dart 由 watcher 触发 Flutter 热重载，修改 Markdown/Vue/CSS 由 Vite HMR 更新。release 静态包仅在执行 `npm run build:all` 时生成。
 
 ## 依赖清单
 
 - 核心与预览：Flutter >= 3.32、Dart >= 3.8，预览通过本地路径依赖 `ui/`。
 - 已有开发依赖：`flutter_test`、`flutter_lints`。
 - 文档：Node.js 与已有 `vitepress`、`vue`，准确版本见 `vitepress/package.json`。
-- 本次未新增第三方依赖，未安装依赖或修改系统环境。
+- watcher 与构建编排仅使用 Node.js 内置模块，未新增第三方依赖。
 
 ## 调研、使用与验收
 
@@ -55,4 +54,4 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 - [详细手动操作与故障检查](vitepress/guide/getting-started.md)
 - [组件文档](vitepress/components/catalog.md)
 
-按项目约束，本次仅修改源码和文档并进行只读检查，未编译、运行、打包、部署或执行测试。当前尚未生成静态预览包，最终交互与视觉效果需在使用者手动构建后验证。
+本地脚本必须由使用者显式启动；watcher 启动后可以自动热重载，但所有脚本都不会部署。

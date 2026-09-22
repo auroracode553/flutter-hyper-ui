@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { getComponentGroup } from '../../catalog';
 import DemoBlock from './DemoBlock.vue';
 import { dartApiFor } from '../dart-api';
+import { exampleSourceFor } from '../example-source';
 
 const props = defineProps<{ groupId: string }>();
 const group = computed(() => getComponentGroup(props.groupId));
@@ -18,12 +19,17 @@ function sourceUrl(source: string) {
     <h1>{{ group.title }}</h1>
     <p class="component-reference__lead">{{ group.description }}</p>
 
-    <DemoBlock
-      :title="group.previewTitle"
-      :component="group.previewId"
-      :code="group.example"
-      :height="group.previewHeight"
-    />
+    <section class="component-reference__demos" aria-label="交互演示">
+      <DemoBlock
+        v-for="demo in group.demos"
+        :key="demo.id"
+        :title="demo.title"
+        :description="demo.description"
+        :component="demo.id"
+        :code="exampleSourceFor(demo.source)"
+        :height="demo.height"
+      />
+    </section>
 
     <h2>公开组件</h2>
     <div class="component-reference__grid">

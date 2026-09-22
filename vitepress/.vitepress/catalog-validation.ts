@@ -20,11 +20,20 @@ export function validateCatalog(repositoryRoot: string, groups: ComponentGroup[]
   const registeredPreviewIds = new Set(
     [...previewCatalog.matchAll(/\bid:\s*'([^']+)'/g)].map((match) => match[1]),
   );
-  const missingPreviewIds = groups
-    .map((group) => group.previewId)
+  const demos = groups.flatMap((group) => group.demos);
+  assertUnique(demos.map((demo) => demo.id), '文档演示 id');
+  const missingPreviewIds = demos
+    .map((demo) => demo.id)
     .filter((previewId) => !registeredPreviewIds.has(previewId));
   if (missingPreviewIds.length > 0) {
     throw new Error(`文档演示未在 PreviewCatalog 注册: ${missingPreviewIds.join(', ')}`);
+  }
+
+  const missingDemoSources = demos
+    .map((demo) => demo.source)
+    .filter((source) => !existsSync(resolve(repositoryRoot, 'preview/lib/src/examples', source)));
+  if (missingDemoSources.length > 0) {
+    throw new Error(`文档演示源码不存在: ${[...new Set(missingDemoSources)].join(', ')}`);
   }
 
   const publicEntryPath = resolve(repositoryRoot, 'ui/lib/hy_ui.dart');

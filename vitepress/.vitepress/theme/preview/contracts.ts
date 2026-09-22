@@ -23,7 +23,7 @@ export interface FlutterPreviewApp {
 
 export interface PreviewBundle {
   protocolVersion: number;
-  start(assetBase: string): Promise<FlutterPreviewApp>;
+  start(assetBase: string, options?: { allowDebug?: boolean }): Promise<FlutterPreviewApp>;
 }
 
 declare global {

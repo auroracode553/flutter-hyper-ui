@@ -42,6 +42,16 @@ export class PreviewView {
     catch (error) { this.onStatus(failureStatus(error)); }
   }
 
+  reset() {
+    if (this.disposed) return;
+    if (!this.app || this.viewId === undefined) {
+      void this.mount();
+      return;
+    }
+    try { this.detach(); this.attach(); }
+    catch (error) { this.onStatus(failureStatus(error)); }
+  }
+
   dispose() {
     this.disposed = true;
     this.detach();

@@ -2,6 +2,7 @@
 import { componentGroups } from '../../catalog';
 import { withBase } from 'vitepress';
 import DemoBlock from './DemoBlock.vue';
+import { exampleSourceFor } from '../example-source';
 </script>
 
 <template>
@@ -23,14 +24,16 @@ import DemoBlock from './DemoBlock.vue';
     <p>
       页面只启动一个 Flutter Web 引擎。进入视口的演示会创建独立 FlutterView，并直接挂载到对应 DOM 容器。
     </p>
-    <DemoBlock
-      v-for="group in componentGroups"
-      :key="group.id"
-      :title="group.previewTitle"
-      :description="group.description"
-      :component="group.previewId"
-      :code="group.example"
-      :height="group.previewHeight"
-    />
+    <template v-for="group in componentGroups" :key="group.id">
+      <DemoBlock
+        v-for="demo in group.demos"
+        :key="demo.id"
+        :title="demo.title"
+        :description="demo.description || group.description"
+        :component="demo.id"
+        :code="exampleSourceFor(demo.source)"
+        :height="demo.height"
+      />
+    </template>
   </article>
 </template>

@@ -1,13 +1,6 @@
 <ComponentReference group-id="feedback" />
 
-## Drawer 抽屉
-
-<DemoBlock
-  title="侧边导航与筛选抽屉"
-  component="drawer"
-  :height="520"
-  code="HyDrawer.show(context, title: '详情', builder: (_) => const Text('抽屉内容'));"
-/>
+## Drawer 使用说明
 
 ```dart
 final result = await HyDrawer.show<String>(

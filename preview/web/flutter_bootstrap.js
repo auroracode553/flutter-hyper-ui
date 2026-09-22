@@ -6,12 +6,12 @@ window.hyUiPreviewBundle = (() => {
   let appPromise;
   return {
     protocolVersion: 1,
-    start(assetBase) {
+    start(assetBase, options = {}) {
       if (appPromise) return appPromise;
       const base = new URL(assetBase, document.baseURI).href;
       appPromise = new Promise((resolve, reject) => {
         const builds = _flutter.buildConfig?.builds || [];
-        if (!builds.some((build) => build.compileTarget === 'dart2js')) {
+        if (!options.allowDebug && !builds.some((build) => build.compileTarget === 'dart2js')) {
           reject(new Error('此预览仅接收标准 Flutter Web release 构建，不接收 flutter run 调试产物。'));
           return;
         }

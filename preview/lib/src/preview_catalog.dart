@@ -9,6 +9,7 @@ import 'examples/feedback_example.dart';
 import 'examples/inputs_example.dart';
 import 'examples/navigation_example.dart';
 import 'examples/overview_example.dart';
+import 'examples/upload_example.dart';
 import 'examples/complete_examples.dart';
 import 'examples/interactive_examples.dart';
 
@@ -63,6 +64,12 @@ class PreviewCatalog {
       title: '完整表单',
       description: '输入、选择、评分、日期与上传。',
       builder: (_) => const FormsExample(),
+    ),
+    PreviewItem(
+      id: 'upload',
+      title: '文件上传',
+      description: '选择、进度、取消、失败和重试状态。',
+      builder: (_) => const UploadExample(),
     ),
     PreviewItem(
       id: 'overlays',

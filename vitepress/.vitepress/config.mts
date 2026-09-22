@@ -9,6 +9,7 @@ function withTrailingSlash(value: string) {
 
 const siteBase = withTrailingSlash(process.env.VITEPRESS_BASE || '/');
 const repositoryRoot = fileURLToPath(new URL('../..', import.meta.url));
+const previewDevelopmentServer = process.env.VITE_HY_UI_PREVIEW_SERVER;
 validateCatalog(repositoryRoot, componentGroups);
 
 export default defineConfig({
@@ -21,6 +22,14 @@ export default defineConfig({
   },
   vite: {
     server: {
+      proxy: previewDevelopmentServer ? {
+        '/preview': {
+          target: previewDevelopmentServer,
+          changeOrigin: true,
+          ws: true,
+          rewrite: (path) => path.replace(/^\/preview/, ''),
+        },
+      } : undefined,
       fs: {
         // 分类页以只读方式导入相邻 ui 包源码，修改参数后由 Vite HMR 实时更新 API 签名。
         allow: [repositoryRoot],

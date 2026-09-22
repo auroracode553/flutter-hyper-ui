@@ -82,25 +82,6 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Install Flutter preview dependencies
-        working-directory: preview
-        run: flutter pub get
-
-      - name: Build Flutter preview
-        working-directory: preview
-        env:
-          PREVIEW_BASE_HREF: ${{ steps.pages.outputs.base_path }}/preview/
-        run: flutter build web --release --base-href "$PREVIEW_BASE_HREF"
-
-      - name: Copy preview into VitePress public assets
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          rm -rf vitepress/public/preview
-          mkdir -p vitepress/public/preview
-          cp -R preview/build/web/. vitepress/public/preview/
-
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
@@ -112,12 +93,11 @@ jobs:
         working-directory: vitepress
         run: npm ci
 
-      - name: Build VitePress
-        working-directory: vitepress
+      - name: Build Flutter preview and VitePress
         env:
+          PREVIEW_BASE_HREF: ${{ steps.pages.outputs.base_path }}/preview/
           VITEPRESS_BASE: ${{ steps.pages.outputs.base_path }}/
-          VITE_PREVIEW_BASE: ${{ steps.pages.outputs.base_path }}/preview
-        run: npm run docs:build
+        run: node tools/build-docs.mjs
 
       - name: Disable Jekyll processing
         shell: bash

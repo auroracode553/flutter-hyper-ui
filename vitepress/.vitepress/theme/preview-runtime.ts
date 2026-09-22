@@ -4,8 +4,12 @@ import { PreviewView, selectedTheme } from './preview/preview-view';
 
 export type { PreviewStatus } from './preview/contracts';
 
-// 共享引擎；开发和发布都使用同一份静态预览资源。
-const loader = new PreviewBundleLoader(`${import.meta.env.BASE_URL}preview/`);
+const developmentServer = import.meta.env.VITE_HY_UI_PREVIEW_MODE === 'dev-server';
+// 开发模式走 Vite 同源代理，发布模式读取同站点静态包。
+const loader = new PreviewBundleLoader(
+  `${import.meta.env.BASE_URL}preview/`,
+  { developmentServer },
+);
 const views = new Set<PreviewView>();
 let themeObserver: MutationObserver | undefined;
 
@@ -35,6 +39,7 @@ export function registerPreview(target: HTMLElement, componentId: string, onStat
   observer.observe(target);
   return {
     activate: () => { observer.disconnect(); void view.mount(); },
+    reset: () => { observer.disconnect(); view.reset(); },
     dispose: () => {
       observer.disconnect();
       views.delete(view);

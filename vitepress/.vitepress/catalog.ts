@@ -4,16 +4,21 @@ export interface ComponentEntry {
   summary: string;
 }
 
+export interface ComponentDemo {
+  id: string;
+  title: string;
+  description?: string;
+  height: number;
+  source: string;
+}
+
 export interface ComponentGroup {
   id: string;
   title: string;
   navTitle: string;
   description: string;
   page: string;
-  previewId: string;
-  previewTitle: string;
-  previewHeight: number;
-  example: string;
+  demos: ComponentDemo[];
   components: ComponentEntry[];
   conventions?: string[];
 }
@@ -24,11 +29,19 @@ const component = (name: string, source: string, summary: string): ComponentEntr
   summary,
 });
 
+const demo = (
+  id: string,
+  title: string,
+  source: string,
+  height: number,
+  description?: string,
+): ComponentDemo => ({ id, title, source, height, description });
+
 /**
  * 文档的唯一人工维护目录。
  *
- * 页面、侧栏和演示均读取这里；source 必须指向真实 Dart 源文件，previewId
- * 必须存在于 preview/lib/src/preview_catalog.dart。
+ * 页面、侧栏和演示均读取这里；组件 source 必须指向真实 Dart 源文件，
+ * Demo id 必须存在于 PreviewCatalog，Demo source 必须指向真实示例文件。
  */
 export const componentGroups: ComponentGroup[] = [
   {
@@ -37,16 +50,10 @@ export const componentGroups: ComponentGroup[] = [
     navTitle: '基础元素',
     description: '文字、图标、图片、头像、角标与语义状态，是组合其他组件的最小视觉单元。',
     page: '/components/foundations',
-    previewId: 'atoms',
-    previewTitle: '基础元素完整状态',
-    previewHeight: 740,
-    example: `HySpace(
-  children: const [
-    HyText('轻盈，也清晰。', variant: HyTextStyle.display),
-    HyAvatar(text: 'HY', size: 56, radius: 18),
-    HyTag(label: '已完成', tone: HyUiTone.success),
-  ],
-)`,
+    demos: [
+      demo('atoms', '基础元素完整状态', 'complete_examples.dart', 740, '文字、图标、头像、图片和语义标签。'),
+      demo('data', '徽标、列表与进度', 'data_example.dart', 460, '用于检查数据展示组件的常用组合。'),
+    ],
     components: [
       component('HyText / HyTextStyle', 'hy_typography.dart', '统一的显示、标题、正文、说明和提示文字层级。'),
       component('HyIcon / HyIcons', 'hy_typography.dart', '带语义标签的图标组件与常用业务图标集合。'),
@@ -64,20 +71,10 @@ export const componentGroups: ComponentGroup[] = [
     navTitle: '按钮与卡片',
     description: '动作入口和内容容器，覆盖按钮层级、状态、玻璃材质与卡片结构。',
     page: '/components/actions',
-    previewId: 'actions',
-    previewTitle: '按钮与卡片完整状态',
-    previewHeight: 680,
-    example: `HyButton.filled(
-  label: '打开文件',
-  icon: Icons.add,
-  onPressed: () {},
-)
-
-HyCard(
-  title: '本周活动计划',
-  subtitle: '12 项活动',
-  child: const Text('内容摘要'),
-)`,
+    demos: [
+      demo('buttons', '按钮层级、尺寸与状态', 'buttons_example.dart', 360, '点击真实按钮，检查图标、加载态和不同尺寸。'),
+      demo('cards', '卡片结构与选择状态', 'cards_example.dart', 520, '包含标题、状态、进度、标签和选中态。'),
+    ],
     components: [
       component('HyButton / HyButtonVariant / HyButtonSize', 'hy_button.dart', '五种视觉层级、三种尺寸、加载、禁用、图标和通栏状态。'),
       component('HyCard', 'hy_card.dart', '具有标题、操作区、正文、底部和选中态的内容容器。'),
@@ -92,16 +89,9 @@ HyCard(
     navTitle: '布局与占位',
     description: '间距、换行、网格、分割线、骨架和空状态。',
     page: '/components/layout',
-    previewId: 'layout',
-    previewTitle: '布局容器与占位状态',
-    previewHeight: 740,
-    example: `HyCard(
-  title: '常用入口',
-  child: HyGrid(
-    columns: 3,
-    children: items,
-  ),
-)`,
+    demos: [
+      demo('layout', '布局容器与占位状态', 'complete_examples.dart', 740),
+    ],
     components: [
       component('HySpace', 'hy_layout.dart', '在线性方向排列子项并统一插入间距。'),
       component('HyWrap', 'hy_layout.dart', '带统一主轴和换行间距的流式布局。'),
@@ -117,20 +107,11 @@ HyCard(
     navTitle: '表单与选择',
     description: '文本输入、受控选择、选择器、日期时间与文件上传。',
     page: '/components/forms',
-    previewId: 'forms',
-    previewTitle: '完整表单交互',
-    previewHeight: 900,
-    example: `HyTextField(
-  label: '称呼',
-  hintText: '请输入称呼',
-  validator: (value) => value?.isEmpty == true ? '请输入称呼' : null,
-)
-
-HySelect<String>(
-  options: options,
-  values: selectedValues,
-  onChanged: (values) => setState(() => selectedValues = values),
-)`,
+    demos: [
+      demo('inputs', '基础输入与分段选择', 'inputs_example.dart', 520, '用于快速检查输入、辅助文案和受控选择。'),
+      demo('forms', '完整表单交互', 'complete_examples.dart', 900, '覆盖校验、选择、评分、日期和上传入口。'),
+      demo('upload', '上传状态与重试', 'upload_example.dart', 620, '模拟选择、上传进度、取消、失败和重试，不依赖平台插件。'),
+    ],
     components: [
       component('HyTextField', 'hy_text_field.dart', '支持校验、多行、清除、密码显隐、错误和字数限制。'),
       component('HySegmentedControl / HySegmentOption', 'hy_segmented_control.dart', '适用于少量互斥选项的受控分段选择。'),
@@ -155,16 +136,11 @@ HySelect<String>(
     navTitle: '反馈与弹层',
     description: '轻提示、对话框、局部或全局加载、通知、底部弹层与锚点菜单。',
     page: '/components/feedback',
-    previewId: 'overlays',
-    previewTitle: '反馈与弹层交互',
-    previewHeight: 700,
-    example: `HyToast.show(context, '保存成功', tone: HyUiTone.success);
-
-final confirmed = await HyDialog.confirm(
-  context,
-  title: '保存更改？',
-  message: '新的偏好将立即生效。',
-);`,
+    demos: [
+      demo('feedback', '基础反馈状态', 'feedback_example.dart', 520, '空状态、徽标和常用反馈组合。'),
+      demo('overlays', '反馈与弹层交互', 'interactive_examples.dart', 700, '可实际打开 Toast、Dialog、BottomSheet、Popover 和加载层。'),
+      demo('drawer', '抽屉交互', 'drawer_example.dart', 620, '检查左右抽屉、固定底部操作和返回值。'),
+    ],
     components: [
       component('HyToast', 'hy_feedback.dart', '基于 ScaffoldMessenger 的自动消失轻提示。'),
       component('HyDialog', 'hy_feedback.dart', '确认、提示或自定义正文对话框。'),
@@ -185,17 +161,10 @@ final confirmed = await HyDialog.confirm(
     navTitle: '导航与列表',
     description: '顶部、标签、底部导航，步骤与进度，以及列表的刷新、分页和吸顶。',
     page: '/components/navigation',
-    previewId: 'full-navigation',
-    previewTitle: '导航、步骤与列表联动',
-    previewHeight: 860,
-    example: `HyTabBar(
-  items: const [
-    HyTabItem(icon: Icons.home_outlined, label: '首页'),
-    HyTabItem(icon: Icons.person_outline, label: '我的'),
-  ],
-  selectedIndex: selectedIndex,
-  onSelected: (value) => setState(() => selectedIndex = value),
-)`,
+    demos: [
+      demo('navigation', '基础导航', 'navigation_example.dart', 520),
+      demo('full-navigation', '导航、步骤与列表联动', 'complete_examples.dart', 860),
+    ],
     components: [
       component('HyTopBar', 'hy_top_bar.dart', '支持副标题、自定义前导和操作区的页面顶部栏。'),
       component('HyTabBar / HyTabItem', 'hy_navigation.dart', '带选中动效、RTL 与安全区适配的悬浮底部导航。'),
@@ -220,16 +189,9 @@ final confirmed = await HyDialog.confirm(
     navTitle: '业务展示',
     description: '常见业务页需要的搜索、倒计时、折叠面板和时间轴。',
     page: '/components/business',
-    previewId: 'business',
-    previewTitle: '业务组件组合',
-    previewHeight: 850,
-    example: `HySearchBar(onChanged: onQueryChanged)
-
-HyCountDown(endTime: deadline)
-
-const HyTimeline(
-  items: [HyTimelineItem(title: '已送达', time: '今天 14:32')],
-)`,
+    demos: [
+      demo('business', '业务组件组合', 'interactive_examples.dart', 850, '搜索、通知、倒计时、设置菜单、折叠面板与时间轴。'),
+    ],
     components: [
       component('HySearchBar', 'hy_business.dart', '包含搜索、提交和清空交互的输入入口。'),
       component('HyCountDown', 'hy_business.dart', '基于截止时间计算，并在应用恢复前台时校准。'),
@@ -244,14 +206,9 @@ const HyTimeline(
     navTitle: '主题与工具',
     description: '主题令牌、间距、圆角、动效以及屏幕、键盘、路由和安全区工具。',
     page: '/components/utilities',
-    previewId: 'overview',
-    previewTitle: '主题化组件概览',
-    previewHeight: 380,
-    example: `MaterialApp(
-  theme: HyUiTheme.light(primary: Colors.indigo),
-  darkTheme: HyUiTheme.dark(primary: Colors.indigo),
-  home: const App(),
-)`,
+    demos: [
+      demo('overview', '主题化组件概览', 'overview_example.dart', 420, '文档明暗主题会同步到 Flutter 预览。'),
+    ],
     components: [
       component('HyUiTheme', '../theme/hy_ui_theme.dart', '明暗主题的 ThemeData 构造入口。'),
       component('HyUiThemeTokens', '../theme/hy_ui_theme_tokens.dart', '组件消费的 ThemeExtension 语义令牌。'),

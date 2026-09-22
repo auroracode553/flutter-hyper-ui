@@ -1,13 +1,20 @@
 import { PreviewFailure, type FlutterPreviewApp, type PreviewListener, type PreviewStatus } from './contracts';
 
-/** 只加载与文档一起分发的产物，不连接 Flutter 调试服务。 */
+export interface PreviewBundleLoaderOptions {
+  developmentServer?: boolean;
+}
+
+/** 开发时连接 Flutter 调试服务，发布时加载同站点 release 静态包。 */
 export class PreviewBundleLoader {
   private pending?: Promise<FlutterPreviewApp>;
   private engineStarted = false;
   private readonly listeners = new Set<PreviewListener>();
   private status: PreviewStatus = { phase: 'assets', message: '正在检查预览资源…' };
 
-  constructor(private readonly basePath: string) {}
+  constructor(
+    private readonly basePath: string,
+    private readonly options: PreviewBundleLoaderOptions = {},
+  ) {}
 
   getApp(onStatus: PreviewListener): Promise<FlutterPreviewApp> {
     this.listeners.add(onStatus);
@@ -24,7 +31,7 @@ export class PreviewBundleLoader {
 
   private async load(): Promise<FlutterPreviewApp> {
     const base = new URL(this.basePath, window.location.origin);
-    await this.checkManifest(base);
+    if (!this.options.developmentServer) await this.checkBundle(base);
     await this.loadScript(new URL('flutter_bootstrap.js', base).href);
     const bundle = window.hyUiPreviewBundle;
     if (!bundle || bundle.protocolVersion !== 1) {
@@ -37,7 +44,9 @@ export class PreviewBundleLoader {
       const timer = window.setTimeout(() => reject(new PreviewFailure(
         '预览初始化超过 60 秒。请检查 main.dart.js 和 canvaskit 资源是否完整，修复后刷新页面。', true,
       )), 60_000);
-      Promise.resolve().then(() => bundle.start(base.href)).then((app) => {
+      Promise.resolve().then(() => bundle.start(base.href, {
+        allowDebug: this.options.developmentServer,
+      })).then((app) => {
         if (typeof app?.addView !== 'function' || typeof app?.removeView !== 'function') {
           throw new Error('构建产物未提供 Flutter 多视图接口');
         }
@@ -48,23 +57,25 @@ export class PreviewBundleLoader {
     });
   }
 
-  private async checkManifest(base: URL) {
+  private async checkBundle(base: URL) {
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), 12_000);
     try {
-      const response = await fetch(new URL('hy-preview.json', base), {
+      // version.json is emitted by every Flutter Web release build. Relying on
+      // it avoids a second custom manifest that Flutter might not copy.
+      const response = await fetch(new URL('version.json', base), {
         signal: controller.signal, cache: 'no-store',
       });
       if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
-        throw new Error('missing manifest');
+        throw new Error('missing preview version');
       }
-      const manifest = await response.json();
-      if (manifest.protocolVersion !== 1 || manifest.format !== 'flutter-web-release') {
-        throw new Error('incompatible manifest');
+      const version = await response.json();
+      if (version.app_name !== 'flutter_hyper_ui_preview') {
+        throw new Error('incompatible preview bundle');
       }
     } catch {
       throw new PreviewFailure(
-        '预览构建产物缺失、不兼容或不可访问。请按快速开始文档使用 --output ../vitepress/public/preview 直接构建到文档目录。',
+        '预览构建产物缺失、不兼容或不可访问。请使用 dev-docs watcher，或重新生成完整 release 文档包。',
       );
     } finally {
       window.clearTimeout(timer);
