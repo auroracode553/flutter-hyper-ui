@@ -1,10 +1,13 @@
 library hy_ui;
 
 export 'src/components/hy_glass.dart';
+export 'src/components/hy_pressable.dart';
 export 'src/components/hy_typography.dart';
 export 'src/components/hy_image.dart';
 export 'src/components/hy_layout.dart';
 export 'src/components/hy_selection_controls.dart';
+export 'src/components/hy_dropdown.dart';
+export 'src/components/hy_slide_menu.dart';
 export 'src/components/hy_select.dart';
 export 'src/components/hy_picker.dart';
 export 'src/components/hy_uploader.dart';
@@ -18,6 +21,7 @@ export 'src/components/hy_business.dart';
 export 'src/components/hy_notice_bar.dart';
 export 'src/utils/hy_utils.dart';
 export 'src/theme/hy_ui_effects.dart';
+export 'src/theme/hy_glass_theme.dart';
 
 export 'src/components/hy_badge.dart';
 export 'src/components/hy_button.dart';

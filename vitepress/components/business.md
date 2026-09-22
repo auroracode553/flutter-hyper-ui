@@ -1,1 +1,3 @@
-<ComponentReference group-id="business" />
+# 页面已更名
+
+原“业务展示”已重构为业务无关的[复合组件](./composites.md)。

@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitepress';
-import { componentGroups } from './catalog';
+import { componentGroups, featuredDemo } from './catalog';
 import { validateCatalog } from './catalog-validation';
 
 function withTrailingSlash(value: string) {
@@ -10,13 +10,18 @@ function withTrailingSlash(value: string) {
 const siteBase = withTrailingSlash(process.env.VITEPRESS_BASE || '/');
 const repositoryRoot = fileURLToPath(new URL('../..', import.meta.url));
 const previewDevelopmentServer = process.env.VITE_HY_UI_PREVIEW_SERVER;
-validateCatalog(repositoryRoot, componentGroups);
+validateCatalog(repositoryRoot, componentGroups, [featuredDemo]);
 
 export default defineConfig({
-  title: 'Flutter Hyper UI',
-  description: 'Hy 柔光玻璃 Flutter UI 组件库',
+  title: 'Hy UI',
+  titleTemplate: ':title · Flutter Hyper UI',
+  description: '面向 Flutter 移动端的通用柔性玻璃 UI 组件库',
   base: siteBase,
   cleanUrls: true,
+  head: [
+    ['meta', { name: 'theme-color', content: '#f4f6fb' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${siteBase}hy-ui-logo.svg` }],
+  ],
   markdown: {
     lineNumbers: true,
   },
@@ -37,12 +42,14 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    logo: undefined,
+    logo: '/hy-ui-logo.svg',
+    siteTitle: 'Hy UI',
     search: {
       provider: 'local',
     },
     nav: [
-      { text: '指南', link: '/guide/getting-started' },
+      { text: '开始', link: '/guide/getting-started' },
+      { text: '设计系统', link: '/guide/design-system' },
       { text: '组件', link: '/components/catalog' },
     ],
     sidebar: [
@@ -50,7 +57,11 @@ export default defineConfig({
         text: '指南',
         items: [
           { text: '快速开始', link: '/guide/getting-started' },
-          { text: '文档与预览架构', link: '/guide/architecture' },
+          { text: '设计系统', link: '/guide/design-system' },
+          { text: '主题与令牌', link: '/guide/theming' },
+          { text: '无障碍与自适应', link: '/guide/accessibility' },
+          { text: '架构与依赖边界', link: '/guide/architecture' },
+          { text: '文档开发', link: '/guide/documentation' },
         ],
       },
       {
@@ -63,6 +74,13 @@ export default defineConfig({
     ],
     outline: {
       level: [2, 3],
+    },
+    docFooter: {
+      prev: '上一篇',
+      next: '下一篇',
+    },
+    lastUpdated: {
+      text: '最后更新',
     },
   },
 });

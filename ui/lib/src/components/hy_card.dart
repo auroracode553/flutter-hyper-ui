@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'hy_glass.dart';
 
 import '../theme/hy_ui_radii.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
+import '../theme/hy_glass_theme.dart';
 
 class HyCard extends StatelessWidget {
   final Widget? child;
@@ -17,6 +19,7 @@ class HyCard extends StatelessWidget {
   final bool selected;
   final double radius;
   final double blur;
+  final HyGlassWeight weight;
   final Color? borderColor;
   final List<BoxShadow>? shadows;
 
@@ -33,6 +36,7 @@ class HyCard extends StatelessWidget {
     this.selected = false,
     this.radius = HyUiRadii.md,
     this.blur = 18,
+    this.weight = HyGlassWeight.regular,
     this.borderColor,
     this.shadows,
   });
@@ -54,7 +58,8 @@ class HyCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_hasHeader) _buildHeader(context),
-          if (_hasHeader && child != null) const SizedBox(height: HyUiSpacing.sm),
+          if (_hasHeader && child != null)
+            const SizedBox(height: HyUiSpacing.sm),
           if (child != null) child!,
           if (footer != null) ...[
             const SizedBox(height: HyUiSpacing.sm),
@@ -66,10 +71,16 @@ class HyCard extends StatelessWidget {
       ),
     );
 
-    return HyGlass(radius: radius, blur: blur, onTap: onTap,
-      color: selected ? tokens.selectionBackground : null,
+    return HyGlass(
+      radius: radius,
+      blur: blur,
+      onTap: onTap,
+      weight: weight,
+      color: selected ? HyGlassTheme.of(context).surfaceStrong : null,
       borderColor: borderColor ?? (selected ? tokens.primary : null),
-      shadows: shadows, child: content);
+      shadows: shadows,
+      child: content,
+    );
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -117,10 +128,7 @@ class HyCard extends StatelessWidget {
         ),
         if (actions.isNotEmpty) ...[
           const SizedBox(width: HyUiSpacing.xs),
-          Wrap(
-            spacing: HyUiSpacing.xs,
-            children: actions,
-          ),
+          Wrap(spacing: HyUiSpacing.xs, children: actions),
         ],
       ],
     );

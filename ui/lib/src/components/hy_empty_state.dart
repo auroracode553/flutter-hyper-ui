@@ -35,11 +35,7 @@ class HyEmptyState extends StatelessWidget {
                 color: tokens.muted,
                 borderRadius: BorderRadius.circular(HyUiRadii.md),
               ),
-              child: Icon(
-                icon,
-                size: 34,
-                color: tokens.mutedForeground,
-              ),
+              child: Icon(icon, size: 34, color: tokens.mutedForeground),
             ),
             const SizedBox(height: HyUiSpacing.lg),
             Text(

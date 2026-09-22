@@ -1,6 +1,11 @@
+---
+title: 反馈与浮层
+description: Toast、Dialog、Drawer、BottomSheet、Popover 和加载状态
+---
+
 <ComponentReference group-id="feedback" />
 
-## Drawer 使用说明
+## Drawer 返回结果
 
 ```dart
 final result = await HyDrawer.show<String>(
@@ -26,4 +31,4 @@ if (result != null) HyToast.show(context, result);
 - `useRootNavigator` 默认为 `true`，嵌套导航场景可设为 `false`。
 - 自动适配明暗主题和系统减少动画设置。直接使用 `HyDrawer(child: ...)` 时需提供有限高度，并通过 `onClose` 注入关闭行为。
 
-依赖：仅使用现有 Flutter SDK 和库内 `HyGlass`，无新增第三方依赖。
+Drawer 使用突出玻璃材质与模态遮罩；如果内容只是补充信息且不应中断当前流程，优先使用 Popover 或页面内展开。

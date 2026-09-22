@@ -3,6 +3,7 @@ import type { Theme } from 'vitepress';
 import DemoBlock from './components/DemoBlock.vue';
 import ComponentReference from './components/ComponentReference.vue';
 import CatalogOverview from './components/CatalogOverview.vue';
+import HomePage from './components/HomePage.vue';
 import './style.css';
 
 export default {
@@ -11,5 +12,6 @@ export default {
     app.component('DemoBlock', DemoBlock);
     app.component('ComponentReference', ComponentReference);
     app.component('CatalogOverview', CatalogOverview);
+    app.component('HomePage', HomePage);
   },
 } satisfies Theme;

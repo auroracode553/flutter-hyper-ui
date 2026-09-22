@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../theme/hy_ui_radii.dart';
+import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_glass.dart';
+import 'hy_pressable.dart';
 
+/// 通用列表/设置菜单行。
+///
+/// [grouped] 为 true 时不重复绘制玻璃表面，交由外部 [HyMenuGroup] 承载材质。
 class HyListTile extends StatelessWidget {
-  final String title;
-  final String? subtitle;
-  final String? meta;
-  final Widget? leading;
-  final IconData? leadingIcon;
-  final Color? leadingColor;
-  final Widget? trailing;
-  final VoidCallback? onTap;
-  final bool selected;
-  final bool grouped;
-
   const HyListTile({
     super.key,
     required this.title,
@@ -28,116 +22,141 @@ class HyListTile extends StatelessWidget {
     this.onTap,
     this.selected = false,
     this.grouped = false,
+    this.enabled = true,
+    this.showChevron = true,
   });
+
+  final String title;
+  final String? subtitle;
+  final String? meta;
+  final Widget? leading;
+  final IconData? leadingIcon;
+  final Color? leadingColor;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+  final bool selected;
+  final bool grouped;
+  final bool enabled;
+  final bool showChevron;
+
+  bool get _hasLeading => leading != null || leadingIcon != null;
 
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
-    final borderColor = grouped ? Colors.transparent : selected ? tokens.primary : tokens.border;
-    final backgroundColor =
-        selected ? tokens.selectionBackground : grouped ? Colors.transparent : tokens.card.withAlpha(190);
-
-    return Material(
-      color: backgroundColor,
-      borderRadius: BorderRadius.circular(HyUiRadii.md),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(HyUiSpacing.cardPadding),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(HyUiRadii.md),
-            border: Border.all(color: borderColor),
-          ),
-          child: Row(
-            children: [
-              if (_hasLeading) ...[
-                _buildLeading(tokens),
-                const SizedBox(width: HyUiSpacing.sm),
-              ],
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        color: tokens.cardForeground,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle!,
-                        style: TextStyle(
-                          color: tokens.mutedForeground,
-                          fontSize: 13,
-                          height: 1.35,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                    if (meta != null) ...[
-                      const SizedBox(height: HyUiSpacing.xxs),
-                      Text(
-                        meta!,
-                        style: TextStyle(
-                          color: tokens.mutedForeground,
-                          fontSize: 12,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(width: HyUiSpacing.sm),
-              trailing ??
-                  Icon(
-                    Icons.chevron_right,
-                    size: 18,
-                    color: tokens.mutedForeground,
-                  ),
-            ],
-          ),
-        ),
+    final glass = HyGlassTheme.of(context);
+    final radius = BorderRadius.circular(grouped ? 12 : 18);
+    final row = AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutCubic,
+      constraints: const BoxConstraints(minHeight: 52),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: selected ? glass.selection : Colors.transparent,
+        borderRadius: radius,
       ),
+      child: Row(
+        children: <Widget>[
+          if (_hasLeading) ...<Widget>[
+            _buildLeading(tokens, glass),
+            const SizedBox(width: HyUiSpacing.sm),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: enabled
+                        ? tokens.cardForeground
+                        : tokens.mutedForeground,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    height: 1.25,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (subtitle != null) ...<Widget>[
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle!,
+                    style: TextStyle(
+                      color: tokens.mutedForeground,
+                      fontSize: 12,
+                      height: 1.35,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+                if (meta != null) ...<Widget>[
+                  const SizedBox(height: 4),
+                  Text(
+                    meta!,
+                    style: TextStyle(
+                      color: tokens.mutedForeground,
+                      fontSize: 11,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (trailing != null) ...<Widget>[
+            const SizedBox(width: HyUiSpacing.sm),
+            trailing!,
+          ] else if (showChevron && onTap != null) ...<Widget>[
+            const SizedBox(width: HyUiSpacing.sm),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 20,
+              color: tokens.mutedForeground,
+            ),
+          ],
+        ],
+      ),
+    );
+
+    if (grouped) {
+      return HyPressable(
+        onPressed: enabled ? onTap : null,
+        enabled: enabled,
+        pressedScale: 0.992,
+        borderRadius: radius,
+        semanticLabel: title,
+        child: row,
+      );
+    }
+
+    return HyGlass(
+      radius: 18,
+      blur: 14,
+      weight: HyGlassWeight.regular,
+      onTap: enabled ? onTap : null,
+      color: selected ? glass.surfaceStrong : null,
+      borderColor: selected ? tokens.primary.withAlpha(90) : null,
+      child: row,
     );
   }
 
-  bool get _hasLeading => leading != null || leadingIcon != null;
-
-  Widget _buildLeading(HyUiThemeTokens tokens) {
-    final customLeading = leading;
-    if (customLeading != null) {
-      return customLeading;
-    }
-
-    final icon = leadingIcon;
-    if (icon == null) {
-      return const SizedBox.shrink();
-    }
-
+  Widget _buildLeading(HyUiThemeTokens tokens, HyGlassTheme glass) {
+    if (leading != null) return leading!;
     final color = leadingColor ?? tokens.primary;
     return Container(
-      width: 40,
-      height: 40,
+      width: 38,
+      height: 38,
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(HyUiRadii.sm),
+        color: color.withAlpha(28),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: glass.edgeHighlight),
       ),
-      child: Icon(
-        icon,
-        size: 20,
-        color: tokens.primaryForeground,
-      ),
+      alignment: Alignment.center,
+      child: Icon(leadingIcon, size: 20, color: color),
     );
   }
 }

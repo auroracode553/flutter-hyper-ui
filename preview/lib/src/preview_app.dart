@@ -35,7 +35,7 @@ class _PreviewAppState extends State<PreviewApp> {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: _theme,
-      builder: (_, __) => MaterialApp(
+      builder: (_, _) => MaterialApp(
         title: 'Flutter Hyper UI Preview',
         debugShowCheckedModeBanner: false,
         theme: HyUiTheme.light(),

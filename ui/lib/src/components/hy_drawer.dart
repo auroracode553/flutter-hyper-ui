@@ -1,5 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
+import '../theme/hy_glass_theme.dart';
+import '../theme/hy_ui_effects.dart';
 import 'hy_glass.dart';
 
 /// 逻辑方向；在 RTL 布局中 start 位于右侧，end 位于左侧。
@@ -40,13 +44,14 @@ class HyDrawer extends StatelessWidget {
     bool scrollable = true,
     bool useRootNavigator = true,
     EdgeInsetsGeometry padding = const EdgeInsets.all(20),
-    Color barrierColor = const Color(0x66000000),
+    Color? barrierColor,
     String? barrierLabel,
     RouteSettings? routeSettings,
   }) {
     assert(width > 0 && width.isFinite);
     final direction = Directionality.of(context);
-    final isLeft = (placement == HyDrawerPlacement.start) ==
+    final isLeft =
+        (placement == HyDrawerPlacement.start) ==
         (direction == TextDirection.ltr);
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
@@ -57,56 +62,79 @@ class HyDrawer extends StatelessWidget {
       useRootNavigator: useRootNavigator,
       routeSettings: routeSettings,
       barrierDismissible: dismissible,
-      barrierColor: barrierColor,
-      barrierLabel: barrierLabel ??
+      barrierColor: barrierColor ?? HyGlassTheme.of(context).scrim,
+      barrierLabel:
+          barrierLabel ??
           MaterialLocalizations.of(context).modalBarrierDismissLabel,
       transitionDuration: reduceMotion
           ? Duration.zero
-          : const Duration(milliseconds: 260),
+          : HyUiEffects.overlayDuration,
       pageBuilder: (routeContext, animation, secondaryAnimation) => themes.wrap(
         Directionality(
           textDirection: direction,
-          child: Builder(builder: (drawerContext) {
-            // 在路由内读取键盘和安全区，随窗口尺寸变化重新约束宽度。
-            return Padding(
-              padding: MediaQuery.viewInsetsOf(drawerContext),
-              child: SafeArea(
-                minimum: const EdgeInsets.all(12),
-                child: Align(
-                  alignment: isLeft ? Alignment.centerLeft : Alignment.centerRight,
-                  child: SizedBox(
-                    width: width,
-                    height: double.infinity,
-                    child: Semantics(
-                      scopesRoute: true,
-                      namesRoute: true,
-                      label: title ?? MaterialLocalizations.of(drawerContext).dialogLabel,
-                      explicitChildNodes: true,
-                      child: HyDrawer(
-                        title: title,
-                        footer: footerBuilder?.call(drawerContext),
-                        onClose: showCloseButton
-                            ? () { Navigator.of(drawerContext).pop(); }
-                            : null,
-                        scrollable: scrollable,
-                        padding: padding,
-                        child: builder(drawerContext),
+          child: Builder(
+            builder: (drawerContext) {
+              // 在路由内读取键盘和安全区，随窗口尺寸变化重新约束宽度。
+              return LayoutBuilder(
+                builder: (context, constraints) => Padding(
+                  padding: MediaQuery.viewInsetsOf(drawerContext),
+                  child: SafeArea(
+                    minimum: const EdgeInsets.all(12),
+                    child: Align(
+                      alignment: isLeft
+                          ? Alignment.centerLeft
+                          : Alignment.centerRight,
+                      child: SizedBox(
+                        width: math.max(
+                          0,
+                          math.min(width, constraints.maxWidth - 24),
+                        ),
+                        height: double.infinity,
+                        child: Semantics(
+                          scopesRoute: true,
+                          namesRoute: true,
+                          label:
+                              title ??
+                              MaterialLocalizations.of(drawerContext)
+                                  .dialogLabel,
+                          explicitChildNodes: true,
+                          child: HyDrawer(
+                            title: title,
+                            footer: footerBuilder?.call(drawerContext),
+                            onClose: showCloseButton
+                                ? () {
+                                    Navigator.of(drawerContext).pop();
+                                  }
+                                : null,
+                            scrollable: scrollable,
+                            padding: padding,
+                            child: builder(drawerContext),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: Offset(isLeft ? -1 : 1, 0),
-            end: Offset.zero,
-          ).chain(CurveTween(curve: Curves.easeOutCubic)).animate(animation),
-          child: child,
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: HyUiEffects.overlayCurve,
+          reverseCurve: Curves.easeInCubic,
+        );
+        return FadeTransition(
+          opacity: curved,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: Offset(isLeft ? -0.12 : 0.12, 0),
+              end: Offset.zero,
+            ).animate(curved),
+            child: child,
+          ),
         );
       },
     );
@@ -114,24 +142,34 @@ class HyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => HyGlass(
-    radius: 28,
+    radius: 30,
+    blur: HyUiEffects.glassBlurStrong,
+    weight: HyGlassWeight.prominent,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (title != null || onClose != null)
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 8, 8),
-            child: Row(children: [
-              Expanded(child: title == null
-                  ? const SizedBox.shrink()
-                  : Text(title!, style: Theme.of(context).textTheme.titleLarge)),
-              if (onClose != null)
-                IconButton(
-                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-                  onPressed: onClose,
-                  icon: const Icon(Icons.close_rounded),
+            child: Row(
+              children: [
+                Expanded(
+                  child: title == null
+                      ? const SizedBox.shrink()
+                      : Text(
+                          title!,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
                 ),
-            ]),
+                if (onClose != null)
+                  IconButton(
+                    tooltip: MaterialLocalizations.of(context)
+                        .closeButtonTooltip,
+                    onPressed: onClose,
+                    icon: const Icon(Icons.close_rounded),
+                  ),
+              ],
+            ),
           ),
         Expanded(
           child: scrollable

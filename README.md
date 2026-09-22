@@ -4,6 +4,47 @@
 
 面向移动端的柔光玻璃 Flutter 组件库。组件使用 `Hy` 前缀，通过 `package:flutter_hyper_ui/hy_ui.dart` 引用。
 
+## 设计系统
+
+Hy UI 是独立、无业务依赖的通用组件库。视觉语言以克制的半透明材质、细边缘高光、低对比阴影和胶囊选中态为核心；交互遵循按下即响应、拖拽 1:1 跟手、释放速度继承、边界柔性阻尼和减少动画适配。
+
+- `HyUiThemeTokens`：背景、文字、品牌色和状态色等语义令牌。
+- `HyGlassTheme`：玻璃表面、边缘、阴影、控件轨道、选中态和遮罩令牌，可由应用通过 `ThemeData.extensions` 覆盖。
+- `HyGlass`：按 `subtle / regular / prominent / solid` 区分材质厚度；大面积浮层使用更强材质，小控件使用轻量材质。
+- `HyPressable`：按钮、卡片和菜单行共享的即时按压反馈，不包含业务行为。
+
+## 通用组件
+
+- 导航：`HyTabBar`、`HyTabs`、`HyNavBar`、`HyDrawer`、`HyBottomSheet`。
+- 操作：`HyButton`、`HySlideMenu`、`HyPopupMenu`、`HySegmentedControl`。
+- 表单：`HyTextField`、`HySwitch`、`HyCheckbox`、`HyRadio`、`HySlider`、`HySelect`、`HyDropdown`。
+- 数据与菜单：`HyList`、`HyListTile`、`HyMenuList`、`HyMenuGroup`、`HyCard`。
+- 反馈：`HyToast`、`HyDialog`、`HyAlert`、`HyLoading`、`HySkeleton`。
+
+所有组件均为受控或回调驱动，不读取业务状态、不内置路由名称、不依赖第三方状态管理方案。
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/hy_ui.dart';
+
+MaterialApp(
+  theme: HyUiTheme.light(),
+  darkTheme: HyUiTheme.dark(),
+  home: Scaffold(
+    extendBody: true,
+    body: const HySoftBackground(child: YourPage()),
+    bottomNavigationBar: HyTabBar(
+      items: const [
+        HyTabItem(icon: Icons.home_outlined, label: '首页'),
+        HyTabItem(icon: Icons.person_outline, label: '我的'),
+      ],
+      selectedIndex: selectedIndex,
+      onSelected: onSelected,
+    ),
+  ),
+);
+```
+
 ## 文档预览方案
 
 文档采用 **VitePress + Flutter Web + 官方 DOM 多视图嵌入**。开发模式由 Vite 将 `/preview` 同源代理到 Flutter Debug 服务并支持热重载；release 模式读取文档站自己的静态预览包。两种模式都不使用 iframe。

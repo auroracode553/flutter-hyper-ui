@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../theme/hy_ui_radii.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
+import '../theme/hy_glass_theme.dart';
+import 'hy_glass.dart';
 
 class HySegmentOption<T> {
   final T value;
@@ -34,7 +36,6 @@ class HySegmentedControl<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
     final children = options.map((option) {
       final item = _HySegmentItem<T>(
         option: option,
@@ -45,12 +46,11 @@ class HySegmentedControl<T> extends StatelessWidget {
       return equalWidth ? Expanded(child: item) : item;
     }).toList();
 
-    return Container(
+    return HyGlass(
+      radius: 18,
+      blur: 14,
+      weight: HyGlassWeight.subtle,
       padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: tokens.muted,
-        borderRadius: BorderRadius.circular(HyUiRadii.sm),
-      ),
       child: Row(
         mainAxisSize: equalWidth ? MainAxisSize.max : MainAxisSize.min,
         children: children,
@@ -75,12 +75,13 @@ class _HySegmentItem<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
+    final glass = HyGlassTheme.of(context);
     final foreground = selected
-        ? tokens.primaryForeground
+        ? tokens.foreground
         : option.enabled
-            ? tokens.foreground
-            : tokens.mutedForeground;
-    final background = selected ? tokens.primary : Colors.transparent;
+        ? tokens.foreground
+        : tokens.mutedForeground;
+    final background = selected ? glass.selection : Colors.transparent;
 
     return Material(
       color: background,

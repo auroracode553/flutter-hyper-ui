@@ -37,6 +37,14 @@ const demo = (
   description?: string,
 ): ComponentDemo => ({ id, title, source, height, description });
 
+export const featuredDemo = demo(
+  'glass-library',
+  '柔性玻璃组件总览',
+  'glass_library_example.dart',
+  980,
+  '导航、输入、菜单、反馈与加载组件的统一状态和交互。',
+);
+
 /**
  * 文档的唯一人工维护目录。
  *
@@ -46,9 +54,9 @@ const demo = (
 export const componentGroups: ComponentGroup[] = [
   {
     id: 'foundations',
-    title: '基础元素',
-    navTitle: '基础元素',
-    description: '文字、图标、图片、头像、角标与语义状态，是组合其他组件的最小视觉单元。',
+    title: '基础与语义',
+    navTitle: '基础与语义',
+    description: '文字、图标、图片、头像和语义状态，是构成一致移动端界面的最小单元。',
     page: '/components/foundations',
     demos: [
       demo('atoms', '基础元素完整状态', 'complete_examples.dart', 740, '文字、图标、头像、图片和语义标签。'),
@@ -67,9 +75,9 @@ export const componentGroups: ComponentGroup[] = [
   },
   {
     id: 'actions',
-    title: '按钮与卡片',
-    navTitle: '按钮与卡片',
-    description: '动作入口和内容容器，覆盖按钮层级、状态、玻璃材质与卡片结构。',
+    title: '材质与操作',
+    navTitle: '材质与操作',
+    description: '玻璃表面、即时按压反馈、动作层级和内容容器。',
     page: '/components/actions',
     demos: [
       demo('buttons', '按钮层级、尺寸与状态', 'buttons_example.dart', 360, '点击真实按钮，检查图标、加载态和不同尺寸。'),
@@ -79,15 +87,21 @@ export const componentGroups: ComponentGroup[] = [
       component('HyButton / HyButtonVariant / HyButtonSize', 'hy_button.dart', '五种视觉层级、三种尺寸、加载、禁用、图标和通栏状态。'),
       component('HyCard', 'hy_card.dart', '具有标题、操作区、正文、底部和选中态的内容容器。'),
       component('HyGlass', 'hy_glass.dart', '可配置模糊、背景、边框、阴影和点击行为的玻璃材质。'),
+      component('HyGlassWeight', 'hy_glass.dart', '按表面面积和层级区分轻薄、标准、突出与实色材质。'),
+      component('HyPressable', 'hy_pressable.dart', '按下即响应、可适配减少动画的通用触控反馈层。'),
       component('HySoftBackground', 'hy_glass.dart', '为页面提供与明暗主题同步的柔光背景。'),
     ],
-    conventions: ['密集列表中可设置 `HyGlass.blur: 0`，保留材质外观并降低模糊绘制成本。'],
+    conventions: [
+      '按表面面积选择 `HyGlassWeight`：小控件用 `subtle`，普通卡片用 `regular`，模态浮层用 `prominent`。',
+      '密集列表中可设置 `HyGlass.blur: 0`，保留材质外观并降低模糊绘制成本。',
+      '不要在轻量玻璃表面上继续叠加轻量玻璃；选中态优先使用颜色状态而不是新增一层材质。',
+    ],
   },
   {
     id: 'layout',
-    title: '布局与占位',
-    navTitle: '布局与占位',
-    description: '间距、换行、网格、分割线、骨架和空状态。',
+    title: '布局与加载',
+    navTitle: '布局与加载',
+    description: '间距、换行、网格、分割、动态骨架与空状态。',
     page: '/components/layout',
     demos: [
       demo('layout', '布局容器与占位状态', 'complete_examples.dart', 740),
@@ -97,7 +111,7 @@ export const componentGroups: ComponentGroup[] = [
       component('HyWrap', 'hy_layout.dart', '带统一主轴和换行间距的流式布局。'),
       component('HyGrid', 'hy_layout.dart', '固定列数和宽高比的轻量网格。'),
       component('HyDivider', 'hy_layout.dart', '横向或纵向、实线或虚线分隔。'),
-      component('HySkeleton', 'hy_layout.dart', '列表或卡片加载占位。'),
+      component('HySkeleton', 'hy_layout.dart', '适配减少动画设置的列表或卡片扫光占位。'),
       component('HyEmptyState', 'hy_empty_state.dart', '包含图标、标题、说明和操作的空状态。'),
     ],
   },
@@ -105,7 +119,7 @@ export const componentGroups: ComponentGroup[] = [
     id: 'forms',
     title: '表单与选择',
     navTitle: '表单与选择',
-    description: '文本输入、受控选择、选择器、日期时间与文件上传。',
+    description: '受控输入、锚定下拉、底部选择器、日期时间与注入式文件上传。',
     page: '/components/forms',
     demos: [
       demo('inputs', '基础输入与分段选择', 'inputs_example.dart', 520, '用于快速检查输入、辅助文案和受控选择。'),
@@ -116,6 +130,7 @@ export const componentGroups: ComponentGroup[] = [
       component('HyTextField', 'hy_text_field.dart', '支持校验、多行、清除、密码显隐、错误和字数限制。'),
       component('HySegmentedControl / HySegmentOption', 'hy_segmented_control.dart', '适用于少量互斥选项的受控分段选择。'),
       component('HySelect / HyOption', 'hy_select.dart', '底部弹层单选或多选，支持禁用项。'),
+      component('HyDropdown', 'hy_dropdown.dart', '锚定触发器展开、适合在选择时保持页面上下文的泛型下拉。'),
       component('HyCheckbox', 'hy_selection_controls.dart', '支持三态、禁用和标签的受控复选。'),
       component('HyRadio', 'hy_selection_controls.dart', '泛型值受控单选。'),
       component('HySwitch', 'hy_selection_controls.dart', '布尔值受控开关。'),
@@ -132,9 +147,9 @@ export const componentGroups: ComponentGroup[] = [
   },
   {
     id: 'feedback',
-    title: '反馈与弹层',
-    navTitle: '反馈与弹层',
-    description: '轻提示、对话框、局部或全局加载、通知、底部弹层与锚点菜单。',
+    title: '反馈与浮层',
+    navTitle: '反馈与浮层',
+    description: '玻璃 Toast、对话框、加载、通知、Drawer、BottomSheet 与锚点菜单。',
     page: '/components/feedback',
     demos: [
       demo('feedback', '基础反馈状态', 'feedback_example.dart', 520, '空状态、徽标和常用反馈组合。'),
@@ -142,7 +157,7 @@ export const componentGroups: ComponentGroup[] = [
       demo('drawer', '抽屉交互', 'drawer_example.dart', 620, '检查左右抽屉、固定底部操作和返回值。'),
     ],
     components: [
-      component('HyToast', 'hy_feedback.dart', '基于 ScaffoldMessenger 的自动消失轻提示。'),
+      component('HyToast', 'hy_feedback.dart', '支持语义色和可选撤销动作的玻璃轻提示。'),
       component('HyDialog', 'hy_feedback.dart', '确认、提示或自定义正文对话框。'),
       component('HyLoading', 'hy_feedback.dart', '局部加载状态与自动清理的全局任务遮罩。'),
       component('HyAlert', 'hy_feedback.dart', '可关闭的语义通知。'),
@@ -157,23 +172,25 @@ export const componentGroups: ComponentGroup[] = [
   },
   {
     id: 'navigation',
-    title: '导航、进度与列表',
-    navTitle: '导航与列表',
-    description: '顶部、标签、底部导航，步骤与进度，以及列表的刷新、分页和吸顶。',
+    title: '导航与菜单',
+    navTitle: '导航与菜单',
+    description: 'Navbar、可拖拽 TabBar、标签、步骤、进度、列表、分组菜单与侧滑操作。',
     page: '/components/navigation',
     demos: [
       demo('navigation', '基础导航', 'navigation_example.dart', 520),
       demo('full-navigation', '导航、步骤与列表联动', 'complete_examples.dart', 860),
     ],
     components: [
-      component('HyTopBar', 'hy_top_bar.dart', '支持副标题、自定义前导和操作区的页面顶部栏。'),
-      component('HyTabBar / HyTabItem', 'hy_navigation.dart', '带选中动效、RTL 与安全区适配的悬浮底部导航。'),
+      component('HyTopBar / HyNavBar', 'hy_top_bar.dart', '支持副标题、自定义前导、操作区和悬浮材质的页面顶部栏。'),
+      component('HyTabBar / HyTabItem', 'hy_navigation.dart', '支持拖拽、速度投影、弹簧吸附、RTL 与安全区的悬浮导航。'),
       component('HyTabs / HyTabBarView', 'hy_navigation.dart', '共享 TabController 的标签与页面联动。'),
       component('HySteps / HyStep', 'hy_navigation.dart', '横向或纵向步骤状态。'),
       component('HyProgress', 'hy_navigation.dart', '线性、环形、确定或不定进度。'),
       component('HyProgressBar', 'hy_progress_bar.dart', '紧凑线性进度条。'),
       component('HyListTile', 'hy_list_tile.dart', '支持图标、头像、标签、元信息和自定义尾部的列表项。'),
-      component('HyMenuGroup', 'hy_lists.dart', '设置页风格的列表分组容器。'),
+      component('HyList', 'hy_lists.dart', '不绑定数据模型的轻量分隔列表。'),
+      component('HyMenuList / HyMenuItem / HyMenuGroup', 'hy_lists.dart', '设置页、个人中心和详情页通用的描述式分组菜单。'),
+      component('HySlideMenu / HySlideAction', 'hy_slide_menu.dart', '支持 RTL、速度投影、弹簧吸附与边界阻尼的侧滑菜单。'),
       component('HyPullRefresh', 'hy_lists.dart', '对 RefreshIndicator 的语义化封装。'),
       component('HyLoadMore', 'hy_lists.dart', '串行分页、终态与失败重试。'),
       component('HySticky', 'hy_lists.dart', '用于 CustomScrollView.slivers 的吸顶内容。'),
@@ -185,10 +202,10 @@ export const componentGroups: ComponentGroup[] = [
   },
   {
     id: 'business',
-    title: '业务展示',
-    navTitle: '业务展示',
-    description: '常见业务页需要的搜索、倒计时、折叠面板和时间轴。',
-    page: '/components/business',
+    title: '复合组件',
+    navTitle: '复合组件',
+    description: '由基础组件组合而成的搜索、倒计时、折叠面板和时间轴，仍保持业务无关。',
+    page: '/components/composites',
     demos: [
       demo('business', '业务组件组合', 'interactive_examples.dart', 850, '搜索、通知、倒计时、设置菜单、折叠面板与时间轴。'),
     ],
@@ -202,9 +219,9 @@ export const componentGroups: ComponentGroup[] = [
   },
   {
     id: 'utilities',
-    title: '主题与工具',
-    navTitle: '主题与工具',
-    description: '主题令牌、间距、圆角、动效以及屏幕、键盘、路由和安全区工具。',
+    title: '主题与基础设施',
+    navTitle: '主题与基础设施',
+    description: '语义颜色、玻璃材质、间距、圆角、动效与平台辅助工具。',
     page: '/components/utilities',
     demos: [
       demo('overview', '主题化组件概览', 'overview_example.dart', 420, '文档明暗主题会同步到 Flutter 预览。'),
@@ -212,6 +229,7 @@ export const componentGroups: ComponentGroup[] = [
     components: [
       component('HyUiTheme', '../theme/hy_ui_theme.dart', '明暗主题的 ThemeData 构造入口。'),
       component('HyUiThemeTokens', '../theme/hy_ui_theme_tokens.dart', '组件消费的 ThemeExtension 语义令牌。'),
+      component('HyGlassTheme', '../theme/hy_glass_theme.dart', '玻璃表面、边缘、阴影、选中态、控件轨道与遮罩令牌。'),
       component('HyUiColors', '../theme/hy_ui_colors.dart', '组件库基础色板。'),
       component('HyUiSpacing', '../theme/hy_ui_spacing.dart', '统一间距常量。'),
       component('HyUiRadii', '../theme/hy_ui_radii.dart', '统一圆角常量。'),

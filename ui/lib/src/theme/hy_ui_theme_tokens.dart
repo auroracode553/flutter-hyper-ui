@@ -134,14 +134,20 @@ class HyUiThemeTokens extends ThemeExtension<HyUiThemeTokens> {
       card: Color.lerp(card, other.card, t)!,
       cardForeground: Color.lerp(cardForeground, other.cardForeground, t)!,
       primary: Color.lerp(primary, other.primary, t)!,
-      primaryForeground:
-          Color.lerp(primaryForeground, other.primaryForeground, t)!,
+      primaryForeground: Color.lerp(
+        primaryForeground,
+        other.primaryForeground,
+        t,
+      )!,
       muted: Color.lerp(muted, other.muted, t)!,
       mutedForeground: Color.lerp(mutedForeground, other.mutedForeground, t)!,
       border: Color.lerp(border, other.border, t)!,
       input: Color.lerp(input, other.input, t)!,
-      selectionBackground:
-          Color.lerp(selectionBackground, other.selectionBackground, t)!,
+      selectionBackground: Color.lerp(
+        selectionBackground,
+        other.selectionBackground,
+        t,
+      )!,
       success: Color.lerp(success, other.success, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
       error: Color.lerp(error, other.error, t)!,

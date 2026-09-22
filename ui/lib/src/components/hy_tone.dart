@@ -2,14 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 
-enum HyUiTone {
-  neutral,
-  primary,
-  success,
-  warning,
-  error,
-  info,
-}
+enum HyUiTone { neutral, primary, success, warning, error, info }
 
 extension HyUiToneResolver on HyUiTone {
   Color color(HyUiThemeTokens tokens) {

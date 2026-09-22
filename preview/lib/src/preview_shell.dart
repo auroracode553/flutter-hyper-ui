@@ -23,7 +23,10 @@ class PreviewShell extends StatelessWidget {
       return _EmbeddedPreview(key: ValueKey(item.id), item: item);
     }
 
-    return _StandalonePreview(initialSelected: item, onToggleTheme: onToggleTheme);
+    return _StandalonePreview(
+      initialSelected: item,
+      onToggleTheme: onToggleTheme,
+    );
   }
 }
 
@@ -38,15 +41,17 @@ class _EmbeddedPreview extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: tokens.background,
-      body: HySoftBackground(child: SingleChildScrollView(
-        padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 760),
-            child: item.builder(context),
+      body: HySoftBackground(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: item.builder(context),
+            ),
           ),
         ),
-      )),
+      ),
     );
   }
 }
@@ -73,51 +78,58 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
 
     return Scaffold(
       backgroundColor: tokens.background,
-      body: HySoftBackground(child: SafeArea(
-        child: Column(
-          children: [
-            HyTopBar(
-              title: 'Flutter Hyper UI Preview',
-              subtitle: selected.description,
-              safeArea: false,
-              actions: [IconButton(tooltip: '切换明暗主题', onPressed: widget.onToggleTheme,
-                icon: const Icon(Icons.brightness_6_outlined))],
-            ),
-            SizedBox(
-              height: 52,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: HyUiSpacing.pagePadding,
-                  vertical: HyUiSpacing.xs,
-                ),
-                itemCount: PreviewCatalog.items.length,
-                separatorBuilder: (_, __) =>
-                    const SizedBox(width: HyUiSpacing.xs),
-                itemBuilder: (context, index) {
-                  final item = PreviewCatalog.items[index];
-                  return HyTag(
-                    label: item.title,
-                    selected: item.id == selected.id,
-                    onTap: () => setState(() => _selectedId = item.id),
-                  );
-                },
+      body: HySoftBackground(
+        child: SafeArea(
+          child: Column(
+            children: [
+              HyTopBar(
+                title: 'Flutter Hyper UI Preview',
+                subtitle: selected.description,
+                safeArea: false,
+                actions: [
+                  IconButton(
+                    tooltip: '切换明暗主题',
+                    onPressed: widget.onToggleTheme,
+                    icon: const Icon(Icons.brightness_6_outlined),
+                  ),
+                ],
               ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 960),
-                    child: selected.builder(context),
+              SizedBox(
+                height: 52,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: HyUiSpacing.pagePadding,
+                    vertical: HyUiSpacing.xs,
+                  ),
+                  itemCount: PreviewCatalog.items.length,
+                  separatorBuilder: (_, _) =>
+                      const SizedBox(width: HyUiSpacing.xs),
+                  itemBuilder: (context, index) {
+                    final item = PreviewCatalog.items[index];
+                    return HyTag(
+                      label: item.title,
+                      selected: item.id == selected.id,
+                      onTap: () => setState(() => _selectedId = item.id),
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 960),
+                      child: selected.builder(context),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

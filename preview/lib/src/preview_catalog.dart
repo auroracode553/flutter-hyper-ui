@@ -6,6 +6,7 @@ import 'examples/cards_example.dart';
 import 'examples/data_example.dart';
 import 'examples/drawer_example.dart';
 import 'examples/feedback_example.dart';
+import 'examples/glass_library_example.dart';
 import 'examples/inputs_example.dart';
 import 'examples/navigation_example.dart';
 import 'examples/overview_example.dart';
@@ -32,9 +33,15 @@ class PreviewItem {
 class PreviewCatalog {
   const PreviewCatalog._();
 
-  static const defaultId = 'overview';
+  static const defaultId = 'glass-library';
 
   static final List<PreviewItem> items = [
+    PreviewItem(
+      id: 'glass-library',
+      title: '柔性玻璃组件库',
+      description: '通用导航、表单、菜单、反馈与加载组件。',
+      builder: (_) => const GlassLibraryExample(),
+    ),
     PreviewItem(
       id: 'drawer',
       title: 'Drawer 抽屉',

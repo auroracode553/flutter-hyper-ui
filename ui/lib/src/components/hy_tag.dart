@@ -62,9 +62,16 @@ class HyTag extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              if (onClose != null) SizedBox(width: 28, child: IconButton(
-                padding: EdgeInsets.zero, tooltip: '移除 $label', onPressed: onClose,
-                icon: Icon(Icons.close, size: 14, color: foreground))),
+              if (onClose != null)
+                SizedBox(
+                  width: 28,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    tooltip: '移除 $label',
+                    onPressed: onClose,
+                    icon: Icon(Icons.close, size: 14, color: foreground),
+                  ),
+                ),
             ],
           ),
         ),

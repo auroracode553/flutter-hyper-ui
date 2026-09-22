@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import type { ComponentGroup } from './catalog';
+import type { ComponentDemo, ComponentGroup } from './catalog';
 
 function assertUnique(values: string[], label: string) {
   const duplicates = values.filter((value, index) => values.indexOf(value) !== index);
@@ -11,16 +11,31 @@ function assertUnique(values: string[], label: string) {
 }
 
 /** VitePress 启动和构建时执行的只读契约检查。 */
-export function validateCatalog(repositoryRoot: string, groups: ComponentGroup[]) {
+export function validateCatalog(
+  repositoryRoot: string,
+  groups: ComponentGroup[],
+  featuredDemos: ComponentDemo[] = [],
+) {
   assertUnique(groups.map((group) => group.id), '组件分类 id');
   assertUnique(groups.map((group) => group.page), '组件分类 page');
+
+  const missingPages = groups
+    .filter((group) => !existsSync(resolve(
+      repositoryRoot,
+      'vitepress',
+      `${group.page.replace(/^\//, '')}.md`,
+    )))
+    .map((group) => group.page);
+  if (missingPages.length > 0) {
+    throw new Error(`组件分类页面不存在: ${missingPages.join(', ')}`);
+  }
 
   const previewCatalogPath = resolve(repositoryRoot, 'preview/lib/src/preview_catalog.dart');
   const previewCatalog = readFileSync(previewCatalogPath, 'utf8');
   const registeredPreviewIds = new Set(
     [...previewCatalog.matchAll(/\bid:\s*'([^']+)'/g)].map((match) => match[1]),
   );
-  const demos = groups.flatMap((group) => group.demos);
+  const demos = [...featuredDemos, ...groups.flatMap((group) => group.demos)];
   assertUnique(demos.map((demo) => demo.id), '文档演示 id');
   const missingPreviewIds = demos
     .map((demo) => demo.id)
