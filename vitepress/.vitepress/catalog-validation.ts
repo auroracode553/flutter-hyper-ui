@@ -18,6 +18,9 @@ export function validateCatalog(
 ) {
   assertUnique(groups.map((group) => group.id), '组件分类 id');
   assertUnique(groups.map((group) => group.page), '组件分类 page');
+  const componentEntries = groups.flatMap((group) => group.components);
+  assertUnique(componentEntries.map((entry) => entry.id), '组件文档 id');
+  assertUnique(componentEntries.map((entry) => entry.page), '组件文档 page');
 
   const missingPages = groups
     .filter((group) => !existsSync(resolve(
@@ -28,6 +31,17 @@ export function validateCatalog(
     .map((group) => group.page);
   if (missingPages.length > 0) {
     throw new Error(`组件分类页面不存在: ${missingPages.join(', ')}`);
+  }
+
+  const missingComponentPages = componentEntries
+    .filter((entry) => !existsSync(resolve(
+      repositoryRoot,
+      'vitepress',
+      `${entry.page.replace(/^\//, '')}.md`,
+    )))
+    .map((entry) => entry.page);
+  if (missingComponentPages.length > 0) {
+    throw new Error(`组件文档页面不存在: ${missingComponentPages.join(', ')}`);
   }
 
   const previewCatalogPath = resolve(repositoryRoot, 'preview/lib/src/preview_catalog.dart');

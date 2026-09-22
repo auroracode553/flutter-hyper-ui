@@ -63,7 +63,8 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 - `vitepress/.vitepress/theme/preview/bundle-loader.ts`：预览包身份、脚本和引擎加载，分阶段超时。
 - `vitepress/.vitepress/theme/preview/preview-view.ts`：单个视图的创建、首帧确认、主题更新和销毁。
 - `vitepress/.vitepress/theme/preview-runtime.ts`：共享引擎与文档演示注册。
-- `vitepress/.vitepress/catalog.ts`：文档分类、场景 Demo 与真实示例源码引用。
+- `vitepress/.vitepress/catalog.ts`：组件独立路由、平铺侧栏分类、场景 Demo 与真实示例源码引用。
+- `vitepress/.vitepress/theme/components/ComponentDoc.vue`：单组件文档页的示例、API、约定和同类组件结构。
 - `vitepress/.vitepress/theme/example-source.ts`：从 `preview/lib/src/examples/` 读取 Demo 的真实 Dart 源码。
 - `tools/dev-docs.mjs`：启动两个开发服务、监听 Dart 并触发热重载。
 - `tools/build-docs.mjs`：构建 release、自动同步产物并构建 VitePress，不部署。

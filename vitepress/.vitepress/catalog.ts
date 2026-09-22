@@ -1,7 +1,12 @@
 export interface ComponentEntry {
+  id: string;
   name: string;
+  navName: string;
+  page: string;
   source: string;
   summary: string;
+  demoId?: string;
+  sidebar?: boolean;
 }
 
 export interface ComponentDemo {
@@ -23,11 +28,39 @@ export interface ComponentGroup {
   conventions?: string[];
 }
 
-const component = (name: string, source: string, summary: string): ComponentEntry => ({
-  name,
-  source,
-  summary,
-});
+interface ComponentOptions {
+  id?: string;
+  navName?: string;
+  demoId?: string;
+  sidebar?: boolean;
+}
+
+function componentId(name: string) {
+  return name
+    .replace(/^Hy/, '')
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .toLowerCase();
+}
+
+const component = (
+  name: string,
+  source: string,
+  summary: string,
+  options: ComponentOptions = {},
+): ComponentEntry => {
+  const navName = options.navName ?? name.split('/')[0].trim().replace(/<.*>/, '');
+  const id = options.id ?? componentId(navName);
+  return {
+    id,
+    name,
+    navName,
+    page: `/components/${id}`,
+    source,
+    summary,
+    demoId: options.demoId,
+    sidebar: options.sidebar ?? true,
+  };
+};
 
 const demo = (
   id: string,
@@ -54,8 +87,8 @@ export const featuredDemo = demo(
 export const componentGroups: ComponentGroup[] = [
   {
     id: 'foundations',
-    title: '基础与语义',
-    navTitle: '基础与语义',
+    title: '基础组件',
+    navTitle: '基础组件',
     description: '文字、图标、图片、头像和语义状态，是构成一致移动端界面的最小单元。',
     page: '/components/foundations',
     demos: [
@@ -70,7 +103,7 @@ export const componentGroups: ComponentGroup[] = [
       component('HyCountBadge', 'hy_image.dart', '红点、数字和最大值角标。'),
       component('HyBadge', 'hy_badge.dart', '紧凑型语义状态徽标。'),
       component('HyTag', 'hy_tag.dart', '支持语义色、选择、点击和关闭的标签。'),
-      component('HyUiTone / HyUiToneResolver', 'hy_tone.dart', '跨组件共用的语义状态及其主题颜色解析扩展。'),
+      component('HyUiTone / HyUiToneResolver', 'hy_tone.dart', '跨组件共用的语义状态及其主题颜色解析扩展。', { sidebar: false }),
     ],
   },
   {
@@ -84,10 +117,10 @@ export const componentGroups: ComponentGroup[] = [
       demo('cards', '卡片结构与选择状态', 'cards_example.dart', 520, '包含标题、状态、进度、标签和选中态。'),
     ],
     components: [
-      component('HyButton / HyButtonVariant / HyButtonSize', 'hy_button.dart', '五种视觉层级、三种尺寸、加载、禁用、图标和通栏状态。'),
-      component('HyCard', 'hy_card.dart', '具有标题、操作区、正文、底部和选中态的内容容器。'),
-      component('HyGlass', 'hy_glass.dart', '可配置模糊、背景、边框、阴影和点击行为的玻璃材质。'),
-      component('HyGlassWeight', 'hy_glass.dart', '按表面面积和层级区分轻薄、标准、突出与实色材质。'),
+      component('HyButton / HyButtonVariant / HyButtonSize', 'hy_button.dart', '五种视觉层级、三种尺寸、加载、禁用、图标和通栏状态。', { demoId: 'buttons' }),
+      component('HyCard', 'hy_card.dart', '具有标题、操作区、正文、底部和选中态的内容容器。', { demoId: 'cards' }),
+      component('HyGlass', 'hy_glass.dart', '可配置模糊、背景、边框、阴影和点击行为的玻璃材质。', { demoId: 'cards' }),
+      component('HyGlassWeight', 'hy_glass.dart', '按表面面积和层级区分轻薄、标准、突出与实色材质。', { sidebar: false }),
       component('HyPressable', 'hy_pressable.dart', '按下即响应、可适配减少动画的通用触控反馈层。'),
       component('HySoftBackground', 'hy_glass.dart', '为页面提供与明暗主题同步的柔光背景。'),
     ],
@@ -99,8 +132,8 @@ export const componentGroups: ComponentGroup[] = [
   },
   {
     id: 'layout',
-    title: '布局与加载',
-    navTitle: '布局与加载',
+    title: '布局组件',
+    navTitle: '布局组件',
     description: '间距、换行、网格、分割、动态骨架与空状态。',
     page: '/components/layout',
     demos: [
@@ -117,8 +150,8 @@ export const componentGroups: ComponentGroup[] = [
   },
   {
     id: 'forms',
-    title: '表单与选择',
-    navTitle: '表单与选择',
+    title: '表单组件',
+    navTitle: '表单组件',
     description: '受控输入、锚定下拉、底部选择器、日期时间与注入式文件上传。',
     page: '/components/forms',
     demos: [
@@ -127,8 +160,8 @@ export const componentGroups: ComponentGroup[] = [
       demo('upload', '上传状态与重试', 'upload_example.dart', 620, '模拟选择、上传进度、取消、失败和重试，不依赖平台插件。'),
     ],
     components: [
-      component('HyTextField', 'hy_text_field.dart', '支持校验、多行、清除、密码显隐、错误和字数限制。'),
-      component('HySegmentedControl / HySegmentOption', 'hy_segmented_control.dart', '适用于少量互斥选项的受控分段选择。'),
+      component('HyTextField', 'hy_text_field.dart', '支持校验、多行、清除、密码显隐、错误和字数限制。', { demoId: 'inputs' }),
+      component('HySegmentedControl / HySegmentOption', 'hy_segmented_control.dart', '适用于少量互斥选项的受控分段选择。', { demoId: 'inputs' }),
       component('HySelect / HyOption', 'hy_select.dart', '底部弹层单选或多选，支持禁用项。'),
       component('HyDropdown', 'hy_dropdown.dart', '锚定触发器展开、适合在选择时保持页面上下文的泛型下拉。'),
       component('HyCheckbox', 'hy_selection_controls.dart', '支持三态、禁用和标签的受控复选。'),
@@ -136,9 +169,10 @@ export const componentGroups: ComponentGroup[] = [
       component('HySwitch', 'hy_selection_controls.dart', '布尔值受控开关。'),
       component('HySlider', 'hy_selection_controls.dart', '范围、分段和结束回调可配置的滑块。'),
       component('HyRate', 'hy_selection_controls.dart', '数量、步长和图标可配置的评分。'),
-      component('HyPicker / HyDatePicker', 'hy_picker.dart', '普通选项滚轮、日期、时间和日期区间选择。'),
-      component('HyUploader / HyUploadSource / HyUploadStatus / HyUploadFile / HyUploadCancellation / HyUploadItem', 'hy_uploader.dart', '通过注入式适配器完成选择、上传、进度、取消、失败与重试。'),
-      component('HyFilePicker / HyFileUpload', 'hy_uploader.dart', '由业务层实现的文件选择与上传函数类型。'),
+      component('HyPicker', 'hy_picker.dart', '通过滚轮完成普通选项选择。'),
+      component('HyDatePicker', 'hy_picker.dart', '提供日期、时间和日期区间选择入口。'),
+      component('HyUploader / HyUploadSource / HyUploadStatus / HyUploadFile / HyUploadCancellation / HyUploadItem', 'hy_uploader.dart', '通过注入式适配器完成选择、上传、进度、取消、失败与重试。', { demoId: 'upload' }),
+      component('HyFilePicker / HyFileUpload', 'hy_uploader.dart', '由业务层实现的文件选择与上传函数类型。', { sidebar: false }),
     ],
     conventions: [
       '`HySelect.values` 是已提交值；多选仅在确认后触发 `onChanged`。',
@@ -162,7 +196,7 @@ export const componentGroups: ComponentGroup[] = [
       component('HyLoading', 'hy_feedback.dart', '局部加载状态与自动清理的全局任务遮罩。'),
       component('HyAlert', 'hy_feedback.dart', '可关闭的语义通知。'),
       component('HyBottomSheet', 'hy_bottom_sheet.dart', '适配安全区、键盘与最大高度的自定义底部弹层。'),
-      component('HyDrawer / HyDrawerPlacement', 'hy_drawer.dart', '支持双侧弹出、RTL、自定义宽度、固定底部操作区与泛型返回结果的柔光抽屉。'),
+      component('HyDrawer / HyDrawerPlacement', 'hy_drawer.dart', '支持双侧弹出、RTL、自定义宽度、固定底部操作区与泛型返回结果的柔光抽屉。', { demoId: 'drawer' }),
       component('HyActionSheet / HyAction', 'hy_bottom_sheet.dart', '支持危险项与禁用项的底部操作菜单。'),
       component('HyPopover', 'hy_popover.dart', '锚定子组件的补充说明气泡。'),
       component('HyPopupMenu', 'hy_popover.dart', '基于 HyAction 的泛型弹出菜单。'),
@@ -181,8 +215,8 @@ export const componentGroups: ComponentGroup[] = [
       demo('full-navigation', '导航、步骤与列表联动', 'complete_examples.dart', 860),
     ],
     components: [
-      component('HyTopBar / HyNavBar', 'hy_top_bar.dart', '支持副标题、自定义前导、操作区和悬浮材质的页面顶部栏。'),
-      component('HyTabBar / HyTabItem', 'hy_navigation.dart', '支持拖拽、速度投影、弹簧吸附、RTL 与安全区的悬浮导航。'),
+      component('HyTopBar / HyNavBar', 'hy_top_bar.dart', '支持副标题、自定义前导、操作区和悬浮材质的页面顶部栏。', { id: 'nav-bar', navName: 'HyNavBar', demoId: 'navigation' }),
+      component('HyTabBar / HyTabItem', 'hy_navigation.dart', '支持拖拽、速度投影、弹簧吸附、RTL 与安全区的悬浮导航。', { demoId: 'navigation' }),
       component('HyTabs / HyTabBarView', 'hy_navigation.dart', '共享 TabController 的标签与页面联动。'),
       component('HySteps / HyStep', 'hy_navigation.dart', '横向或纵向步骤状态。'),
       component('HyProgress', 'hy_navigation.dart', '线性、环形、确定或不定进度。'),
@@ -246,4 +280,73 @@ export function getComponentGroup(id: string): ComponentGroup {
   const group = componentGroups.find((item) => item.id === id);
   if (!group) throw new Error(`Unknown component group: ${id}`);
   return group;
+}
+
+export interface ComponentDocumentEntry extends ComponentEntry {
+  groupId: string;
+  groupTitle: string;
+}
+
+export interface ComponentSidebarSection {
+  id: string;
+  title: string;
+  components: ComponentDocumentEntry[];
+}
+
+export const componentEntries: ComponentDocumentEntry[] = componentGroups.flatMap((group) => (
+  group.components.map((entry) => ({
+    ...entry,
+    groupId: group.id,
+    groupTitle: group.title,
+  }))
+));
+
+const listComponentIds = new Set([
+  'list-tile', 'list', 'menu-list', 'slide-menu', 'pull-refresh', 'load-more', 'sticky',
+]);
+const actionComponentIds = new Set(['button', 'pressable']);
+
+/** 侧栏只展示分类标题和组件叶子项，不再链接分类聚合页。 */
+export const componentSidebarSections: ComponentSidebarSection[] = componentGroups.flatMap((group) => {
+  const entries = componentEntries.filter((entry) => (
+    entry.groupId === group.id && entry.sidebar !== false
+  ));
+  if (group.id === 'actions') {
+    return [
+      {
+        id: 'actions',
+        title: '操作组件',
+        components: entries.filter((entry) => actionComponentIds.has(entry.id)),
+      },
+      {
+        id: 'containers',
+        title: '容器与材质',
+        components: entries.filter((entry) => !actionComponentIds.has(entry.id)),
+      },
+    ];
+  }
+  if (group.id !== 'navigation') {
+    return [{ id: group.id, title: group.title, components: entries }];
+  }
+  return [
+    {
+      id: 'navigation',
+      title: '导航组件',
+      components: entries.filter((entry) => !listComponentIds.has(entry.id)),
+    },
+    {
+      id: 'lists',
+      title: '列表组件',
+      components: entries.filter((entry) => listComponentIds.has(entry.id)),
+    },
+  ];
+});
+
+export function getComponentEntry(id: string) {
+  const entry = componentEntries.find((item) => item.id === id);
+  if (!entry) throw new Error(`Unknown component document: ${id}`);
+  return {
+    entry,
+    group: getComponentGroup(entry.groupId),
+  };
 }

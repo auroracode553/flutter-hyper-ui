@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress';
-import { componentGroups, featuredDemo } from '../../catalog';
+import { componentSidebarSections, featuredDemo } from '../../catalog';
 import DemoBlock from './DemoBlock.vue';
 import { exampleSourceFor } from '../example-source';
 
@@ -21,6 +21,15 @@ const principles = [
     description: '组件只接受值、Widget 与回调，不绑定路由、业务模型或状态管理框架。',
   },
 ];
+
+const componentCount = componentSidebarSections.reduce(
+  (total, section) => total + section.components.length,
+  0,
+);
+
+function sectionPreview(section: (typeof componentSidebarSections)[number]) {
+  return section.components.slice(0, 4).map((item) => item.navName).join(' · ');
+}
 
 const quickCode = `import 'package:flutter/material.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
@@ -54,7 +63,7 @@ MaterialApp(
           <a class="hy-button hy-button--glass" :href="withBase('/components/catalog')">浏览组件</a>
         </div>
         <ul class="hy-home__facts" aria-label="库特性">
-          <li><strong>40+</strong><span>公开 API</span></li>
+          <li><strong>{{ componentCount }}</strong><span>组件文档</span></li>
           <li><strong>0</strong><span>运行时第三方依赖</span></li>
           <li><strong>A11y</strong><span>动效与对比度适配</span></li>
         </ul>
@@ -115,11 +124,15 @@ MaterialApp(
         <h2>从原子控件到完整移动端界面。</h2>
       </div>
       <nav class="hy-home__catalog-grid" aria-label="组件分类">
-        <a v-for="(group, index) in componentGroups" :key="group.id" :href="withBase(group.page)">
+        <a
+          v-for="(section, index) in componentSidebarSections"
+          :key="section.id"
+          :href="withBase(`/components/catalog#${section.id}`)"
+        >
           <small>{{ String(index + 1).padStart(2, '0') }}</small>
-          <h3>{{ group.title }}</h3>
-          <p>{{ group.description }}</p>
-          <span>{{ group.components.length }} 组 API <b>→</b></span>
+          <h3>{{ section.title }}</h3>
+          <p>{{ sectionPreview(section) }}</p>
+          <span>{{ section.components.length }} 个组件 <b>→</b></span>
         </a>
       </nav>
     </section>

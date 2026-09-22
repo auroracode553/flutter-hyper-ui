@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitepress';
-import { componentGroups, featuredDemo } from './catalog';
+import { componentGroups, componentSidebarSections, featuredDemo } from './catalog';
 import { validateCatalog } from './catalog-validation';
 
 function withTrailingSlash(value: string) {
@@ -52,26 +52,34 @@ export default defineConfig({
       { text: '设计系统', link: '/guide/design-system' },
       { text: '组件', link: '/components/catalog' },
     ],
-    sidebar: [
-      {
-        text: '指南',
-        items: [
-          { text: '快速开始', link: '/guide/getting-started' },
-          { text: '设计系统', link: '/guide/design-system' },
-          { text: '主题与令牌', link: '/guide/theming' },
-          { text: '无障碍与自适应', link: '/guide/accessibility' },
-          { text: '架构与依赖边界', link: '/guide/architecture' },
-          { text: '文档开发', link: '/guide/documentation' },
-        ],
-      },
-      {
-        text: '组件',
-        items: [
-          { text: '组件总览', link: '/components/catalog' },
-          ...componentGroups.map((group) => ({ text: group.navTitle, link: group.page })),
-        ],
-      },
-    ],
+    sidebar: {
+      '/guide/': [
+        {
+          text: '指南',
+          items: [
+            { text: '快速开始', link: '/guide/getting-started' },
+            { text: '设计系统', link: '/guide/design-system' },
+            { text: '主题与令牌', link: '/guide/theming' },
+            { text: '无障碍与自适应', link: '/guide/accessibility' },
+            { text: '架构与依赖边界', link: '/guide/architecture' },
+            { text: '文档开发', link: '/guide/documentation' },
+          ],
+        },
+      ],
+      '/components/': [
+        {
+          text: '组件',
+          items: [{ text: '组件总览', link: '/components/catalog' }],
+        },
+        ...componentSidebarSections.map((section) => ({
+          text: section.title,
+          items: section.components.map((entry) => ({
+            text: entry.navName,
+            link: entry.page,
+          })),
+        })),
+      ],
+    },
     outline: {
       level: [2, 3],
     },

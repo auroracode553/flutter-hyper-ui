@@ -105,7 +105,7 @@ async function copyCode() {
               <i />
               <div><span /><span /></div>
             </div>
-            <div v-for="index in 3" :key="index" class="demo-block__skeleton-row">
+            <div v-for="index in 2" :key="index" class="demo-block__skeleton-row">
               <i />
               <div><span /><span /></div>
               <b />

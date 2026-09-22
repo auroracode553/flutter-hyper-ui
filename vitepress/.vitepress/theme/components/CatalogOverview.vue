@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { componentGroups, featuredDemo } from '../../catalog';
+import { componentSidebarSections, featuredDemo } from '../../catalog';
 import { withBase } from 'vitepress';
 import DemoBlock from './DemoBlock.vue';
 import { exampleSourceFor } from '../example-source';
 
-const componentCount = componentGroups.reduce(
-  (total, group) => total + group.components.length,
+const componentCount = componentSidebarSections.reduce(
+  (total, section) => total + section.components.length,
   0,
 );
 </script>
@@ -16,18 +16,30 @@ const componentCount = componentGroups.reduce(
       <span class="hy-kicker">COMPONENT CATALOG</span>
       <h1>组件总览</h1>
       <p>
-        {{ componentGroups.length }} 个分类、{{ componentCount }} 组公开 API，共享同一套主题、材质、状态和交互规则。
+        {{ componentSidebarSections.length }} 个分类、{{ componentCount }} 组公开 API，共享同一套主题、材质、状态和交互规则。
         组件均不绑定业务模型或状态管理方案。
       </p>
     </header>
 
-    <nav class="catalog-overview__grid" aria-label="组件分类">
-      <a v-for="(group, index) in componentGroups" :key="group.id" :href="withBase(group.page)">
-        <small>{{ String(index + 1).padStart(2, '0') }}</small>
-        <strong>{{ group.title }}</strong>
-        <span>{{ group.description }}</span>
-        <em>{{ group.components.length }} 组 API <b>→</b></em>
-      </a>
+    <nav class="catalog-overview__sections" aria-label="全部组件">
+      <section
+        v-for="section in componentSidebarSections"
+        :id="section.id"
+        :key="section.id"
+        class="catalog-overview__section"
+      >
+        <header>
+          <h2>{{ section.title }}</h2>
+          <span>{{ section.components.length }}</span>
+        </header>
+        <div class="catalog-overview__component-grid">
+          <a v-for="item in section.components" :key="item.id" :href="withBase(item.page)">
+            <strong>{{ item.navName }}</strong>
+            <span>{{ item.summary }}</span>
+            <b>→</b>
+          </a>
+        </div>
+      </section>
     </nav>
 
     <section class="catalog-overview__preview">
