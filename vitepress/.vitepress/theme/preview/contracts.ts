@@ -3,6 +3,8 @@ export type PreviewPhase = 'idle' | 'assets' | 'engine' | 'view' | 'ready' | 'er
 export interface PreviewStatus {
   phase: PreviewPhase;
   message: string;
+  /** 阶段进度仅用于加载反馈，不代表网络字节进度。 */
+  progress?: number;
   reloadRequired?: boolean;
 }
 

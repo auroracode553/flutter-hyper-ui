@@ -12,6 +12,47 @@ const loader = new PreviewBundleLoader(
 );
 const views = new Set<PreviewView>();
 let themeObserver: MutationObserver | undefined;
+let prewarmScheduled = false;
+let idleHandle: number | undefined;
+let fallbackHandle: number | undefined;
+
+type ConnectionAwareNavigator = Navigator & {
+  connection?: { saveData?: boolean; effectiveType?: string };
+};
+
+function shouldPrewarm() {
+  const connection = (navigator as ConnectionAwareNavigator).connection;
+  return !connection?.saveData && !['slow-2g', '2g'].includes(connection?.effectiveType ?? '');
+}
+
+function cancelScheduledPrewarm() {
+  if (idleHandle !== undefined && typeof window.cancelIdleCallback === 'function') {
+    window.cancelIdleCallback(idleHandle);
+  }
+  if (fallbackHandle !== undefined) window.clearTimeout(fallbackHandle);
+  idleHandle = undefined;
+  fallbackHandle = undefined;
+  prewarmScheduled = false;
+}
+
+function runPrewarm() {
+  idleHandle = undefined;
+  fallbackHandle = undefined;
+  prewarmScheduled = false;
+  if (!views.size || document.visibilityState !== 'visible') return;
+  // 预热失败会在 View 真正挂载时显示可操作的错误，不在后台打扰读者。
+  void loader.prewarm().catch(() => undefined);
+}
+
+function schedulePrewarm() {
+  if (prewarmScheduled || !shouldPrewarm()) return;
+  prewarmScheduled = true;
+  if (typeof window.requestIdleCallback === 'function') {
+    idleHandle = window.requestIdleCallback(runPrewarm, { timeout: 1_500 });
+  } else {
+    fallbackHandle = window.setTimeout(runPrewarm, 700);
+  }
+}
 
 function observeTheme() {
   if (themeObserver) return;
@@ -33,9 +74,10 @@ export function registerPreview(target: HTMLElement, componentId: string, onStat
     if (!entry.isIntersecting) return;
     observer.disconnect();
     void view.mount();
-  }, { rootMargin: '300px 0px' });
+  }, { rootMargin: '520px 0px' });
   views.add(view);
   observeTheme();
+  schedulePrewarm();
   observer.observe(target);
   return {
     activate: () => { observer.disconnect(); void view.mount(); },
@@ -44,7 +86,11 @@ export function registerPreview(target: HTMLElement, componentId: string, onStat
       observer.disconnect();
       views.delete(view);
       view.dispose();
-      if (!views.size) { themeObserver?.disconnect(); themeObserver = undefined; }
+      if (!views.size) {
+        cancelScheduledPrewarm();
+        themeObserver?.disconnect();
+        themeObserver = undefined;
+      }
     },
   };
 }
@@ -53,6 +99,7 @@ if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     for (const view of views) view.dispose();
     views.clear();
+    cancelScheduledPrewarm();
     themeObserver?.disconnect();
   });
 }

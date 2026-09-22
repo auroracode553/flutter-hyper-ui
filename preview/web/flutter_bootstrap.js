@@ -19,7 +19,8 @@ window.hyUiPreviewBundle = (() => {
           entrypointBaseUrl: base,
           assetBase: base,
           canvasKitBaseUrl: new URL('canvaskit/', base).href,
-          canvasKitVariant: 'full',
+          // Chromium 使用体积更小的专用构建，其余浏览器自动回退 full。
+          canvasKitVariant: 'auto',
           renderer: 'canvaskit',
           multiViewEnabled: true,
         };

@@ -9,7 +9,11 @@ export class PreviewBundleLoader {
   private pending?: Promise<FlutterPreviewApp>;
   private engineStarted = false;
   private readonly listeners = new Set<PreviewListener>();
-  private status: PreviewStatus = { phase: 'assets', message: '正在检查预览资源…' };
+  private status: PreviewStatus = {
+    phase: 'assets',
+    message: '正在准备交互预览…',
+    progress: 0.18,
+  };
 
   constructor(
     private readonly basePath: string,
@@ -29,17 +33,29 @@ export class PreviewBundleLoader {
     return this.pending.finally(() => this.listeners.delete(onStatus));
   }
 
+  /** 页面空闲时只预热共享引擎；具体 Flutter View 仍由视口按需创建。 */
+  prewarm(): Promise<void> {
+    return this.getApp(() => undefined).then(() => undefined);
+  }
+
   private async load(): Promise<FlutterPreviewApp> {
     const base = new URL(this.basePath, window.location.origin);
-    if (!this.options.developmentServer) await this.checkBundle(base);
-    await this.loadScript(new URL('flutter_bootstrap.js', base).href);
+    this.preload(new URL('main.dart.js', base).href, 'script');
+    // 版本校验与启动脚本互不依赖，并行处理可省去一个串行往返。
+    await Promise.all([
+      this.options.developmentServer ? Promise.resolve() : this.checkBundle(base),
+      this.loadScript(new URL('flutter_bootstrap.js', base).href),
+    ]);
     const bundle = window.hyUiPreviewBundle;
     if (!bundle || bundle.protocolVersion !== 1) {
       throw new PreviewFailure('预览接口版本不匹配，请替换完整构建产物并刷新页面。', true);
     }
     this.engineStarted = true;
-    this.status = { phase: 'engine', message: '正在初始化预览…' };
-    for (const listener of this.listeners) listener(this.status);
+    this.updateStatus({
+      phase: 'engine',
+      message: '正在启动 Flutter 渲染引擎…',
+      progress: 0.58,
+    });
     return new Promise<FlutterPreviewApp>((resolve, reject) => {
       const timer = window.setTimeout(() => reject(new PreviewFailure(
         '预览初始化超过 60 秒。请检查 main.dart.js 和 canvaskit 资源是否完整，修复后刷新页面。', true,
@@ -64,7 +80,8 @@ export class PreviewBundleLoader {
       // version.json is emitted by every Flutter Web release build. Relying on
       // it avoids a second custom manifest that Flutter might not copy.
       const response = await fetch(new URL('version.json', base), {
-        signal: controller.signal, cache: 'no-store',
+        signal: controller.signal,
+        cache: 'default',
       });
       if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
         throw new Error('missing preview version');
@@ -80,6 +97,20 @@ export class PreviewBundleLoader {
     } finally {
       window.clearTimeout(timer);
     }
+  }
+
+  private updateStatus(status: PreviewStatus) {
+    this.status = status;
+    for (const listener of this.listeners) listener(status);
+  }
+
+  private preload(url: string, as: 'script') {
+    if (document.head.querySelector(`link[rel="preload"][href="${url}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = as;
+    link.href = url;
+    document.head.appendChild(link);
   }
 
   private loadScript(url: string): Promise<void> {

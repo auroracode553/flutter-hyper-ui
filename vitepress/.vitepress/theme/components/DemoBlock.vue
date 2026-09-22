@@ -24,6 +24,8 @@ const previewWidth = ref<PreviewWidth>('fluid');
 const previewFrame = ref<HTMLElement>();
 const previewTarget = ref<HTMLElement>();
 const previewStatus = ref<PreviewStatus>({ phase: 'idle', message: '演示尚未加载' });
+const previewBusy = computed(() => ['assets', 'engine', 'view'].includes(previewStatus.value.phase));
+const previewProgress = computed(() => `${Math.round((previewStatus.value.progress ?? 0) * 100)}%`);
 const frameStyle = computed(() => ({
   height: `${props.height}px`,
   width: previewWidth.value === 'mobile' ? '390px' : '100%',
@@ -52,7 +54,7 @@ function retryPreview() {
 }
 
 function resetPreview() {
-  previewStatus.value = { phase: 'view', message: '正在重置演示…' };
+  previewStatus.value = { phase: 'view', message: '正在重置演示…', progress: 0.86 };
   resetPreviewView?.();
 }
 
@@ -87,12 +89,44 @@ async function copyCode() {
     <div class="demo-block__stage">
       <div ref="previewFrame" class="demo-block__preview" :style="frameStyle">
         <div ref="previewTarget" class="demo-block__flutter-host" />
-        <div v-if="previewStatus.phase !== 'ready'" class="demo-block__placeholder" aria-live="polite">
-          <span v-if="['assets', 'engine', 'view'].includes(previewStatus.phase)" class="demo-block__spinner" aria-hidden="true" />
-          <span :role="previewStatus.phase === 'error' ? 'alert' : 'status'">{{ previewStatus.message }}</span>
-          <button v-if="previewStatus.phase === 'idle' || previewStatus.phase === 'error'" type="button" @click="retryPreview">
-            {{ previewStatus.reloadRequired ? '刷新页面' : previewStatus.phase === 'error' ? '重试加载' : '显示此演示' }}
-          </button>
+        <div
+          v-if="previewStatus.phase !== 'ready'"
+          class="demo-block__placeholder"
+          :class="`is-${previewStatus.phase}`"
+          :aria-busy="previewBusy"
+          aria-live="polite"
+        >
+          <div class="demo-block__skeleton" aria-hidden="true">
+            <div class="demo-block__skeleton-nav">
+              <i />
+              <span />
+            </div>
+            <div class="demo-block__skeleton-card">
+              <i />
+              <div><span /><span /></div>
+            </div>
+            <div v-for="index in 3" :key="index" class="demo-block__skeleton-row">
+              <i />
+              <div><span /><span /></div>
+              <b />
+            </div>
+            <div class="demo-block__skeleton-tabbar">
+              <span v-for="index in 4" :key="index" />
+            </div>
+          </div>
+
+          <div class="demo-block__load-state">
+            <div class="demo-block__load-copy">
+              <span v-if="previewBusy" class="demo-block__spinner" aria-hidden="true" />
+              <span :role="previewStatus.phase === 'error' ? 'alert' : 'status'">{{ previewStatus.message }}</span>
+            </div>
+            <div v-if="previewBusy" class="demo-block__progress" aria-hidden="true">
+              <i :style="{ width: previewProgress }" />
+            </div>
+            <button v-if="previewStatus.phase === 'idle' || previewStatus.phase === 'error'" type="button" @click="retryPreview">
+              {{ previewStatus.reloadRequired ? '刷新页面' : previewStatus.phase === 'error' ? '重试加载' : '立即加载' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>

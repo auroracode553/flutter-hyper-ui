@@ -60,7 +60,7 @@ export class PreviewView {
   private attach() {
     if (!this.app) return;
     const generation = ++this.generation;
-    this.onStatus({ phase: 'view', message: '正在绘制演示…' });
+    this.onStatus({ phase: 'view', message: '正在绘制交互界面…', progress: 0.86 });
     this.frameTimer = window.setTimeout(() => {
       if (this.disposed || generation !== this.generation) return;
       this.detach();
@@ -76,7 +76,7 @@ export class PreviewView {
           onFirstFrame: () => {
             if (this.disposed || generation !== this.generation) return;
             window.clearTimeout(this.frameTimer);
-            this.onStatus({ phase: 'ready', message: '' });
+            this.onStatus({ phase: 'ready', message: '', progress: 1 });
           },
         },
       });
