@@ -170,7 +170,6 @@ body {
 
 .VPSidebarItem.level-1.is-active > .item {
   background: linear-gradient(100deg, var(--vp-c-brand-soft), rgba(91, 132, 238, 0.08));
-  box-shadow: inset 3px 0 0 var(--vp-c-brand-1);
 }
 
 .VPSidebarItem.level-1.is-active > .item .text {
@@ -777,12 +776,6 @@ body {
 /* Demo */
 .demo-block {
   margin: 20px 0 34px;
-  overflow: hidden;
-  border: 1px solid var(--hy-edge);
-  border-radius: 24px;
-  background: var(--hy-glass-strong);
-  box-shadow: var(--hy-shadow-strong);
-  backdrop-filter: blur(24px) saturate(145%);
 }
 
 .demo-block__header {
@@ -790,8 +783,7 @@ body {
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
-  padding: 18px 20px;
-  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 2px 4px 14px;
 }
 
 .demo-block__header h3 {
@@ -868,7 +860,7 @@ body {
   display: flex;
   justify-content: center;
   overflow-x: auto;
-  padding: 16px;
+  padding: 24px 4px;
   background: transparent;
 }
 
@@ -892,7 +884,7 @@ body {
   border: 1px solid var(--vp-c-divider);
   border-radius: 14px;
   background: #fff;
-  box-shadow: var(--hy-shadow);
+  box-shadow: 0 6px 20px -12px rgba(28, 40, 72, 0.18);
 }
 
 .dark .device-frame--fluid {
@@ -934,7 +926,7 @@ body {
   box-shadow:
     0 0 0 2px #0e1013,
     0 0 0 5px #2a2d36,
-    var(--hy-shadow-strong);
+    0 8px 28px -16px rgba(28, 40, 72, 0.25);
 }
 
 .dark .device-frame--mobile {
@@ -1184,7 +1176,6 @@ body {
 }
 
 .demo-block__code {
-  border-top: 1px solid var(--vp-c-divider);
   background: transparent;
 }
 
@@ -1193,9 +1184,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--vp-c-divider);
-  background: var(--hy-glass-subtle);
+  padding: 14px 4px 4px;
 }
 
 .demo-block__code-header > :first-child {
@@ -1204,23 +1193,21 @@ body {
 
 .demo-block__code-body pre.shiki {
   max-height: 560px;
-  margin: 0;
+  margin: 12px 4px 0;
   padding: 18px 22px;
   overflow: auto;
   background-color: var(--shiki-light-bg, #ffffff) !important;
   font-family: var(--vp-font-family-mono);
   font-size: 13px;
   line-height: 1.75;
-  border-radius: 0;
+  border-radius: 12px;
 }
 
 .demo-block__code-body pre.shiki code {
   font-family: inherit;
 }
 
-.dark .demo-block__code-header {
-  background: var(--hy-glass-subtle);
-}
+
 
 .dark .demo-block__code-body pre.shiki {
   background-color: var(--shiki-dark-bg) !important;
