@@ -65,8 +65,12 @@ body {
     radial-gradient(circle at 8% 6%, rgba(93, 137, 255, 0.1), transparent 28rem),
     radial-gradient(circle at 92% 18%, rgba(160, 118, 224, 0.09), transparent 30rem),
     var(--vp-c-bg);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
+    system-ui, sans-serif;
   font-feature-settings: "kern" 1, "liga" 1;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .VPNavBar {
@@ -179,7 +183,7 @@ body {
 .vp-doc h1,
 .vp-doc h2,
 .vp-doc h3 {
-  letter-spacing: -0.025em;
+  letter-spacing: -0.01em;
 }
 
 .vp-doc h1 {
@@ -319,9 +323,9 @@ body {
   margin: 0;
   color: var(--vp-c-text-1);
   font-size: clamp(2.5rem, 4.8vw, 4.1rem);
-  font-weight: 780;
-  line-height: 1.06;
-  letter-spacing: -0.045em;
+  font-weight: 720;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
 }
 
 .hy-home__hero h1 span {
@@ -416,46 +420,69 @@ body {
   min-height: 560px;
   overflow: hidden;
   padding: 26px 22px 84px;
-  border: 1px solid var(--hy-edge);
-  border-radius: 44px;
+  border-radius: 48px;
   background:
     radial-gradient(circle at 82% 12%, rgba(105, 144, 244, 0.2), transparent 34%),
     radial-gradient(circle at 8% 68%, rgba(170, 125, 226, 0.14), transparent 35%),
     var(--hy-glass-strong);
-  box-shadow: var(--hy-shadow-strong);
+  /* 深色金属中框 */
+  box-shadow:
+    0 0 0 2px #0e1013,
+    0 0 0 5px #2a2d36,
+    var(--hy-shadow-strong);
   transform: rotateY(-5deg) rotateX(2deg);
   backdrop-filter: blur(30px) saturate(150%);
 }
 
+/* 左侧侧边按键 */
+.hy-home__phone::before {
+  position: absolute;
+  z-index: 3;
+  top: 150px;
+  left: -6px;
+  width: 3px;
+  height: 54px;
+  border-radius: 2px 0 0 2px;
+  background: #2a2d36;
+  content: '';
+  box-shadow: 0 96px 0 #2a2d36;
+}
+
 .hy-home__phone::after {
   position: absolute;
-  inset: 1px;
-  border: 1px solid var(--hy-edge-shade);
-  border-radius: 47px;
+  inset: 0;
+  border-radius: 48px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   content: '';
   pointer-events: none;
 }
 
 .hy-home__phone-top {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 62px;
 }
 
+/* 居中灵动岛 */
 .hy-home__phone-top span:first-child {
-  width: 62px;
-  height: 9px;
+  width: 96px;
+  height: 24px;
   border-radius: 99px;
-  background: var(--vp-c-text-1);
-  opacity: 0.9;
+  background: #0b0d11;
 }
 
+/* 灵动岛右侧摄像头 */
 .hy-home__phone-top span:last-child {
-  width: 30px;
-  height: 9px;
-  border-radius: 99px;
-  background: var(--vp-c-text-3);
-  opacity: 0.35;
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 68px);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1c2735;
+  box-shadow: inset 0 0 0 2px #274b66;
 }
 
 .hy-home__welcome {
@@ -621,9 +648,9 @@ body {
   margin: 12px 0 0;
   color: var(--vp-c-text-1);
   font-size: clamp(1.85rem, 3.4vw, 2.6rem);
-  font-weight: 740;
-  line-height: 1.14;
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
 }
 
 .hy-home__section-heading p,
@@ -854,10 +881,8 @@ body {
   display: flex;
   justify-content: center;
   overflow-x: auto;
-  padding: 12px;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(85, 128, 236, 0.08), transparent 24rem),
-    var(--vp-c-bg);
+  padding: 16px;
+  background: transparent;
 }
 
 .demo-block__preview {
