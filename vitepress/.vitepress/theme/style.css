@@ -416,19 +416,9 @@ body {
 
 .hy-home__phone {
   position: relative;
-  width: min(100%, 340px);
-  min-height: 680px;
-  overflow: hidden;
-  padding: 26px 22px 24px;
-  border-radius: 48px;
-  background: #ffffff;
-  /* 深色金属中框 */
-  box-shadow:
-    0 0 0 2px #0e1013,
-    0 0 0 5px #2a2d36,
-    var(--hy-shadow-strong);
+  width: 340px;
+  height: 680px;
   transform: rotateY(-5deg) rotateX(2deg);
-  backdrop-filter: blur(30px) saturate(150%);
 }
 
 /* 左侧侧边按键 */

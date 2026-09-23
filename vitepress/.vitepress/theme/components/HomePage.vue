@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { withBase } from 'vitepress';
 import { componentSidebarSections, featuredDemo } from '../../catalog';
 import DemoBlock from './DemoBlock.vue';
+import DeviceFrame from './DeviceFrame.vue';
 import { exampleSourceFor } from '../example-source';
+import { registerPreview } from '../preview-runtime';
 
 const principles = [
   {
@@ -30,6 +33,15 @@ const componentCount = componentSidebarSections.reduce(
 function sectionPreview(section: (typeof componentSidebarSections)[number]) {
   return section.components.slice(0, 4).map((item) => item.navName).join(' · ');
 }
+
+const phoneTarget = ref<HTMLElement>();
+let disposePhone: (() => void) | undefined;
+onMounted(() => {
+  if (!phoneTarget.value) return;
+  const registration = registerPreview(phoneTarget.value, 'home-hero', () => {});
+  disposePhone = registration.dispose;
+});
+onBeforeUnmount(() => disposePhone?.());
 
 const quickCode = `import 'package:flutter/material.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
@@ -69,23 +81,10 @@ MaterialApp(
         </ul>
       </div>
 
-      <div class="hy-home__hero-object" aria-hidden="true">
-        <div class="hy-home__phone">
-          <div class="hy-home__phone-top"><span /><span /></div>
-          <div class="hy-home__welcome">下午好</div>
-          <div class="hy-home__phone-title">保持从容，<br />专注重要的事。</div>
-          <div class="hy-home__metric">
-            <span>今日进度</span><strong>72%</strong>
-            <div><i /></div>
-          </div>
-          <div class="hy-home__menu-row"><b>◈</b><span>外观与显示</span><i>›</i></div>
-          <div class="hy-home__menu-row"><b>◇</b><span>通知</span><em /></div>
-          <div class="hy-home__tabbar">
-            <span class="is-active">⌂<small>首页</small></span>
-            <span>⌁<small>发现</small></span>
-            <span>○<small>我的</small></span>
-          </div>
-        </div>
+      <div class="hy-home__hero-object">
+        <DeviceFrame class="hy-home__phone" mode="mobile">
+          <div ref="phoneTarget" class="demo-block__flutter-host" />
+        </DeviceFrame>
       </div>
     </section>
 

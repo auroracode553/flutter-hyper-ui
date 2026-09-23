@@ -21,6 +21,7 @@ import 'examples/navigation_example.dart';
 import 'examples/overview_example.dart';
 import 'examples/upload_example.dart';
 import 'examples/complete_examples.dart';
+import 'examples/home_hero_example.dart';
 import 'examples/interactive_examples.dart';
 
 typedef PreviewBuilder = Widget Function(BuildContext context);
@@ -57,6 +58,12 @@ class PreviewCatalog {
       title: '柔性玻璃组件库',
       description: '通用导航、表单、菜单、反馈与加载组件。',
       builder: (_) => const GlassLibraryExample(),
+    ),
+    PreviewItem(
+      id: 'home-hero',
+      title: '首页真机',
+      description: '首页英雄区的真实组件拼合。',
+      builder: (_) => const HomeHeroExample(),
     ),
     PreviewItem(
       id: 'drawer',
