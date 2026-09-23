@@ -37,8 +37,8 @@ watch(codeExpanded, async (open) => {
 const previewBusy = computed(() => ['assets', 'engine', 'view'].includes(previewStatus.value.phase));
 const previewProgress = computed(() => `${Math.round((previewStatus.value.progress ?? 0) * 100)}%`);
 const frameStyle = computed(() => ({
-  height: previewWidth.value === 'mobile' ? '760px' : `${props.height}px`,
-  width: previewWidth.value === 'mobile' ? '390px' : '100%',
+  height: previewWidth.value === 'mobile' ? '680px' : `${props.height}px`,
+  width: previewWidth.value === 'mobile' ? '350px' : '100%',
 }));
 let disposePreview: (() => void) | undefined;
 let activatePreview: (() => void) | undefined;
