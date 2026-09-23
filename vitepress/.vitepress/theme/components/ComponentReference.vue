@@ -14,7 +14,6 @@ const previewCount = computed(() => (
 <template>
   <article class="component-reference">
     <header class="component-reference__header">
-      <span class="hy-kicker">HY UI COMPONENTS</span>
       <h1>{{ group.title }}</h1>
       <p class="component-reference__lead">{{ group.description }}</p>
       <div class="component-reference__meta">
@@ -24,7 +23,6 @@ const previewCount = computed(() => (
     </header>
 
     <div class="component-reference__section-heading">
-      <span class="hy-kicker">COMPONENT DIRECTORY</span>
       <h2>选择组件</h2>
       <p>每个组件进入独立文档、独立预览与独立源码片段；分类页不再承载组合 Demo。</p>
     </div>

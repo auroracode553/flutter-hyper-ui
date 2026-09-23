@@ -13,7 +13,6 @@ const componentCount = componentSidebarSections.reduce(
 <template>
   <article class="catalog-overview">
     <header class="catalog-overview__header">
-      <span class="hy-kicker">COMPONENT CATALOG</span>
       <h1>组件总览</h1>
       <p>
         {{ componentSidebarSections.length }} 个分类、{{ componentCount }} 组公开 API，共享同一套主题、材质、状态和交互规则。
@@ -44,7 +43,6 @@ const componentCount = componentSidebarSections.reduce(
 
     <section class="catalog-overview__preview">
       <div class="catalog-overview__section-heading">
-        <span class="hy-kicker">LIVE PREVIEW</span>
         <h2>先体验，再选择。</h2>
         <p>下面运行的是真实 Flutter Widget。可以切换手机宽度、操作控件并查看完整示例源码。</p>
       </div>

@@ -1,3 +1,8 @@
+export interface ComponentPropDoc {
+  name: string;
+  description: string;
+}
+
 export interface ComponentEntry {
   id: string;
   name: string;
@@ -7,6 +12,7 @@ export interface ComponentEntry {
   summary: string;
   preview?: ComponentDemo;
   sidebar?: boolean;
+  propsDocs?: ComponentPropDoc[];
 }
 
 export interface ComponentDemo {
@@ -34,6 +40,7 @@ interface ComponentOptions {
   navName?: string;
   preview?: ComponentDemo;
   sidebar?: boolean;
+  propsDocs?: ComponentPropDoc[];
 }
 
 function componentId(name: string) {
@@ -60,6 +67,7 @@ const component = (
     summary,
     preview: options.preview,
     sidebar: options.sidebar ?? true,
+    propsDocs: options.propsDocs,
   };
 };
 
@@ -105,6 +113,17 @@ export const componentGroups: ComponentGroup[] = [
         preview: demo('component-icon', 'HyIcon 图标', 'component_foundation_examples.dart', 250, '展示常用语义图标与无障碍标签。', 'IconComponentExample'),
       }),
       component('HyImage', 'hy_image.dart', '支持 ImageProvider、网络、资源、占位、失败态与缩放预览。', {
+        propsDocs: [
+          { name: 'provider', description: '图片数据源，ImageProvider 类型' },
+          { name: 'width', description: '图片宽度' },
+          { name: 'height', description: '图片高度' },
+          { name: 'radius', description: '圆角大小，默认 16' },
+          { name: 'fit', description: '图片适配方式，默认 BoxFit.cover' },
+          { name: 'placeholder', description: '加载中占位组件' },
+          { name: 'errorPlaceholder', description: '加载失败占位组件' },
+          { name: 'preview', description: '是否点击进入全屏预览，默认 false' },
+          { name: 'semanticLabel', description: '语义化标签，用于无障碍' },
+        ],
         preview: demo('component-image', 'HyImage 图片', 'component_foundation_examples.dart', 340, '点击图片进入缩放预览。', 'ImageComponentExample'),
       }),
       component('HyAvatar', 'hy_image.dart', '图片、文字或默认图标头像，支持圆形和自定义圆角。', {

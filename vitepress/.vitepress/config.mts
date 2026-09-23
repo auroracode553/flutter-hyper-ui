@@ -73,6 +73,7 @@ export default defineConfig({
     ],
     outline: {
       level: [2, 3],
+      label: '本页目录',
     },
     docFooter: {
       prev: false,

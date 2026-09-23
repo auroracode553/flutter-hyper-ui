@@ -1538,13 +1538,116 @@ body {
   font-size: 11px;
 }
 
-.component-doc__api pre {
+.component-doc__api-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.component-doc__api-toggle {
+  min-height: 30px;
+  padding: 4px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--vp-c-text-2);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.component-doc__api-toggle:hover {
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+}
+.component-doc__api pre.shiki {
   max-height: 620px;
   margin: 0;
+  padding: 18px 22px;
   overflow: auto;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.component-doc__props {
+  margin-top: 32px;
+}
+
+.component-doc__props h3 {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.component-doc__props-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  font-size: 13px;
+  background: var(--hy-glass-subtle);
+  border: 1px solid var(--hy-edge);
+  box-shadow: 0 8px 32px rgba(28, 40, 72, 0.06);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+.component-doc__props-table th,
+.component-doc__props-table td {
+  padding: 13px 20px;
+  text-align: left;
+}
+
+.component-doc__props-table th {
+  background: rgba(255, 255, 255, 0.45);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--vp-c-text-1);
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--hy-edge);
+}
+
+.component-doc__props-table tbody tr td {
+  transition: background 120ms ease;
+}
+
+.component-doc__props-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.component-doc__props-table td:last-child {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+
+.component-doc__prop-name {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+}
+
+.component-doc__required {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: #e5534b;
+  background: rgba(229, 83, 75, 0.08);
+}
+
+.dark .component-doc__props-table th {
+  background: var(--vp-c-bg-alt);
 }
 
 .component-doc__rules {
