@@ -47,9 +47,46 @@ export function validateCatalog(
   const previewCatalogPath = resolve(repositoryRoot, 'preview/lib/src/preview_catalog.dart');
   const previewCatalog = readFileSync(previewCatalogPath, 'utf8');
   const registeredPreviewIds = new Set(
-    [...previewCatalog.matchAll(/\bid:\s*'([^']+)'/g)].map((match) => match[1]),
+    [...previewCatalog.matchAll(/(?:\bid:\s*|_componentPreview\()'([^']+)'/g)]
+      .map((match) => match[1]),
   );
-  const demos = [...featuredDemos, ...groups.flatMap((group) => group.demos)];
+  const missingComponentPreviews = componentEntries
+    .filter((entry) => entry.preview === undefined)
+    .map((entry) => entry.name);
+  if (missingComponentPreviews.length > 0) {
+    throw new Error(`组件缺少专属预览: ${missingComponentPreviews.join(', ')}`);
+  }
+  const componentDemos = groups
+    .flatMap((group) => group.components)
+    .map((entry) => entry.preview)
+    .filter((demo): demo is ComponentDemo => demo !== undefined);
+  const componentPreviewErrors = componentEntries.flatMap((entry) => {
+    const preview = entry.preview;
+    if (!preview) return [];
+    const errors: string[] = [];
+    if (preview.id !== `component-${entry.id}`) {
+      errors.push(`${entry.name}: 专属预览 id 应为 component-${entry.id}`);
+    }
+    if (preview.symbol) {
+      const sourcePath = resolve(repositoryRoot, 'preview/lib/src/examples', preview.source);
+      if (existsSync(sourcePath)) {
+        const source = readFileSync(sourcePath, 'utf8');
+        if (!source.includes(`// doc-region ${preview.symbol}`)
+          || !source.includes(`// end-doc-region ${preview.symbol}`)) {
+          errors.push(`${entry.name}: 未找到专属源码片段 ${preview.symbol}`);
+        }
+      }
+    }
+    return errors;
+  });
+  if (componentPreviewErrors.length > 0) {
+    throw new Error(`组件专属预览契约失败:\n${componentPreviewErrors.join('\n')}`);
+  }
+  const demos = [
+    ...featuredDemos,
+    ...groups.flatMap((group) => group.demos),
+    ...componentDemos,
+  ];
   assertUnique(demos.map((demo) => demo.id), '文档演示 id');
   const missingPreviewIds = demos
     .map((demo) => demo.id)

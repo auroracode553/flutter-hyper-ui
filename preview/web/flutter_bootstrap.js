@@ -5,7 +5,7 @@
 window.hyUiPreviewBundle = (() => {
   let appPromise;
   return {
-    protocolVersion: 1,
+    protocolVersion: 2,
     start(assetBase, options = {}) {
       if (appPromise) return appPromise;
       const base = new URL(assetBase, document.baseURI).href;

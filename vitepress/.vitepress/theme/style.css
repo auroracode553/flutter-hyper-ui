@@ -1323,6 +1323,15 @@ body {
 .component-reference__item {
   border-radius: 18px;
   padding: 18px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 140ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.component-reference__item:hover {
+  border-color: color-mix(in srgb, var(--vp-c-brand-1) 42%, transparent);
+  background: var(--hy-glass-strong);
+  transform: translateY(-2px);
 }
 
 .component-reference__item h3 {
@@ -1338,7 +1347,8 @@ body {
   font-size: 12px;
 }
 
-.component-reference__item > a {
+.component-reference__item > span {
+  color: var(--vp-c-brand-1);
   font-size: 11px;
   font-weight: 650;
 }
@@ -1346,7 +1356,7 @@ body {
 /* Individual component pages */
 .component-doc__header {
   max-width: 760px;
-  margin-bottom: 54px;
+  margin-bottom: 0;
 }
 
 .component-doc__category {
@@ -1369,28 +1379,6 @@ body {
   color: var(--vp-c-text-2);
   font-size: 17px;
   line-height: 1.75;
-}
-
-.component-doc__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 22px;
-}
-
-.component-doc__meta > * {
-  padding: 6px 10px;
-  border: 1px solid var(--hy-edge);
-  border-radius: 99px;
-  background: var(--hy-glass-subtle);
-  color: var(--vp-c-text-2);
-  font-size: 11px;
-  font-weight: 620;
-  text-decoration: none;
-}
-
-.component-doc__meta a:hover {
-  color: var(--vp-c-brand-1);
 }
 
 .component-doc__section {
@@ -1503,26 +1491,6 @@ body {
   background: var(--vp-c-brand-soft);
 }
 
-.component-reference__item details {
-  margin: 12px 0;
-  padding: 9px 11px;
-  border-radius: 10px;
-  background: var(--hy-edge-shade);
-}
-
-.component-reference__item summary {
-  color: var(--vp-c-text-2);
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.component-reference__item details pre {
-  max-height: 320px;
-  margin: 10px -2px 0;
-  overflow: auto;
-  font-size: 10px;
-}
-
 @media (max-width: 960px) {
   .hy-home__hero {
     grid-template-columns: 1fr;
@@ -1622,10 +1590,6 @@ body {
     border-radius: 12px;
   }
 
-  .component-doc__header {
-    margin-bottom: 42px;
-  }
-
   .component-doc__header > p {
     font-size: 15px;
   }
@@ -1647,6 +1611,7 @@ body {
   .hy-home__catalog-grid a,
   .catalog-overview__grid a,
   .catalog-overview__component-grid a,
+  .component-reference__item,
   .VPSidebarItem.level-1 > .item,
   .demo-block__preview,
   .demo-block__toolbar button,

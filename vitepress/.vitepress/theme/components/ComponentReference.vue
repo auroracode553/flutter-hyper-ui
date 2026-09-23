@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { withBase } from 'vitepress';
 import { getComponentGroup } from '../../catalog';
-import DemoBlock from './DemoBlock.vue';
-import { dartApiFor } from '../dart-api';
-import { exampleSourceFor } from '../example-source';
 
 const props = defineProps<{ groupId: string }>();
 const group = computed(() => getComponentGroup(props.groupId));
+const previewCount = computed(() => (
+  group.value.components.filter((item) => item.preview !== undefined).length
+));
 
-function sourceUrl(source: string) {
-  const normalized = source.startsWith('../') ? source : `../components/${source}`;
-  return `https://github.com/auroracode553/flutter-hyper-ui/blob/main/ui/lib/src/${normalized.replace('../', '')}`;
-}
 </script>
 
 <template>
@@ -22,43 +19,27 @@ function sourceUrl(source: string) {
       <p class="component-reference__lead">{{ group.description }}</p>
       <div class="component-reference__meta">
         <span>{{ group.components.length }} 组公开 API</span>
-        <span>{{ group.demos.length }} 个交互示例</span>
+        <span>{{ previewCount }} 个专属预览</span>
       </div>
     </header>
 
-    <section class="component-reference__demos" aria-label="交互演示">
-      <div class="component-reference__section-heading">
-        <span class="hy-kicker">INTERACTIVE EXAMPLES</span>
-        <h2>交互示例</h2>
-        <p>演示直接运行 PreviewCatalog 中登记的 Flutter Widget，源码与实际预览保持同源。</p>
-      </div>
-      <DemoBlock
-        v-for="demo in group.demos"
-        :key="demo.id"
-        :title="demo.title"
-        :description="demo.description"
-        :component="demo.id"
-        :code="exampleSourceFor(demo.source)"
-        :height="demo.height"
-      />
-    </section>
-
     <div class="component-reference__section-heading">
-      <span class="hy-kicker">PUBLIC API</span>
-      <h2>公开组件</h2>
-      <p>展开签名可快速查看构造参数；源码链接指向组件的实际实现文件。</p>
+      <span class="hy-kicker">COMPONENT DIRECTORY</span>
+      <h2>选择组件</h2>
+      <p>每个组件进入独立文档、独立预览与独立源码片段；分类页不再承载组合 Demo。</p>
     </div>
-    <div class="component-reference__grid">
-      <section v-for="item in group.components" :key="item.name" class="component-reference__item">
-        <h3><code>{{ item.name }}</code></h3>
+    <nav class="component-reference__grid" aria-label="分类组件">
+      <a
+        v-for="item in group.components"
+        :key="item.id"
+        class="component-reference__item"
+        :href="withBase(item.page)"
+      >
+        <h3><code>{{ item.navName }}</code></h3>
         <p>{{ item.summary }}</p>
-        <details>
-          <summary>当前公开签名</summary>
-          <pre><code>{{ dartApiFor(item.name, item.source) }}</code></pre>
-        </details>
-        <a :href="sourceUrl(item.source)" target="_blank" rel="noreferrer">查看 Dart API 源码</a>
-      </section>
-    </div>
+        <span>查看组件 →</span>
+      </a>
+    </nav>
 
     <template v-if="group.conventions?.length">
       <h2>使用约定</h2>

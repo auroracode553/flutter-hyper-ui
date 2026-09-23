@@ -10,17 +10,12 @@ const props = defineProps<{ componentId: string }>();
 const resolved = computed(() => getComponentEntry(props.componentId));
 const entry = computed(() => resolved.value.entry);
 const group = computed(() => resolved.value.group);
-const demo = computed(() => (
-  group.value.demos.find((item) => item.id === entry.value.demoId) ?? group.value.demos[0]
-));
+// 组件页只接受目录显式绑定的专属预览，禁止回退到分类组合 Demo。
+const demo = computed(() => entry.value.preview);
 const relatedComponents = computed(() => (
   group.value.components.filter((item) => item.id !== entry.value.id).slice(0, 8)
 ));
 
-function sourceUrl(source: string) {
-  const normalized = source.startsWith('../') ? source.slice(3) : `components/${source}`;
-  return `https://github.com/auroracode553/flutter-hyper-ui/blob/main/ui/lib/src/${normalized}`;
-}
 </script>
 
 <template>
@@ -31,10 +26,6 @@ function sourceUrl(source: string) {
       </a>
       <h1>{{ entry.navName }}</h1>
       <p>{{ entry.summary }}</p>
-      <div class="component-doc__meta">
-        <span>Flutter Widget</span>
-        <a :href="sourceUrl(entry.source)" target="_blank" rel="noreferrer">查看源码 ↗</a>
-      </div>
     </header>
 
     <section v-if="demo" class="component-doc__section" aria-labelledby="component-demo-title">
@@ -47,7 +38,7 @@ function sourceUrl(source: string) {
         :title="demo.title"
         :description="demo.description"
         :component="demo.id"
-        :code="exampleSourceFor(demo.source)"
+        :code="exampleSourceFor(demo.source, demo.symbol)"
         :height="demo.height"
       />
     </section>

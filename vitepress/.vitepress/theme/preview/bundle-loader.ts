@@ -47,8 +47,8 @@ export class PreviewBundleLoader {
       this.loadScript(new URL('flutter_bootstrap.js', base).href),
     ]);
     const bundle = window.hyUiPreviewBundle;
-    if (!bundle || bundle.protocolVersion !== 1) {
-      throw new PreviewFailure('预览接口版本不匹配，请替换完整构建产物并刷新页面。', true);
+    if (!bundle || bundle.protocolVersion !== 2) {
+      throw new PreviewFailure('预览接口版本不匹配。组件预览已拆分，请重新生成完整预览包并刷新页面。', true);
     }
     this.engineStarted = true;
     this.updateStatus({
