@@ -107,9 +107,23 @@ export const componentGroups: ComponentGroup[] = [
     ],
     components: [
       component('HyText / HyTextStyle', 'hy_typography.dart', '统一的显示、标题、正文、说明和提示文字层级。', {
+        propsDocs: [
+          { name: 'data', description: '显示的文本内容' },
+          { name: 'variant', description: '文字样式层级，默认 HyTextStyle.body' },
+          { name: 'color', description: '文字颜色' },
+          { name: 'weight', description: '字重' },
+          { name: 'maxLines', description: '最大行数' },
+          { name: 'textAlign', description: '文字对齐方式' },
+        ],
         preview: demo('component-text', 'HyText 文字层级', 'component_foundation_examples.dart', 360, '逐级展示六种文字语义。', 'TextComponentExample'),
       }),
       component('HyIcon / HyIcons', 'hy_typography.dart', '带语义标签的图标组件与常用业务图标集合。', {
+        propsDocs: [
+          { name: 'icon', description: '图标数据，IconData 类型' },
+          { name: 'size', description: '图标大小，默认 24' },
+          { name: 'color', description: '图标颜色' },
+          { name: 'label', description: '语义化标签，用于无障碍' },
+        ],
         preview: demo('component-icon', 'HyIcon 图标', 'component_foundation_examples.dart', 250, '展示常用语义图标与无障碍标签。', 'IconComponentExample'),
       }),
       component('HyImage', 'hy_image.dart', '支持 ImageProvider、网络、资源、占位、失败态与缩放预览。', {
@@ -127,15 +141,43 @@ export const componentGroups: ComponentGroup[] = [
         preview: demo('component-image', 'HyImage 图片', 'component_foundation_examples.dart', 340, '点击图片进入缩放预览。', 'ImageComponentExample'),
       }),
       component('HyAvatar', 'hy_image.dart', '图片、文字或默认图标头像，支持圆形和自定义圆角。', {
+        propsDocs: [
+          { name: 'image', description: '头像图片数据源，ImageProvider 类型' },
+          { name: 'text', description: '文字头像内容' },
+          { name: 'size', description: '头像尺寸，默认 44' },
+          { name: 'radius', description: '圆角大小，为空时为圆形' },
+          { name: 'backgroundColor', description: '背景颜色' },
+        ],
         preview: demo('component-avatar', 'HyAvatar 头像', 'component_foundation_examples.dart', 250, '展示文字、默认图标与圆角头像。', 'AvatarComponentExample'),
       }),
       component('HyCountBadge', 'hy_image.dart', '红点、数字和最大值角标。', {
+        propsDocs: [
+          { name: 'child', description: '子组件' },
+          { name: 'count', description: '角标数字，默认 0' },
+          { name: 'max', description: '数字最大值上限，默认 99' },
+          { name: 'dot', description: '是否仅显示红点，默认 false' },
+          { name: 'showZero', description: '数字为 0 时是否显示，默认 false' },
+        ],
         preview: demo('component-count-badge', 'HyCountBadge 数字角标', 'component_foundation_examples.dart', 250, '展示数字、最大值和红点角标。', 'CountBadgeComponentExample'),
       }),
       component('HyBadge', 'hy_badge.dart', '紧凑型语义状态徽标。', {
+        propsDocs: [
+          { name: 'label', description: '徽标文字' },
+          { name: 'tone', description: '语义色调，默认 HyUiTone.neutral' },
+          { name: 'icon', description: '前置图标' },
+          { name: 'subtle', description: '是否使用弱化样式，默认 true' },
+        ],
         preview: demo('component-badge', 'HyBadge 状态徽标', 'component_foundation_examples.dart', 260, '展示不同语义色与强调层级。', 'BadgeComponentExample'),
       }),
       component('HyTag', 'hy_tag.dart', '支持语义色、选择、点击和关闭的标签。', {
+        propsDocs: [
+          { name: 'label', description: '标签文字' },
+          { name: 'tone', description: '语义色调，默认 HyUiTone.neutral' },
+          { name: 'icon', description: '前置图标' },
+          { name: 'selected', description: '是否选中，默认 false' },
+          { name: 'onTap', description: '点击回调' },
+          { name: 'onClose', description: '关闭按钮回调' },
+        ],
         preview: demo('component-tag', 'HyTag 标签', 'component_foundation_examples.dart', 260, '点击选择或移除标签。', 'TagComponentExample'),
       }),
       component('HyUiTone / HyUiToneResolver', 'hy_tone.dart', '跨组件共用的语义状态及其主题颜色解析扩展。', {
@@ -156,12 +198,51 @@ export const componentGroups: ComponentGroup[] = [
     ],
     components: [
       component('HyButton / HyButtonVariant / HyButtonSize', 'hy_button.dart', '五种视觉层级、三种尺寸、加载、禁用、图标和通栏状态。', {
+        propsDocs: [
+          { name: 'label', description: '按钮文字' },
+          { name: 'onPressed', description: '点击回调' },
+          { name: 'variant', description: '按钮视觉层级，默认 HyButtonVariant.filled' },
+          { name: 'size', description: '按钮尺寸，默认 HyButtonSize.md' },
+          { name: 'icon', description: '前置图标' },
+          { name: 'trailingIcon', description: '后置图标' },
+          { name: 'loading', description: '是否显示加载态，默认 false' },
+          { name: 'expanded', description: '是否通栏铺满，默认 false' },
+          { name: 'radius', description: '圆角大小，默认 16' },
+        ],
         preview: demo('component-button', 'HyButton 状态', 'buttons_example.dart', 360, '只展示按钮的层级、尺寸和状态。'),
       }),
       component('HyCard', 'hy_card.dart', '具有标题、操作区、正文、底部和选中态的内容容器。', {
+        propsDocs: [
+          { name: 'child', description: '正文内容组件' },
+          { name: 'title', description: '标题' },
+          { name: 'subtitle', description: '副标题' },
+          { name: 'leading', description: '前置组件' },
+          { name: 'actions', description: '操作区组件列表，默认空数组' },
+          { name: 'footer', description: '底部组件' },
+          { name: 'padding', description: '内边距' },
+          { name: 'onTap', description: '点击回调' },
+          { name: 'selected', description: '是否选中，默认 false' },
+          { name: 'radius', description: '圆角大小' },
+          { name: 'blur', description: '模糊度，默认 18' },
+          { name: 'weight', description: '玻璃材质重量，默认 HyGlassWeight.regular' },
+          { name: 'borderColor', description: '边框颜色' },
+          { name: 'shadows', description: '阴影列表' },
+        ],
         preview: demo('component-card', 'HyCard 结构', 'component_surface_examples.dart', 340, '只展示卡片的标题、正文和操作区。', 'CardComponentExample'),
       }),
       component('HyGlass', 'hy_glass.dart', '可配置模糊、背景、边框、阴影和点击行为的玻璃材质。', {
+        propsDocs: [
+          { name: 'child', description: '子组件' },
+          { name: 'padding', description: '内边距，默认 EdgeInsets.zero' },
+          { name: 'radius', description: '圆角大小，默认 24' },
+          { name: 'blur', description: '模糊度' },
+          { name: 'weight', description: '玻璃材质重量，默认 HyGlassWeight.regular' },
+          { name: 'borderColor', description: '边框颜色' },
+          { name: 'shadows', description: '阴影列表' },
+          { name: 'color', description: '背景颜色' },
+          { name: 'onTap', description: '点击回调' },
+          { name: 'clipBehavior', description: '裁剪行为，默认 Clip.antiAlias' },
+        ],
         preview: demo('component-glass', 'HyGlass 材质', 'component_surface_examples.dart', 320, '只展示不同重量的玻璃表面。', 'GlassComponentExample'),
       }),
       component('HyGlassWeight', 'hy_glass.dart', '按表面面积和层级区分轻薄、标准、突出与实色材质。', {
@@ -169,9 +250,22 @@ export const componentGroups: ComponentGroup[] = [
         preview: demo('component-glass-weight', 'HyGlassWeight 材质重量', 'component_action_examples.dart', 300, '对比四种玻璃材质重量。', 'GlassWeightComponentExample'),
       }),
       component('HyPressable', 'hy_pressable.dart', '按下即响应、可适配减少动画的通用触控反馈层。', {
+        propsDocs: [
+          { name: 'child', description: '子组件' },
+          { name: 'onPressed', description: '点击回调' },
+          { name: 'enabled', description: '是否启用，默认 true' },
+          { name: 'pressedScale', description: '按下时缩放比例，默认 0.975' },
+          { name: 'pressedOpacity', description: '按下时透明度，默认 0.92' },
+          { name: 'borderRadius', description: '圆角' },
+          { name: 'semanticLabel', description: '语义化标签' },
+        ],
         preview: demo('component-pressable', 'HyPressable 按压反馈', 'component_action_examples.dart', 280, '按住表面感受即时缩放与透明度反馈。', 'PressableComponentExample'),
       }),
       component('HySoftBackground', 'hy_glass.dart', '为页面提供与明暗主题同步的柔光背景。', {
+        propsDocs: [
+          { name: 'child', description: '子组件' },
+          { name: 'intensity', description: '柔光强度，默认 1' },
+        ],
         preview: demo('component-soft-background', 'HySoftBackground 柔光背景', 'component_action_examples.dart', 320, '展示环境色与玻璃材质的景深关系。', 'SoftBackgroundComponentExample'),
       }),
     ],
@@ -192,21 +286,56 @@ export const componentGroups: ComponentGroup[] = [
     ],
     components: [
       component('HySpace', 'hy_layout.dart', '在线性方向排列子项并统一插入间距。', {
+        propsDocs: [
+          { name: 'children', description: '子组件列表' },
+          { name: 'direction', description: '排列方向，默认 Axis.vertical' },
+          { name: 'spacing', description: '间距大小，默认 12' },
+          { name: 'alignment', description: '交叉轴对齐方式，默认 CrossAxisAlignment.start' },
+        ],
         preview: demo('component-space', 'HySpace 间距布局', 'component_layout_examples.dart', 340, '展示线性排列与统一间距。', 'SpaceComponentExample'),
       }),
       component('HyWrap', 'hy_layout.dart', '带统一主轴和换行间距的流式布局。', {
+        propsDocs: [
+          { name: 'children', description: '子组件列表' },
+          { name: 'spacing', description: '主轴间距，默认 8' },
+          { name: 'runSpacing', description: '换行间距，默认 8' },
+        ],
         preview: demo('component-wrap', 'HyWrap 流式布局', 'component_layout_examples.dart', 280, '缩放预览宽度观察自动换行。', 'WrapComponentExample'),
       }),
       component('HyGrid', 'hy_layout.dart', '固定列数和宽高比的轻量网格。', {
+        propsDocs: [
+          { name: 'children', description: '子组件列表' },
+          { name: 'columns', description: '列数，默认 3' },
+          { name: 'spacing', description: '间距，默认 12' },
+          { name: 'childAspectRatio', description: '子项宽高比，默认 1' },
+        ],
         preview: demo('component-grid', 'HyGrid 网格', 'component_layout_examples.dart', 380, '展示三列自适应网格。', 'GridComponentExample'),
       }),
       component('HyDivider', 'hy_layout.dart', '横向或纵向、实线或虚线分隔。', {
+        propsDocs: [
+          { name: 'axis', description: '方向，默认 Axis.horizontal' },
+          { name: 'indent', description: '起始缩进，默认 0' },
+          { name: 'endIndent', description: '结束缩进，默认 0' },
+          { name: 'dashed', description: '是否虚线，默认 false' },
+          { name: 'length', description: '长度' },
+          { name: 'color', description: '颜色' },
+        ],
         preview: demo('component-divider', 'HyDivider 分割线', 'component_layout_examples.dart', 300, '展示横向、纵向、实线与虚线。', 'DividerComponentExample'),
       }),
       component('HySkeleton', 'hy_layout.dart', '适配减少动画设置的列表或卡片扫光占位。', {
+        propsDocs: [
+          { name: 'rows', description: '骨架行数，默认 3' },
+          { name: 'card', description: '是否为卡片样式，默认 false' },
+        ],
         preview: demo('component-skeleton', 'HySkeleton 骨架屏', 'component_feedback_examples.dart', 360, '只展示卡片与列表骨架状态。', 'SkeletonComponentExample'),
       }),
       component('HyEmptyState', 'hy_empty_state.dart', '包含图标、标题、说明和操作的空状态。', {
+        propsDocs: [
+          { name: 'icon', description: '图标，IconData 类型' },
+          { name: 'title', description: '标题' },
+          { name: 'message', description: '说明文字' },
+          { name: 'action', description: '操作按钮组件' },
+        ],
         preview: demo('component-empty-state', 'HyEmptyState 空状态', 'component_layout_examples.dart', 390, '展示图标、说明和恢复操作。', 'EmptyStateComponentExample'),
       }),
     ],
@@ -224,39 +353,142 @@ export const componentGroups: ComponentGroup[] = [
     ],
     components: [
       component('HyTextField', 'hy_text_field.dart', '支持校验、多行、清除、密码显隐、错误和字数限制。', {
+        propsDocs: [
+          { name: 'controller', description: '文本编辑控制器' },
+          { name: 'focusNode', description: '焦点节点' },
+          { name: 'label', description: '标签文字' },
+          { name: 'hintText', description: '占位提示文字' },
+          { name: 'helperText', description: '辅助说明文字' },
+          { name: 'errorText', description: '错误提示文字' },
+          { name: 'prefixIcon', description: '前置图标' },
+          { name: 'suffix', description: '后缀组件' },
+          { name: 'enabled', description: '是否启用，默认 true' },
+          { name: 'readOnly', description: '是否只读，默认 false' },
+          { name: 'obscureText', description: '是否隐藏文字（密码模式），默认 false' },
+          { name: 'maxLines', description: '最大行数，默认 1' },
+          { name: 'minLines', description: '最小行数' },
+          { name: 'maxLength', description: '最大字符数' },
+          { name: 'clearable', description: '是否显示清除按钮，默认 true' },
+          { name: 'keyboardType', description: '键盘类型' },
+          { name: 'textInputAction', description: '键盘操作按钮类型' },
+          { name: 'textCapitalization', description: '文本大写模式，默认 TextCapitalization.none' },
+          { name: 'autofillHints', description: '自动填充提示' },
+          { name: 'onChanged', description: '内容变化回调' },
+          { name: 'onSubmitted', description: '提交回调' },
+          { name: 'onTap', description: '点击回调' },
+          { name: 'validator', description: '表单校验函数' },
+          { name: 'initialValue', description: '初始值' },
+        ],
         preview: demo('component-text-field', 'HyTextField 输入框', 'component_form_examples.dart', 390, '只展示输入、辅助文案和错误状态。', 'TextFieldComponentExample'),
       }),
       component('HySegmentedControl / HySegmentOption', 'hy_segmented_control.dart', '适用于少量互斥选项的受控分段选择。', {
+        propsDocs: [
+          { name: 'options', description: '选项列表' },
+          { name: 'selectedValue', description: '当前选中值' },
+          { name: 'onChanged', description: '选中变化回调' },
+          { name: 'equalWidth', description: '是否等宽，默认 true' },
+        ],
         preview: demo('component-segmented-control', 'HySegmentedControl 分段选择', 'component_form_examples.dart', 280, '只展示受控分段选择。', 'SegmentedControlComponentExample'),
       }),
       component('HySelect / HyOption', 'hy_select.dart', '底部弹层单选或多选，支持禁用项。', {
+        propsDocs: [
+          { name: 'options', description: '选项列表' },
+          { name: 'values', description: '已选中值列表' },
+          { name: 'onChanged', description: '选中变化回调' },
+          { name: 'multiple', description: '是否多选，默认 false' },
+          { name: 'placeholder', description: '占位文字，默认 请选择' },
+          { name: 'label', description: '标签文字' },
+        ],
         preview: demo('component-select', 'HySelect 底部选择', 'component_form_examples.dart', 300, '打开弹层完成多选并确认。', 'SelectComponentExample'),
       }),
       component('HyDropdown', 'hy_dropdown.dart', '锚定触发器展开、适合在选择时保持页面上下文的泛型下拉。', {
+        propsDocs: [
+          { name: 'options', description: '选项列表' },
+          { name: 'value', description: '当前选中值' },
+          { name: 'onChanged', description: '选中变化回调' },
+          { name: 'label', description: '标签文字' },
+          { name: 'placeholder', description: '占位文字，默认 请选择' },
+          { name: 'menuMaxHeight', description: '下拉菜单最大高度，默认 320' },
+          { name: 'width', description: '宽度' },
+        ],
         preview: demo('component-dropdown', 'HyDropdown 下拉菜单', 'component_form_examples.dart', 320, '只展示锚定式单选下拉。', 'DropdownComponentExample'),
       }),
       component('HyCheckbox', 'hy_selection_controls.dart', '支持三态、禁用和标签的受控复选。', {
+        propsDocs: [
+          { name: 'value', description: '是否选中' },
+          { name: 'onChanged', description: '状态变化回调' },
+          { name: 'label', description: '标签文字' },
+          { name: 'tristate', description: '是否三态，默认 false' },
+        ],
         preview: demo('component-checkbox', 'HyCheckbox 复选框', 'component_form_examples.dart', 260, '只展示受控复选状态。', 'CheckboxComponentExample'),
       }),
       component('HyRadio', 'hy_selection_controls.dart', '泛型值受控单选。', {
+        propsDocs: [
+          { name: 'value', description: '当前选项值' },
+          { name: 'groupValue', description: '组选中值' },
+          { name: 'onChanged', description: '选中变化回调' },
+          { name: 'label', description: '标签文字' },
+        ],
         preview: demo('component-radio', 'HyRadio 单选框', 'component_form_examples.dart', 300, '只展示一组互斥单选项。', 'RadioComponentExample'),
       }),
       component('HySwitch', 'hy_selection_controls.dart', '布尔值受控开关。', {
+        propsDocs: [
+          { name: 'value', description: '是否开启' },
+          { name: 'onChanged', description: '状态变化回调' },
+          { name: 'label', description: '标签文字' },
+        ],
         preview: demo('component-switch', 'HySwitch 开关', 'component_form_examples.dart', 260, '只展示开关的开启、关闭与禁用状态。', 'SwitchComponentExample'),
       }),
       component('HySlider', 'hy_selection_controls.dart', '范围、分段和结束回调可配置的滑块。', {
+        propsDocs: [
+          { name: 'value', description: '当前值' },
+          { name: 'onChanged', description: '拖动中回调' },
+          { name: 'onChangeStart', description: '开始拖动回调' },
+          { name: 'onChangeEnd', description: '结束拖动回调' },
+          { name: 'min', description: '最小值，默认 0' },
+          { name: 'max', description: '最大值，默认 100' },
+          { name: 'divisions', description: '分段数' },
+          { name: 'showValue', description: '是否显示当前值，默认 true' },
+        ],
         preview: demo('component-slider', 'HySlider 滑块', 'component_form_examples.dart', 280, '只展示可拖动的离散数值滑块。', 'SliderComponentExample'),
       }),
       component('HyRate', 'hy_selection_controls.dart', '数量、步长和图标可配置的评分。', {
+        propsDocs: [
+          { name: 'value', description: '当前评分' },
+          { name: 'onChanged', description: '评分变化回调' },
+          { name: 'count', description: '星星数量，默认 5' },
+          { name: 'size', description: '星星大小，默认 26' },
+        ],
         preview: demo('component-rate', 'HyRate 评分', 'component_form_examples.dart', 250, '点击星级修改当前评分。', 'RateComponentExample'),
       }),
       component('HyPicker', 'hy_picker.dart', '通过滚轮完成普通选项选择。', {
+        propsDocs: [
+          { name: 'options', description: '选项列表' },
+          { name: 'initialIndex', description: '初始选中索引，默认 0' },
+          { name: 'title', description: '标题，默认 选择选项' },
+        ],
         preview: demo('component-picker', 'HyPicker 滚轮选择器', 'component_form_examples.dart', 270, '打开底部滚轮选择一个选项。', 'PickerComponentExample'),
       }),
       component('HyDatePicker', 'hy_picker.dart', '提供日期、时间和日期区间选择入口。', {
+        propsDocs: [
+          { name: 'initialDate', description: '初始日期' },
+          { name: 'firstDate', description: '最早可选日期' },
+          { name: 'lastDate', description: '最晚可选日期' },
+        ],
         preview: demo('component-date-picker', 'HyDatePicker 日期选择', 'component_form_examples.dart', 270, '调用平台一致的日期选择入口。', 'DatePickerComponentExample'),
       }),
       component('HyUploader / HyUploadSource / HyUploadStatus / HyUploadFile / HyUploadCancellation / HyUploadItem', 'hy_uploader.dart', '通过注入式适配器完成选择、上传、进度、取消、失败与重试。', {
+        propsDocs: [
+          { name: 'pick', description: '文件选择器，HyFilePicker 类型' },
+          { name: 'upload', description: '文件上传器，HyFileUpload 类型' },
+          { name: 'onChanged', description: '上传列表变化回调' },
+          { name: 'onError', description: '错误回调' },
+          { name: 'initialItems', description: '初始上传项列表，默认空数组' },
+          { name: 'maxCount', description: '最大文件数，默认 9' },
+          { name: 'maxBytes', description: '单文件最大字节数，默认 10MB' },
+          { name: 'enabled', description: '是否启用，默认 true' },
+          { name: 'sources', description: '可选上传来源，默认相册和相机' },
+        ],
         preview: demo('component-uploader', 'HyUploader 上传', 'upload_example.dart', 620, '只展示文件选择、进度、取消和重试状态。'),
       }),
       component('HyFilePicker / HyFileUpload', 'hy_uploader.dart', '由业务层实现的文件选择与上传函数类型。', {
@@ -282,33 +514,92 @@ export const componentGroups: ComponentGroup[] = [
     ],
     components: [
       component('HyToast', 'hy_feedback.dart', '支持语义色和可选撤销动作的玻璃轻提示。', {
+        propsDocs: [
+          { name: 'tone', description: '语义色调，默认 HyUiTone.neutral' },
+          { name: 'duration', description: '显示时长，默认 2 秒' },
+          { name: 'actionLabel', description: '操作按钮文字' },
+          { name: 'onAction', description: '操作按钮回调' },
+        ],
         preview: demo('component-toast', 'HyToast 轻提示', 'component_feedback_examples.dart', 280, '点击按钮查看成功、警告和错误提示。', 'ToastComponentExample'),
       }),
       component('HyDialog', 'hy_feedback.dart', '确认、提示或自定义正文对话框。', {
+        propsDocs: [
+          { name: 'title', description: '标题' },
+          { name: 'message', description: '提示文字' },
+          { name: 'content', description: '自定义正文组件' },
+          { name: 'confirmLabel', description: '确认按钮文字，默认 确定' },
+          { name: 'cancelLabel', description: '取消按钮文字，默认 取消' },
+          { name: 'dangerous', description: '是否危险操作样式，默认 false' },
+          { name: 'showCancel', description: '是否显示取消按钮，默认 true' },
+        ],
         preview: demo('component-dialog', 'HyDialog 对话框', 'component_feedback_examples.dart', 260, '打开玻璃确认对话框。', 'DialogComponentExample'),
       }),
       component('HyLoading', 'hy_feedback.dart', '局部加载状态与自动清理的全局任务遮罩。', {
+        propsDocs: [
+          { name: 'label', description: '加载提示文字' },
+          { name: 'size', description: '加载图标大小，默认 24' },
+        ],
         preview: demo('component-loading', 'HyLoading 加载', 'component_feedback_examples.dart', 280, '展示局部加载与自动清理的全局遮罩。', 'LoadingComponentExample'),
       }),
       component('HyAlert', 'hy_feedback.dart', '可关闭的语义通知。', {
+        propsDocs: [
+          { name: 'message', description: '通知内容' },
+          { name: 'title', description: '标题' },
+          { name: 'tone', description: '语义色调，默认 HyUiTone.info' },
+          { name: 'onClose', description: '关闭回调' },
+        ],
         preview: demo('component-alert', 'HyAlert 通知', 'component_feedback_examples.dart', 280, '关闭并重新显示语义通知。', 'AlertComponentExample'),
       }),
       component('HyBottomSheet', 'hy_bottom_sheet.dart', '适配安全区、键盘与最大高度的自定义底部弹层。', {
+        propsDocs: [
+          { name: 'builder', description: '内容构建器' },
+          { name: 'title', description: '标题' },
+          { name: 'dismissible', description: '是否可点击外部关闭，默认 true' },
+        ],
         preview: demo('component-bottom-sheet', 'HyBottomSheet 底部弹层', 'component_feedback_examples.dart', 260, '打开适配安全区的自定义弹层。', 'BottomSheetComponentExample'),
       }),
       component('HyDrawer / HyDrawerPlacement', 'hy_drawer.dart', '支持双侧弹出、RTL、自定义宽度、固定底部操作区与泛型返回结果的柔光抽屉。', {
+        propsDocs: [
+          { name: 'child', description: '内容组件' },
+          { name: 'title', description: '标题' },
+          { name: 'footer', description: '底部操作区组件' },
+          { name: 'onClose', description: '关闭回调' },
+          { name: 'scrollable', description: '是否可滚动，默认 true' },
+          { name: 'padding', description: '内边距' },
+        ],
         preview: demo('component-drawer', 'HyDrawer 抽屉', 'component_feedback_examples.dart', 320, '只展示抽屉的打开、关闭和返回结果。', 'DrawerComponentExample'),
       }),
       component('HyActionSheet / HyAction', 'hy_bottom_sheet.dart', '支持危险项与禁用项的底部操作菜单。', {
+        propsDocs: [
+          { name: 'actions', description: '操作项列表' },
+          { name: 'title', description: '标题' },
+          { name: 'cancelLabel', description: '取消按钮文字，默认 取消' },
+        ],
         preview: demo('component-action-sheet', 'HyActionSheet 操作菜单', 'component_feedback_examples.dart', 260, '打开含普通与危险操作的底部菜单。', 'ActionSheetComponentExample'),
       }),
       component('HyPopover', 'hy_popover.dart', '锚定子组件的补充说明气泡。', {
+        propsDocs: [
+          { name: 'child', description: '锚点子组件' },
+          { name: 'content', description: '气泡内容组件' },
+        ],
         preview: demo('component-popover', 'HyPopover 气泡', 'component_feedback_examples.dart', 260, '点击锚点查看补充说明。', 'PopoverComponentExample'),
       }),
       component('HyPopupMenu', 'hy_popover.dart', '基于 HyAction 的泛型弹出菜单。', {
+        propsDocs: [
+          { name: 'actions', description: '菜单项列表' },
+          { name: 'onSelected', description: '选中回调' },
+          { name: 'icon', description: '触发图标，默认 Icons.more_horiz_rounded' },
+          { name: 'tooltip', description: '长按提示文字，默认 更多操作' },
+        ],
         preview: demo('component-popup-menu', 'HyPopupMenu 弹出菜单', 'component_feedback_examples.dart', 260, '选择菜单项并读取泛型返回值。', 'PopupMenuComponentExample'),
       }),
       component('HyNoticeBar', 'hy_notice_bar.dart', '短公告静止、长公告滚动的可关闭通知条。', {
+        propsDocs: [
+          { name: 'message', description: '公告内容' },
+          { name: 'onTap', description: '点击回调' },
+          { name: 'onClose', description: '关闭回调' },
+          { name: 'speed', description: '滚动速度，默认 28' },
+        ],
         preview: demo('component-notice-bar', 'HyNoticeBar 公告栏', 'component_feedback_examples.dart', 270, '长公告自动滚动并支持关闭。', 'NoticeBarComponentExample'),
       }),
     ],
@@ -328,42 +619,133 @@ export const componentGroups: ComponentGroup[] = [
       component('HyTopBar / HyNavBar', 'hy_top_bar.dart', '支持副标题、自定义前导、操作区和悬浮材质的页面顶部栏。', {
         id: 'nav-bar',
         navName: 'HyNavBar',
+        propsDocs: [
+          { name: 'title', description: '标题' },
+          { name: 'subtitle', description: '副标题' },
+          { name: 'leading', description: '前导组件' },
+          { name: 'actions', description: '操作区组件列表，默认空数组' },
+          { name: 'safeArea', description: '是否适配安全区，默认 true' },
+          { name: 'automaticallyImplyLeading', description: '是否自动添加返回按钮，默认 true' },
+          { name: 'centerTitle', description: '标题是否居中，默认 false' },
+          { name: 'floating', description: '是否悬浮材质，默认 false' },
+        ],
         preview: demo('component-nav-bar', 'HyNavBar 顶部导航', 'component_navigation_examples.dart', 260, '只展示标题、副标题和操作区。', 'NavBarComponentExample'),
       }),
       component('HyTabBar / HyTabItem', 'hy_navigation.dart', '支持拖拽、速度投影、弹簧吸附、RTL 与安全区的悬浮导航。', {
+        propsDocs: [
+          { name: 'items', description: '导航项列表' },
+          { name: 'selectedIndex', description: '当前选中索引' },
+          { name: 'onSelected', description: '选中回调' },
+          { name: 'safeArea', description: '是否适配安全区，默认 true' },
+          { name: 'enableHaptics', description: '是否启用触感反馈，默认 true' },
+          { name: 'margin', description: '外边距' },
+        ],
         preview: demo('component-tab-bar', 'HyTabBar 底部导航', 'component_navigation_examples.dart', 320, '拖动或点击胶囊切换当前项。', 'TabBarComponentExample'),
       }),
       component('HyTabs / HyTabBarView', 'hy_navigation.dart', '共享 TabController 的标签与页面联动。', {
+        propsDocs: [
+          { name: 'tabs', description: '标签组件列表' },
+          { name: 'controller', description: 'TabController 控制器' },
+          { name: 'scrollable', description: '标签是否可滚动，默认 false' },
+          { name: 'onTap', description: '标签点击回调' },
+        ],
         preview: demo('component-tabs', 'HyTabs 标签页', 'component_navigation_examples.dart', 350, '点击标签或横向滑动页面。', 'TabsComponentExample'),
       }),
       component('HySteps / HyStep', 'hy_navigation.dart', '横向或纵向步骤状态。', {
+        propsDocs: [
+          { name: 'steps', description: '步骤项列表' },
+          { name: 'current', description: '当前步骤索引' },
+          { name: 'vertical', description: '是否纵向排列，默认 false' },
+        ],
         preview: demo('component-steps', 'HySteps 步骤', 'component_navigation_examples.dart', 300, '切换当前步骤检查完成状态。', 'StepsComponentExample'),
       }),
       component('HyProgress', 'hy_navigation.dart', '线性、环形、确定或不定进度。', {
+        propsDocs: [
+          { name: 'value', description: '进度值（0-1），为空时为不定进度' },
+          { name: 'circular', description: '是否环形，默认 false' },
+          { name: 'size', description: '环形尺寸，默认 64' },
+          { name: 'showLabel', description: '是否显示百分比文字，默认 true' },
+          { name: 'strokeWidth', description: '环形线宽，默认 6' },
+        ],
         preview: demo('component-progress', 'HyProgress 进度', 'component_navigation_examples.dart', 330, '展示线性、环形和不定进度。', 'ProgressComponentExample'),
       }),
       component('HyProgressBar', 'hy_progress_bar.dart', '紧凑线性进度条。', {
+        propsDocs: [
+          { name: 'value', description: '进度值（0-1）' },
+          { name: 'height', description: '高度，默认 8' },
+          { name: 'color', description: '进度条颜色' },
+          { name: 'backgroundColor', description: '轨道颜色' },
+        ],
         preview: demo('component-progress-bar', 'HyProgressBar 进度条', 'component_navigation_examples.dart', 280, '展示不同厚度的紧凑进度轨道。', 'ProgressBarComponentExample'),
       }),
       component('HyListTile', 'hy_list_tile.dart', '支持图标、头像、标签、元信息和自定义尾部的列表项。', {
+        propsDocs: [
+          { name: 'title', description: '标题' },
+          { name: 'subtitle', description: '副标题' },
+          { name: 'meta', description: '元信息文字' },
+          { name: 'leading', description: '前置组件' },
+          { name: 'leadingIcon', description: '前置图标' },
+          { name: 'leadingColor', description: '前置图标颜色' },
+          { name: 'trailing', description: '尾部组件' },
+          { name: 'onTap', description: '点击回调' },
+          { name: 'selected', description: '是否选中，默认 false' },
+          { name: 'grouped', description: '是否分组样式，默认 false' },
+          { name: 'enabled', description: '是否启用，默认 true' },
+          { name: 'showChevron', description: '是否显示右箭头，默认 true' },
+        ],
         preview: demo('component-list-tile', 'HyListTile 列表项', 'component_navigation_examples.dart', 300, '只展示普通、选中和禁用列表项。', 'ListTileComponentExample'),
       }),
       component('HyList', 'hy_lists.dart', '不绑定数据模型的轻量分隔列表。', {
+        propsDocs: [
+          { name: 'children', description: '子组件列表' },
+          { name: 'padding', description: '内边距，默认 EdgeInsets.zero' },
+          { name: 'physics', description: '滚动物理效果' },
+          { name: 'shrinkWrap', description: '是否根据子组件高度收缩，默认 false' },
+          { name: 'separator', description: '分隔组件' },
+        ],
         preview: demo('component-list', 'HyList 列表', 'component_navigation_examples.dart', 380, '只展示列表容器的间距和分隔。', 'ListComponentExample'),
       }),
       component('HyMenuList / HyMenuItem / HyMenuGroup', 'hy_lists.dart', '设置页、个人中心和详情页通用的描述式分组菜单。', {
+        propsDocs: [
+          { name: 'items', description: '菜单项列表' },
+          { name: 'title', description: '分组标题' },
+          { name: 'subtitle', description: '分组副标题' },
+        ],
         preview: demo('component-menu-list', 'HyMenuList 菜单列表', 'component_navigation_examples.dart', 420, '只展示设置页式分组菜单。', 'MenuListComponentExample'),
       }),
       component('HySlideMenu / HySlideAction', 'hy_slide_menu.dart', '支持 RTL、速度投影、弹簧吸附与边界阻尼的侧滑菜单。', {
+        propsDocs: [
+          { name: 'child', description: '内容组件' },
+          { name: 'startActions', description: '左侧操作列表，默认空数组' },
+          { name: 'endActions', description: '右侧操作列表，默认空数组' },
+          { name: 'actionExtent', description: '操作区域宽度，默认 72' },
+          { name: 'radius', description: '圆角大小，默认 18' },
+          { name: 'enabled', description: '是否启用侧滑，默认 true' },
+          { name: 'decorateChild', description: '是否为内容添加材质装饰，默认 true' },
+        ],
         preview: demo('component-slide-menu', 'HySlideMenu 侧滑菜单', 'component_navigation_examples.dart', 300, '左右拖动列表行查看快捷操作。', 'SlideMenuComponentExample'),
       }),
       component('HyPullRefresh', 'hy_lists.dart', '对 RefreshIndicator 的语义化封装。', {
+        propsDocs: [
+          { name: 'onRefresh', description: '刷新回调' },
+          { name: 'child', description: '子组件' },
+        ],
         preview: demo('component-pull-refresh', 'HyPullRefresh 下拉刷新', 'component_navigation_examples.dart', 360, '下拉列表触发异步刷新。', 'PullRefreshComponentExample'),
       }),
       component('HyLoadMore', 'hy_lists.dart', '串行分页、终态与失败重试。', {
+        propsDocs: [
+          { name: 'child', description: '子组件' },
+          { name: 'onLoadMore', description: '加载更多回调' },
+          { name: 'hasMore', description: '是否还有更多数据' },
+          { name: 'threshold', description: '触发加载的距离阈值，默认 160' },
+        ],
         preview: demo('component-load-more', 'HyLoadMore 分页加载', 'component_navigation_examples.dart', 360, '滚动到底部或点击触发下一页。', 'LoadMoreComponentExample'),
       }),
       component('HySticky', 'hy_lists.dart', '用于 CustomScrollView.slivers 的吸顶内容。', {
+        propsDocs: [
+          { name: 'child', description: '子组件' },
+          { name: 'height', description: '吸顶高度，默认 52' },
+        ],
         preview: demo('component-sticky', 'HySticky 吸顶', 'component_navigation_examples.dart', 380, '滚动列表观察标题保持在顶部。', 'StickyComponentExample'),
       }),
     ],
@@ -383,15 +765,36 @@ export const componentGroups: ComponentGroup[] = [
     ],
     components: [
       component('HySearchBar', 'hy_business.dart', '包含搜索、提交和清空交互的输入入口。', {
+        propsDocs: [
+          { name: 'controller', description: '文本编辑控制器' },
+          { name: 'onChanged', description: '内容变化回调' },
+          { name: 'onSubmitted', description: '提交回调' },
+          { name: 'hintText', description: '占位提示文字，默认 搜索' },
+          { name: 'enabled', description: '是否启用，默认 true' },
+        ],
         preview: demo('component-search-bar', 'HySearchBar 搜索栏', 'component_composite_examples.dart', 300, '输入关键词观察受控搜索状态。', 'SearchBarComponentExample'),
       }),
       component('HyCountDown', 'hy_business.dart', '基于截止时间计算，并在应用恢复前台时校准。', {
+        propsDocs: [
+          { name: 'endTime', description: '截止时间' },
+          { name: 'onFinished', description: '倒计时结束回调' },
+          { name: 'builder', description: '自定义构建器' },
+        ],
         preview: demo('component-count-down', 'HyCountDown 倒计时', 'component_composite_examples.dart', 280, '基于绝对截止时间显示并校准倒计时。', 'CountDownComponentExample'),
       }),
       component('HyCollapse', 'hy_business.dart', '标题与正文组成的折叠内容。', {
+        propsDocs: [
+          { name: 'title', description: '标题' },
+          { name: 'child', description: '内容组件' },
+          { name: 'initiallyExpanded', description: '初始是否展开，默认 false' },
+          { name: 'onChanged', description: '展开状态变化回调' },
+        ],
         preview: demo('component-collapse', 'HyCollapse 折叠面板', 'component_composite_examples.dart', 360, '独立展开或收起内容区域。', 'CollapseComponentExample'),
       }),
       component('HyTimeline / HyTimelineItem', 'hy_business.dart', '订单、物流和流程事件时间轴。', {
+        propsDocs: [
+          { name: 'items', description: '时间轴项列表' },
+        ],
         preview: demo('component-timeline', 'HyTimeline 时间轴', 'component_composite_examples.dart', 370, '展示已完成、当前和待处理事件。', 'TimelineComponentExample'),
       }),
     ],

@@ -38,8 +38,10 @@ const apiProps = computed<ApiProp[]>(() => {
   if (!code) return [];
 
   const props: ApiProp[] = [];
+  // 先移除 enum 定义，避免枚举值（如 filled/tonal）被误解析为构造函数参数
+  const codeWithoutEnums = code.replace(/enum\s+\w+\s*\{[^}]*\}/g, '');
   // 匹配每个构造函数的参数块 { ... }
-  const blocks = code.match(/\{([^}]+)\}/g) ?? [];
+  const blocks = codeWithoutEnums.match(/\{([^}]+)\}/g) ?? [];
 
   for (const block of blocks) {
     const inner = block.slice(1, -1).trim();
