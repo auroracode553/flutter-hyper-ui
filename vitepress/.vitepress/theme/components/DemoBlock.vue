@@ -22,7 +22,6 @@ type PreviewWidth = 'fluid' | 'mobile';
 const copied = ref(false);
 const codeExpanded = ref(false);
 const previewWidth = ref<PreviewWidth>('fluid');
-const previewFrame = ref<HTMLElement>();
 const previewTarget = ref<HTMLElement>();
 const previewStatus = ref<PreviewStatus>({ phase: 'idle', message: '演示尚未加载' });
 const highlightedCode = ref(props.code);
@@ -42,7 +41,6 @@ const frameStyle = computed(() => ({
 }));
 let disposePreview: (() => void) | undefined;
 let activatePreview: (() => void) | undefined;
-let resetPreviewView: (() => void) | undefined;
 
 onMounted(() => {
   if (!previewTarget.value) return;
@@ -53,7 +51,6 @@ onMounted(() => {
   );
   disposePreview = registration.dispose;
   activatePreview = registration.activate;
-  resetPreviewView = registration.reset;
 });
 
 onBeforeUnmount(() => disposePreview?.());
@@ -61,15 +58,6 @@ onBeforeUnmount(() => disposePreview?.());
 function retryPreview() {
   if (previewStatus.value.reloadRequired) window.location.reload();
   else activatePreview?.();
-}
-
-function resetPreview() {
-  previewStatus.value = { phase: 'view', message: '正在重置演示…', progress: 0.86 };
-  resetPreviewView?.();
-}
-
-async function openFullscreen() {
-  await previewFrame.value?.requestFullscreen();
 }
 
 async function copyCode() {
@@ -91,13 +79,11 @@ async function copyCode() {
           <button type="button" :class="{ 'is-active': previewWidth === 'fluid' }" :aria-pressed="previewWidth === 'fluid'" @click="previewWidth = 'fluid'">自适应</button>
           <button type="button" :class="{ 'is-active': previewWidth === 'mobile' }" :aria-pressed="previewWidth === 'mobile'" @click="previewWidth = 'mobile'">手机</button>
         </div>
-        <button type="button" title="重置演示状态" :disabled="previewStatus.phase !== 'ready'" @click="resetPreview">重置</button>
-        <button type="button" title="全屏预览" @click="openFullscreen">全屏</button>
       </div>
     </header>
 
     <div class="demo-block__stage">
-      <div ref="previewFrame" class="demo-block__preview" :style="frameStyle">
+      <div class="demo-block__preview" :style="frameStyle">
         <div ref="previewTarget" class="demo-block__flutter-host" />
         <div
           v-if="previewStatus.phase !== 'ready'"
