@@ -1086,7 +1086,7 @@ body {
 
 .demo-block__code {
   border-top: 1px solid var(--vp-c-divider);
-  background: var(--hy-glass-subtle);
+  background: transparent;
 }
 
 .demo-block__code-header {
@@ -1094,19 +1094,41 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  background: var(--hy-glass-subtle);
 }
 
 .demo-block__code-header > :first-child {
   margin-right: auto;
 }
 
-.demo-block__code pre {
+.demo-block__code-body pre.shiki {
   max-height: 560px;
   margin: 0;
+  padding: 18px 22px;
   overflow: auto;
-  border-top: 1px solid var(--vp-c-divider);
+  background-color: var(--shiki-light-bg, #ffffff) !important;
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  line-height: 1.75;
   border-radius: 0;
+}
+
+.demo-block__code-body pre.shiki code {
+  font-family: inherit;
+}
+
+.dark .demo-block__code-header {
+  background: var(--hy-glass-subtle);
+}
+
+.dark .demo-block__code-body pre.shiki {
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+.dark .demo-block__code-body pre.shiki span {
+  color: var(--shiki-dark) !important;
 }
 
 /* Catalog and reference */

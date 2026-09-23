@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { registerPreview, type PreviewStatus } from '../preview-runtime';
+import { highlightDart } from '../highlight';
 
 const props = withDefaults(
   defineProps<{
@@ -24,6 +25,15 @@ const previewWidth = ref<PreviewWidth>('fluid');
 const previewFrame = ref<HTMLElement>();
 const previewTarget = ref<HTMLElement>();
 const previewStatus = ref<PreviewStatus>({ phase: 'idle', message: '演示尚未加载' });
+const highlightedCode = ref(props.code);
+let highlightedReady = false;
+
+// 展开源码时按需高亮；结果缓存，重复展开不重复计算。
+watch(codeExpanded, async (open) => {
+  if (!open || highlightedReady) return;
+  highlightedReady = true;
+  highlightedCode.value = await highlightDart(props.code);
+});
 const previewBusy = computed(() => ['assets', 'engine', 'view'].includes(previewStatus.value.phase));
 const previewProgress = computed(() => `${Math.round((previewStatus.value.progress ?? 0) * 100)}%`);
 const frameStyle = computed(() => ({
@@ -138,7 +148,7 @@ async function copyCode() {
         </button>
         <button type="button" @click="copyCode">{{ copied ? '已复制' : '复制代码' }}</button>
       </div>
-      <pre v-if="codeExpanded"><code>{{ code }}</code></pre>
+      <div v-if="codeExpanded" class="demo-block__code-body" v-html="highlightedCode" />
     </div>
   </section>
 </template>
