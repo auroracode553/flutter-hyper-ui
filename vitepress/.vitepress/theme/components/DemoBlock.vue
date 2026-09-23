@@ -22,7 +22,7 @@ type PreviewWidth = 'fluid' | 'mobile';
 
 const copied = ref(false);
 const codeExpanded = ref(false);
-const previewWidth = ref<PreviewWidth>('fluid');
+const previewWidth = ref<PreviewWidth>('mobile');
 const previewTarget = ref<HTMLElement>();
 const previewStatus = ref<PreviewStatus>({ phase: 'idle', message: '演示尚未加载' });
 const highlightedCode = ref(props.code);
