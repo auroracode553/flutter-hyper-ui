@@ -61,10 +61,7 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(circle at 8% 6%, rgba(93, 137, 255, 0.1), transparent 28rem),
-    radial-gradient(circle at 92% 18%, rgba(160, 118, 224, 0.09), transparent 30rem),
-    var(--vp-c-bg);
+  background: var(--vp-c-bg);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
     system-ui, sans-serif;
@@ -276,10 +273,7 @@ body {
 }
 
 .hy-home__ambient {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(12px);
-  pointer-events: none;
+  display: none;
 }
 
 .hy-home__ambient--blue {
@@ -712,7 +706,7 @@ body {
 }
 
 .hy-home__live {
-  background: radial-gradient(circle at 50% 45%, rgba(92, 127, 227, 0.1), transparent 45rem);
+  background: transparent;
 }
 
 .hy-home__catalog-grid,
@@ -885,15 +879,102 @@ body {
   background: transparent;
 }
 
-.demo-block__preview {
+.device-frame {
   position: relative;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   min-height: 220px;
   overflow: hidden;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 16px;
-  background: var(--vp-c-bg);
   transition: width 220ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.device-frame__screen {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+/* 自适应 = PC 窗口 */
+.device-frame--fluid {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--hy-shadow);
+}
+
+.dark .device-frame--fluid {
+  background: var(--vp-c-bg-alt);
+}
+
+.device-frame__chrome {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 14px;
+  background: var(--vp-c-bg-alt);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.device-frame__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.device-frame__dot--red { background: #ff5f57; }
+.device-frame__dot--yellow { background: #febc2e; }
+.device-frame__dot--green { background: #28c840; }
+
+.device-frame__url {
+  flex: 1;
+  height: 20px;
+  margin-left: 8px;
+  border-radius: 6px;
+  background: var(--vp-c-bg);
+}
+
+/* 手机 = 真机 */
+.device-frame--mobile {
+  border-radius: 48px;
+  background: #fff;
+  box-shadow:
+    0 0 0 2px #0e1013,
+    0 0 0 5px #2a2d36,
+    var(--hy-shadow-strong);
+}
+
+.dark .device-frame--mobile {
+  background: #0b0d11;
+}
+
+.device-frame__notch {
+  position: absolute;
+  z-index: 5;
+  top: 12px;
+  left: 50%;
+  width: 100px;
+  height: 26px;
+  border-radius: 99px;
+  background: #0b0d11;
+  transform: translateX(-50%);
+}
+
+.device-frame__camera {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 14px);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1c2735;
+  box-shadow: inset 0 0 0 2px #274b66;
+  transform: translateY(-50%);
+}
+
+/* 手机模式：让出灵动岛的顶部安全区 */
+.device-frame--mobile .demo-block__flutter-host {
+  top: 52px;
 }
 
 .demo-block__preview:fullscreen {

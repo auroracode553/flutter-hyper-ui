@@ -37,20 +37,11 @@ class _EmbeddedPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
-
     return Scaffold(
-      backgroundColor: tokens.background,
-      body: HySoftBackground(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 760),
-              child: item.builder(context),
-            ),
-          ),
-        ),
+      backgroundColor: Colors.transparent,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
+        child: item.builder(context),
       ),
     );
   }

@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { registerPreview, type PreviewStatus } from '../preview-runtime';
 import { highlightDart } from '../highlight';
+import DeviceFrame from './DeviceFrame.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -36,7 +37,7 @@ watch(codeExpanded, async (open) => {
 const previewBusy = computed(() => ['assets', 'engine', 'view'].includes(previewStatus.value.phase));
 const previewProgress = computed(() => `${Math.round((previewStatus.value.progress ?? 0) * 100)}%`);
 const frameStyle = computed(() => ({
-  height: `${props.height}px`,
+  height: previewWidth.value === 'mobile' ? '680px' : `${props.height}px`,
   width: previewWidth.value === 'mobile' ? '390px' : '100%',
 }));
 let disposePreview: (() => void) | undefined;
@@ -83,7 +84,7 @@ async function copyCode() {
     </header>
 
     <div class="demo-block__stage">
-      <div class="demo-block__preview" :style="frameStyle">
+      <DeviceFrame class="demo-block__preview" :mode="previewWidth" :style="frameStyle">
         <div ref="previewTarget" class="demo-block__flutter-host" />
         <div
           v-if="previewStatus.phase !== 'ready'"
@@ -124,7 +125,7 @@ async function copyCode() {
             </button>
           </div>
         </div>
-      </div>
+      </DeviceFrame>
     </div>
 
     <div class="demo-block__code">
