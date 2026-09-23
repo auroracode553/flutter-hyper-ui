@@ -945,6 +945,22 @@ body {
   transform: translateX(-50%);
 }
 
+.device-frame__home-indicator {
+  position: absolute;
+  z-index: 10;
+  bottom: 8px;
+  left: 50%;
+  width: 134px;
+  height: 5px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.85);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.dark .device-frame__home-indicator {
+  background: rgba(255, 255, 255, 0.9);
+}
 .device-frame__camera {
   position: absolute;
   top: 50%;
@@ -960,6 +976,8 @@ body {
 /* 手机模式：让出灵动岛的顶部安全区 */
 .device-frame--mobile .demo-block__flutter-host {
   top: 52px;
+  bottom: 0;
+  height: auto;
 }
 
 .demo-block__preview:fullscreen {

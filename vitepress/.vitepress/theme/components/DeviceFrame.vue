@@ -14,11 +14,12 @@ defineProps<{
       <span class="device-frame__url" />
     </div>
 
-    <!-- 手机：灵动岛 + 摄像头（悬浮覆盖在屏幕上） -->
+    <!-- 手机：灵动岛 + 摄像头 + Home Indicator（悬浮覆盖在屏幕上） -->
     <template v-else>
       <div class="device-frame__notch">
         <span class="device-frame__camera" />
       </div>
+      <div class="device-frame__home-indicator" />
     </template>
 
     <div class="device-frame__screen">
