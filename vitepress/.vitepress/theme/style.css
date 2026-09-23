@@ -70,7 +70,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+:root {
+  --vp-nav-height: 54px;
+}
+
 .VPNavBar {
+  height: var(--vp-nav-height) !important;
   background: var(--vp-nav-bg-color) !important;
   border-bottom-color: transparent !important;
   backdrop-filter: blur(24px) saturate(150%);
@@ -267,9 +272,9 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.72fr);
   gap: clamp(36px, 6vw, 96px);
-  align-items: center;
-  min-height: min(680px, calc(100vh - var(--vp-nav-height)));
-  padding: 64px max(24px, calc((100vw - 1160px) / 2)) 72px;
+  align-items: start;
+  min-height: auto;
+  padding: 56px max(24px, calc((100vw - 1160px) / 2)) 40px;
 }
 
 .hy-home__ambient {
@@ -405,20 +410,18 @@ body {
   z-index: 1;
   display: grid;
   place-items: center;
+  margin-top: 48px;
   perspective: 1200px;
 }
 
 .hy-home__phone {
   position: relative;
   width: min(100%, 340px);
-  min-height: 560px;
+  min-height: 680px;
   overflow: hidden;
-  padding: 26px 22px 84px;
+  padding: 26px 22px 24px;
   border-radius: 48px;
-  background:
-    radial-gradient(circle at 82% 12%, rgba(105, 144, 244, 0.2), transparent 34%),
-    radial-gradient(circle at 8% 68%, rgba(170, 125, 226, 0.14), transparent 35%),
-    var(--hy-glass-strong);
+  background: #ffffff;
   /* 深色金属中框 */
   box-shadow:
     0 0 0 2px #0e1013,
@@ -456,7 +459,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 62px;
+  margin-bottom: 88px;
 }
 
 /* 居中灵动岛 */
