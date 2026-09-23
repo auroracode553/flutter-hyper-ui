@@ -12,9 +12,6 @@ const entry = computed(() => resolved.value.entry);
 const group = computed(() => resolved.value.group);
 // 组件页只接受目录显式绑定的专属预览，禁止回退到分类组合 Demo。
 const demo = computed(() => entry.value.preview);
-const relatedComponents = computed(() => (
-  group.value.components.filter((item) => item.id !== entry.value.id).slice(0, 8)
-));
 
 </script>
 
@@ -69,16 +66,5 @@ const relatedComponents = computed(() => (
         </li>
       </ul>
     </section>
-
-    <nav v-if="relatedComponents.length" class="component-doc__related" aria-label="同类组件">
-      <div>
-        <span class="hy-kicker">RELATED</span>
-        <h2>同类组件</h2>
-      </div>
-      <a v-for="item in relatedComponents" :key="item.id" :href="withBase(item.page)">
-        <span>{{ item.navName }}</span>
-        <b>→</b>
-      </a>
-    </nav>
   </article>
 </template>

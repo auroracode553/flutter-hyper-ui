@@ -47,48 +47,37 @@ export default defineConfig({
     search: {
       provider: 'local',
     },
-    nav: [
-      { text: '开始', link: '/guide/getting-started' },
-      { text: '设计系统', link: '/guide/design-system' },
-      { text: '组件', link: '/components/catalog' },
-    ],
-    sidebar: {
-      '/guide/': [
-        {
-          text: '指南',
-          items: [
-            { text: '快速开始', link: '/guide/getting-started' },
-            { text: '设计系统', link: '/guide/design-system' },
-            { text: '主题与令牌', link: '/guide/theming' },
-            { text: '无障碍与自适应', link: '/guide/accessibility' },
-            { text: '架构与依赖边界', link: '/guide/architecture' },
-            { text: '文档开发', link: '/guide/documentation' },
-          ],
-        },
-      ],
-      '/components/': [
-        {
-          text: '组件',
-          items: [{ text: '组件总览', link: '/components/catalog' }],
-        },
-        ...componentSidebarSections.map((section) => ({
-          text: section.title,
-          items: section.components.map((entry) => ({
-            text: entry.navName,
-            link: entry.page,
-          })),
+    nav: [],
+    // 指南与组件共用同一棵侧边栏树，类似 element-plus：指南之后直接展开组件分类。
+    sidebar: [
+      {
+        text: '指南',
+        collapsed: false,
+        items: [
+          { text: '快速开始', link: '/guide/getting-started' },
+          { text: '设计系统', link: '/guide/design-system' },
+        ],
+      },
+      {
+        text: '组件总览',
+        link: '/components/catalog',
+      },
+      ...componentSidebarSections.map((section) => ({
+        text: section.title,
+        collapsed: false,
+        items: section.components.map((entry) => ({
+          text: entry.navName,
+          link: entry.page,
         })),
-      ],
-    },
+      })),
+    ],
     outline: {
       level: [2, 3],
     },
     docFooter: {
-      prev: '上一篇',
-      next: '下一篇',
+      prev: false,
+      next: false,
     },
-    lastUpdated: {
-      text: '最后更新',
-    },
+    lastUpdated: false,
   },
 });

@@ -50,8 +50,6 @@ theme: HyUiTheme.light(
 ),
 ```
 
-更深入的材质定制见[主题与令牌](./theming.md)。
-
 ## 创建第一个页面
 
 `HySoftBackground` 提供低饱和环境色，让透明材质具有可见景深；它不是必需的业务容器。
@@ -118,6 +116,4 @@ HySwitch(
 ## 下一步
 
 - 阅读[设计系统](./design-system.md)，理解玻璃层级和交互规则。
-- 阅读[主题与令牌](./theming.md)，定制品牌色与玻璃材质。
-- 阅读[无障碍与自适应](./accessibility.md)，了解文本缩放、RTL 和减少动画行为。
 - 前往[组件总览](../components/catalog.md)，体验真实 Flutter Widget。
