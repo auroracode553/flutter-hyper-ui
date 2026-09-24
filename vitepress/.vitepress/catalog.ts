@@ -397,6 +397,17 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-text-field', 'HyTextField 输入框', 'component_form_examples.dart', 860, '展示基础、清空、密码、前后缀、多行、计数、禁用只读与错误态。', 'TextFieldComponentExample'),
       }),
+      component('HyFormField', 'hy_form_field.dart', '为任意输入控件统一排列标题、必填标记、辅助文案和错误提示。', {
+        propsDocs: [
+          { name: 'label', description: '字段标题' },
+          { name: 'child', description: '输入控件' },
+          { name: 'helperText', description: '正常状态辅助说明' },
+          { name: 'errorText', description: '错误提示，存在时替代辅助说明' },
+          { name: 'isRequired', description: '是否显示必填标记，默认 false' },
+          { name: 'trailing', description: '标题右侧附加组件' },
+        ],
+        preview: demo('component-form-field', 'HyFormField 字段容器', 'component_form_field_example.dart', 360, '文本输入与数值控件共享标题、说明和错误层级。', 'FormFieldComponentExample'),
+      }),
       component('HySegmentedControl / HySegmentOption', 'hy_segmented_control.dart', '适用于少量互斥选项的受控分段选择。', {
         propsDocs: [
           { name: 'options', description: '选项列表' },
@@ -611,6 +622,15 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-popover', 'HyPopover 气泡', 'component_feedback_examples.dart', 260, '点击锚点查看补充说明。', 'PopoverComponentExample'),
       }),
+      component('HyTooltip', 'hy_tooltip.dart', '悬停、长按或键盘聚焦时出现的轻量玻璃提示。', {
+        propsDocs: [
+          { name: 'message', description: '提示文字' },
+          { name: 'child', description: '锚点组件' },
+          { name: 'hoverDelay', description: '悬停显示延迟，默认 500 毫秒' },
+          { name: 'maxWidth', description: '提示最大宽度，默认 240' },
+        ],
+        preview: demo('component-tooltip', 'HyTooltip 轻提示', 'component_tooltip_example.dart', 260, '悬停、长按与键盘聚焦。', 'TooltipComponentExample'),
+      }),
       component('HyPopupMenu', 'hy_popover.dart', '基于 HyAction 的泛型弹出菜单。', {
         propsDocs: [
           { name: 'actions', description: '菜单项列表' },
@@ -677,6 +697,25 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'onTap', description: '标签点击回调' },
         ],
         preview: demo('component-tabs', 'HyTabs 标签页', 'component_navigation_examples.dart', 350, '点击标签或横向滑动页面。', 'TabsComponentExample'),
+      }),
+      component('HyCarousel', 'hy_carousel.dart', '支持滑动、可选自动播放和页码回调的紧凑轮播。', {
+        propsDocs: [
+          { name: 'items', description: '轮播页面，至少一个' },
+          { name: 'height', description: '页面高度，默认 180' },
+          { name: 'initialIndex', description: '初始页索引，默认 0' },
+          { name: 'onPageChanged', description: '页面变化回调' },
+          { name: 'showIndicator', description: '是否显示页码指示器，默认 true' },
+          { name: 'autoPlayInterval', description: '自动播放间隔，需大于 350 毫秒；为空时不自动播放' },
+        ],
+        preview: demo('component-carousel', 'HyCarousel 轮播', 'component_carousel_example.dart', 280, '滑动切页与页码同步。', 'CarouselComponentExample'),
+      }),
+      component('HyPageIndicator', 'hy_carousel.dart', '可独立使用的受控页码指示器。', {
+        propsDocs: [
+          { name: 'count', description: '总页数，必须大于 0' },
+          { name: 'index', description: '当前页索引，从 0 开始' },
+          { name: 'onSelected', description: '点击页码回调；为空时只读' },
+        ],
+        preview: demo('component-page-indicator', 'HyPageIndicator 页码指示', 'component_carousel_example.dart', 200, '可点击与只读状态。', 'PageIndicatorComponentExample'),
       }),
       component('HySteps / HyStep', 'hy_navigation.dart', '横向或纵向步骤状态。', {
         propsDocs: [
@@ -767,6 +806,15 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'threshold', description: '触发加载的距离阈值，默认 160' },
         ],
         preview: demo('component-load-more', 'HyLoadMore 分页加载', 'component_navigation_examples.dart', 480, '滚动到底自动加载与 hasMore: false 终态。', 'LoadMoreComponentExample'),
+      }),
+      component('HyPagination', 'hy_pagination.dart', '支持跳页、省略号和 RTL 的受控分页导航。', {
+        propsDocs: [
+          { name: 'page', description: '当前页，从 1 开始；空数据时为 0' },
+          { name: 'pageCount', description: '总页数；无数据时传 0' },
+          { name: 'onChanged', description: '页码变化回调；为空时只读' },
+          { name: 'maxVisiblePages', description: '中间可见页码数，默认 5' },
+        ],
+        preview: demo('component-pagination', 'HyPagination 分页导航', 'component_pagination_example.dart', 260, '跳页、首末页与空数据状态。', 'PaginationComponentExample'),
       }),
       component('HySticky', 'hy_lists.dart', '用于 CustomScrollView.slivers 的吸顶内容。', {
         propsDocs: [

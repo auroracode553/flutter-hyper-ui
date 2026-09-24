@@ -4,15 +4,19 @@ import 'examples/actions_example.dart';
 import 'examples/buttons_example.dart';
 import 'examples/cards_example.dart';
 import 'examples/component_action_examples.dart';
+import 'examples/component_carousel_example.dart';
 import 'examples/component_composite_examples.dart';
 import 'examples/component_feedback_examples.dart';
 import 'examples/component_foundation_examples.dart';
+import 'examples/component_form_field_example.dart';
 import 'examples/component_form_examples.dart';
 import 'examples/component_layout_examples.dart';
 import 'examples/component_navigation_examples.dart';
 import 'examples/component_number_stepper_example.dart';
+import 'examples/component_pagination_example.dart';
 import 'examples/component_surface_examples.dart';
 import 'examples/component_theme_examples.dart';
+import 'examples/component_tooltip_example.dart';
 import 'examples/data_example.dart';
 import 'examples/drawer_example.dart';
 import 'examples/feedback_example.dart';
@@ -229,6 +233,7 @@ class PreviewCatalog {
       builder: (_) => const SliderComponentExample(),
     ),
     _componentPreview('component-number-stepper', 'HyNumberStepper', '紧凑整数增减与边界状态。', (_) => const NumberStepperComponentExample()),
+    _componentPreview('component-form-field', 'HyFormField', '字段标题、辅助与错误状态。', (_) => const FormFieldComponentExample()),
     PreviewItem(
       id: 'component-uploader',
       title: 'HyUploader',
@@ -311,14 +316,18 @@ class PreviewCatalog {
     _componentPreview('component-bottom-sheet', 'HyBottomSheet', '安全区底部弹层。', (_) => const BottomSheetComponentExample()),
     _componentPreview('component-action-sheet', 'HyActionSheet', '底部操作菜单。', (_) => const ActionSheetComponentExample()),
     _componentPreview('component-popover', 'HyPopover', '锚定补充说明。', (_) => const PopoverComponentExample()),
+    _componentPreview('component-tooltip', 'HyTooltip', '自绘玻璃提示。', (_) => const TooltipComponentExample()),
     _componentPreview('component-popup-menu', 'HyPopupMenu', '泛型弹出菜单。', (_) => const PopupMenuComponentExample()),
     _componentPreview('component-notice-bar', 'HyNoticeBar', '可关闭滚动公告。', (_) => const NoticeBarComponentExample()),
     _componentPreview('component-tabs', 'HyTabs', '标签与页面联动。', (_) => const TabsComponentExample()),
+    _componentPreview('component-carousel', 'HyCarousel', '滑动轮播与页码状态。', (_) => const CarouselComponentExample()),
+    _componentPreview('component-page-indicator', 'HyPageIndicator', '独立页码指示器。', (_) => const PageIndicatorComponentExample()),
     _componentPreview('component-steps', 'HySteps', '步骤状态。', (_) => const StepsComponentExample()),
     _componentPreview('component-progress', 'HyProgress', '线性与环形进度。', (_) => const ProgressComponentExample()),
     _componentPreview('component-progress-bar', 'HyProgressBar', '紧凑线性进度条。', (_) => const ProgressBarComponentExample()),
     _componentPreview('component-pull-refresh', 'HyPullRefresh', '下拉刷新。', (_) => const PullRefreshComponentExample()),
     _componentPreview('component-load-more', 'HyLoadMore', '分页加载与终态。', (_) => const LoadMoreComponentExample()),
+    _componentPreview('component-pagination', 'HyPagination', '可直接跳页的受控分页。', (_) => const PaginationComponentExample()),
     _componentPreview('component-sticky', 'HySticky', '吸顶内容。', (_) => const StickyComponentExample()),
     _componentPreview('component-search-bar', 'HySearchBar', '搜索输入入口。', (_) => const SearchBarComponentExample()),
     _componentPreview('component-count-down', 'HyCountDown', '绝对时间倒计时。', (_) => const CountDownComponentExample()),

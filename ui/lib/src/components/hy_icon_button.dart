@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/hy_ui_radii.dart';
 import 'hy_pressable.dart';
+import 'hy_tooltip.dart';
 
 /// 自绘图标按钮。
 ///
@@ -46,7 +47,7 @@ class HyIconButton extends StatelessWidget {
       ),
       child: Icon(icon, size: iconSize, color: effectiveColor),
     );
-    if (tooltip != null) child = Tooltip(message: tooltip!, child: child);
+    if (tooltip != null) child = HyTooltip(message: tooltip!, child: child);
     return Semantics(
       button: true,
       enabled: enabled,
