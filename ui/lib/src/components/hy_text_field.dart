@@ -174,7 +174,8 @@ class _HyTextFieldState extends State<HyTextField> {
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
     final glass = HyGlassTheme.of(context);
-    final borderRadius = BorderRadius.circular(17);
+    // 圆角与 HySelect 等表单控件（HyGlass radius: 16）保持一致。
+    final borderRadius = BorderRadius.circular(16);
 
     OutlineInputBorder border(Color color, {double width = 1}) {
       return OutlineInputBorder(
@@ -223,21 +224,17 @@ class _HyTextFieldState extends State<HyTextField> {
                   child: widget.prefix!,
                 ),
               ),
-        prefixIconConstraints: const BoxConstraints(
-          minWidth: 0,
-          minHeight: 0,
-        ),
+        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         suffixIcon: _buildSuffix(tokens),
-        suffixIconConstraints: const BoxConstraints(
-          minWidth: 0,
-          minHeight: 0,
-        ),
+        suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
-        enabledBorder: border(glass.edgeHighlight),
-        disabledBorder: border(glass.edgeShade),
+        // 轮廓使用专用 input 令牌（浅色 #E5E7EB / 深色 #343B47），
+        // 避免玻璃高光色 edgeHighlight 在浅色下白边贴白底导致轮廓不可见。
+        enabledBorder: border(tokens.input),
+        disabledBorder: border(tokens.input.withAlpha(110)),
         focusedBorder: border(tokens.primary.withAlpha(190), width: 1.5),
         errorBorder: border(tokens.error.withAlpha(180)),
         focusedErrorBorder: border(tokens.error, width: 1.5),
@@ -299,7 +296,9 @@ class _HyTextFieldState extends State<HyTextField> {
           )
         : null;
 
-    if (widget.suffix == null && passwordButton == null && clearButton == null) {
+    if (widget.suffix == null &&
+        passwordButton == null &&
+        clearButton == null) {
       return null;
     }
 
@@ -350,7 +349,9 @@ class _AffixButton extends StatelessWidget {
     return InkResponse(
       onTap: onPressed,
       radius: 18,
-      child: tooltip == null ? content : Tooltip(message: tooltip!, child: content),
+      child: tooltip == null
+          ? content
+          : Tooltip(message: tooltip!, child: content),
     );
   }
 }
