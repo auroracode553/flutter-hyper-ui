@@ -52,6 +52,9 @@ class UiThemeTokensComponentExample extends StatelessWidget {
       swatch('Success', tokens.success),
       swatch('Warning', tokens.warning),
       swatch('Error', tokens.error),
+      // input / border 是输入框与描边类组件的轮廓令牌。
+      swatch('Input', tokens.input),
+      swatch('Border', tokens.border),
     ]);
   }
 }

@@ -8,14 +8,25 @@ class UploadExample extends StatefulWidget {
   @override
   State<UploadExample> createState() => _UploadExampleState();
 }
+
 class _UploadExampleState extends State<UploadExample> {
   bool _fail = false;
+  bool _disabled = false;
   int _sequence = 0;
-  Future<List<HyUploadFile>> _pick(HyUploadSource source) async => [HyUploadFile(
-    id: 'sample-${_sequence++}', name: '示例图片.png', bytes: base64Decode(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aN1sAAAAASUVORK5CYII='))];
-  Future<String> _upload(HyUploadFile file, ValueChanged<double> progress,
-    HyUploadCancellation cancellation) async {
+  Future<List<HyUploadFile>> _pick(HyUploadSource source) async => [
+    HyUploadFile(
+      id: 'sample-${_sequence++}',
+      name: '示例图片.png',
+      bytes: base64Decode(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aN1sAAAAASUVORK5CYII=',
+      ),
+    ),
+  ];
+  Future<String> _upload(
+    HyUploadFile file,
+    ValueChanged<double> progress,
+    HyUploadCancellation cancellation,
+  ) async {
     for (var i = 1; i <= 10; i++) {
       await Future<void>.delayed(const Duration(milliseconds: 150));
       if (cancellation.isCancelled) throw StateError('已取消');
@@ -24,12 +35,36 @@ class _UploadExampleState extends State<UploadExample> {
     if (_fail) throw StateError('模拟上传失败');
     return 'demo://${file.id}';
   }
+
   @override
-  Widget build(BuildContext context) => HyCard(title: '文件上传',
+  Widget build(BuildContext context) => HyCard(
+    title: '文件上传',
     subtitle: '演示适配器：生成本地示例图片，模拟进度；不上传到服务器。',
-    child: HySpace(alignment: CrossAxisAlignment.stretch, children: [
-      HySwitch(label: '模拟上传失败', value: _fail, onChanged: (value) => setState(() => _fail = value)),
-      HyUploader(pick: _pick, upload: _upload, maxCount: 4,
-        sources: const [HyUploadSource.gallery, HyUploadSource.camera, HyUploadSource.file]),
-    ]));
+    child: HySpace(
+      alignment: CrossAxisAlignment.stretch,
+      children: [
+        HySwitch(
+          label: '模拟上传失败',
+          value: _fail,
+          onChanged: (value) => setState(() => _fail = value),
+        ),
+        HySwitch(
+          label: '禁用上传',
+          value: _disabled,
+          onChanged: (value) => setState(() => _disabled = value),
+        ),
+        HyUploader(
+          pick: _pick,
+          upload: _upload,
+          maxCount: 4,
+          enabled: !_disabled,
+          sources: const [
+            HyUploadSource.gallery,
+            HyUploadSource.camera,
+            HyUploadSource.file,
+          ],
+        ),
+      ],
+    ),
+  );
 }

@@ -153,7 +153,10 @@ class HyListTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withAlpha(28),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: glass.edgeHighlight),
+        // 与 HyGlass 一致的合成边缘：高光叠微量分隔色，避免纯白高光在浅色下不可见。
+        border: Border.all(
+          color: Color.alphaBlend(glass.edgeShade, glass.edgeHighlight),
+        ),
       ),
       alignment: Alignment.center,
       child: Icon(leadingIcon, size: 20, color: color),

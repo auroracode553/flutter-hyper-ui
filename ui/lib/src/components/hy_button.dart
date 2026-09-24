@@ -246,9 +246,10 @@ class _HyButtonVisual {
             ? Colors.transparent
             : glass.controlTrack,
         foreground: tokens.mutedForeground.withAlpha(150),
+        // 禁用态保留弱化轮廓，色相与启用态一致（edgeShade 在浅色下仅 7% 黑，轮廓不可见）。
         border: variant == HyButtonVariant.ghost
             ? Colors.transparent
-            : glass.edgeShade,
+            : tokens.border.withAlpha(110),
       );
     }
 
@@ -286,7 +287,8 @@ class _HyButtonVisual {
       HyButtonVariant.outline => _HyButtonVisual(
         background: glass.surfaceSubtle,
         foreground: tokens.foreground,
-        border: glass.edgeShade,
+        // outline 层级依赖可感知轮廓，使用语义边框令牌而非玻璃分隔色。
+        border: tokens.border,
       ),
       HyButtonVariant.ghost => _HyButtonVisual(
         background: Colors.transparent,

@@ -5,19 +5,47 @@ import 'package:flutter_hyper_ui/hy_ui.dart';
 class NavBarComponentExample extends StatelessWidget {
   const NavBarComponentExample({super.key});
 
+  Widget _label(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
+    child: HyText(text, variant: HyTextStyle.caption),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return HyNavBar(
-      title: '项目详情',
-      subtitle: '最后更新于 10:24',
-      safeArea: false,
-      floating: true,
-      automaticallyImplyLeading: false,
-      actions: [
-        IconButton(
-          tooltip: '分享',
-          onPressed: () {},
-          icon: const Icon(Icons.ios_share_outlined),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _label('基础（自动返回按钮 + 居中标题）'),
+        HyNavBar(
+          title: '项目详情',
+          subtitle: '最后更新于 10:24',
+          centerTitle: true,
+          safeArea: false,
+          actions: [
+            IconButton(
+              tooltip: '分享',
+              onPressed: () {},
+              icon: const Icon(Icons.ios_share_outlined),
+            ),
+          ],
+        ),
+        const SizedBox(height: HyUiSpacing.lg),
+
+        _label('悬浮模式（floating，无返回按钮）'),
+        HyNavBar(
+          title: '项目详情',
+          subtitle: '最后更新于 10:24',
+          safeArea: false,
+          floating: true,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              tooltip: '分享',
+              onPressed: () {},
+              icon: const Icon(Icons.ios_share_outlined),
+            ),
+          ],
         ),
       ],
     );
@@ -64,25 +92,45 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
 class ListTileComponentExample extends StatelessWidget {
   const ListTileComponentExample({super.key});
 
+  Widget _label(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
+    child: HyText(text, variant: HyTextStyle.caption),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        HyListTile(
+        _label('基础（图标 + 标题 + 副标题 + 右侧 meta）'),
+        const HyListTile(
           title: '产品需求说明',
           subtitle: 'PDF · 今天 09:30',
           meta: '12.6 MB',
           leadingIcon: Icons.picture_as_pdf_outlined,
         ),
-        SizedBox(height: 10),
-        HyListTile(
+        const SizedBox(height: 10),
+
+        _label('选中与禁用状态'),
+        const HyListTile(
           title: '已选择的项目',
           subtitle: '展示选中状态',
           selected: true,
           leadingIcon: Icons.check_circle_outline,
         ),
-        SizedBox(height: 10),
-        HyListTile(title: '不可用项目', enabled: false),
+        const SizedBox(height: 10),
+        const HyListTile(title: '不可用项目', enabled: false),
+        const SizedBox(height: 10),
+
+        _label('自定义插槽（leading / trailing，showChevron: false）'),
+        const HyListTile(
+          title: '项目成员',
+          subtitle: '头部与尾部都是任意 Widget',
+          leading: CircleAvatar(child: Icon(Icons.person_outline_rounded)),
+          trailing: HyTag(label: '管理员'),
+          showChevron: false,
+        ),
       ],
     );
   }
@@ -159,11 +207,7 @@ class SlideMenuComponentExample extends StatelessWidget {
           label: '删除',
           icon: Icons.delete_outline_rounded,
           color: Theme.of(context).colorScheme.error,
-          onPressed: () => HyToast.show(
-            context,
-            '已删除',
-            tone: HyUiTone.error,
-          ),
+          onPressed: () => HyToast.show(context, '已删除', tone: HyUiTone.error),
         ),
       ],
       child: const ListTile(
@@ -185,12 +229,23 @@ class TabsComponentExample extends StatelessWidget {
     length: 3,
     child: Column(
       children: [
-        const HyTabs(tabs: [Tab(text: '概览'), Tab(text: '动态'), Tab(text: '成员')]),
+        const HyTabs(
+          tabs: [
+            Tab(text: '概览'),
+            Tab(text: '动态'),
+            Tab(text: '成员'),
+          ],
+        ),
         SizedBox(
           height: 150,
           child: HyTabBarView(
             children: [
-              Center(child: Text('项目概览', style: Theme.of(context).textTheme.titleMedium)),
+              Center(
+                child: Text(
+                  '项目概览',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
               const Center(child: Text('最近没有新动态')),
               const Center(child: Text('共有 8 位成员')),
             ],
@@ -213,15 +268,37 @@ class StepsComponentExample extends StatefulWidget {
 class _StepsComponentExampleState extends State<StepsComponentExample> {
   int _current = 1;
 
+  Widget _label(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
+    child: HyText(text, variant: HyTextStyle.caption),
+  );
+
   @override
   Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
+      _label('水平步骤（current 受控切换）'),
       HySteps(
         current: _current,
         steps: const [HyStep('创建'), HyStep('配置'), HyStep('完成')],
       ),
-      const SizedBox(height: 24),
-      HyButton.tonal(label: '下一步', onPressed: () => setState(() => _current = (_current + 1) % 3)),
+      const SizedBox(height: 16),
+      HyButton.tonal(
+        label: '下一步',
+        onPressed: () => setState(() => _current = (_current + 1) % 3),
+      ),
+      const SizedBox(height: HyUiSpacing.lg),
+
+      _label('纵向步骤（vertical，可带副标题）'),
+      HySteps(
+        current: _current,
+        vertical: true,
+        steps: const [
+          HyStep('创建项目', subtitle: '填写基本信息'),
+          HyStep('配置成员', subtitle: '邀请协作者加入'),
+          HyStep('发布上线', subtitle: '对外可见'),
+        ],
+      ),
     ],
   );
 }
@@ -254,9 +331,19 @@ class ProgressBarComponentExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const HySpace(
     children: [
-      Row(children: [Expanded(child: Text('下载中')), Text('72%')]),
+      Row(
+        children: [
+          Expanded(child: Text('下载中')),
+          Text('72%'),
+        ],
+      ),
       HyProgressBar(value: .72),
-      Row(children: [Expanded(child: Text('较粗轨道')), Text('45%')]),
+      Row(
+        children: [
+          Expanded(child: Text('较粗轨道')),
+          Text('45%'),
+        ],
+      ),
       HyProgressBar(value: .45, height: 12),
     ],
   );
@@ -289,20 +376,50 @@ class PullRefreshComponentExample extends StatelessWidget {
 class LoadMoreComponentExample extends StatelessWidget {
   const LoadMoreComponentExample({super.key});
 
+  Widget _label(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
+    child: HyText(text, variant: HyTextStyle.caption),
+  );
+
   @override
-  Widget build(BuildContext context) => SizedBox(
-    height: 220,
-    child: HyLoadMore(
-      hasMore: true,
-      onLoadMore: () => Future<void>.delayed(const Duration(milliseconds: 700)),
-      child: ListView(
-        children: const [
-          ListTile(title: Text('第 1 条内容')),
-          ListTile(title: Text('第 2 条内容')),
-          ListTile(title: Text('第 3 条内容')),
-        ],
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      _label('滚动到底自动加载（hasMore: true）'),
+      SizedBox(
+        height: 190,
+        child: HyLoadMore(
+          hasMore: true,
+          onLoadMore: () =>
+              Future<void>.delayed(const Duration(milliseconds: 700)),
+          child: ListView(
+            children: const [
+              ListTile(title: Text('第 1 条内容')),
+              ListTile(title: Text('第 2 条内容')),
+              ListTile(title: Text('第 3 条内容')),
+            ],
+          ),
+        ),
       ),
-    ),
+      const SizedBox(height: HyUiSpacing.lg),
+
+      _label('终态提示（hasMore: false）'),
+      SizedBox(
+        height: 170,
+        child: HyLoadMore(
+          hasMore: false,
+          onLoadMore: () => Future<void>.value(),
+          child: ListView(
+            children: const [
+              ListTile(title: Text('第 1 条内容')),
+              ListTile(title: Text('第 2 条内容')),
+              ListTile(title: Text('第 3 条内容')),
+            ],
+          ),
+        ),
+      ),
+    ],
   );
 }
 // end-doc-region LoadMoreComponentExample

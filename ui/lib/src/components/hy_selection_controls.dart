@@ -228,7 +228,7 @@ ThemeData _selectionTheme(BuildContext context) {
       fillColor: WidgetStateProperty.resolveWith(stateColor),
       checkColor: WidgetStatePropertyAll(tokens.primaryForeground),
       overlayColor: WidgetStatePropertyAll(tokens.primary.withAlpha(24)),
-      side: BorderSide(color: glass.edgeShade, width: 1.2),
+      side: BorderSide(color: tokens.input, width: 1.2),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
     ),
     radioTheme: RadioThemeData(
@@ -255,7 +255,7 @@ ThemeData _selectionTheme(BuildContext context) {
             ? tokens.primaryForeground
             : tokens.card;
       }),
-      trackOutlineColor: WidgetStatePropertyAll(glass.edgeShade),
+      trackOutlineColor: WidgetStatePropertyAll(tokens.input),
       overlayColor: WidgetStatePropertyAll(tokens.primary.withAlpha(24)),
     ),
   );
