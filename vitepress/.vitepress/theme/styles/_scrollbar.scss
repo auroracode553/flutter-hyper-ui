@@ -1,0 +1,68 @@
+// =============================================================
+// 全局滚动条：简约风格（重构自 ai-fast-buy 全局滚动条样式）
+//   - 轨道透明、滑块为细圆角胶囊，常态轻隐、悬停加深、拖拽更实
+//   - 颜色派生自 VitePress 主题变量（--vp-c-text-2），深浅主题自动适配
+//   - 移动端沿用触控滚动：隐藏文档级滚动条，局部容器滚动保持独立
+// =============================================================
+@use './mixins';
+
+/* Firefox / 标准 scrollbar-color（Chromium 下此行为兜底） */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--vp-c-text-2) 34%, transparent) transparent;
+}
+
+/* Chromium / Electron：覆盖所有滚动容器的原生滚动条 */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 2.5px solid transparent; /* 透明边框 + padding-box 压缩可见宽度，悬浮于内容之上 */
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--vp-c-text-2) 26%, transparent);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--vp-c-text-2) 45%, transparent);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: color-mix(in srgb, var(--vp-c-text-2) 62%, transparent);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* 隐藏经典滚动条的方向按钮与双三角 */
+*::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* 移动端触控滚动：不显示文档级滚动条；局部表格/抽屉滚动保持独立。 */
+@include mixins.bp(720) {
+  html,
+  body,
+  #app {
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  #app::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}

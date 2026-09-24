@@ -1,0 +1,72 @@
+// =============================================================
+// 无障碍适配：减少动效 / 高对比度 / 减少透明
+// =============================================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .hy-button,
+  .hy-home__catalog-grid a,
+  .catalog-overview__grid a,
+  .catalog-overview__component-grid a,
+  .component-reference__item,
+  .VPSidebarItem.level-1 > .item,
+  .demo-block__preview,
+  .demo-block__toolbar button,
+  .demo-block__code-header button {
+    transition: none !important;
+  }
+
+  .demo-block__spinner,
+  .demo-block__skeleton::after {
+    animation: none;
+  }
+
+  .demo-block__spinner {
+    border-color: var(--vp-c-brand-1);
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --hy-glass: #fff;
+    --hy-glass-strong: #fff;
+    --hy-glass-subtle: #f5f6f8;
+    --hy-edge: rgba(0, 0, 0, 0.45);
+  }
+
+  .dark {
+    --hy-glass: #1b1e25;
+    --hy-glass-strong: #232731;
+    --hy-glass-subtle: #1b1e25;
+    --hy-edge: rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .VPNavBar,
+  .VPSidebar,
+  .hy-button--glass,
+  .hy-home__phone,
+  .hy-home__metric,
+  .hy-home__menu-row,
+  .hy-home__tabbar,
+  .hy-home__principle-grid article,
+  .hy-home__catalog-grid a,
+  .hy-home__start,
+  .demo-block,
+  .demo-block__load-state,
+  .demo-block__skeleton-nav,
+  .demo-block__skeleton-card,
+  .demo-block__skeleton-row,
+  .demo-block__skeleton-tabbar,
+  .catalog-overview__grid a,
+  .component-reference__item,
+  .catalog-overview__rules > div {
+    backdrop-filter: none !important;
+  }
+}

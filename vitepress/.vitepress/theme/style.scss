@@ -1,0 +1,13 @@
+// =============================================================
+// Hy UI VitePress 主题样式入口
+// 按内容域拆分，媒体查询就近归属于各组件文件
+// =============================================================
+@use './styles/mixins';
+@use './styles/tokens';
+@use './styles/layout';
+@use './styles/doc';
+@use './styles/home';
+@use './styles/demo';
+@use './styles/catalog';
+@use './styles/a11y';
+@use './styles/scrollbar';

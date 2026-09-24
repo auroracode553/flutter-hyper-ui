@@ -1,0 +1,71 @@
+// =============================================================
+// 抽象层：跨组件复用的 SCSS 工具
+//   断点速记 / 毛玻璃滤镜 / 玻璃表面 / 卡片上浮 / 工具按钮
+// =============================================================
+
+/// 断点速记：@include bp(700) { ... } → @media (max-width: 700px)
+@mixin bp($max) {
+  @media (max-width: $max) {
+    @content;
+  }
+}
+
+/// 毛玻璃背景滤镜（导航 / 侧边栏等非卡片场景）
+@mixin frosted($blur, $saturate) {
+  backdrop-filter: blur($blur) saturate($saturate);
+  -webkit-backdrop-filter: blur($blur) saturate($saturate);
+}
+
+/// 玻璃表面：边框 + 背景 + 阴影 + 毛玻璃滤镜
+/// 默认取主题玻璃变量，特殊表面（强玻璃、骨架屏等）整体覆写
+@mixin glass(
+  $blur,
+  $saturate,
+  $bg: var(--hy-glass),
+  $edge: var(--hy-edge),
+  $shadow: var(--hy-shadow)
+) {
+  border: 1px solid $edge;
+  background: $bg;
+  box-shadow: $shadow;
+  @include frosted($blur, $saturate);
+}
+
+/// 卡片上浮交互：hover 抬高 + 品牌色描边 + 可选背景 / 阴影变化
+/// $edge 为描边混色基准（transparent 或 --hy-edge），$edge-mix 为品牌色占比
+@mixin lift-hover(
+  $y: -2px,
+  $edge-mix: 42%,
+  $edge: transparent,
+  $hover-bg: null,
+  $hover-shadow: null
+) {
+  transition: transform 180ms ease, border-color 180ms ease,
+    box-shadow 180ms ease, background-color 180ms ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--vp-c-brand-1) #{$edge-mix}, #{$edge});
+    @if $hover-bg {
+      background: $hover-bg;
+    }
+    @if $hover-shadow {
+      box-shadow: $hover-shadow;
+    }
+    transform: translateY($y);
+  }
+}
+
+/// 小型工具按钮（DemoBlock 工具栏 / 代码头部 / 占位区共用基础态）
+/// hover / active 状态因作用域差异，由调用方按需补充
+@mixin tool-button {
+  min-height: 32px;
+  border: 1px solid var(--hy-edge-shade);
+  border-radius: 10px;
+  padding: 5px 10px;
+  background: var(--hy-glass-subtle);
+  color: var(--vp-c-text-2);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 100ms ease, color 160ms ease, background 160ms ease;
+}

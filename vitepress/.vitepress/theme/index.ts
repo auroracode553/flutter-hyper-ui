@@ -5,7 +5,7 @@ import ComponentReference from './components/ComponentReference.vue';
 import ComponentDoc from './components/ComponentDoc.vue';
 import CatalogOverview from './components/CatalogOverview.vue';
 import HomePage from './components/HomePage.vue';
-import './style.css';
+import './style.scss';
 
 export default {
   extends: DefaultTheme,

@@ -26,6 +26,13 @@ export default defineConfig({
     lineNumbers: true,
   },
   vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern',
+        },
+      },
+    },
     server: {
       proxy: previewDevelopmentServer ? {
         '/preview': {
