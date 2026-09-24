@@ -30,7 +30,7 @@ class HyList extends StatelessWidget {
       shrinkWrap: shrinkWrap,
       itemCount: children.length,
       itemBuilder: (_, index) => children[index],
-      separatorBuilder: (_, __) => separator ?? const SizedBox(height: 10),
+      separatorBuilder: (_, __) => separator ?? const SizedBox(height: 8),
     );
   }
 }
@@ -256,7 +256,7 @@ class _HyLoadMoreState extends State<HyLoadMore> {
 }
 
 class HySticky extends StatelessWidget {
-  const HySticky({super.key, required this.child, this.height = 52});
+  const HySticky({super.key, required this.child, this.height = 46});
 
   final Widget child;
   final double height;

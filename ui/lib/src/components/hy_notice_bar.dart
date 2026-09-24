@@ -64,7 +64,7 @@ class _HyNoticeBarState extends State<HyNoticeBar>
       radius: 16,
       blur: 0,
       color: tokens.selectionBackground,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
         children: [
           Icon(Icons.campaign_outlined, color: tokens.primary),

@@ -64,7 +64,7 @@ class HyDropdown<T> extends StatelessWidget {
                     constraints: BoxConstraints(maxHeight: menuMaxHeight),
                     child: options.isEmpty
                         ? Padding(
-                            padding: const EdgeInsets.all(18),
+                            padding: const EdgeInsets.all(16),
                             child: Text(
                               '暂无选项',
                               textAlign: TextAlign.center,
@@ -101,11 +101,11 @@ class HyDropdown<T> extends StatelessWidget {
                           ? controller.close()
                           : controller.open(),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 52),
+                  constraints: const BoxConstraints(minHeight: 44),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 14,
-                      vertical: 9,
+                      vertical: 8,
                     ),
                     child: Row(
                       children: <Widget>[
@@ -132,7 +132,7 @@ class HyDropdown<T> extends StatelessWidget {
                                   color: _selected == null
                                       ? tokens.mutedForeground
                                       : tokens.foreground,
-                                  fontSize: 15,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -186,7 +186,7 @@ class _DropdownOption<T> extends StatelessWidget {
               }
             : null,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
           child: Row(
             children: <Widget>[
               Expanded(

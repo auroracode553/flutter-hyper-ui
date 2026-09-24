@@ -35,18 +35,18 @@ abstract final class HyToast {
             blur: 28,
             weight: HyGlassWeight.prominent,
             borderColor: toneColor.withAlpha(65),
-            padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+            padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
             child: Row(
               children: <Widget>[
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: 26,
+                  height: 26,
                   decoration: BoxDecoration(
                     color: toneColor.withAlpha(28),
                     shape: BoxShape.circle,
                   ),
                   alignment: Alignment.center,
-                  child: Icon(_iconFor(tone), color: toneColor, size: 18),
+                  child: Icon(_iconFor(tone), color: toneColor, size: 16),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -105,7 +105,7 @@ abstract final class HyDialog {
           radius: 26,
           blur: 30,
           weight: HyGlassWeight.prominent,
-          padding: const EdgeInsets.all(22),
+          padding: const EdgeInsets.all(18),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -114,10 +114,10 @@ abstract final class HyDialog {
                 Text(title, style: Theme.of(context).textTheme.titleLarge),
                 if (content != null ||
                     (message?.isNotEmpty ?? false)) ...<Widget>[
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   content ?? Text(message!),
                 ],
-                const SizedBox(height: 22),
+                const SizedBox(height: 18),
                 Wrap(
                   alignment: WrapAlignment.end,
                   spacing: 8,
@@ -194,7 +194,7 @@ class HyLoading extends StatelessWidget {
               radius: 24,
               blur: 30,
               weight: HyGlassWeight.prominent,
-              padding: const EdgeInsets.all(26),
+              padding: const EdgeInsets.all(20),
               child: HyLoading(label: label),
             ),
           ),
@@ -238,11 +238,11 @@ class HyAlert extends StatelessWidget {
         color.withAlpha(16),
         HyGlassTheme.of(context).surface,
       ),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       child: Row(
         children: <Widget>[
-          Icon(HyToast._iconFor(tone), color: color, size: 21),
-          const SizedBox(width: 12),
+          Icon(HyToast._iconFor(tone), color: color, size: 18),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -90,7 +90,7 @@ class _HySegmentItem<T> extends StatelessWidget {
       child: InkWell(
         onTap: option.enabled ? () => onSelected(option.value) : null,
         child: Container(
-          height: 34,
+          height: 32,
           padding: const EdgeInsets.symmetric(horizontal: HyUiSpacing.sm),
           alignment: Alignment.center,
           child: Row(

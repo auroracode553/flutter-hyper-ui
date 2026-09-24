@@ -123,7 +123,7 @@ class HyButton extends StatelessWidget {
         boxShadow: visual.shadows,
       ),
       child: IconTheme(
-        data: IconThemeData(color: visual.foreground, size: 18),
+        data: IconThemeData(color: visual.foreground, size: 17),
         child: DefaultTextStyle(
           style: TextStyle(
             color: visual.foreground,
@@ -199,22 +199,22 @@ class _HyButtonMetrics {
 
   static _HyButtonMetrics resolve(HyButtonSize size) => switch (size) {
     HyButtonSize.sm => const _HyButtonMetrics(
-      height: 34,
-      minWidth: 58,
-      horizontal: 12,
-      fontSize: 13,
+      height: 32,
+      minWidth: 52,
+      horizontal: 10,
+      fontSize: 12,
     ),
     HyButtonSize.md => const _HyButtonMetrics(
-      height: 42,
-      minWidth: 76,
-      horizontal: 16,
-      fontSize: 14,
+      height: 38,
+      minWidth: 68,
+      horizontal: 14,
+      fontSize: 13,
     ),
     HyButtonSize.lg => const _HyButtonMetrics(
-      height: 50,
-      minWidth: 92,
-      horizontal: 20,
-      fontSize: 15,
+      height: 44,
+      minWidth: 82,
+      horizontal: 18,
+      fontSize: 14,
     ),
   };
 }

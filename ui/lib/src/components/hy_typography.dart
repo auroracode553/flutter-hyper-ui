@@ -27,7 +27,7 @@ class HyText extends StatelessWidget {
       HyTextStyle.display => 36.0,
       HyTextStyle.title => 28.0,
       HyTextStyle.heading => 20.0,
-      HyTextStyle.body => 15.0,
+      HyTextStyle.body => 14.0,
       HyTextStyle.caption => 13.0,
       HyTextStyle.hint => 12.0,
     };
@@ -41,7 +41,7 @@ class HyText extends StatelessWidget {
         height: 1.4,
         fontWeight: weight ?? (size >= 20 ? FontWeight.w700 : FontWeight.w400),
         color:
-            color ?? (size < 15 ? tokens.mutedForeground : tokens.foreground),
+            color ?? (size < 14 ? tokens.mutedForeground : tokens.foreground),
       ),
     );
   }

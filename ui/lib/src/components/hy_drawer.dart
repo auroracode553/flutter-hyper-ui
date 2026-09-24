@@ -18,7 +18,7 @@ class HyDrawer extends StatelessWidget {
     this.footer,
     this.onClose,
     this.scrollable = true,
-    this.padding = const EdgeInsets.all(20),
+    this.padding = const EdgeInsets.all(16),
   });
 
   final Widget child;
@@ -38,12 +38,12 @@ class HyDrawer extends StatelessWidget {
     String? title,
     WidgetBuilder? footerBuilder,
     HyDrawerPlacement placement = HyDrawerPlacement.end,
-    double width = 360,
+    double width = 320,
     bool dismissible = true,
     bool showCloseButton = true,
     bool scrollable = true,
     bool useRootNavigator = true,
-    EdgeInsetsGeometry padding = const EdgeInsets.all(20),
+    EdgeInsetsGeometry padding = const EdgeInsets.all(16),
     Color? barrierColor,
     String? barrierLabel,
     RouteSettings? routeSettings,
@@ -95,8 +95,9 @@ class HyDrawer extends StatelessWidget {
                           namesRoute: true,
                           label:
                               title ??
-                              MaterialLocalizations.of(drawerContext)
-                                  .dialogLabel,
+                              MaterialLocalizations.of(
+                                drawerContext,
+                              ).dialogLabel,
                           explicitChildNodes: true,
                           child: HyDrawer(
                             title: title,
@@ -163,8 +164,9 @@ class HyDrawer extends StatelessWidget {
                 ),
                 if (onClose != null)
                   IconButton(
-                    tooltip: MaterialLocalizations.of(context)
-                        .closeButtonTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).closeButtonTooltip,
                     onPressed: onClose,
                     icon: const Icon(Icons.close_rounded),
                   ),

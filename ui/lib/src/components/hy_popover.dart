@@ -22,7 +22,7 @@ class HyPopover extends StatelessWidget {
           radius: 18,
           blur: 28,
           weight: HyGlassWeight.prominent,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(14),
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: MediaQuery.sizeOf(context).height * .4,

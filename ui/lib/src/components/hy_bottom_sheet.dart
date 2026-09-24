@@ -30,7 +30,7 @@ abstract final class HyBottomSheet {
           radius: 30,
           blur: HyUiEffects.glassBlurStrong,
           weight: HyGlassWeight.prominent,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: SafeArea(
             top: false,
             child: SingleChildScrollView(
@@ -96,6 +96,7 @@ abstract final class HyActionSheet {
       children: [
         for (final action in actions)
           ListTile(
+            dense: true,
             enabled: action.enabled,
             leading: action.icon == null ? null : Icon(action.icon),
             textColor: action.destructive

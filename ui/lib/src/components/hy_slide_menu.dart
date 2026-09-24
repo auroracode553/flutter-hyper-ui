@@ -35,7 +35,7 @@ class HySlideMenu extends StatefulWidget {
     required this.child,
     this.startActions = const <HySlideAction>[],
     this.endActions = const <HySlideAction>[],
-    this.actionExtent = 72,
+    this.actionExtent = 64,
     this.radius = 18,
     this.enabled = true,
     this.decorateChild = true,
@@ -259,7 +259,7 @@ class _ActionStrip extends StatelessWidget {
                       if (action.icon != null) ...<Widget>[
                         Icon(
                           action.icon,
-                          size: 20,
+                          size: 18,
                           color: action.foregroundColor ?? Colors.white,
                         ),
                         const SizedBox(height: 4),

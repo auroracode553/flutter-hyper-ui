@@ -130,7 +130,7 @@ class HyAvatar extends StatelessWidget {
     super.key,
     this.image,
     this.text,
-    this.size = 44,
+    this.size = 40,
     this.radius,
     this.backgroundColor,
   });

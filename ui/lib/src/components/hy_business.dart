@@ -142,7 +142,7 @@ class HyCollapse extends StatelessWidget {
       onExpansionChanged: onChanged,
       shape: const Border(),
       collapsedShape: const Border(),
-      childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       children: [child],
     ),
   );
@@ -198,7 +198,7 @@ class HyTimeline extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
+                    padding: const EdgeInsets.only(bottom: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

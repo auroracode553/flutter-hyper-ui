@@ -49,8 +49,8 @@ class HyListTile extends StatelessWidget {
     final row = AnimatedContainer(
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
-      constraints: const BoxConstraints(minHeight: 52),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      constraints: const BoxConstraints(minHeight: 46),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: selected ? glass.selection : Colors.transparent,
         borderRadius: radius,
@@ -72,7 +72,7 @@ class HyListTile extends StatelessWidget {
                     color: enabled
                         ? tokens.cardForeground
                         : tokens.mutedForeground,
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                     height: 1.25,
                   ),
@@ -114,7 +114,7 @@ class HyListTile extends StatelessWidget {
             const SizedBox(width: HyUiSpacing.sm),
             Icon(
               Icons.chevron_right_rounded,
-              size: 20,
+              size: 18,
               color: tokens.mutedForeground,
             ),
           ],
@@ -148,18 +148,18 @@ class HyListTile extends StatelessWidget {
     if (leading != null) return leading!;
     final color = leadingColor ?? tokens.primary;
     return Container(
-      width: 38,
-      height: 38,
+      width: 34,
+      height: 34,
       decoration: BoxDecoration(
         color: color.withAlpha(28),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(11),
         // 与 HyGlass 一致的合成边缘：高光叠微量分隔色，避免纯白高光在浅色下不可见。
         border: Border.all(
           color: Color.alphaBlend(glass.edgeShade, glass.edgeHighlight),
         ),
       ),
       alignment: Alignment.center,
-      child: Icon(leadingIcon, size: 20, color: color),
+      child: Icon(leadingIcon, size: 18, color: color),
     );
   }
 }

@@ -204,7 +204,7 @@ class _HyTextFieldState extends State<HyTextField> {
       onFieldSubmitted: widget.onSubmitted,
       onTap: widget.onTap,
       cursorColor: tokens.primary,
-      style: TextStyle(color: tokens.foreground, fontSize: 15, height: 1.3),
+      style: TextStyle(color: tokens.foreground, fontSize: 14, height: 1.3),
       buildCounter: _buildCounter,
       decoration: InputDecoration(
         hintText: widget.hintText,
@@ -218,9 +218,9 @@ class _HyTextFieldState extends State<HyTextField> {
         prefixIcon: widget.prefix == null
             ? null
             : Padding(
-                padding: const EdgeInsets.only(left: 12, right: 6),
+                padding: const EdgeInsets.only(left: 10, right: 6),
                 child: IconTheme.merge(
-                  data: IconThemeData(color: tokens.mutedForeground, size: 20),
+                  data: IconThemeData(color: tokens.mutedForeground, size: 18),
                   child: widget.prefix!,
                 ),
               ),
@@ -228,8 +228,8 @@ class _HyTextFieldState extends State<HyTextField> {
         suffixIcon: _buildSuffix(tokens),
         suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
+          horizontal: 14,
+          vertical: 11,
         ),
         // 轮廓使用专用 input 令牌（浅色 #E5E7EB / 深色 #343B47），
         // 避免玻璃高光色 edgeHighlight 在浅色下白边贴白底导致轮廓不可见。
@@ -309,7 +309,7 @@ class _HyTextFieldState extends State<HyTextField> {
         children: <Widget>[
           if (widget.suffix != null)
             IconTheme.merge(
-              data: IconThemeData(color: tokens.mutedForeground, size: 20),
+              data: IconThemeData(color: tokens.mutedForeground, size: 18),
               child: widget.suffix!,
             ),
           ?passwordButton,
@@ -343,7 +343,7 @@ class _AffixButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget content = Padding(
       padding: const EdgeInsets.all(6),
-      child: Icon(icon, size: 19, color: color),
+      child: Icon(icon, size: 18, color: color),
     );
 
     return InkResponse(

@@ -58,9 +58,9 @@ class HySelect<T> extends StatelessWidget {
       weight: HyGlassWeight.subtle,
       onTap: onChanged == null ? null : () => _open(context),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 52),
+        constraints: const BoxConstraints(minHeight: 44),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           child: Row(
             children: [
               Expanded(
@@ -83,7 +83,7 @@ class HySelect<T> extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 14,
                         color: labels.isEmpty
                             ? tokens.mutedForeground
                             : tokens.foreground,

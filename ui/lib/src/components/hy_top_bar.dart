@@ -31,7 +31,7 @@ class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
   final bool floating;
 
   @override
-  Size get preferredSize => Size.fromHeight(subtitle == null ? 60 : 72);
+  Size get preferredSize => Size.fromHeight(subtitle == null ? 56 : 68);
 
   @override
   Widget build(BuildContext context) {

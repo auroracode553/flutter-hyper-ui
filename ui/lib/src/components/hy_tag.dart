@@ -39,7 +39,7 @@ class HyTag extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          height: 36,
+          height: 30,
           padding: const EdgeInsets.symmetric(horizontal: HyUiSpacing.sm),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(HyUiRadii.sm),

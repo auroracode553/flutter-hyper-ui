@@ -103,7 +103,7 @@ class HyCard extends StatelessWidget {
                   title!,
                   style: TextStyle(
                     color: tokens.cardForeground,
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                     height: 1.25,
                   ),

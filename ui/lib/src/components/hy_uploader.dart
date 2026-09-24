@@ -44,14 +44,14 @@ class HyUploadItem {
   final Object? error;
 }
 
-typedef HyFilePicker = Future<List<HyUploadFile>> Function(
-  HyUploadSource source,
-);
-typedef HyFileUpload = Future<String> Function(
-  HyUploadFile file,
-  ValueChanged<double> onProgress,
-  HyUploadCancellation cancellation,
-);
+typedef HyFilePicker =
+    Future<List<HyUploadFile>> Function(HyUploadSource source);
+typedef HyFileUpload =
+    Future<String> Function(
+      HyUploadFile file,
+      ValueChanged<double> onProgress,
+      HyUploadCancellation cancellation,
+    );
 
 /// 平台选择与 HTTP 上传通过入参注入。组件负责 UI 和请求生命周期。
 class HyUploader extends StatefulWidget {
@@ -209,7 +209,7 @@ class _HyUploaderState extends State<HyUploader> {
         children: [
           for (final item in _items)
             SizedBox(
-              width: 112,
+              width: 104,
               child: HyGlass(
                 blur: 0,
                 radius: 16,
@@ -220,17 +220,17 @@ class _HyUploaderState extends State<HyUploader> {
                         if (item.file.isImage)
                           HyImage(
                             provider: MemoryImage(item.file.bytes),
-                            width: 112,
-                            height: 90,
+                            width: 104,
+                            height: 84,
                             preview: true,
                           )
                         else
                           const SizedBox(
-                            width: 112,
-                            height: 90,
+                            width: 104,
+                            height: 84,
                             child: Icon(
                               Icons.insert_drive_file_outlined,
-                              size: 32,
+                              size: 28,
                             ),
                           ),
                         if (widget.enabled)
@@ -279,8 +279,8 @@ class _HyUploaderState extends State<HyUploader> {
             ),
           if (_items.length < widget.maxCount)
             SizedBox(
-              width: 112,
-              height: 112,
+              width: 104,
+              height: 104,
               child: HyGlass(
                 blur: 0,
                 radius: 16,

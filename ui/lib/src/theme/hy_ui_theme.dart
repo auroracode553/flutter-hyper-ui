@@ -74,7 +74,7 @@ class HyUiTheme {
           borderRadius: BorderRadius.circular(HyUiRadii.md),
         ),
       ),
-      listTileTheme: const ListTileThemeData(minVerticalPadding: 12),
+      listTileTheme: const ListTileThemeData(minVerticalPadding: 10),
       appBarTheme: AppBarTheme(
         backgroundColor: tokens.background,
         foregroundColor: tokens.foreground,
@@ -119,7 +119,7 @@ class HyUiTheme {
           horizontal: HyUiSpacing.sm,
           vertical: HyUiSpacing.sm,
         ),
-        hintStyle: TextStyle(color: tokens.mutedForeground, fontSize: 15),
+        hintStyle: TextStyle(color: tokens.mutedForeground, fontSize: 14),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,

@@ -24,10 +24,10 @@ abstract final class HyPicker {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              height: 220,
+              height: 200,
               child: CupertinoPicker(
                 scrollController: controller,
-                itemExtent: 44,
+                itemExtent: 40,
                 onSelectedItemChanged: (value) => index = value,
                 children: enabled
                     .map((option) => Center(child: Text(option.label)))

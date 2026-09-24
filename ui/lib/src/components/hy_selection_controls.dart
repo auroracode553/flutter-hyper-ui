@@ -172,7 +172,7 @@ class HyRate extends StatelessWidget {
     required this.value,
     this.onChanged,
     this.count = 5,
-    this.size = 26,
+    this.size = 24,
   }) : assert(count > 0);
 
   final double value;

@@ -29,11 +29,11 @@ class HyTabBar extends StatefulWidget {
     required this.onSelected,
     this.safeArea = true,
     this.enableHaptics = true,
-    this.margin = const EdgeInsets.fromLTRB(20, 8, 20, 12),
+    this.margin = const EdgeInsets.fromLTRB(16, 8, 16, 10),
   }) : assert(items.length >= 2),
        assert(selectedIndex >= 0 && selectedIndex < items.length);
 
-  static const double height = 54;
+  static const double height = 50;
 
   final List<HyTabItem> items;
   final int selectedIndex;
@@ -114,7 +114,7 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
     final tokens = HyUiThemeTokens.of(context);
     final glass = HyGlassTheme.of(context);
     final textHeight = MediaQuery.textScalerOf(context).scale(10) * 1.1;
-    final barHeight = math.max(HyTabBar.height, textHeight + 38);
+    final barHeight = math.max(HyTabBar.height, textHeight + 34);
 
     final bar = Padding(
       padding: widget.margin,
@@ -128,7 +128,7 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
             builder: (context, constraints) {
               final barWidth = constraints.maxWidth;
               final pillWidth = math.min(
-                68.0,
+                60.0,
                 (barWidth / widget.items.length) - 4,
               );
               return Listener(
@@ -444,7 +444,7 @@ class _HyTabButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(item.icon, color: foreground, size: 19),
+            Icon(item.icon, color: foreground, size: 18),
             const SizedBox(height: 2),
             Text(
               item.label,
@@ -559,8 +559,8 @@ class HySteps extends StatelessWidget {
 
     Widget indicator(int index) => AnimatedContainer(
       duration: HyUiEffects.selectionDuration,
-      width: 30,
-      height: 30,
+      width: 26,
+      height: 26,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: index <= current ? tokens.primary : glass.controlTrack,
@@ -568,11 +568,11 @@ class HySteps extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: index < current
-          ? Icon(Icons.check_rounded, size: 16, color: tokens.primaryForeground)
+          ? Icon(Icons.check_rounded, size: 14, color: tokens.primaryForeground)
           : Text(
               '${index + 1}',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 color: index <= current
                     ? tokens.primaryForeground
                     : tokens.mutedForeground,

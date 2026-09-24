@@ -188,7 +188,7 @@ class _HySkeletonState extends State<HySkeleton>
           for (var i = 0; i < widget.rows; i++)
             Row(
               children: [
-                block(44, width: 44),
+                block(40, width: 40),
                 const SizedBox(width: 12),
                 Expanded(
                   child: HySpace(
