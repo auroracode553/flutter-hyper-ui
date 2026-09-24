@@ -468,12 +468,23 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-slider', 'HySlider 滑块', 'component_form_examples.dart', 560, '连续取值、离散分段、自定义范围与提交回调。', 'SliderComponentExample'),
       }),
-      component('HyRate', 'hy_selection_controls.dart', '数量、步长和图标可配置的评分。', {
+      component('HyNumberStepper', 'hy_number_stepper.dart', '用于整数数量的紧凑受控增减器，支持上下限和步长。', {
+        propsDocs: [
+          { name: 'value', description: '当前整数值，需处于上下限范围内' },
+          { name: 'onChanged', description: '值变化回调；为空时只读' },
+          { name: 'min', description: '最小值，默认 0' },
+          { name: 'max', description: '最大值，默认 99' },
+          { name: 'step', description: '每次增减的步长，默认 1' },
+          { name: 'semanticLabel', description: '数值的无障碍名称' },
+        ],
+        preview: demo('component-number-stepper', 'HyNumberStepper 数值步进', 'component_number_stepper_example.dart', 330, '数量、步长、边界与只读状态。', 'NumberStepperComponentExample'),
+      }),
+      component('HyRate', 'hy_selection_controls.dart', '星星数量和尺寸可配置的受控评分。', {
         propsDocs: [
           { name: 'value', description: '当前评分' },
           { name: 'onChanged', description: '评分变化回调' },
           { name: 'count', description: '星星数量，默认 5' },
-          { name: 'size', description: '星星大小，默认 26' },
+          { name: 'size', description: '星星大小，默认 20' },
         ],
         preview: demo('component-rate', 'HyRate 评分', 'component_form_examples.dart', 420, '基础评分、只读展示与数量尺寸自定义。', 'RateComponentExample'),
       }),

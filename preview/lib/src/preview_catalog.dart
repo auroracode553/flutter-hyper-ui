@@ -10,6 +10,7 @@ import 'examples/component_foundation_examples.dart';
 import 'examples/component_form_examples.dart';
 import 'examples/component_layout_examples.dart';
 import 'examples/component_navigation_examples.dart';
+import 'examples/component_number_stepper_example.dart';
 import 'examples/component_surface_examples.dart';
 import 'examples/component_theme_examples.dart';
 import 'examples/data_example.dart';
@@ -227,6 +228,7 @@ class PreviewCatalog {
       description: '连续拖动与离散数值。',
       builder: (_) => const SliderComponentExample(),
     ),
+    _componentPreview('component-number-stepper', 'HyNumberStepper', '紧凑整数增减与边界状态。', (_) => const NumberStepperComponentExample()),
     PreviewItem(
       id: 'component-uploader',
       title: 'HyUploader',

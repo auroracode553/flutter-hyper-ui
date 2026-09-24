@@ -24,25 +24,25 @@ class HyEmptyState extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(HyUiSpacing.xxl),
+        padding: const EdgeInsets.all(HyUiSpacing.lg),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 72,
-              height: 72,
+              width: 56,
+              height: 56,
               decoration: BoxDecoration(
                 color: tokens.muted,
                 borderRadius: BorderRadius.circular(HyUiRadii.md),
               ),
-              child: Icon(icon, size: 30, color: tokens.mutedForeground),
+              child: Icon(icon, size: 24, color: tokens.mutedForeground),
             ),
-            const SizedBox(height: HyUiSpacing.lg),
+            const SizedBox(height: HyUiSpacing.sm),
             Text(
               title,
               style: TextStyle(
                 color: tokens.foreground,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
                 height: 1.25,
               ),
@@ -54,14 +54,14 @@ class HyEmptyState extends StatelessWidget {
                 message!,
                 style: TextStyle(
                   color: tokens.mutedForeground,
-                  fontSize: 14,
+                  fontSize: 13,
                   height: 1.45,
                 ),
                 textAlign: TextAlign.center,
               ),
             ],
             if (action != null) ...[
-              const SizedBox(height: HyUiSpacing.lg),
+              const SizedBox(height: HyUiSpacing.sm),
               action!,
             ],
           ],

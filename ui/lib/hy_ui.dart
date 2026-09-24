@@ -29,6 +29,7 @@ export 'src/components/hy_card.dart';
 export 'src/components/hy_icon_button.dart';
 export 'src/components/hy_empty_state.dart';
 export 'src/components/hy_list_tile.dart';
+export 'src/components/hy_number_stepper.dart';
 export 'src/components/hy_progress_bar.dart';
 export 'src/components/hy_segmented_control.dart';
 export 'src/components/hy_tag.dart';

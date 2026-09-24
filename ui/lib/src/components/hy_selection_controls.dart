@@ -32,6 +32,9 @@ class HyCheckbox extends StatelessWidget {
     return HyListTile(
       title: label!,
       trailing: Theme(data: theme, child: checkbox),
+      grouped: true,
+      enabled: onChanged != null,
+      showChevron: false,
       onTap: onChanged == null
           ? null
           : () {
@@ -77,6 +80,9 @@ class HyRadio<T> extends StatelessWidget {
     return HyListTile(
       title: label!,
       trailing: Theme(data: theme, child: radio),
+      grouped: true,
+      enabled: onChanged != null,
+      showChevron: false,
       onTap: onChanged == null ? null : () => onChanged!(value),
     );
   }
@@ -97,6 +103,9 @@ class HySwitch extends StatelessWidget {
     return HyListTile(
       title: label!,
       trailing: Theme(data: theme, child: control),
+      grouped: true,
+      enabled: onChanged != null,
+      showChevron: false,
       onTap: onChanged == null ? null : () => onChanged!(!value),
     );
   }
@@ -170,7 +179,7 @@ class HyRate extends StatelessWidget {
     required this.value,
     this.onChanged,
     this.count = 5,
-    this.size = 24,
+    this.size = 20,
   }) : assert(count > 0);
 
   final double value;
@@ -194,8 +203,8 @@ class HyRate extends StatelessWidget {
                     : value > index
                     ? Icons.star_half_rounded
                     : Icons.star_outline_rounded,
-                tooltip: '${index + 1} 星',
-                size: 40,
+                semanticLabel: '${index + 1} 星',
+                size: size + 12,
                 iconSize: size,
                 onPressed: onChanged == null
                     ? null
@@ -223,6 +232,8 @@ ThemeData _selectionTheme(BuildContext context) {
 
   return base.copyWith(
     splashFactory: NoSplash.splashFactory,
+    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    visualDensity: VisualDensity.compact,
     checkboxTheme: CheckboxThemeData(
       fillColor: WidgetStateProperty.resolveWith(stateColor),
       checkColor: WidgetStatePropertyAll(tokens.primaryForeground),
