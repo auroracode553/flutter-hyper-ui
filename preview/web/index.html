@@ -34,10 +34,13 @@
     const root = document.getElementById('flutter-preview-root');
     const query = new URLSearchParams(window.location.search);
     const loader = root.querySelector('.preview-loader');
-    const timeout = setTimeout(() => {
-      loader.textContent = '预览初始化超时，请检查构建资源后刷新页面。';
-    }, 60000);
-    window.hyUiPreviewBundle.start(new URL('./', document.baseURI).href).then((app) => {
+    Promise.resolve().then(() => {
+      if (!window.hyUiPreviewBundle) throw new Error('预览启动脚本加载失败');
+      return window.hyUiPreviewBundle.start(new URL('./', document.baseURI).href, {
+        onEntrypointLoaded: () => { loader.textContent = '正在初始化 Flutter 渲染引擎…'; },
+      });
+    }).then((app) => {
+      loader.textContent = '正在绘制预览界面…';
       const host = document.createElement('div');
       host.style.cssText = 'width:100%;height:100%';
       root.appendChild(host);
@@ -47,11 +50,10 @@
           componentId: query.get('component') || 'overview',
           embedded: query.get('mode') === 'docs',
           theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
-          onFirstFrame: () => { clearTimeout(timeout); loader.remove(); },
+          onFirstFrame: () => loader.remove(),
         },
       });
     }).catch((error) => {
-      clearTimeout(timeout);
       loader.textContent = `预览加载失败：${error instanceof Error ? error.message : String(error)}`;
     });
   </script>

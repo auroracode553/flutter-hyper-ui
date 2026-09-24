@@ -34,8 +34,8 @@ watch(codeExpanded, async (open) => {
   highlightedReady = true;
   highlightedCode.value = await highlightDart(props.code);
 });
-const previewBusy = computed(() => ['assets', 'engine', 'view'].includes(previewStatus.value.phase));
-const previewProgress = computed(() => `${Math.round((previewStatus.value.progress ?? 0) * 100)}%`);
+const previewBusy = computed(() => ['assets', 'entrypoint', 'engine', 'view'].includes(previewStatus.value.phase));
+const previewStage = computed(() => ['assets', 'entrypoint', 'engine', 'view'].indexOf(previewStatus.value.phase) + 1);
 const frameStyle = computed(() => ({
   height: previewWidth.value === 'mobile' ? '680px' : `${props.height}px`,
   width: previewWidth.value === 'mobile' ? '350px' : '100%',
@@ -116,9 +116,10 @@ async function copyCode() {
             <div class="demo-block__load-copy">
               <span v-if="previewBusy" class="demo-block__spinner" aria-hidden="true" />
               <span :role="previewStatus.phase === 'error' ? 'alert' : 'status'">{{ previewStatus.message }}</span>
+              <span v-if="previewBusy" class="demo-block__stage-count">{{ previewStage }}/4</span>
             </div>
             <div v-if="previewBusy" class="demo-block__progress" aria-hidden="true">
-              <i :style="{ width: previewProgress }" />
+              <i />
             </div>
             <button v-if="previewStatus.phase === 'idle' || previewStatus.phase === 'error'" type="button" @click="retryPreview">
               {{ previewStatus.reloadRequired ? '刷新页面' : previewStatus.phase === 'error' ? '重试加载' : '立即加载' }}

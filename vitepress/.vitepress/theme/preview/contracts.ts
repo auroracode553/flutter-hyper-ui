@@ -1,10 +1,8 @@
-export type PreviewPhase = 'idle' | 'assets' | 'engine' | 'view' | 'ready' | 'error';
+export type PreviewPhase = 'idle' | 'assets' | 'entrypoint' | 'engine' | 'view' | 'ready' | 'error';
 
 export interface PreviewStatus {
   phase: PreviewPhase;
   message: string;
-  /** 阶段进度仅用于加载反馈，不代表网络字节进度。 */
-  progress?: number;
   reloadRequired?: boolean;
 }
 
@@ -25,7 +23,10 @@ export interface FlutterPreviewApp {
 
 export interface PreviewBundle {
   protocolVersion: number;
-  start(assetBase: string, options?: { allowDebug?: boolean }): Promise<FlutterPreviewApp>;
+  start(assetBase: string, options?: {
+    allowDebug?: boolean;
+    onEntrypointLoaded?: () => void;
+  }): Promise<FlutterPreviewApp>;
 }
 
 declare global {

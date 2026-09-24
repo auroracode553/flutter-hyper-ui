@@ -379,6 +379,12 @@
   min-height: 24px;
 }
 
+.demo-block__stage-count {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
 .demo-block__spinner {
   width: 14px;
   height: 14px;
@@ -397,10 +403,11 @@
 
   i {
     display: block;
+    width: 35%;
     height: 100%;
     border-radius: inherit;
     background: linear-gradient(90deg, var(--vp-c-brand-1), #82a1ff);
-    transition: width 420ms cubic-bezier(.2, .8, .2, 1);
+    animation: demo-progress 1.4s ease-in-out infinite;
   }
 }
 
@@ -411,6 +418,11 @@
 
 @keyframes demo-spin {
   to { transform: rotate(360deg); }
+}
+
+@keyframes demo-progress {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(300%); }
 }
 
 @keyframes demo-skeleton-sweep {

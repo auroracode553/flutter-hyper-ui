@@ -1,4 +1,4 @@
-import { createHighlighter, type Highlighter } from 'shiki';
+import type { Highlighter } from 'shiki';
 
 /**
  * 惰性创建共享的 Shiki 高亮器，只加载 dart 语言与两套主题（浅色/深色），
@@ -8,10 +8,10 @@ let highlighterPromise: Promise<Highlighter> | null = null;
 
 function getHighlighter(): Promise<Highlighter> {
   if (!highlighterPromise) {
-    highlighterPromise = createHighlighter({
+    highlighterPromise = import('shiki').then(({ createHighlighter }) => createHighlighter({
       themes: ['vitesse-light', 'vitesse-dark'],
       langs: ['dart'],
-    });
+    }));
   }
   return highlighterPromise;
 }

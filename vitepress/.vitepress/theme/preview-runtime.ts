@@ -12,9 +12,7 @@ const loader = new PreviewBundleLoader(
 );
 const views = new Set<PreviewView>();
 let themeObserver: MutationObserver | undefined;
-let prewarmScheduled = false;
-let idleHandle: number | undefined;
-let fallbackHandle: number | undefined;
+let prewarmStarted = false;
 
 type ConnectionAwareNavigator = Navigator & {
   connection?: { saveData?: boolean; effectiveType?: string };
@@ -25,33 +23,11 @@ function shouldPrewarm() {
   return !connection?.saveData && !['slow-2g', '2g'].includes(connection?.effectiveType ?? '');
 }
 
-function cancelScheduledPrewarm() {
-  if (idleHandle !== undefined && typeof window.cancelIdleCallback === 'function') {
-    window.cancelIdleCallback(idleHandle);
-  }
-  if (fallbackHandle !== undefined) window.clearTimeout(fallbackHandle);
-  idleHandle = undefined;
-  fallbackHandle = undefined;
-  prewarmScheduled = false;
-}
-
-function runPrewarm() {
-  idleHandle = undefined;
-  fallbackHandle = undefined;
-  prewarmScheduled = false;
-  if (!views.size || document.visibilityState !== 'visible') return;
+function prewarm() {
+  if (prewarmStarted || !shouldPrewarm() || document.visibilityState !== 'visible') return;
+  prewarmStarted = true;
   // 预热失败会在 View 真正挂载时显示可操作的错误，不在后台打扰读者。
   void loader.prewarm().catch(() => undefined);
-}
-
-function schedulePrewarm() {
-  if (prewarmScheduled || !shouldPrewarm()) return;
-  prewarmScheduled = true;
-  if (typeof window.requestIdleCallback === 'function') {
-    idleHandle = window.requestIdleCallback(runPrewarm, { timeout: 1_500 });
-  } else {
-    fallbackHandle = window.setTimeout(runPrewarm, 700);
-  }
 }
 
 function observeTheme() {
@@ -77,7 +53,7 @@ export function registerPreview(target: HTMLElement, componentId: string, onStat
   }, { rootMargin: '520px 0px' });
   views.add(view);
   observeTheme();
-  schedulePrewarm();
+  prewarm();
   observer.observe(target);
   return {
     activate: () => { observer.disconnect(); void view.mount(); },
@@ -87,7 +63,6 @@ export function registerPreview(target: HTMLElement, componentId: string, onStat
       views.delete(view);
       view.dispose();
       if (!views.size) {
-        cancelScheduledPrewarm();
         themeObserver?.disconnect();
         themeObserver = undefined;
       }
@@ -99,7 +74,6 @@ if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     for (const view of views) view.dispose();
     views.clear();
-    cancelScheduledPrewarm();
     themeObserver?.disconnect();
   });
 }

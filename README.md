@@ -58,9 +58,9 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 - `preview/lib/src/examples/`：真实组件交互示例。
 - `preview/lib/src/preview_catalog.dart`：演示 ID 和 Widget 映射。
 - `preview/web/flutter_bootstrap.js`：Debug/Release 共用的多视图启动接口与 CanvasKit 配置。
-- Flutter 构建生成的 `version.json`：预览包身份检查；自定义协议版本由启动接口校验。
+- Flutter 构建生成的 `version.json`：保留在静态产物中；启动接口校验预览协议版本。
 - `vitepress/.vitepress/theme/preview/contracts.ts`：宿主与 Flutter 接口约定。
-- `vitepress/.vitepress/theme/preview/bundle-loader.ts`：预览包身份、脚本和引擎加载，分阶段超时。
+- `vitepress/.vitepress/theme/preview/bundle-loader.ts`：预览脚本和共享引擎加载，按实际阶段反馈状态。
 - `vitepress/.vitepress/theme/preview/preview-view.ts`：单个视图的创建、首帧确认、主题更新和销毁。
 - `vitepress/.vitepress/theme/preview-runtime.ts`：共享引擎与文档演示注册。
 - `vitepress/.vitepress/catalog.ts`：组件独立路由、平铺侧栏分类、场景 Demo 与真实示例源码引用。
@@ -69,7 +69,7 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 - `tools/dev-docs.mjs`：启动两个开发服务、监听 Dart 并触发热重载。
 - `tools/build-docs.mjs`：构建 release、自动同步产物并构建 VitePress，不部署。
 
-依赖方向：文档 Demo → 视图管理 → Debug 代理或 release 静态包 → Flutter 多视图 → 预览示例 → UI 组件。首帧确认通过创建视图时注入的回调返回，不使用轮询或猜测延时。
+依赖方向：文档 Demo → 视图管理 → Debug 代理或 release 静态包 → Flutter 多视图 → 预览示例 → UI 组件。组件挂载时立即预热共享引擎；首帧确认通过创建视图时注入的回调返回。加载界面显示当前阶段，不以固定秒数判定失败。
 
 ## 本地开发与构建
 

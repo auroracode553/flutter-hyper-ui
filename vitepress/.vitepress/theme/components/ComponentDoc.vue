@@ -18,9 +18,9 @@ const apiCode = computed(() => dartApiFor(entry.value.name, entry.value.source))
 const highlightedApi = ref('');
 const apiExpanded = ref(false);
 
-watch(apiCode, async (code) => {
-  highlightedApi.value = await highlightDart(code);
-}, { immediate: true });
+watch([apiCode, apiExpanded], async ([code, expanded]) => {
+  if (expanded) highlightedApi.value = await highlightDart(code);
+});
 
 interface ApiProp {
   name: string;

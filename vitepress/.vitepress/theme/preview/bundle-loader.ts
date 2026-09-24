@@ -12,7 +12,6 @@ export class PreviewBundleLoader {
   private status: PreviewStatus = {
     phase: 'assets',
     message: '正在准备交互预览…',
-    progress: 0.18,
   };
 
   constructor(
@@ -33,7 +32,7 @@ export class PreviewBundleLoader {
     return this.pending.finally(() => this.listeners.delete(onStatus));
   }
 
-  /** 页面空闲时只预热共享引擎；具体 Flutter View 仍由视口按需创建。 */
+  /** 预热共享引擎；具体 Flutter View 仍由视口按需创建。 */
   prewarm(): Promise<void> {
     return this.getApp(() => undefined).then(() => undefined);
   }
@@ -41,61 +40,35 @@ export class PreviewBundleLoader {
   private async load(): Promise<FlutterPreviewApp> {
     const base = new URL(this.basePath, window.location.origin);
     this.preload(new URL('main.dart.js', base).href, 'script');
-    // 版本校验与启动脚本互不依赖，并行处理可省去一个串行往返。
-    await Promise.all([
-      this.options.developmentServer ? Promise.resolve() : this.checkBundle(base),
-      this.loadScript(new URL('flutter_bootstrap.js', base).href),
-    ]);
+    if (this.options.developmentServer) {
+      this.preload(new URL('dart_sdk.js', base).href, 'script');
+    }
+    await this.loadScript(new URL('flutter_bootstrap.js', base).href);
     const bundle = window.hyUiPreviewBundle;
     if (!bundle || bundle.protocolVersion !== 2) {
       throw new PreviewFailure('预览接口版本不匹配。组件预览已拆分，请重新生成完整预览包并刷新页面。', true);
     }
     this.engineStarted = true;
     this.updateStatus({
-      phase: 'engine',
-      message: '正在启动 Flutter 渲染引擎…',
-      progress: 0.58,
+      phase: 'entrypoint',
+      message: '正在加载 Dart 入口…',
     });
-    return new Promise<FlutterPreviewApp>((resolve, reject) => {
-      const timer = window.setTimeout(() => reject(new PreviewFailure(
-        'Flutter 预览初始化超过 60 秒。请在浏览器网络面板检查 /preview/ 下失败或卡住的请求，并查看控制台错误后刷新页面。', true,
-      )), 60_000);
-      Promise.resolve().then(() => bundle.start(base.href, {
-        allowDebug: this.options.developmentServer,
-      })).then((app) => {
-        if (typeof app?.addView !== 'function' || typeof app?.removeView !== 'function') {
-          throw new Error('构建产物未提供 Flutter 多视图接口');
-        }
-        resolve(app);
-      }).catch((error: unknown) => reject(new PreviewFailure(
-        error instanceof Error ? error.message : String(error), true,
-      ))).finally(() => window.clearTimeout(timer));
-    });
-  }
-
-  private async checkBundle(base: URL) {
-    const controller = new AbortController();
-    const timer = window.setTimeout(() => controller.abort(), 12_000);
     try {
-      // version.json is emitted by every Flutter Web release build. Relying on
-      // it avoids a second custom manifest that Flutter might not copy.
-      const response = await fetch(new URL('version.json', base), {
-        signal: controller.signal,
-        cache: 'default',
+      const app = await bundle.start(base.href, {
+        allowDebug: this.options.developmentServer,
+        onEntrypointLoaded: () => this.updateStatus({
+          phase: 'engine',
+          message: '正在初始化 Flutter 渲染引擎…',
+        }),
       });
-      if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
-        throw new Error('missing preview version');
+      if (typeof app?.addView !== 'function' || typeof app?.removeView !== 'function') {
+        throw new Error('构建产物未提供 Flutter 多视图接口');
       }
-      const version = await response.json();
-      if (version.app_name !== 'flutter_hyper_ui_preview') {
-        throw new Error('incompatible preview bundle');
-      }
-    } catch {
+      return app;
+    } catch (error) {
       throw new PreviewFailure(
-        '预览构建产物缺失、不兼容或不可访问。请使用 dev-docs watcher，或重新生成完整 release 文档包。',
+        error instanceof Error ? error.message : String(error), true,
       );
-    } finally {
-      window.clearTimeout(timer);
     }
   }
 
@@ -117,25 +90,14 @@ export class PreviewBundleLoader {
     if (window.hyUiPreviewBundle) return Promise.resolve();
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      let settled = false;
-      const finish = (error?: PreviewFailure) => {
-        if (settled) return;
-        settled = true;
-        window.clearTimeout(timer);
-        script.onload = null;
-        script.onerror = null;
-        if (error) { script.remove(); reject(error); }
-        else resolve();
-      };
-      // 超时脚本可能已执行一部分，需刷新页面以清理运行时状态。
-      const timer = window.setTimeout(() => finish(new PreviewFailure(
-        '预览启动脚本加载超时，请检查资源请求后刷新页面。', true,
-      )), 15_000);
       script.src = url;
-      script.onload = () => finish(window.hyUiPreviewBundle ? undefined : new PreviewFailure(
-        '启动脚本不是本项目的静态预览构建，请重新构建并刷新页面。', true,
+      script.onload = () => window.hyUiPreviewBundle ? resolve() : reject(new PreviewFailure(
+        '预览启动脚本缺少宿主接口，请重新生成预览构建。', true,
       ));
-      script.onerror = () => finish(new PreviewFailure(`无法读取预览启动脚本：${url}`));
+      script.onerror = () => {
+        script.remove();
+        reject(new PreviewFailure(`无法读取预览启动脚本：${url}`));
+      };
       document.head.appendChild(script);
     });
   }

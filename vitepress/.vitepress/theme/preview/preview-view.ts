@@ -12,7 +12,6 @@ export class PreviewView {
   private pending = false;
   private disposed = false;
   private generation = 0;
-  private frameTimer?: number;
 
   constructor(
     private readonly target: HTMLElement,
@@ -60,14 +59,7 @@ export class PreviewView {
   private attach() {
     if (!this.app) return;
     const generation = ++this.generation;
-    this.onStatus({ phase: 'view', message: '正在绘制交互界面…', progress: 0.86 });
-    this.frameTimer = window.setTimeout(() => {
-      if (this.disposed || generation !== this.generation) return;
-      this.detach();
-      this.onStatus(failureStatus(new PreviewFailure(
-        '演示未在 20 秒内提交首帧。请检查 Flutter 错误，并确认预览构建与文档版本一致。', true,
-      )));
-    }, 20_000);
+    this.onStatus({ phase: 'view', message: '正在绘制交互界面…' });
     try {
       this.viewId = this.app.addView({
         hostElement: this.target,
@@ -75,20 +67,17 @@ export class PreviewView {
           componentId: this.componentId, embedded: true, theme: selectedTheme(),
           onFirstFrame: () => {
             if (this.disposed || generation !== this.generation) return;
-            window.clearTimeout(this.frameTimer);
-            this.onStatus({ phase: 'ready', message: '', progress: 1 });
+            this.onStatus({ phase: 'ready', message: '' });
           },
         },
       });
     } catch (error) {
-      window.clearTimeout(this.frameTimer);
       throw new PreviewFailure(error instanceof Error ? error.message : String(error), true);
     }
   }
 
   private detach() {
     ++this.generation;
-    window.clearTimeout(this.frameTimer);
     const previousId = this.viewId;
     this.viewId = undefined;
     if (previousId !== undefined) {

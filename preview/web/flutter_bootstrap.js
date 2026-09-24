@@ -10,18 +10,19 @@ window.hyUiPreviewBundle = (() => {
       if (appPromise) return appPromise;
       const base = new URL(assetBase, document.baseURI).href;
       appPromise = new Promise((resolve, reject) => {
-        // Flutter 的回调式加载器不会将入口脚本的网络错误交给 load() Promise。
-        const onScriptError = (event) => {
-          const script = event.target;
-          if (script instanceof HTMLScriptElement && script.src.startsWith(base)) {
-            finish(reject, new Error(`Flutter 预览脚本加载失败：${script.src}`));
+        // 回调式加载器不会将入口脚本及调试模块的错误交给 load() Promise。
+        const onPreviewError = (event) => {
+          const source = event.target instanceof HTMLScriptElement
+            ? event.target.src : event.filename;
+          if (source?.startsWith(base)) {
+            finish(reject, new Error(`${event.message || '预览脚本加载失败'}：${source}`));
           }
         };
         const finish = (callback, value) => {
-          window.removeEventListener('error', onScriptError, true);
+          window.removeEventListener('error', onPreviewError, true);
           callback(value);
         };
-        window.addEventListener('error', onScriptError, true);
+        window.addEventListener('error', onPreviewError, true);
         const builds = _flutter.buildConfig?.builds || [];
         if (!options.allowDebug && !builds.some((build) => build.compileTarget === 'dart2js')) {
           finish(reject, new Error('此预览仅接收标准 Flutter Web release 构建，不接收 flutter run 调试产物。'));
@@ -40,6 +41,7 @@ window.hyUiPreviewBundle = (() => {
           config,
           onEntrypointLoaded: async (initializer) => {
             try {
+              options.onEntrypointLoaded?.();
               const runner = await initializer.initializeEngine(config);
               finish(resolve, await runner.runApp());
             } catch (error) { finish(reject, error); }
