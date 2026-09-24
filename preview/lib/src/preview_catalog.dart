@@ -291,6 +291,7 @@ class PreviewCatalog {
     _componentPreview('component-ui-tone', 'HyUiTone', '跨组件语义状态。', (_) => const ToneComponentExample()),
     _componentPreview('component-glass-weight', 'HyGlassWeight', '四种玻璃材质重量。', (_) => const GlassWeightComponentExample()),
     _componentPreview('component-pressable', 'HyPressable', '即时按压反馈。', (_) => const PressableComponentExample()),
+    _componentPreview('component-icon-button', 'HyIconButton', '自绘图标按钮。', (_) => const IconButtonComponentExample()),
     _componentPreview('component-soft-background', 'HySoftBackground', '柔光环境背景。', (_) => const SoftBackgroundComponentExample()),
     _componentPreview('component-space', 'HySpace', '线性间距布局。', (_) => const SpaceComponentExample()),
     _componentPreview('component-wrap', 'HyWrap', '自适应流式布局。', (_) => const WrapComponentExample()),

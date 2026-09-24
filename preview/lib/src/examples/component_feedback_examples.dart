@@ -83,9 +83,9 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
       builder: (drawerContext) => Column(
         children: [
           for (final label in const ['产品设计', '移动端', '文档站'])
-            ListTile(
-              title: Text(label),
-              trailing: const Icon(Icons.chevron_right_rounded),
+            HyListTile(
+              title: label,
+              showChevron: true,
               onTap: () => Navigator.pop(drawerContext, label),
             ),
         ],
@@ -104,11 +104,23 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
       width: 300,
       builder: (drawerContext) => Column(
         children: [
-          HyCheckbox(value: true, label: '仅显示收藏', onChanged: (value) {}),
-          const SizedBox(height: HyUiSpacing.sm),
-          const HyCheckbox(value: false, label: '包含已归档'),
-          const SizedBox(height: HyUiSpacing.sm),
-          const HyRadio<String>(value: 'all', groupValue: 'all', label: '全部时间'),
+          HyListTile(
+            title: '仅显示收藏',
+            trailing: HyCheckbox(value: true, onChanged: (_) {}),
+            onTap: () {},
+          ),
+          HyListTile(
+            title: '包含已归档',
+            trailing: const HyCheckbox(value: false, onChanged: null),
+          ),
+          HyListTile(
+            title: '全部时间',
+            trailing: const HyRadio<String>(
+              value: 'all',
+              groupValue: 'all',
+              onChanged: null,
+            ),
+          ),
         ],
       ),
       footerBuilder: (footerContext) => HyButton.filled(
@@ -365,13 +377,13 @@ class BottomSheetComponentExample extends StatelessWidget {
             title: '分享项目',
             builder: (sheetContext) => const Column(
               children: [
-                ListTile(
-                  leading: Icon(Icons.link_rounded),
-                  title: Text('复制链接'),
+                HyListTile(
+                  leadingIcon: Icons.link_rounded,
+                  title: '复制链接',
                 ),
-                ListTile(
-                  leading: Icon(Icons.person_add_alt_1_outlined),
-                  title: Text('邀请成员'),
+                HyListTile(
+                  leadingIcon: Icons.person_add_alt_1_outlined,
+                  title: '邀请成员',
                 ),
               ],
             ),

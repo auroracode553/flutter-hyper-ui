@@ -16,19 +16,19 @@ class NavigationExample extends StatelessWidget {
           subtitle: '共 24 个项目',
           safeArea: false,
           actions: [
-            IconButton(
-              onPressed: () {},
+            HyIconButton(
+              icon: Icons.search,
               tooltip: '搜索',
-              icon: const Icon(Icons.search),
-            ),
-            IconButton(
               onPressed: () {},
+            ),
+            HyIconButton(
+              icon: Icons.checklist,
               tooltip: '选择',
-              icon: const Icon(Icons.checklist),
+              onPressed: () {},
             ),
           ],
         ),
-        Divider(color: tokens.border),
+        HyDivider(color: tokens.border),
         const SizedBox(height: HyUiSpacing.sm),
         HyListTile(
           title: '阅读计划.md',

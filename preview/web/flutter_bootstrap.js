@@ -10,9 +10,21 @@ window.hyUiPreviewBundle = (() => {
       if (appPromise) return appPromise;
       const base = new URL(assetBase, document.baseURI).href;
       appPromise = new Promise((resolve, reject) => {
+        // Flutter 的回调式加载器不会将入口脚本的网络错误交给 load() Promise。
+        const onScriptError = (event) => {
+          const script = event.target;
+          if (script instanceof HTMLScriptElement && script.src.startsWith(base)) {
+            finish(reject, new Error(`Flutter 预览脚本加载失败：${script.src}`));
+          }
+        };
+        const finish = (callback, value) => {
+          window.removeEventListener('error', onScriptError, true);
+          callback(value);
+        };
+        window.addEventListener('error', onScriptError, true);
         const builds = _flutter.buildConfig?.builds || [];
         if (!options.allowDebug && !builds.some((build) => build.compileTarget === 'dart2js')) {
-          reject(new Error('此预览仅接收标准 Flutter Web release 构建，不接收 flutter run 调试产物。'));
+          finish(reject, new Error('此预览仅接收标准 Flutter Web release 构建，不接收 flutter run 调试产物。'));
           return;
         }
         const config = {
@@ -24,15 +36,15 @@ window.hyUiPreviewBundle = (() => {
           renderer: 'canvaskit',
           multiViewEnabled: true,
         };
-        Promise.resolve(_flutter.loader.load({
+        Promise.resolve().then(() => _flutter.loader.load({
           config,
           onEntrypointLoaded: async (initializer) => {
             try {
               const runner = await initializer.initializeEngine(config);
-              resolve(await runner.runApp());
-            } catch (error) { reject(error); }
+              finish(resolve, await runner.runApp());
+            } catch (error) { finish(reject, error); }
           },
-        })).catch(reject);
+        })).catch((error) => finish(reject, error));
       });
       return appPromise;
     },

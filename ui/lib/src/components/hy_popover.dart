@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'hy_bottom_sheet.dart';
 import 'hy_glass.dart';
+import 'hy_pressable.dart';
 
 class HyPopover extends StatelessWidget {
   const HyPopover({super.key, required this.child, required this.content});
@@ -32,7 +33,7 @@ class HyPopover extends StatelessWidget {
         ),
       ),
     ],
-    builder: (_, controller, child) => TextButton(
+    builder: (_, controller, child) => HyPressable(
       onPressed: () =>
           controller.isOpen ? controller.close() : controller.open(),
       child: this.child,

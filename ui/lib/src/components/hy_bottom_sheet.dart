@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_effects.dart';
+import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_button.dart';
 import 'hy_glass.dart';
+import 'hy_pressable.dart';
 
 abstract final class HyBottomSheet {
   static Future<T?> show<T>(
@@ -91,25 +94,59 @@ abstract final class HyActionSheet {
   }) => HyBottomSheet.show<T>(
     context,
     title: title,
-    builder: (sheetContext) => Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (final action in actions)
-          ListTile(
-            dense: true,
-            enabled: action.enabled,
-            leading: action.icon == null ? null : Icon(action.icon),
-            textColor: action.destructive
-                ? Theme.of(context).colorScheme.error
-                : null,
-            title: Text(action.label),
-            onTap: () => Navigator.pop(sheetContext, action.value),
+    builder: (sheetContext) {
+      final tokens = HyUiThemeTokens.of(context);
+      final destructiveColor = Theme.of(context).colorScheme.error;
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final action in actions)
+            HyPressable(
+              onPressed: action.enabled
+                  ? () => Navigator.pop(sheetContext, action.value)
+                  : null,
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 48),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  children: [
+                    if (action.icon != null) ...[
+                      Icon(
+                        action.icon,
+                        size: 20,
+                        color: action.destructive
+                            ? destructiveColor
+                            : action.enabled
+                            ? null
+                            : tokens.mutedForeground,
+                      ),
+                      const SizedBox(width: 12),
+                    ],
+                    Text(
+                      action.label,
+                      style: TextStyle(
+                        color: action.destructive
+                            ? destructiveColor
+                            : action.enabled
+                            ? null
+                            : tokens.mutedForeground,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          HyButton.ghost(
+            label: cancelLabel,
+            expanded: true,
+            onPressed: () => Navigator.pop(sheetContext),
           ),
-        TextButton(
-          onPressed: () => Navigator.pop(sheetContext),
-          child: Text(cancelLabel),
-        ),
-      ],
-    ),
+        ],
+      );
+    },
   );
 }

@@ -58,7 +58,7 @@ export class PreviewBundleLoader {
     });
     return new Promise<FlutterPreviewApp>((resolve, reject) => {
       const timer = window.setTimeout(() => reject(new PreviewFailure(
-        '预览初始化超过 60 秒。请检查 main.dart.js 和 canvaskit 资源是否完整，修复后刷新页面。', true,
+        'Flutter 预览初始化超过 60 秒。请在浏览器网络面板检查 /preview/ 下失败或卡住的请求，并查看控制台错误后刷新页面。', true,
       )), 60_000);
       Promise.resolve().then(() => bundle.start(base.href, {
         allowDebug: this.options.developmentServer,

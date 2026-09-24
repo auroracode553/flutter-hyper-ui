@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../theme/hy_ui_radii.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_icon_button.dart';
+import 'hy_pressable.dart';
 import 'hy_tone.dart';
 
 class HyTag extends StatelessWidget {
@@ -32,48 +34,44 @@ class HyTag extends StatelessWidget {
     final iconColor = selected ? tokens.primaryForeground : toneColor;
     final borderColor = selected ? toneColor : tokens.border;
 
-    return Material(
-      color: background,
+    return HyPressable(
+      onPressed: onTap,
       borderRadius: BorderRadius.circular(HyUiRadii.sm),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          height: 30,
-          padding: const EdgeInsets.symmetric(horizontal: HyUiSpacing.sm),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(HyUiRadii.sm),
-            border: Border.all(color: borderColor),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 16, color: iconColor),
-                const SizedBox(width: HyUiSpacing.xs),
-              ],
-              Text(
-                label,
-                style: TextStyle(
-                  color: foreground,
-                  fontSize: 13,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (onClose != null)
-                SizedBox(
-                  width: 28,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    tooltip: '移除 $label',
-                    onPressed: onClose,
-                    icon: Icon(Icons.close, size: 14, color: foreground),
-                  ),
-                ),
+      child: Container(
+        height: 30,
+        padding: const EdgeInsets.symmetric(horizontal: HyUiSpacing.sm),
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: BorderRadius.circular(HyUiRadii.sm),
+          border: Border.all(color: borderColor),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 16, color: iconColor),
+              const SizedBox(width: HyUiSpacing.xs),
             ],
-          ),
+            Text(
+              label,
+              style: TextStyle(
+                color: foreground,
+                fontSize: 13,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            if (onClose != null)
+              HyIconButton(
+                icon: Icons.close,
+                size: 24,
+                iconSize: 14,
+                color: foreground,
+                tooltip: '移除 $label',
+                onPressed: onClose,
+              ),
+          ],
         ),
       ),
     );

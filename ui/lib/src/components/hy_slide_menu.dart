@@ -247,10 +247,11 @@ class _ActionStrip extends StatelessWidget {
           SizedBox(
             width: extent,
             height: double.infinity,
-            child: Material(
+            child: Container(
               color: action.color ?? fallbackColor,
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () => onSelected(action),
+                behavior: HitTestBehavior.opaque,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Column(

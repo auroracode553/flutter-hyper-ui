@@ -22,9 +22,9 @@ class _DrawerExampleState extends State<DrawerExample> {
         padding: EdgeInsets.zero,
         children: [
           for (final label in ['概览', '我的项目', '收藏', '设置'])
-            ListTile(
-              title: Text(label),
-              trailing: const Icon(Icons.chevron_right_rounded),
+            HyListTile(
+              title: label,
+              showChevron: true,
               onTap: () => Navigator.pop(drawerContext, label),
             ),
         ],
@@ -46,11 +46,13 @@ class _DrawerExampleState extends State<DrawerExample> {
           children: [
             const Text('此示例关闭了遮罩点击；可通过关闭按钮或返回键取消。'),
             const SizedBox(height: 20),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('仅显示未读'),
-              value: onlyUnread,
-              onChanged: (value) => setDrawerState(() => onlyUnread = value),
+            HyListTile(
+              title: '仅显示未读',
+              trailing: HySwitch(
+                value: onlyUnread,
+                onChanged: (value) => setDrawerState(() => onlyUnread = value),
+              ),
+              onTap: () => setDrawerState(() => onlyUnread = !onlyUnread),
             ),
             const HyTextField(hintText: '输入关键词，查看键盘适配'),
             const SizedBox(height: 20),

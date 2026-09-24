@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'hy_glass.dart';
+import 'hy_layout.dart';
 
 import '../theme/hy_ui_radii.dart';
 import '../theme/hy_ui_spacing.dart';
@@ -63,7 +64,7 @@ class HyCard extends StatelessWidget {
           if (child != null) child!,
           if (footer != null) ...[
             const SizedBox(height: HyUiSpacing.sm),
-            Divider(color: tokens.border),
+            HyDivider(color: tokens.border),
             const SizedBox(height: HyUiSpacing.sm),
             footer!,
           ],

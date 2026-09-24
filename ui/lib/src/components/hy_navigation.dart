@@ -9,6 +9,7 @@ import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_effects.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
+import 'hy_layout.dart';
 
 class HyTabItem {
   const HyTabItem({required this.icon, required this.label});
@@ -623,13 +624,13 @@ class HySteps extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Expanded(
-                      child: Divider(
+                      child: HyDivider(
                         color: index == 0 ? Colors.transparent : tokens.border,
                       ),
                     ),
                     indicator(index),
                     Expanded(
-                      child: Divider(
+                      child: HyDivider(
                         color: index == steps.length - 1
                             ? Colors.transparent
                             : tokens.border,

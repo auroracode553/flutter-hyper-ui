@@ -2,8 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+import '../theme/hy_glass_theme.dart';
 import 'hy_bottom_sheet.dart';
+import 'hy_button.dart';
 import 'hy_glass.dart';
+import 'hy_icon_button.dart';
 import 'hy_image.dart';
 
 enum HyUploadSource { gallery, camera, file }
@@ -237,10 +240,15 @@ class _HyUploaderState extends State<HyUploader> {
                           Positioned(
                             right: 0,
                             top: 0,
-                            child: IconButton.filledTonal(
+                            child: HyIconButton(
+                              icon: Icons.close,
+                              size: 26,
+                              iconSize: 14,
                               tooltip: '删除 ${item.file.name}',
                               onPressed: () => _remove(item),
-                              icon: const Icon(Icons.close, size: 16),
+                              backgroundColor: HyGlassTheme.of(
+                                context,
+                              ).surfaceStrong,
                             ),
                           ),
                       ],
@@ -263,15 +271,14 @@ class _HyUploaderState extends State<HyUploader> {
                       ),
                     if (item.status == HyUploadStatus.error ||
                         item.status == HyUploadStatus.ready)
-                      TextButton(
+                      HyButton.ghost(
+                        label: item.status == HyUploadStatus.error
+                            ? '失败 · 重试'
+                            : '上传',
+                        size: HyButtonSize.sm,
                         onPressed: widget.enabled
                             ? () => _send(item.file)
                             : null,
-                        child: Text(
-                          item.status == HyUploadStatus.error
-                              ? '失败 · 重试'
-                              : '上传',
-                        ),
                       ),
                   ],
                 ),

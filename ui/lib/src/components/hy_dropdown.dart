@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
+import 'hy_pressable.dart';
 import 'hy_select.dart';
 
 /// 锚定触发器展开的通用下拉选择器。
@@ -174,36 +175,36 @@ class _DropdownOption<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
     final glass = HyGlassTheme.of(context);
-    return Material(
-      color: selected ? glass.selection : Colors.transparent,
+    return HyPressable(
+      onPressed: option.enabled
+          ? () {
+              onSelected(option.value);
+              MenuController.maybeOf(context)?.close();
+            }
+          : null,
       borderRadius: BorderRadius.circular(12),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: option.enabled
-            ? () {
-                onSelected(option.value);
-                MenuController.maybeOf(context)?.close();
-              }
-            : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  option.label,
-                  style: TextStyle(
-                    color: option.enabled
-                        ? tokens.foreground
-                        : tokens.mutedForeground,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                  ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: selected ? glass.selection : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                option.label,
+                style: TextStyle(
+                  color: option.enabled
+                      ? tokens.foreground
+                      : tokens.mutedForeground,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                 ),
               ),
-              if (selected)
-                Icon(Icons.check_rounded, size: 18, color: tokens.foreground),
-            ],
-          ),
+            ),
+            if (selected)
+              Icon(Icons.check_rounded, size: 18, color: tokens.foreground),
+          ],
         ),
       ),
     );

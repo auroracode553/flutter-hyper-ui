@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_button.dart';
 import 'hy_glass.dart';
 import 'hy_layout.dart';
 import 'hy_list_tile.dart';
@@ -245,11 +246,19 @@ class _HyLoadMoreState extends State<HyLoadMore> {
             ),
           )
         else if (_error != null)
-          TextButton(onPressed: _load, child: const Text('加载失败，点击重试'))
+          HyButton.ghost(
+            label: '加载失败，点击重试',
+            size: HyButtonSize.sm,
+            onPressed: _load,
+          )
         else if (!widget.hasMore)
           const Padding(padding: EdgeInsets.all(12), child: Text('没有更多了'))
         else
-          TextButton(onPressed: _load, child: const Text('加载更多')),
+          HyButton.ghost(
+            label: '加载更多',
+            size: HyButtonSize.sm,
+            onPressed: _load,
+          ),
       ],
     );
   }

@@ -26,6 +26,7 @@ export 'src/theme/hy_glass_theme.dart';
 export 'src/components/hy_badge.dart';
 export 'src/components/hy_button.dart';
 export 'src/components/hy_card.dart';
+export 'src/components/hy_icon_button.dart';
 export 'src/components/hy_empty_state.dart';
 export 'src/components/hy_list_tile.dart';
 export 'src/components/hy_progress_bar.dart';

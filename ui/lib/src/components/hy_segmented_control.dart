@@ -5,6 +5,7 @@ import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import '../theme/hy_glass_theme.dart';
 import 'hy_glass.dart';
+import 'hy_pressable.dart';
 
 class HySegmentOption<T> {
   final T value;
@@ -83,17 +84,18 @@ class _HySegmentItem<T> extends StatelessWidget {
         : tokens.mutedForeground;
     final background = selected ? glass.selection : Colors.transparent;
 
-    return Material(
-      color: background,
+    return HyPressable(
+      onPressed: option.enabled ? () => onSelected(option.value) : null,
       borderRadius: BorderRadius.circular(HyUiRadii.sm),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: option.enabled ? () => onSelected(option.value) : null,
-        child: Container(
-          height: 32,
-          padding: const EdgeInsets.symmetric(horizontal: HyUiSpacing.sm),
-          alignment: Alignment.center,
-          child: Row(
+      child: Container(
+        height: 32,
+        padding: const EdgeInsets.symmetric(horizontal: HyUiSpacing.sm),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: BorderRadius.circular(HyUiRadii.sm),
+        ),
+        child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -108,7 +110,6 @@ class _HySegmentItem<T> extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 

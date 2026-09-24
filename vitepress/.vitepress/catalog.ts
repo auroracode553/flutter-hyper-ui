@@ -211,6 +211,20 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-button', 'HyButton 状态', 'buttons_example.dart', 360, '只展示按钮的层级、尺寸和状态。'),
       }),
+      component('HyIconButton', 'hy_icon_button.dart', '自绘图标按钮：HyPressable 即时反馈，支持提示文字、语义标签、背景与禁用态。', {
+        propsDocs: [
+          { name: 'icon', description: '图标数据，IconData 类型' },
+          { name: 'onPressed', description: '点击回调' },
+          { name: 'tooltip', description: '长按提示文字' },
+          { name: 'semanticLabel', description: '语义化标签，用于无障碍' },
+          { name: 'size', description: '按钮尺寸，默认 36' },
+          { name: 'iconSize', description: '图标大小，默认 18' },
+          { name: 'color', description: '图标颜色' },
+          { name: 'backgroundColor', description: '背景颜色' },
+          { name: 'radius', description: '圆角大小，默认 HyUiRadii.full' },
+        ],
+        preview: demo('component-icon-button', 'HyIconButton 图标按钮', 'component_action_examples.dart', 280, '尺寸、背景色、提示文字与禁用态。', 'IconButtonComponentExample'),
+      }),
       component('HyCard', 'hy_card.dart', '具有标题、操作区、正文、底部和选中态的内容容器。', {
         propsDocs: [
           { name: 'child', description: '正文内容组件' },

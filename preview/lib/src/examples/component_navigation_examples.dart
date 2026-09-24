@@ -23,10 +23,10 @@ class NavBarComponentExample extends StatelessWidget {
           centerTitle: true,
           safeArea: false,
           actions: [
-            IconButton(
+            HyIconButton(
+              icon: Icons.ios_share_outlined,
               tooltip: '分享',
               onPressed: () {},
-              icon: const Icon(Icons.ios_share_outlined),
             ),
           ],
         ),
@@ -40,10 +40,10 @@ class NavBarComponentExample extends StatelessWidget {
           floating: true,
           automaticallyImplyLeading: false,
           actions: [
-            IconButton(
+            HyIconButton(
+              icon: Icons.ios_share_outlined,
               tooltip: '分享',
               onPressed: () {},
-              icon: const Icon(Icons.ios_share_outlined),
             ),
           ],
         ),
@@ -127,7 +127,7 @@ class ListTileComponentExample extends StatelessWidget {
         const HyListTile(
           title: '项目成员',
           subtitle: '头部与尾部都是任意 Widget',
-          leading: CircleAvatar(child: Icon(Icons.person_outline_rounded)),
+          leading: HyAvatar(size: 34),
           trailing: HyTag(label: '管理员'),
           showChevron: false,
         ),
@@ -146,11 +146,11 @@ class ListComponentExample extends StatelessWidget {
     return HyList(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      separator: const Divider(height: 1),
+      separator: const HyDivider(),
       children: const [
-        ListTile(title: Text('第一项'), subtitle: Text('列表不绑定数据模型')),
-        ListTile(title: Text('第二项'), subtitle: Text('分隔与间距可替换')),
-        ListTile(title: Text('第三项'), subtitle: Text('子项可以是任意 Widget')),
+        HyListTile(title: '第一项', subtitle: '列表不绑定数据模型'),
+        HyListTile(title: '第二项', subtitle: '分隔与间距可替换'),
+        HyListTile(title: '第三项', subtitle: '子项可以是任意 Widget'),
       ],
     );
   }
@@ -210,10 +210,10 @@ class SlideMenuComponentExample extends StatelessWidget {
           onPressed: () => HyToast.show(context, '已删除', tone: HyUiTone.error),
         ),
       ],
-      child: const ListTile(
-        leading: CircleAvatar(child: Icon(Icons.description_outlined)),
-        title: Text('向左或向右拖动'),
-        subtitle: Text('释放时会根据位置与速度吸附'),
+      child: const HyListTile(
+        title: '向左或向右拖动',
+        subtitle: '释放时会根据位置与速度吸附',
+        leadingIcon: Icons.description_outlined,
       ),
     );
   }
@@ -362,9 +362,9 @@ class PullRefreshComponentExample extends StatelessWidget {
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         children: const [
-          ListTile(title: Text('下拉刷新列表'), subtitle: Text('向下拖动以触发刷新')),
-          ListTile(title: Text('最近项目')),
-          ListTile(title: Text('收藏项目')),
+          HyListTile(title: '下拉刷新列表', subtitle: '向下拖动以触发刷新'),
+          HyListTile(title: '最近项目'),
+          HyListTile(title: '收藏项目'),
         ],
       ),
     ),
@@ -395,9 +395,9 @@ class LoadMoreComponentExample extends StatelessWidget {
               Future<void>.delayed(const Duration(milliseconds: 700)),
           child: ListView(
             children: const [
-              ListTile(title: Text('第 1 条内容')),
-              ListTile(title: Text('第 2 条内容')),
-              ListTile(title: Text('第 3 条内容')),
+              HyListTile(title: '第 1 条内容'),
+              HyListTile(title: '第 2 条内容'),
+              HyListTile(title: '第 3 条内容'),
             ],
           ),
         ),
@@ -412,9 +412,9 @@ class LoadMoreComponentExample extends StatelessWidget {
           onLoadMore: () => Future<void>.value(),
           child: ListView(
             children: const [
-              ListTile(title: Text('第 1 条内容')),
-              ListTile(title: Text('第 2 条内容')),
-              ListTile(title: Text('第 3 条内容')),
+              HyListTile(title: '第 1 条内容'),
+              HyListTile(title: '第 2 条内容'),
+              HyListTile(title: '第 3 条内容'),
             ],
           ),
         ),
@@ -436,7 +436,7 @@ class StickyComponentExample extends StatelessWidget {
         const HySticky(child: Center(child: Text('吸顶标题'))),
         SliverList.builder(
           itemCount: 8,
-          itemBuilder: (_, index) => ListTile(title: Text('列表内容 ${index + 1}')),
+          itemBuilder: (_, index) => HyListTile(title: '列表内容 ${index + 1}'),
         ),
       ],
     ),

@@ -70,13 +70,13 @@ class _CountDownComponentExampleState extends State<CountDownComponentExample> {
               endTime: _endTime,
               onFinished: () => setState(() => _finished = true),
             ),
-            IconButton(
+            HyIconButton(
+              icon: Icons.refresh_rounded,
               tooltip: '重新开始',
               onPressed: () => setState(() {
                 _endTime = DateTime.now().add(const Duration(seconds: 20));
                 _finished = false;
               }),
-              icon: const Icon(Icons.refresh_rounded),
             ),
           ],
         ),

@@ -78,10 +78,10 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
                 subtitle: selected.description,
                 safeArea: false,
                 actions: [
-                  IconButton(
+                  HyIconButton(
+                    icon: Icons.brightness_6_outlined,
                     tooltip: '切换明暗主题',
                     onPressed: widget.onToggleTheme,
-                    icon: const Icon(Icons.brightness_6_outlined),
                   ),
                 ],
               ),

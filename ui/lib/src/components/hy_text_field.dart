@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_pressable.dart';
 
 /// 通用玻璃输入框：只负责文本输入本身，不内置标题、说明文案或业务图标。
 ///
@@ -346,9 +347,9 @@ class _AffixButton extends StatelessWidget {
       child: Icon(icon, size: 18, color: color),
     );
 
-    return InkResponse(
-      onTap: onPressed,
-      radius: 18,
+    return HyPressable(
+      onPressed: onPressed,
+      borderRadius: BorderRadius.circular(18),
       child: tooltip == null
           ? content
           : Tooltip(message: tooltip!, child: content),

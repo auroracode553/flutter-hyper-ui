@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_icon_button.dart';
 
 /// 使用 Flutter ImageCache 的内存缓存；持久缓存可通过 ImageProvider 注入。
 class HyImage extends StatelessWidget {
@@ -92,10 +93,11 @@ class HyImage extends StatelessWidget {
                       SafeArea(
                         child: Align(
                           alignment: Alignment.topRight,
-                          child: IconButton(
+                          child: HyIconButton(
+                            icon: Icons.close,
                             tooltip: '关闭预览',
                             color: Colors.white,
-                            icon: const Icon(Icons.close),
+                            backgroundColor: Colors.black38,
                             onPressed: () => Navigator.pop(dialogContext),
                           ),
                         ),
@@ -187,10 +189,47 @@ class HyCountBadge extends StatelessWidget {
   final int count, max;
   final bool dot, showZero;
   @override
-  Widget build(BuildContext context) => Badge(
-    isLabelVisible: dot || count > 0 || showZero,
-    backgroundColor: HyUiThemeTokens.of(context).error,
-    label: dot ? null : Text(count > max ? '$max+' : '$count'),
-    child: child,
-  );
+  Widget build(BuildContext context) {
+    final visible = dot || count > 0 || showZero;
+    final error = HyUiThemeTokens.of(context).error;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        child,
+        if (visible)
+          Positioned(
+            top: -5,
+            right: -5,
+            child: dot
+                ? Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: error,
+                      shape: BoxShape.circle,
+                    ),
+                  )
+                : Container(
+                    constraints: const BoxConstraints(minWidth: 16),
+                    height: 16,
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: error,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      count > max ? '$max+' : '$count',
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+          ),
+      ],
+    );
+  }
 }

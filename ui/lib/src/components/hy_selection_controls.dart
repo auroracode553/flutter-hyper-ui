@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_icon_button.dart';
+import 'hy_list_tile.dart';
 
 class HyCheckbox extends StatelessWidget {
   const HyCheckbox({
@@ -27,18 +29,20 @@ class HyCheckbox extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
     );
     if (label == null) return Theme(data: theme, child: checkbox);
-    return Theme(
-      data: theme,
-      child: CheckboxListTile(
-        value: value,
-        onChanged: onChanged,
-        tristate: tristate,
-        contentPadding: EdgeInsets.zero,
-        dense: true,
-        title: Text(label!),
-        controlAffinity: ListTileControlAffinity.leading,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      ),
+    return HyListTile(
+      title: label!,
+      trailing: Theme(data: theme, child: checkbox),
+      onTap: onChanged == null
+          ? null
+          : () {
+              if (tristate) {
+                onChanged!(
+                  value == true ? null : value == false ? true : false,
+                );
+              } else {
+                onChanged!(!(value ?? false));
+              }
+            },
     );
   }
 }
@@ -49,31 +53,31 @@ class HyRadio<T> extends StatelessWidget {
     required this.value,
     required this.groupValue,
     this.onChanged,
-    required this.label,
+    this.label,
   });
 
   final T value;
   final T? groupValue;
   final ValueChanged<T>? onChanged;
-  final String label;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: _selectionTheme(context),
-      child: RadioListTile<T>(
-        value: value,
-        groupValue: groupValue,
-        onChanged: onChanged == null
-            ? null
-            : (next) {
-                if (next != null) onChanged!(next);
-              },
-        contentPadding: EdgeInsets.zero,
-        dense: true,
-        title: Text(label),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      ),
+    final theme = _selectionTheme(context);
+    final radio = Radio<T>(
+      value: value,
+      groupValue: groupValue,
+      onChanged: onChanged == null
+          ? null
+          : (next) {
+              if (next != null) onChanged!(next);
+            },
+    );
+    if (label == null) return Theme(data: theme, child: radio);
+    return HyListTile(
+      title: label!,
+      trailing: Theme(data: theme, child: radio),
+      onTap: onChanged == null ? null : () => onChanged!(value),
     );
   }
 }
@@ -90,16 +94,10 @@ class HySwitch extends StatelessWidget {
     final theme = _selectionTheme(context);
     final control = Switch(value: value, onChanged: onChanged);
     if (label == null) return Theme(data: theme, child: control);
-    return Theme(
-      data: theme,
-      child: SwitchListTile(
-        value: value,
-        onChanged: onChanged,
-        title: Text(label!),
-        contentPadding: EdgeInsets.zero,
-        dense: true,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      ),
+    return HyListTile(
+      title: label!,
+      trailing: Theme(data: theme, child: control),
+      onTap: onChanged == null ? null : () => onChanged!(!value),
     );
   }
 }
@@ -188,20 +186,21 @@ class HyRate extends StatelessWidget {
         for (var index = 0; index < count; index++)
           Semantics(
             selected: value >= index + 1,
-            child: IconButton(
-              tooltip: '${index + 1} 星',
-              iconSize: size,
-              onPressed: onChanged == null
-                  ? null
-                  : () => onChanged!(index + 1.0),
-              color: tokens.warning,
-              disabledColor: tokens.warning.withAlpha(130),
-              icon: Icon(
-                value >= index + 1
+            child: Opacity(
+              opacity: onChanged == null ? 0.5 : 1,
+              child: HyIconButton(
+                icon: value >= index + 1
                     ? Icons.star_rounded
                     : value > index
                     ? Icons.star_half_rounded
                     : Icons.star_outline_rounded,
+                tooltip: '${index + 1} 星',
+                size: 40,
+                iconSize: size,
+                onPressed: onChanged == null
+                    ? null
+                    : () => onChanged!(index + 1.0),
+                color: tokens.warning,
               ),
             ),
           ),

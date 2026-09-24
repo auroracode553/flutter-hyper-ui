@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_effects.dart';
 import 'hy_glass.dart';
+import 'hy_icon_button.dart';
+import 'hy_layout.dart';
 
 /// 逻辑方向；在 RTL 布局中 start 位于右侧，end 位于左侧。
 enum HyDrawerPlacement { start, end }
@@ -163,12 +165,12 @@ class HyDrawer extends StatelessWidget {
                         ),
                 ),
                 if (onClose != null)
-                  IconButton(
+                  HyIconButton(
                     tooltip: MaterialLocalizations.of(
                       context,
                     ).closeButtonTooltip,
                     onPressed: onClose,
-                    icon: const Icon(Icons.close_rounded),
+                    icon: Icons.close_rounded,
                   ),
               ],
             ),
@@ -179,7 +181,7 @@ class HyDrawer extends StatelessWidget {
               : Padding(padding: padding, child: child),
         ),
         if (footer != null) ...[
-          const Divider(height: 1),
+          const HyDivider(),
           Padding(padding: padding, child: footer),
         ],
       ],

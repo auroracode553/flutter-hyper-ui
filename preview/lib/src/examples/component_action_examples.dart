@@ -67,3 +67,32 @@ class SoftBackgroundComponentExample extends StatelessWidget {
   );
 }
 // end-doc-region SoftBackgroundComponentExample
+
+// doc-region IconButtonComponentExample
+class IconButtonComponentExample extends StatelessWidget {
+  const IconButtonComponentExample({super.key});
+
+  @override
+  Widget build(BuildContext context) => const HyWrap(
+    spacing: 14,
+    runSpacing: 14,
+    children: [
+      HyIconButton(icon: Icons.favorite_outline_rounded, tooltip: '喜欢'),
+      HyIconButton(
+        icon: Icons.delete_outline_rounded,
+        color: Colors.white,
+        backgroundColor: Color(0xFFE5484D),
+        tooltip: '删除',
+      ),
+      HyIconButton(
+        icon: Icons.share_outlined,
+        semanticLabel: '分享',
+        size: 44,
+        iconSize: 22,
+        backgroundColor: Color(0x14000000),
+      ),
+      HyIconButton(icon: Icons.edit_outlined, tooltip: '编辑', onPressed: null),
+    ],
+  );
+}
+// end-doc-region IconButtonComponentExample

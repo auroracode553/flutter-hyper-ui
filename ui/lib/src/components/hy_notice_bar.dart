@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
+import 'hy_icon_button.dart';
 
 /// 短文本静止；长文本匀速滚动，触摸按住或减少动画时停止。
 class HyNoticeBar extends StatefulWidget {
@@ -135,10 +136,12 @@ class _HyNoticeBarState extends State<HyNoticeBar>
             ),
           ),
           if (widget.onClose != null)
-            IconButton(
+            HyIconButton(
+              icon: Icons.close,
+              size: 28,
+              iconSize: 18,
               tooltip: '关闭公告',
               onPressed: widget.onClose,
-              icon: const Icon(Icons.close, size: 18),
             ),
         ],
       ),

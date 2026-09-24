@@ -4,6 +4,7 @@ import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
+import 'hy_icon_button.dart';
 
 /// 页面顶部导航栏。默认使用轻量玻璃材质并允许内容从其下方滚动经过。
 class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
@@ -150,11 +151,11 @@ class _BackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
+    return HyIconButton(
+      icon: Icons.arrow_back_ios_new_rounded,
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       onPressed: () => Navigator.maybePop(context),
-      style: IconButton.styleFrom(backgroundColor: glass.selection),
-      icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+      backgroundColor: glass.selection,
     );
   }
 }

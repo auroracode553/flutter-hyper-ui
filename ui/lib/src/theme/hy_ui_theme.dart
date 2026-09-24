@@ -74,27 +74,12 @@ class HyUiTheme {
           borderRadius: BorderRadius.circular(HyUiRadii.md),
         ),
       ),
-      listTileTheme: const ListTileThemeData(minVerticalPadding: 10),
       appBarTheme: AppBarTheme(
         backgroundColor: tokens.background,
         foregroundColor: tokens.foreground,
         elevation: 0,
         centerTitle: false,
         titleSpacing: 0,
-      ),
-      cardTheme: CardThemeData(
-        color: tokens.card,
-        elevation: 0,
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(HyUiRadii.md),
-          side: BorderSide(color: tokens.border),
-        ),
-      ),
-      dividerTheme: DividerThemeData(
-        color: tokens.border,
-        space: 1,
-        thickness: 1,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,

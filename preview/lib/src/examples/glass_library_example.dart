@@ -32,10 +32,10 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
           floating: true,
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            IconButton(
+            HyIconButton(
+              icon: Icons.more_horiz_rounded,
               tooltip: '更多',
               onPressed: () => HyToast.show(context, 'Navbar action'),
-              icon: const Icon(Icons.more_horiz_rounded),
             ),
           ],
         ),

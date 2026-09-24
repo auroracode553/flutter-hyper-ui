@@ -4,6 +4,8 @@ import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_button.dart';
 import 'hy_glass.dart';
+import 'hy_icon_button.dart';
+import 'hy_pressable.dart';
 import 'hy_tone.dart';
 
 /// 无全局状态的玻璃轻提示。
@@ -60,12 +62,24 @@ abstract final class HyToast {
                   ),
                 ),
                 if (actionLabel != null && onAction != null)
-                  TextButton(
+                  HyPressable(
                     onPressed: () {
                       messenger.hideCurrentSnackBar();
                       onAction();
                     },
-                    child: Text(actionLabel),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 6,
+                      ),
+                      child: Text(
+                        actionLabel,
+                        style: TextStyle(
+                          color: toneColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ),
               ],
             ),
@@ -257,10 +271,12 @@ class HyAlert extends StatelessWidget {
             ),
           ),
           if (onClose != null)
-            IconButton(
+            HyIconButton(
+              icon: Icons.close_rounded,
+              size: 28,
+              iconSize: 18,
               tooltip: '关闭通知',
               onPressed: onClose,
-              icon: const Icon(Icons.close_rounded, size: 18),
             ),
         ],
       ),

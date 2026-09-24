@@ -4,6 +4,7 @@ import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_bottom_sheet.dart';
 import 'hy_button.dart';
 import 'hy_glass.dart';
+import 'hy_pressable.dart';
 
 class HyOption<T> {
   const HyOption({
@@ -118,37 +119,58 @@ class _HySelectionPanel<T> extends StatefulWidget {
 class _HySelectionPanelState<T> extends State<_HySelectionPanel<T>> {
   late final List<T> selected = List.of(widget.values);
   @override
-  Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      for (final option in widget.options)
-        CheckboxListTile(
-          title: Text(option.label),
-          value: selected.contains(option.value),
-          onChanged: !option.enabled
-              ? null
-              : (checked) {
-                  if (!widget.multiple) {
-                    Navigator.pop(context, <T>[option.value]);
-                    return;
-                  }
-                  setState(() {
-                    if (checked == true) {
-                      selected.add(option.value);
-                    } else {
-                      selected.remove(option.value);
+  Widget build(BuildContext context) {
+    final tokens = HyUiThemeTokens.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final option in widget.options)
+          HyPressable(
+            onPressed: !option.enabled
+                ? null
+                : () {
+                    if (!widget.multiple) {
+                      Navigator.pop(context, <T>[option.value]);
+                      return;
                     }
-                  });
-                },
-        ),
-      if (widget.options.isEmpty)
-        const Padding(padding: EdgeInsets.all(24), child: Text('暂无选项')),
-      if (widget.multiple)
-        HyButton(
-          label: '确定',
-          expanded: true,
-          onPressed: () => Navigator.pop(context, List<T>.of(selected)),
-        ),
-    ],
-  );
+                    setState(() {
+                      if (selected.contains(option.value)) {
+                        selected.remove(option.value);
+                      } else {
+                        selected.add(option.value);
+                      }
+                    });
+                  },
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 44),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      option.label,
+                      style: TextStyle(
+                        color: option.enabled
+                            ? null
+                            : tokens.mutedForeground,
+                      ),
+                    ),
+                  ),
+                  if (selected.contains(option.value))
+                    Icon(Icons.check_rounded, size: 18, color: tokens.primary),
+                ],
+              ),
+            ),
+          ),
+        if (widget.options.isEmpty)
+          const Padding(padding: EdgeInsets.all(24), child: Text('暂无选项')),
+        if (widget.multiple)
+          HyButton(
+            label: '确定',
+            expanded: true,
+            onPressed: () => Navigator.pop(context, List<T>.of(selected)),
+          ),
+      ],
+    );
+  }
 }

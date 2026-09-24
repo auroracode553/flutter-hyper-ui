@@ -22,10 +22,10 @@ class CardComponentExample extends StatelessWidget {
           subtitle: '保持轻量、清晰的内容层级',
           leading: const Icon(Icons.auto_awesome_outlined),
           actions: [
-            IconButton(
+            HyIconButton(
+              icon: Icons.more_horiz_rounded,
               tooltip: '更多',
               onPressed: () {},
-              icon: const Icon(Icons.more_horiz_rounded),
             ),
           ],
           footer: const Text('上次更新：今天 09:30'),
