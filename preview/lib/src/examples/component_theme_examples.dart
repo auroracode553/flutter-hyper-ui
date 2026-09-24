@@ -231,7 +231,7 @@ class KeyboardComponentExample extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const HyTextField(label: '点击唤起键盘', hintText: '输入后可主动收起'),
+        const HyTextField(hintText: '输入后可主动收起'),
         const SizedBox(height: 14),
         HyButton.tonal(label: '收起键盘', onPressed: () => HyKeyboard.dismiss(context)),
       ],

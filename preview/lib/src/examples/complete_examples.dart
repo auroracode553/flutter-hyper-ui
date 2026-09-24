@@ -85,11 +85,11 @@ class _FormsExampleState extends State<FormsExample> {
     const HyText('每一次输入，都从容', variant: HyTextStyle.title),
     HyCard(title: '输入与校验', child: Form(key: _form, child: HySpace(
       alignment: CrossAxisAlignment.stretch, children: [
-        HyTextField(label: '称呼', hintText: '请输入称呼', maxLength: 20,
+        HyTextField(hintText: '请输入称呼', maxLength: 20,
           validator: (value) => value == null || value.trim().isEmpty ? '请输入称呼' : null),
-        const HyTextField(label: '密码', obscureText: true, hintText: '可切换显示与隐藏'),
-        const HyTextField(label: '备注', maxLines: 3, maxLength: 120),
-        const HyTextField(label: '只读状态', initialValue: '不可编辑', enabled: false),
+        const HyTextField(obscureText: true, showPasswordToggle: true, hintText: '可切换显示与隐藏'),
+        const HyTextField(maxLines: 3, maxLength: 120),
+        const HyTextField(initialValue: '不可编辑', enabled: false),
         HyButton(label: '保存', onPressed: () { if (_form.currentState!.validate()) {
           HyToast.show(context, '已保存', tone: HyUiTone.success); } }),
       ]))),

@@ -27,7 +27,7 @@ class HySearchBar extends StatelessWidget {
     onSubmitted: onSubmitted,
     hintText: hintText,
     enabled: enabled,
-    prefixIcon: Icons.search_rounded,
+    prefix: const Icon(Icons.search_rounded),
   );
 }
 

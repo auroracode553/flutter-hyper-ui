@@ -77,9 +77,8 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             alignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const HyTextField(
-                label: '搜索',
                 hintText: '输入关键词',
-                prefixIcon: Icons.search_rounded,
+                prefix: Icon(Icons.search_rounded),
               ),
               HyDropdown<String>(
                 label: '材质厚度',

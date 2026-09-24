@@ -5,22 +5,68 @@ import 'package:flutter_hyper_ui/hy_ui.dart';
 class TextFieldComponentExample extends StatelessWidget {
   const TextFieldComponentExample({super.key});
 
+  // 字段标题写在输入框外部：输入组件本身不携带标题与说明。
+  Widget _label(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
+    child: HyText(text, variant: HyTextStyle.caption),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        HyTextField(
-          label: '项目名称',
-          hintText: '输入名称',
-          helperText: '最多 24 个字符',
-          prefixIcon: Icons.edit_outlined,
-          maxLength: 24,
+        _label('基础输入'),
+        const HyTextField(hintText: '请输入内容'),
+        const SizedBox(height: HyUiSpacing.lg),
+
+        _label('可清空'),
+        const HyTextField(
+          clearable: true,
+          initialValue: '示例内容',
+          hintText: '输入后右侧显示清空按钮',
         ),
-        SizedBox(height: 16),
-        HyTextField(
-          label: '错误状态',
-          initialValue: '重复名称',
-          errorText: '该名称已经存在',
+        const SizedBox(height: HyUiSpacing.lg),
+
+        _label('密码显隐'),
+        const HyTextField(
+          obscureText: true,
+          showPasswordToggle: true,
+          hintText: '请输入密码',
+        ),
+        const SizedBox(height: HyUiSpacing.lg),
+
+        _label('前缀与后缀插槽'),
+        const HyTextField(
+          hintText: '搜索组件',
+          prefix: Icon(Icons.search_rounded),
+          suffix: Icon(Icons.tune_rounded),
+        ),
+        const SizedBox(height: HyUiSpacing.lg),
+
+        _label('多行输入'),
+        const HyTextField(maxLines: 3, hintText: '请输入多行内容'),
+        const SizedBox(height: HyUiSpacing.lg),
+
+        _label('字数统计'),
+        const HyTextField(
+          maxLength: 50,
+          showCounter: true,
+          hintText: '最多输入 50 个字符',
+        ),
+        const SizedBox(height: HyUiSpacing.lg),
+
+        _label('禁用与只读'),
+        const HyTextField(enabled: false, initialValue: '禁用状态'),
+        const SizedBox(height: HyUiSpacing.sm),
+        const HyTextField(readOnly: true, initialValue: '只读状态'),
+        const SizedBox(height: HyUiSpacing.lg),
+
+        _label('错误态'),
+        const HyTextField(
+          initialValue: '错误内容',
+          errorText: '内容格式不正确',
         ),
       ],
     );

@@ -40,14 +40,11 @@ class _InputsExampleState extends State<InputsExample> {
         ),
         const SizedBox(height: HyUiSpacing.md),
         const HyTextField(
-          label: '搜索',
           hintText: '输入文件名或关键词',
-          prefixIcon: Icons.search,
-          helperText: '可按标题、标签或正文片段搜索。',
+          prefix: Icon(Icons.search_rounded),
         ),
         const SizedBox(height: HyUiSpacing.md),
         const HyTextField(
-          label: '备注',
           hintText: '补充说明',
           maxLines: 3,
         ),

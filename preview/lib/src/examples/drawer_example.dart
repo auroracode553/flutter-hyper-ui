@@ -52,7 +52,7 @@ class _DrawerExampleState extends State<DrawerExample> {
               value: onlyUnread,
               onChanged: (value) => setDrawerState(() => onlyUnread = value),
             ),
-            const HyTextField(label: '关键词', hintText: '输入关键词，查看键盘适配'),
+            const HyTextField(hintText: '输入关键词，查看键盘适配'),
             const SizedBox(height: 20),
             for (var index = 1; index <= 12; index++)
               Padding(
