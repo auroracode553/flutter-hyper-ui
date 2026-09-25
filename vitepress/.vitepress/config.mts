@@ -1,3 +1,4 @@
+import { Agent } from 'node:http';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitepress';
 import { componentGroups, componentSidebarSections, featuredDemo } from './catalog';
@@ -10,6 +11,10 @@ function withTrailingSlash(value: string) {
 const siteBase = withTrailingSlash(process.env.VITEPRESS_BASE || '/');
 const repositoryRoot = fileURLToPath(new URL('../..', import.meta.url));
 const previewDevelopmentServer = process.env.VITE_HY_UI_PREVIEW_SERVER;
+// Debug 的 DDC 会请求大量小模块；复用 Vite 到 Flutter 的本地连接。
+const previewProxyAgent = previewDevelopmentServer
+  ? new Agent({ keepAlive: true, maxSockets: 128 })
+  : undefined;
 validateCatalog(repositoryRoot, componentGroups, [featuredDemo]);
 
 export default defineConfig({
@@ -37,6 +42,7 @@ export default defineConfig({
       proxy: previewDevelopmentServer ? {
         '/preview': {
           target: previewDevelopmentServer,
+          agent: previewProxyAgent,
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(/^\/preview/, ''),

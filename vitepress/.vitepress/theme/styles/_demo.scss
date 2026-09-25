@@ -416,6 +416,11 @@
   opacity: 0.58;
 }
 
+/* Flutter 外壳首帧出现后露出真实加载界面，只保留轻量状态条。 */
+.demo-block__placeholder.is-component .demo-block__skeleton {
+  display: none;
+}
+
 @keyframes demo-spin {
   to { transform: rotate(360deg); }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hy_ui_preview_core.dart';
 import 'package:flutter/material.dart';
 
 import 'preview_shell.dart';
@@ -19,7 +19,7 @@ class _PreviewAppState extends State<PreviewApp> {
   @override
   void initState() {
     super.initState();
-    // 确认 Flutter 已提交该视图的第一帧，宿主此时才隐藏占位。
+    // 框架占位首帧先显示；当前组件的完成信号由异步内容单独发送。
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) widget.configuration.onFirstFrame?.call();
     });
@@ -47,6 +47,8 @@ class _PreviewAppState extends State<PreviewApp> {
           onToggleTheme: () => _theme.setMode(
             _theme.mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark,
           ),
+          onComponentReady: widget.configuration.onComponentReady,
+          onComponentError: widget.configuration.onComponentError,
         ),
       ),
     );

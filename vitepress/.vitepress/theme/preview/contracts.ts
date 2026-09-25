@@ -1,4 +1,4 @@
-export type PreviewPhase = 'idle' | 'assets' | 'entrypoint' | 'engine' | 'view' | 'ready' | 'error';
+export type PreviewPhase = 'idle' | 'assets' | 'entrypoint' | 'engine' | 'view' | 'component' | 'ready' | 'error';
 
 export interface PreviewStatus {
   phase: PreviewPhase;
@@ -16,6 +16,8 @@ export interface FlutterPreviewApp {
       embedded: boolean;
       theme: 'light' | 'dark';
       onFirstFrame: () => void;
+      onComponentReady: () => void;
+      onComponentError: (message: string) => void;
     };
   }): number;
   removeView(viewId: number): unknown;

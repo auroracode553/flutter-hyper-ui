@@ -59,6 +59,8 @@ export class PreviewView {
   private attach() {
     if (!this.app) return;
     const generation = ++this.generation;
+    const viewStartedAt = performance.now();
+    let shellReadyAt = viewStartedAt;
     this.onStatus({ phase: 'view', message: '正在绘制交互界面…' });
     try {
       this.viewId = this.app.addView({
@@ -67,7 +69,24 @@ export class PreviewView {
           componentId: this.componentId, embedded: true, theme: selectedTheme(),
           onFirstFrame: () => {
             if (this.disposed || generation !== this.generation) return;
+            shellReadyAt = performance.now();
+            this.onStatus({ phase: 'component', message: '正在加载当前组件…' });
+          },
+          onComponentReady: () => {
+            if (this.disposed || generation !== this.generation) return;
+            if (import.meta.env.DEV) {
+              const summary = {
+                组件: this.componentId,
+                外壳首帧秒数: ((shellReadyAt - viewStartedAt) / 1000).toFixed(1),
+                当前组件秒数: ((performance.now() - shellReadyAt) / 1000).toFixed(1),
+              };
+              console.info(`[Hy UI 预览] 组件加载耗时 ${JSON.stringify(summary)}`);
+            }
             this.onStatus({ phase: 'ready', message: '' });
+          },
+          onComponentError: (message) => {
+            if (this.disposed || generation !== this.generation) return;
+            this.onStatus({ phase: 'error', message: `组件加载失败：${message}` });
           },
         },
       });

@@ -8,12 +8,16 @@ class PreviewViewConfiguration {
     required this.embedded,
     required this.themeMode,
     this.onFirstFrame,
+    this.onComponentReady,
+    this.onComponentError,
   });
 
   final String componentId;
   final bool embedded;
   final ThemeMode themeMode;
   final VoidCallback? onFirstFrame;
+  final VoidCallback? onComponentReady;
+  final ValueChanged<String>? onComponentError;
 
   factory PreviewViewConfiguration.forView(int viewId) {
     final requestedId = Uri.base.queryParameters['component'];

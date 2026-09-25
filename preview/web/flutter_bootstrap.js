@@ -10,6 +10,17 @@ window.hyUiPreviewBundle = (() => {
       if (appPromise) return appPromise;
       const base = new URL(assetBase, document.baseURI).href;
       appPromise = new Promise((resolve, reject) => {
+        // Flutter AMD 调试入口中的 require.js 使用 document.baseURI 解析后续脚本。
+        // 文档页路径是 /components/...，临时切换到 Flutter 资源根目录可避免
+        // 首屏把 /components/require.js 错误地请求成 HTML。
+        const previousBase = document.querySelector('base');
+        const temporaryBase = document.createElement('base');
+        temporaryBase.href = base;
+        document.head.prepend(temporaryBase);
+        const restoreDocumentBase = () => {
+          temporaryBase.remove();
+          if (previousBase) document.head.prepend(previousBase);
+        };
         // 回调式加载器不会将入口脚本及调试模块的错误交给 load() Promise。
         const onPreviewError = (event) => {
           const source = event.target instanceof HTMLScriptElement
@@ -20,6 +31,7 @@ window.hyUiPreviewBundle = (() => {
         };
         const finish = (callback, value) => {
           window.removeEventListener('error', onPreviewError, true);
+          restoreDocumentBase();
           callback(value);
         };
         window.addEventListener('error', onPreviewError, true);

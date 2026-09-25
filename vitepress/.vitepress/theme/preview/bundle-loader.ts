@@ -1,4 +1,5 @@
 import { PreviewFailure, type FlutterPreviewApp, type PreviewListener, type PreviewStatus } from './contracts';
+import { PreviewLoadDiagnostics } from './load-diagnostics';
 
 export interface PreviewBundleLoaderOptions {
   developmentServer?: boolean;
@@ -39,11 +40,18 @@ export class PreviewBundleLoader {
 
   private async load(): Promise<FlutterPreviewApp> {
     const base = new URL(this.basePath, window.location.origin);
+    const diagnostics = this.options.developmentServer ? new PreviewLoadDiagnostics(base) : undefined;
     this.preload(new URL('main.dart.js', base).href, 'script');
     if (this.options.developmentServer) {
       this.preload(new URL('dart_sdk.js', base).href, 'script');
     }
     await this.loadScript(new URL('flutter_bootstrap.js', base).href);
+    diagnostics?.bootstrapLoaded();
+    if (this.options.developmentServer) {
+      // Bootstrap 到达后，这些 Debug 后续脚本已由 Flutter 服务生成。
+      this.preload(new URL('ddc_module_loader.js', base).href, 'script');
+      this.preload(new URL('main_module.bootstrap.js', base).href, 'script');
+    }
     const bundle = window.hyUiPreviewBundle;
     if (!bundle || bundle.protocolVersion !== 2) {
       throw new PreviewFailure('预览接口版本不匹配。组件预览已拆分，请重新生成完整预览包并刷新页面。', true);
@@ -51,16 +59,27 @@ export class PreviewBundleLoader {
     this.engineStarted = true;
     this.updateStatus({
       phase: 'entrypoint',
-      message: '正在加载 Dart 入口…',
+      message: this.options.developmentServer ? '正在加载 Dart 调试模块…' : '正在加载 Dart 入口…',
     });
+    const progressTimer = diagnostics ? window.setInterval(() => {
+      this.updateStatus({
+        phase: 'entrypoint',
+        message: `加载 Dart 模块 · ${diagnostics.completedScripts} 个 · ${diagnostics.elapsedSeconds} 秒`,
+      });
+    }, 1000) : undefined;
     try {
       const app = await bundle.start(base.href, {
         allowDebug: this.options.developmentServer,
-        onEntrypointLoaded: () => this.updateStatus({
-          phase: 'engine',
-          message: '正在初始化 Flutter 渲染引擎…',
-        }),
+        onEntrypointLoaded: () => {
+          diagnostics?.entrypointLoaded();
+          if (progressTimer !== undefined) window.clearInterval(progressTimer);
+          this.updateStatus({
+            phase: 'engine',
+            message: '正在初始化 Flutter 渲染引擎…',
+          });
+        },
       });
+      diagnostics?.finish();
       if (typeof app?.addView !== 'function' || typeof app?.removeView !== 'function') {
         throw new Error('构建产物未提供 Flutter 多视图接口');
       }
@@ -69,6 +88,8 @@ export class PreviewBundleLoader {
       throw new PreviewFailure(
         error instanceof Error ? error.message : String(error), true,
       );
+    } finally {
+      if (progressTimer !== undefined) window.clearInterval(progressTimer);
     }
   }
 

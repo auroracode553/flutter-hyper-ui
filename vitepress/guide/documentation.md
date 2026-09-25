@@ -19,7 +19,13 @@ tools/       本地开发与构建编排脚本
 npm run dev:watch
 ```
 
-该脚本启动 Flutter Web Debug 服务与 VitePress，监听 Dart 文件并请求 Flutter 热重载。Markdown、Vue 和 CSS 由 Vite HMR 更新。按 `Ctrl+C` 只停止本次启动的本地子进程。
+该脚本启动 Flutter Web Debug 服务与 VitePress，默认使用 AMD 调试模块，监听 Dart 文件并请求 Flutter 热重启。这样可以避开 DDC 在 Dart 入口前加载整套模块的等待。Markdown、Vue 和 CSS 由 Vite HMR 更新。按 `Ctrl+C` 只停止本次启动的本地子进程。
+
+如果需要 DDC 热重载，可在 Windows PowerShell 中先设置 `$env:HY_UI_PREVIEW_AMD='0'`，再运行脚本。还可以用 `HY_UI_FLUTTER_PORT` 和 `HY_UI_VITE_PORT` 覆盖本地端口。
+
+首次打开预览时，Flutter Debug 会先编译，再通过浏览器加载 Dart SDK 和大量 DDC JavaScript 模块。页面显示“加载 Dart 模块”时，Flutter 启动脚本已返回，正在下载或执行调试模块；数字是已完成的脚本请求数，不是编译百分比。Debug 的 `main.dart.js` 是引导脚本，开发预览会同时预取后续所需的 SDK 和模块加载器。浏览器控制台中的 `[Hy UI 预览] 首次加载耗时` 分别列出启动脚本等待、Dart 模块和 Flutter 引擎的耗时，以及最慢脚本；可据此判断慢在 Flutter 首编译、DDC 模块传输与执行，还是渲染引擎。首次冷启动通常比后续刷新慢。
+
+预览入口通过 `hy_ui_preview_core.dart` 只同步加载 Flutter 外壳所需的主题和基础组件。示例文件通过 Dart `deferred` 导入，当前视图建立后才调用对应文件的 `loadLibrary()`；同文件内的示例共享加载结果。Flutter 外壳首帧出现时，文档骨架屏退场，当前组件在 Flutter 页面内继续显示加载状态；真实组件提交首帧后才标记为完成。远离视口的文档示例不会主动创建视图。首次仍需下载 Flutter 引擎与 Dart SDK，但不会为了一个组件等全部示例代码加载完。控制台中的 `[Hy UI 预览] 组件加载耗时` 可以继续区分外壳首帧和当前示例模块的耗时。
 
 开发模式不执行 release 构建，也不复制静态产物。
 
@@ -61,6 +67,6 @@ DOM host  ←──────────── addView / first frame ──�
 | 现象 | 处理 |
 | --- | --- |
 | 端口被占用 | 关闭旧开发进程，再手动重新启动 watcher |
-| Dart 保存后没有变化 | 查看终端是否发出热重载；结构性修改需要重启 |
+| Dart 保存后没有变化 | 查看终端是否发出热重启；结构性修改仍可手动重启 |
 | 演示提示资源不完整 | 最终静态预览需重新执行 `npm run build:all` |
 | Shader 无法写入 | 不要自行指定项目外输出目录，沿用已有构建脚本 |
