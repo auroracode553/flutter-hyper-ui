@@ -1,5 +1,6 @@
 import 'package:flutter_hyper_ui/hy_ui_preview_core.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'preview_catalog.dart';
 import 'preview_deferred_content.dart';
@@ -100,7 +101,7 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
                 safeArea: false,
                 actions: [
                   HyIconButton(
-                    icon: Icons.brightness_6_outlined,
+                    icon: LucideIcons.sun,
                     tooltip: '切换明暗主题',
                     onPressed: widget.onToggleTheme,
                   ),

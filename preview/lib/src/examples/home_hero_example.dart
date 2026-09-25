@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 /// 首页英雄区真机预览：用真实 Hy UI 组件拼成一个手机首页，
@@ -47,7 +48,7 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
             const HyIcon(HyIcons.settings),
             const SizedBox(width: 12),
             const Expanded(child: HyText('外观与显示')),
-            HyIcon(Icons.chevron_right,
+            HyIcon(LucideIcons.chevronRight,
                 color: HyUiThemeTokens.of(context).mutedForeground),
           ]),
         ),
@@ -56,7 +57,7 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
         // 设置项：通知开关
         HyCard(
           child: Row(children: [
-            const HyIcon(Icons.notifications_outlined),
+            const HyIcon(LucideIcons.bell),
             const SizedBox(width: 12),
             const Expanded(child: HyText('通知')),
             HySwitch(
@@ -73,9 +74,9 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
           selectedIndex: _tab,
           onSelected: (index) => setState(() => _tab = index),
           items: const [
-            HyTabItem(icon: Icons.home_outlined, label: '首页'),
-            HyTabItem(icon: Icons.bolt_outlined, label: '发现'),
-            HyTabItem(icon: Icons.person_outline, label: '我的'),
+            HyTabItem(icon: LucideIcons.house, label: '首页'),
+            HyTabItem(icon: LucideIcons.zap, label: '发现'),
+            HyTabItem(icon: LucideIcons.user, label: '我的'),
           ],
         ),
       ],

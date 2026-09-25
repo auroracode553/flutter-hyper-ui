@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'hy_bottom_sheet.dart';
 import 'hy_glass.dart';
@@ -46,7 +47,7 @@ class HyPopupMenu<T> extends StatelessWidget {
     super.key,
     required this.actions,
     required this.onSelected,
-    this.icon = Icons.more_horiz_rounded,
+    this.icon = LucideIcons.ellipsis,
     this.tooltip = '更多操作',
   });
   final List<HyAction<T>> actions;

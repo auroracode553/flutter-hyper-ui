@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
@@ -199,10 +200,10 @@ class HyRate extends StatelessWidget {
               opacity: onChanged == null ? 0.5 : 1,
               child: HyIconButton(
                 icon: value >= index + 1
-                    ? Icons.star_rounded
+                    ? LucideIcons.star
                     : value > index
-                    ? Icons.star_half_rounded
-                    : Icons.star_outline_rounded,
+                    ? LucideIcons.starHalf
+                    : LucideIcons.star,
                 semanticLabel: '${index + 1} 星',
                 size: size + 12,
                 iconSize: size,

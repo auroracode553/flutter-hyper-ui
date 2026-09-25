@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
@@ -57,7 +58,7 @@ class HyPagination extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             HyIconButton(
-              icon: rtl ? Icons.chevron_right_rounded : Icons.chevron_left_rounded,
+              icon: rtl ? LucideIcons.chevronRight : LucideIcons.chevronLeft,
               semanticLabel: '上一页',
               size: 32,
               iconSize: 18,
@@ -119,7 +120,7 @@ class HyPagination extends StatelessWidget {
                         ),
                       ),
             HyIconButton(
-              icon: rtl ? Icons.chevron_left_rounded : Icons.chevron_right_rounded,
+              icon: rtl ? LucideIcons.chevronLeft : LucideIcons.chevronRight,
               semanticLabel: '下一页',
               size: 32,
               iconSize: 18,

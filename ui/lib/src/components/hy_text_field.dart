@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
@@ -269,8 +270,8 @@ class _HyTextFieldState extends State<HyTextField> {
         widget.showPasswordToggle && widget.obscureText
         ? _AffixButton(
             icon: _obscured
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
+                ? LucideIcons.eye
+                : LucideIcons.eyeOff,
             tooltip: _obscured ? '显示密码' : '隐藏密码',
             color: tokens.mutedForeground,
             onPressed: interactive
@@ -288,7 +289,7 @@ class _HyTextFieldState extends State<HyTextField> {
             child: IgnorePointer(
               ignoring: !canClear,
               child: _AffixButton(
-                icon: Icons.close_rounded,
+                icon: LucideIcons.x,
                 tooltip: '清空',
                 color: tokens.mutedForeground,
                 onPressed: canClear ? _clear : null,

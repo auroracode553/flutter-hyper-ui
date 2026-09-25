@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region TooltipComponentExample
@@ -16,7 +17,7 @@ class TooltipComponentExample extends StatelessWidget {
         HyTooltip(
           message: '更改后会同步到所有设备。',
           child: HyIconButton(
-            icon: Icons.info_outline_rounded,
+            icon: LucideIcons.info,
             semanticLabel: '同步说明',
             onPressed: () {},
           ),

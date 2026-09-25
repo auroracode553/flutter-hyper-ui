@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region SpaceComponentExample
@@ -185,7 +186,7 @@ class EmptyStateComponentExample extends StatelessWidget {
       children: [
         _label('带恢复操作'),
         HyEmptyState(
-          icon: Icons.search_off_rounded,
+          icon: LucideIcons.searchX,
           title: '没有找到结果',
           message: '换一个关键词，或者清除筛选条件后重试。',
           action: HyButton.tonal(label: '清除筛选', onPressed: () {}),
@@ -194,7 +195,7 @@ class EmptyStateComponentExample extends StatelessWidget {
 
         _label('纯提示（无操作按钮）'),
         const HyEmptyState(
-          icon: Icons.inbox_outlined,
+          icon: LucideIcons.inbox,
           title: '这里还是空的',
           message: '创建第一个项目后它会出现在这里。',
         ),

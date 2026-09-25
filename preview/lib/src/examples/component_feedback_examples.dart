@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region ToastComponentExample
@@ -378,11 +379,11 @@ class BottomSheetComponentExample extends StatelessWidget {
             builder: (sheetContext) => const Column(
               children: [
                 HyListTile(
-                  leadingIcon: Icons.link_rounded,
+                  leadingIcon: LucideIcons.link,
                   title: '复制链接',
                 ),
                 HyListTile(
-                  leadingIcon: Icons.person_add_alt_1_outlined,
+                  leadingIcon: LucideIcons.userPlus,
                   title: '邀请成员',
                 ),
               ],
@@ -428,19 +429,19 @@ class ActionSheetComponentExample extends StatelessWidget {
       context,
       title: '项目操作',
       actions: const [
-        HyAction(value: 'rename', label: '重命名', icon: Icons.edit_outlined),
-        HyAction(value: 'share', label: '分享', icon: Icons.ios_share_outlined),
+        HyAction(value: 'rename', label: '重命名', icon: LucideIcons.pencil),
+        HyAction(value: 'share', label: '分享', icon: LucideIcons.share2),
         // 禁用项：仅展示，不可点击。
         HyAction(
           value: 'move',
           label: '移动（无权限）',
-          icon: Icons.drive_file_move_outlined,
+          icon: LucideIcons.folderInput,
           enabled: false,
         ),
         HyAction(
           value: 'delete',
           label: '删除',
-          icon: Icons.delete_outline_rounded,
+          icon: LucideIcons.trash,
           destructive: true,
         ),
       ],
@@ -479,12 +480,12 @@ class _PopupMenuComponentExampleState extends State<PopupMenuComponentExample> {
       HyPopupMenu<String>(
         onSelected: (value) => setState(() => _selected = value),
         actions: const [
-          HyAction(value: '编辑', label: '编辑', icon: Icons.edit_outlined),
-          HyAction(value: '复制', label: '复制', icon: Icons.copy_rounded),
+          HyAction(value: '编辑', label: '编辑', icon: LucideIcons.pencil),
+          HyAction(value: '复制', label: '复制', icon: LucideIcons.copy),
           HyAction(
             value: '删除',
             label: '删除',
-            icon: Icons.delete_outline_rounded,
+            icon: LucideIcons.trash,
             destructive: true,
           ),
         ],

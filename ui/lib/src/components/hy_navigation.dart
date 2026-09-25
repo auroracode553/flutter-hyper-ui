@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_effects.dart';
@@ -745,7 +746,7 @@ class HySteps extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: index < current
-          ? Icon(Icons.check_rounded, size: 14, color: tokens.primaryForeground)
+          ? Icon(LucideIcons.check, size: 14, color: tokens.primaryForeground)
           : Text(
               '${index + 1}',
               style: TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class NavigationExample extends StatelessWidget {
   const NavigationExample({super.key});
@@ -17,12 +18,12 @@ class NavigationExample extends StatelessWidget {
           safeArea: false,
           actions: [
             HyIconButton(
-              icon: Icons.search,
+              icon: LucideIcons.search,
               tooltip: '搜索',
               onPressed: () {},
             ),
             HyIconButton(
-              icon: Icons.checklist,
+              icon: LucideIcons.listChecks,
               tooltip: '选择',
               onPressed: () {},
             ),
@@ -33,14 +34,14 @@ class NavigationExample extends StatelessWidget {
         HyListTile(
           title: '阅读计划.md',
           subtitle: 'Markdown · 今天',
-          leadingIcon: Icons.data_object_outlined,
+          leadingIcon: LucideIcons.braces,
           leadingColor: tokens.foreground,
         ),
         const SizedBox(height: HyUiSpacing.xs),
         HyListTile(
           title: '销售预测.xlsx',
           subtitle: '表格 · 昨天',
-          leadingIcon: Icons.table_chart_outlined,
+          leadingIcon: LucideIcons.table,
           leadingColor: tokens.success,
         ),
       ],

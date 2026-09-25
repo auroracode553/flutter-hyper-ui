@@ -1,5 +1,6 @@
 import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ButtonsExample extends StatelessWidget {
   const ButtonsExample({super.key});
@@ -16,27 +17,27 @@ class ButtonsExample extends StatelessWidget {
           children: [
             HyButton.filled(
               label: '打开文件',
-              icon: Icons.add,
+              icon: LucideIcons.plus,
               onPressed: _noop,
             ),
             HyButton.tonal(
               label: '同步状态',
-              icon: Icons.sync,
+              icon: LucideIcons.refreshCw,
               onPressed: _noop,
             ),
             HyButton.outline(
               label: '导出',
-              icon: Icons.ios_share,
+              icon: LucideIcons.share2,
               onPressed: _noop,
             ),
             HyButton.ghost(
               label: '更多',
-              trailingIcon: Icons.keyboard_arrow_down,
+              trailingIcon: LucideIcons.chevronDown,
               onPressed: _noop,
             ),
             HyButton.danger(
               label: '删除',
-              icon: Icons.delete_outline,
+              icon: LucideIcons.trash,
               onPressed: _noop,
             ),
           ],

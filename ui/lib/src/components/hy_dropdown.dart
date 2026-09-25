@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
@@ -142,8 +143,8 @@ class HyDropdown<T> extends StatelessWidget {
                         const SizedBox(width: 10),
                         Icon(
                           controller.isOpen
-                              ? Icons.keyboard_arrow_up_rounded
-                              : Icons.keyboard_arrow_down_rounded,
+                              ? LucideIcons.chevronUp
+                              : LucideIcons.chevronDown,
                           color: tokens.mutedForeground,
                         ),
                       ],
@@ -201,7 +202,7 @@ class _DropdownOption<T> extends StatelessWidget {
               ),
             ),
             if (selected)
-              Icon(Icons.check_rounded, size: 18, color: tokens.foreground),
+              Icon(LucideIcons.check, size: 18, color: tokens.foreground),
           ],
         ),
       ),

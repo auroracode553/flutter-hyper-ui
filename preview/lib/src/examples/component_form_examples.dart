@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region TextFieldComponentExample
@@ -40,8 +41,8 @@ class TextFieldComponentExample extends StatelessWidget {
         _label('前缀与后缀插槽'),
         const HyTextField(
           hintText: '搜索组件',
-          prefix: Icon(Icons.search_rounded),
-          suffix: Icon(Icons.tune_rounded),
+          prefix: Icon(LucideIcons.search),
+          suffix: Icon(LucideIcons.slidersHorizontal),
         ),
         const SizedBox(height: HyUiSpacing.lg),
 
@@ -133,17 +134,17 @@ class _SegmentedControlComponentExampleState
             HySegmentOption(
               value: 'list',
               label: '列表',
-              icon: Icons.view_list_rounded,
+              icon: LucideIcons.list,
             ),
             HySegmentOption(
               value: 'chart',
               label: '图表',
-              icon: Icons.insights_rounded,
+              icon: LucideIcons.trendingUp,
             ),
             HySegmentOption(
               value: 'board',
               label: '看板（未开放）',
-              icon: Icons.dashboard_rounded,
+              icon: LucideIcons.layoutDashboard,
               enabled: false,
             ),
           ],
@@ -717,7 +718,7 @@ class _DatePickerComponentExampleState
           children: [
             HyButton.tonal(
               label: '选择日期',
-              icon: Icons.calendar_today_outlined,
+              icon: LucideIcons.calendar,
               onPressed: _pickDate,
             ),
             const SizedBox(width: 14),
@@ -731,7 +732,7 @@ class _DatePickerComponentExampleState
           children: [
             HyButton.tonal(
               label: '选择时间',
-              icon: Icons.schedule_outlined,
+              icon: LucideIcons.clock,
               onPressed: _pickTime,
             ),
             const SizedBox(width: 14),
@@ -749,7 +750,7 @@ class _DatePickerComponentExampleState
           children: [
             HyButton.tonal(
               label: '选择区间',
-              icon: Icons.date_range_outlined,
+              icon: LucideIcons.calendarDays,
               onPressed: _pickRange,
             ),
             const SizedBox(width: 14),
@@ -775,7 +776,7 @@ class FilePickerComponentExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const HyCard(
     title: '能力由业务层注入',
-    leading: Icon(Icons.extension_outlined),
+    leading: Icon(LucideIcons.puzzle),
     child: Text('HyFilePicker 负责选择文件，HyFileUpload 负责上传；组件库不绑定平台插件或网络实现。'),
   );
 }

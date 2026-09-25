@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_icon_button.dart';
@@ -64,8 +65,8 @@ class HyImage extends StatelessWidget {
       color: HyUiThemeTokens.of(context).muted,
       child: Center(
         child: error
-            ? (errorPlaceholder ?? const Icon(Icons.broken_image_outlined))
-            : (placeholder ?? const Icon(Icons.image_outlined)),
+            ? (errorPlaceholder ?? const Icon(LucideIcons.imageOff))
+            : (placeholder ?? const Icon(LucideIcons.image)),
       ),
     );
     return Semantics(
@@ -94,7 +95,7 @@ class HyImage extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.topRight,
                           child: HyIconButton(
-                            icon: Icons.close,
+                            icon: LucideIcons.x,
                             tooltip: '关闭预览',
                             color: Colors.white,
                             backgroundColor: Colors.black38,
@@ -146,7 +147,7 @@ class HyAvatar extends StatelessWidget {
     final tokens = HyUiThemeTokens.of(context);
     final fallback = Center(
       child: text == null || text!.isEmpty
-          ? Icon(Icons.person_rounded, size: size * .5, color: tokens.primary)
+          ? Icon(LucideIcons.user, size: size * .5, color: tokens.primary)
           : Text(
               text!.characters.take(2).toString(),
               style: TextStyle(

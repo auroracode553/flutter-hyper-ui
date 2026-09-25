@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region CarouselComponentExample
@@ -24,17 +25,17 @@ class _CarouselComponentExampleState extends State<CarouselComponentExample> {
           items: <Widget>[
             _CarouselPanel(
               title: '柔性玻璃',
-              icon: Icons.blur_on_rounded,
+              icon: LucideIcons.aperture,
               color: tokens.primary.withAlpha(35),
             ),
             _CarouselPanel(
               title: '轻量交互',
-              icon: Icons.touch_app_rounded,
+              icon: LucideIcons.hand,
               color: tokens.success.withAlpha(35),
             ),
             _CarouselPanel(
               title: '一致尺寸',
-              icon: Icons.aspect_ratio_rounded,
+              icon: LucideIcons.ratio,
               color: tokens.info.withAlpha(35),
             ),
           ],

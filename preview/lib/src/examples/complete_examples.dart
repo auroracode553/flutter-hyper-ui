@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'interactive_examples.dart';
 import 'upload_example.dart';
@@ -26,7 +27,7 @@ class _AtomsExampleState extends State<AtomsExample> {
     const HyCard(title: '头像与角标', child: HyWrap(spacing: 24, children: [
       HyAvatar(text: '林', size: 56), HyAvatar(text: 'HY', size: 56, radius: 18),
       HyAvatar(size: 56), HyCountBadge(count: 128, child: HyAvatar(text: '讯')),
-      HyCountBadge(dot: true, child: HyIcon(Icons.notifications_outlined)),
+      HyCountBadge(dot: true, child: HyIcon(LucideIcons.bell)),
     ])),
     HyCard(title: '状态标签', child: HyWrap(children: [
       const HyTag(label: '已完成', tone: HyUiTone.success),
@@ -48,9 +49,9 @@ class LayoutExample extends StatelessWidget {
     const HyText('有序的空间', variant: HyTextStyle.title),
     HyCard(title: '常用入口 · Grid', footer: const HyText('统一 12 dp 间距', variant: HyTextStyle.caption),
       child: HyGrid(childAspectRatio: 1.2, children: [
-        for (final entry in const [(Icons.wallet_outlined, '钱包'), (Icons.receipt_long_outlined, '订单'),
-          (Icons.favorite_border, '收藏'), (Icons.location_on_outlined, '地址'),
-          (Icons.headset_mic_outlined, '帮助'), (Icons.settings_outlined, '设置')])
+        for (final entry in const [(LucideIcons.wallet, '钱包'), (LucideIcons.receiptText, '订单'),
+          (LucideIcons.heart, '收藏'), (LucideIcons.mapPin, '地址'),
+          (LucideIcons.headset, '帮助'), (LucideIcons.settings, '设置')])
           HyGlass(blur: 0, radius: 18, onTap: () => HyToast.show(context, entry.$2),
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               HyIcon(entry.$1), const SizedBox(height: 8), Text(entry.$2)])),
@@ -61,10 +62,10 @@ class LayoutExample extends StatelessWidget {
       HySpace(direction: Axis.horizontal, children: [Text('左侧'), HyDivider(axis: Axis.vertical), Text('右侧')]),
     ])),
     const HyCard(title: '骨架占位', child: HySkeleton(card: true, rows: 2)),
-    HyCard(child: HyEmptyState(icon: Icons.search_off_rounded, title: '没有找到结果',
+    HyCard(child: HyEmptyState(icon: LucideIcons.searchX, title: '没有找到结果',
       message: '试试其他关键词', action: HyButton.tonal(label: '重新搜索',
         onPressed: () => HyToast.show(context, '已重置搜索条件')))),
-    const HyCard(child: HyEmptyState(icon: Icons.wifi_off_rounded, title: '网络暂时不可用', message: '请检查连接后重试')),
+    const HyCard(child: HyEmptyState(icon: LucideIcons.wifiOff, title: '网络暂时不可用', message: '请检查连接后重试')),
   ]);
 }
 
@@ -149,7 +150,7 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
       Padding(padding: const EdgeInsets.all(24), child: Text(['首页', '发现', '我的'][_tab],
         style: Theme.of(context).textTheme.headlineMedium)),
       HyTabBar(safeArea: false, items: const [HyTabItem(icon: HyIcons.home, label: '首页'),
-        HyTabItem(icon: Icons.explore_outlined, label: '发现'), HyTabItem(icon: HyIcons.profile, label: '我的')],
+        HyTabItem(icon: LucideIcons.compass, label: '发现'), HyTabItem(icon: HyIcons.profile, label: '我的')],
         selectedIndex: _tab, onSelected: (value) => setState(() => _tab = value)),
     ])),
     const HyCard(title: '标签与联动页面', child: SizedBox(height: 220,

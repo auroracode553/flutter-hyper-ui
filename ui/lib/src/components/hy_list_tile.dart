@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_spacing.dart';
@@ -113,7 +114,7 @@ class HyListTile extends StatelessWidget {
           ] else if (showChevron && onTap != null) ...<Widget>[
             const SizedBox(width: HyUiSpacing.sm),
             Icon(
-              Icons.chevron_right_rounded,
+              LucideIcons.chevronRight,
               size: 18,
               color: tokens.mutedForeground,
             ),

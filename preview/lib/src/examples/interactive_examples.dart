@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 class OverlayExample extends StatefulWidget {
@@ -101,12 +102,12 @@ class _OverlayExampleState extends State<OverlayExample> {
                     HyAction(
                       value: '收藏',
                       label: '收藏',
-                      icon: Icons.favorite_border,
+                      icon: LucideIcons.heart,
                     ),
                     HyAction(
                       value: '删除',
                       label: '删除',
-                      icon: Icons.delete_outline,
+                      icon: LucideIcons.trash,
                       destructive: true,
                     ),
                   ],
@@ -194,14 +195,14 @@ class _BusinessExampleState extends State<BusinessExample> {
             grouped: true,
             title: '外观与显示',
             subtitle: '柔光 · 跟随系统',
-            leadingIcon: Icons.palette_outlined,
+            leadingIcon: LucideIcons.palette,
             leadingColor: const Color(0xFF8C79CF),
             onTap: () => HyToast.show(context, '可在页面顶部切换明暗主题'),
           ),
           HyListTile(
             grouped: true,
             title: '消息通知',
-            leadingIcon: Icons.notifications_outlined,
+            leadingIcon: LucideIcons.bell,
             leadingColor: const Color(0xFFE1A14D),
             trailing: HySwitch(
               value: _notifications,
@@ -211,7 +212,7 @@ class _BusinessExampleState extends State<BusinessExample> {
           HyListTile(
             grouped: true,
             title: '隐私与安全',
-            leadingIcon: Icons.shield_outlined,
+            leadingIcon: LucideIcons.shield,
             leadingColor: const Color(0xFF69A894),
             onTap: () => HyDialog.confirm(
               context,

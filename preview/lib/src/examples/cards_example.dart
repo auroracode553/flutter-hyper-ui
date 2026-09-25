@@ -1,5 +1,6 @@
 import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class CardsExample extends StatelessWidget {
   const CardsExample({super.key});
@@ -18,7 +19,7 @@ class CardsExample extends StatelessWidget {
             title: '本周活动计划',
             subtitle: '12 项活动 · 最近更新 09:42',
             leading: _IconBox(
-              icon: Icons.folder_open_outlined,
+              icon: LucideIcons.folderOpen,
               color: tokens.primary,
             ),
             actions: const [
@@ -48,7 +49,7 @@ class CardsExample extends StatelessWidget {
             title: '周末出行计划',
             subtitle: '已加入批量处理队列。',
             leading: _IconBox(
-              icon: Icons.check_circle_outline,
+              icon: LucideIcons.circleCheckBig,
               color: tokens.success,
             ),
             child: const Wrap(

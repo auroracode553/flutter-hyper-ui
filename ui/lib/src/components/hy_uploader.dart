@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import 'hy_bottom_sheet.dart';
@@ -116,8 +117,8 @@ class _HyUploaderState extends State<HyUploader> {
                   HyUploadSource.file => '选择文件',
                 },
                 icon: source == HyUploadSource.camera
-                    ? Icons.photo_camera_outlined
-                    : Icons.add_photo_alternate_outlined,
+                    ? LucideIcons.camera
+                    : LucideIcons.imagePlus,
               ),
             )
             .toList(),
@@ -232,7 +233,7 @@ class _HyUploaderState extends State<HyUploader> {
                             width: 104,
                             height: 84,
                             child: Icon(
-                              Icons.insert_drive_file_outlined,
+                              LucideIcons.file,
                               size: 28,
                             ),
                           ),
@@ -241,7 +242,7 @@ class _HyUploaderState extends State<HyUploader> {
                             right: 0,
                             top: 0,
                             child: HyIconButton(
-                              icon: Icons.close,
+                              icon: LucideIcons.x,
                               size: 26,
                               iconSize: 14,
                               tooltip: '删除 ${item.file.name}',
@@ -298,7 +299,7 @@ class _HyUploaderState extends State<HyUploader> {
                       : const Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.add_rounded),
+                            Icon(LucideIcons.plus),
                             SizedBox(height: 8),
                             Text('添加文件'),
                           ],

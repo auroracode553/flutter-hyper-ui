@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_effects.dart';
@@ -170,7 +171,7 @@ class HyDrawer extends StatelessWidget {
                       context,
                     ).closeButtonTooltip,
                     onPressed: onClose,
-                    icon: Icons.close_rounded,
+                    icon: LucideIcons.x,
                   ),
               ],
             ),

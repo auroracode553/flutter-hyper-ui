@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 
@@ -48,16 +49,16 @@ class HyText extends StatelessWidget {
 }
 
 abstract final class HyIcons {
-  static const home = Icons.home_rounded;
-  static const search = Icons.search_rounded;
-  static const settings = Icons.settings_rounded;
-  static const profile = Icons.person_rounded;
-  static const cart = Icons.shopping_bag_rounded;
-  static const back = Icons.arrow_back_ios_new_rounded;
-  static const close = Icons.close_rounded;
-  static const success = Icons.check_circle_rounded;
-  static const warning = Icons.warning_amber_rounded;
-  static const image = Icons.image_rounded;
+  static const home = LucideIcons.house;
+  static const search = LucideIcons.search;
+  static const settings = LucideIcons.settings;
+  static const profile = LucideIcons.user;
+  static const cart = LucideIcons.shoppingBag;
+  static const back = LucideIcons.chevronLeft;
+  static const close = LucideIcons.x;
+  static const success = LucideIcons.circleCheckBig;
+  static const warning = LucideIcons.triangleAlert;
+  static const image = LucideIcons.image;
 }
 
 class HyIcon extends StatelessWidget {

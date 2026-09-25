@@ -1,6 +1,7 @@
 import 'dart:ui' show FontFeature;
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
@@ -47,7 +48,7 @@ class HyNumberStepper extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             HyIconButton(
-              icon: Icons.remove_rounded,
+              icon: LucideIcons.minus,
               semanticLabel: '减少',
               size: 32,
               iconSize: 17,
@@ -75,7 +76,7 @@ class HyNumberStepper extends StatelessWidget {
               ),
             ),
             HyIconButton(
-              icon: Icons.add_rounded,
+              icon: LucideIcons.plus,
               semanticLabel: '增加',
               size: 32,
               iconSize: 17,

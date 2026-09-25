@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region CardComponentExample
@@ -20,10 +21,10 @@ class CardComponentExample extends StatelessWidget {
         HyCard(
           title: '本周专注',
           subtitle: '保持轻量、清晰的内容层级',
-          leading: const Icon(Icons.auto_awesome_outlined),
+          leading: const Icon(LucideIcons.sparkles),
           actions: [
             HyIconButton(
-              icon: Icons.more_horiz_rounded,
+              icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () {},
             ),

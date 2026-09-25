@@ -1,5 +1,6 @@
 import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class DataExample extends StatelessWidget {
   const DataExample({super.key});
@@ -26,7 +27,7 @@ class DataExample extends StatelessWidget {
           title: '产品需求说明.pdf',
           subtitle: 'PDF 文档 · 最近打开 08:30',
           meta: '12.6 MB',
-          leadingIcon: Icons.picture_as_pdf_outlined,
+          leadingIcon: LucideIcons.fileText,
           leadingColor: tokens.error,
         ),
         const SizedBox(height: HyUiSpacing.xs),
@@ -35,7 +36,7 @@ class DataExample extends StatelessWidget {
           subtitle: 'Word 文档 · 最近打开 昨天',
           meta: '386 KB',
           selected: true,
-          leadingIcon: Icons.article_outlined,
+          leadingIcon: LucideIcons.fileText,
           leadingColor: tokens.primary,
         ),
         const SizedBox(height: HyUiSpacing.md),

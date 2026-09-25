@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
@@ -89,12 +90,12 @@ abstract final class HyToast {
   }
 
   static IconData _iconFor(HyUiTone tone) => switch (tone) {
-    HyUiTone.primary => Icons.auto_awesome_rounded,
-    HyUiTone.success => Icons.check_rounded,
-    HyUiTone.warning => Icons.priority_high_rounded,
-    HyUiTone.error => Icons.close_rounded,
-    HyUiTone.info => Icons.info_outline_rounded,
-    HyUiTone.neutral => Icons.notifications_none_rounded,
+    HyUiTone.primary => LucideIcons.sparkles,
+    HyUiTone.success => LucideIcons.check,
+    HyUiTone.warning => LucideIcons.circleAlert,
+    HyUiTone.error => LucideIcons.x,
+    HyUiTone.info => LucideIcons.info,
+    HyUiTone.neutral => LucideIcons.bell,
   };
 }
 
@@ -272,7 +273,7 @@ class HyAlert extends StatelessWidget {
           ),
           if (onClose != null)
             HyIconButton(
-              icon: Icons.close_rounded,
+              icon: LucideIcons.x,
               size: 28,
               iconSize: 18,
               tooltip: '关闭通知',

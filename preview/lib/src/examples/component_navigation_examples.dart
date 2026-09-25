@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region NavBarComponentExample
@@ -24,7 +25,7 @@ class NavBarComponentExample extends StatelessWidget {
           safeArea: false,
           actions: [
             HyIconButton(
-              icon: Icons.ios_share_outlined,
+              icon: LucideIcons.share2,
               tooltip: '分享',
               onPressed: () {},
             ),
@@ -41,7 +42,7 @@ class NavBarComponentExample extends StatelessWidget {
           automaticallyImplyLeading: false,
           actions: [
             HyIconButton(
-              icon: Icons.ios_share_outlined,
+              icon: LucideIcons.share2,
               tooltip: '分享',
               onPressed: () {},
             ),
@@ -77,9 +78,9 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
           selectedIndex: _index,
           onSelected: (index) => setState(() => _index = index),
           items: const [
-            HyTabItem(icon: Icons.home_outlined, label: '首页'),
-            HyTabItem(icon: Icons.explore_outlined, label: '发现'),
-            HyTabItem(icon: Icons.person_outline_rounded, label: '我的'),
+            HyTabItem(icon: LucideIcons.house, label: '首页'),
+            HyTabItem(icon: LucideIcons.compass, label: '发现'),
+            HyTabItem(icon: LucideIcons.user, label: '我的'),
           ],
         ),
       ],
@@ -108,7 +109,7 @@ class ListTileComponentExample extends StatelessWidget {
           title: '产品需求说明',
           subtitle: 'PDF · 今天 09:30',
           meta: '12.6 MB',
-          leadingIcon: Icons.picture_as_pdf_outlined,
+          leadingIcon: LucideIcons.fileText,
         ),
         const SizedBox(height: 10),
 
@@ -117,7 +118,7 @@ class ListTileComponentExample extends StatelessWidget {
           title: '已选择的项目',
           subtitle: '展示选中状态',
           selected: true,
-          leadingIcon: Icons.check_circle_outline,
+          leadingIcon: LucideIcons.circleCheckBig,
         ),
         const SizedBox(height: 10),
         const HyListTile(title: '不可用项目', enabled: false),
@@ -170,17 +171,17 @@ class MenuListComponentExample extends StatelessWidget {
         HyMenuItem(
           title: '账户与安全',
           subtitle: '密码、设备与登录记录',
-          leadingIcon: Icons.shield_outlined,
+          leadingIcon: LucideIcons.shield,
         ),
         HyMenuItem(
           title: '外观与显示',
           subtitle: '主题、字号与动态效果',
-          leadingIcon: Icons.palette_outlined,
+          leadingIcon: LucideIcons.palette,
         ),
         HyMenuItem(
           title: '关于',
           meta: 'v1.0.0',
-          leadingIcon: Icons.info_outline_rounded,
+          leadingIcon: LucideIcons.info,
         ),
       ],
     );
@@ -198,14 +199,14 @@ class SlideMenuComponentExample extends StatelessWidget {
       startActions: [
         HySlideAction(
           label: '置顶',
-          icon: Icons.vertical_align_top_rounded,
+          icon: LucideIcons.arrowUpToLine,
           onPressed: () => HyToast.show(context, '已置顶'),
         ),
       ],
       endActions: [
         HySlideAction(
           label: '删除',
-          icon: Icons.delete_outline_rounded,
+          icon: LucideIcons.trash,
           color: Theme.of(context).colorScheme.error,
           onPressed: () => HyToast.show(context, '已删除', tone: HyUiTone.error),
         ),
@@ -213,7 +214,7 @@ class SlideMenuComponentExample extends StatelessWidget {
       child: const HyListTile(
         title: '向左或向右拖动',
         subtitle: '释放时会根据位置与速度吸附',
-        leadingIcon: Icons.description_outlined,
+        leadingIcon: LucideIcons.fileText,
       ),
     );
   }

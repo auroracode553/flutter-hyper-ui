@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_spacing.dart';
@@ -152,7 +153,7 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HyIconButton(
-      icon: Icons.arrow_back_ios_new_rounded,
+      icon: LucideIcons.chevronLeft,
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       onPressed: () => Navigator.maybePop(context),
       backgroundColor: glass.selection,

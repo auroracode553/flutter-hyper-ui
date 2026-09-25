@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_radii.dart';
 import '../theme/hy_ui_spacing.dart';
@@ -64,7 +65,7 @@ class HyTag extends StatelessWidget {
             ),
             if (onClose != null)
               HyIconButton(
-                icon: Icons.close,
+                icon: LucideIcons.x,
                 size: 24,
                 iconSize: 14,
                 color: foreground,

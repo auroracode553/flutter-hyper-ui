@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region GlassWeightComponentExample
@@ -38,7 +39,7 @@ class _PressableComponentExampleState extends State<PressableComponentExample> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.touch_app_outlined),
+          const Icon(LucideIcons.hand),
           const SizedBox(width: 10),
           Text('按住感受缩放 · $_count'),
         ],
@@ -77,21 +78,21 @@ class IconButtonComponentExample extends StatelessWidget {
     spacing: 14,
     runSpacing: 14,
     children: [
-      HyIconButton(icon: Icons.favorite_outline_rounded, tooltip: '喜欢'),
+      HyIconButton(icon: LucideIcons.heart, tooltip: '喜欢'),
       HyIconButton(
-        icon: Icons.delete_outline_rounded,
+        icon: LucideIcons.trash,
         color: Colors.white,
         backgroundColor: Color(0xFFE5484D),
         tooltip: '删除',
       ),
       HyIconButton(
-        icon: Icons.share_outlined,
+        icon: LucideIcons.share,
         semanticLabel: '分享',
         size: 44,
         iconSize: 22,
         backgroundColor: Color(0x14000000),
       ),
-      HyIconButton(icon: Icons.edit_outlined, tooltip: '编辑', onPressed: null),
+      HyIconButton(icon: LucideIcons.pencil, tooltip: '编辑', onPressed: null),
     ],
   );
 }

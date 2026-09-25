@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region SearchBarComponentExample
@@ -71,7 +72,7 @@ class _CountDownComponentExampleState extends State<CountDownComponentExample> {
               onFinished: () => setState(() => _finished = true),
             ),
             HyIconButton(
-              icon: Icons.refresh_rounded,
+              icon: LucideIcons.refreshCw,
               tooltip: '重新开始',
               onPressed: () => setState(() {
                 _endTime = DateTime.now().add(const Duration(seconds: 20));

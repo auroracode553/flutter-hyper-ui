@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 /// 通用组件总览，不依赖任何业务模型或路由结构。
@@ -33,7 +34,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
           automaticallyImplyLeading: false,
           actions: <Widget>[
             HyIconButton(
-              icon: Icons.more_horiz_rounded,
+              icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () => HyToast.show(context, 'Navbar action'),
             ),
@@ -48,9 +49,9 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             selectedIndex: _tab,
             onSelected: (value) => setState(() => _tab = value),
             items: const <HyTabItem>[
-              HyTabItem(icon: Icons.home_outlined, label: '首页'),
-              HyTabItem(icon: Icons.explore_outlined, label: '发现'),
-              HyTabItem(icon: Icons.person_outline_rounded, label: '我的'),
+              HyTabItem(icon: LucideIcons.house, label: '首页'),
+              HyTabItem(icon: LucideIcons.compass, label: '发现'),
+              HyTabItem(icon: LucideIcons.user, label: '我的'),
             ],
           ),
         ),
@@ -60,7 +61,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             children: <Widget>[
               HyButton.filled(
                 label: '主要操作',
-                icon: Icons.auto_awesome_rounded,
+                icon: LucideIcons.sparkles,
                 onPressed: () => HyToast.show(context, '主要操作'),
               ),
               HyButton.tonal(label: '柔和', onPressed: () {}),
@@ -78,7 +79,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             children: <Widget>[
               const HyTextField(
                 hintText: '输入关键词',
-                prefix: Icon(Icons.search_rounded),
+                prefix: Icon(LucideIcons.search),
               ),
               HyDropdown<String>(
                 label: '材质厚度',
@@ -135,13 +136,13 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             HyMenuItem(
               title: '外观与显示',
               subtitle: '主题、字号和动态效果',
-              leadingIcon: Icons.palette_outlined,
+              leadingIcon: LucideIcons.palette,
               leadingColor: const Color(0xFF8C79CF),
               onTap: () => HyToast.show(context, '外观与显示'),
             ),
             HyMenuItem(
               title: '通知',
-              leadingIcon: Icons.notifications_outlined,
+              leadingIcon: LucideIcons.bell,
               leadingColor: const Color(0xFFD69A4A),
               trailing: HySwitch(
                 value: _enabled,
@@ -151,7 +152,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             ),
             HyMenuItem(
               title: '隐私与安全',
-              leadingIcon: Icons.shield_outlined,
+              leadingIcon: LucideIcons.shield,
               leadingColor: const Color(0xFF5C9C88),
               onTap: () {},
             ),
@@ -165,13 +166,13 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             endActions: <HySlideAction>[
               HySlideAction(
                 label: '置顶',
-                icon: Icons.vertical_align_top_rounded,
+                icon: LucideIcons.arrowUpToLine,
                 color: const Color(0xFF6B7280),
                 onPressed: () => HyToast.show(context, '已置顶'),
               ),
               HySlideAction(
                 label: '删除',
-                icon: Icons.delete_outline_rounded,
+                icon: LucideIcons.trash,
                 onPressed: () =>
                     HyToast.show(context, '已删除', tone: HyUiTone.error),
               ),

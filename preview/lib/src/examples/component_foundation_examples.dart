@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
 // doc-region TextComponentExample
@@ -139,7 +140,7 @@ class ImageComponentExample extends StatelessWidget {
                 errorPlaceholder: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.broken_image_outlined),
+                    Icon(LucideIcons.imageOff),
                     SizedBox(height: 4),
                     HyText('加载失败', variant: HyTextStyle.hint),
                   ],
@@ -222,13 +223,13 @@ class CountBadgeComponentExample extends StatelessWidget {
             // 超过 max（默认 99）显示 99+。
             HyCountBadge(
               count: 128,
-              child: HyIcon(Icons.mail_outline_rounded, size: 32),
+              child: HyIcon(LucideIcons.mail, size: 32),
             ),
             // showZero: 数字为 0 也显示。
             HyCountBadge(
               count: 0,
               showZero: true,
-              child: HyIcon(Icons.inbox_outlined, size: 32),
+              child: HyIcon(LucideIcons.inbox, size: 32),
             ),
           ],
         ),
@@ -240,7 +241,7 @@ class CountBadgeComponentExample extends StatelessWidget {
           children: [
             HyCountBadge(
               dot: true,
-              child: HyIcon(Icons.notifications_outlined, size: 32),
+              child: HyIcon(LucideIcons.bell, size: 32),
             ),
           ],
         ),
@@ -274,12 +275,12 @@ class BadgeComponentExample extends StatelessWidget {
             HyBadge(
               label: '处理中',
               tone: HyUiTone.info,
-              icon: Icons.sync_rounded,
+              icon: LucideIcons.refreshCw,
             ),
             HyBadge(
               label: '已完成',
               tone: HyUiTone.success,
-              icon: Icons.check_rounded,
+              icon: LucideIcons.check,
             ),
             HyBadge(label: '需注意', tone: HyUiTone.warning),
             HyBadge(label: '失败', tone: HyUiTone.error),
@@ -334,7 +335,7 @@ class _TagComponentExampleState extends State<TagComponentExample> {
             HyTag(
               label: '可选标签',
               selected: _selected,
-              icon: Icons.auto_awesome_outlined,
+              icon: LucideIcons.sparkles,
               onTap: () => setState(() => _selected = !_selected),
             ),
             HyTag(
@@ -356,7 +357,7 @@ class _TagComponentExampleState extends State<TagComponentExample> {
             HyTag(
               label: '错误',
               tone: HyUiTone.error,
-              icon: Icons.error_outline_rounded,
+              icon: LucideIcons.circleAlert,
             ),
           ],
         ),
@@ -374,7 +375,7 @@ class _TagComponentExampleState extends State<TagComponentExample> {
             else
               HyTag(
                 label: '恢复',
-                icon: Icons.replay_rounded,
+                icon: LucideIcons.rotateCcw,
                 onTap: () => setState(() => _visible = true),
               ),
           ],

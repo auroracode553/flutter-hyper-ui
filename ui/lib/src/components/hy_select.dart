@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_bottom_sheet.dart';
@@ -94,7 +95,7 @@ class HySelect<T> extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              Icon(Icons.unfold_more_rounded, color: tokens.mutedForeground),
+              Icon(LucideIcons.chevronsDownUp, color: tokens.mutedForeground),
             ],
           ),
         ),
@@ -157,7 +158,7 @@ class _HySelectionPanelState<T> extends State<_HySelectionPanel<T>> {
                     ),
                   ),
                   if (selected.contains(option.value))
-                    Icon(Icons.check_rounded, size: 18, color: tokens.primary),
+                    Icon(LucideIcons.check, size: 18, color: tokens.primary),
                 ],
               ),
             ),

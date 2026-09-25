@@ -1,5 +1,6 @@
 import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class OverviewExample extends StatelessWidget {
   const OverviewExample({super.key});
@@ -15,7 +16,7 @@ class OverviewExample extends StatelessWidget {
         _OverviewTile(
           title: 'Button',
           subtitle: '动作按钮',
-          icon: Icons.touch_app_outlined,
+          icon: LucideIcons.hand,
           color: tokens.primary,
           child: HyButton.filled(
             label: '打开',
@@ -25,21 +26,21 @@ class OverviewExample extends StatelessWidget {
         _OverviewTile(
           title: 'Input',
           subtitle: '输入控件',
-          icon: Icons.edit_note_outlined,
+          icon: LucideIcons.squarePen,
           color: tokens.warning,
           child: const HyTextField(hintText: '搜索文件'),
         ),
         _OverviewTile(
           title: 'Data',
           subtitle: '数据展示',
-          icon: Icons.view_list_outlined,
+          icon: LucideIcons.list,
           color: tokens.success,
           child: const HyProgressBar(value: 0.72),
         ),
         _OverviewTile(
           title: 'Feedback',
           subtitle: '状态反馈',
-          icon: Icons.tips_and_updates_outlined,
+          icon: LucideIcons.lightbulb,
           color: tokens.info,
           child: const HyBadge(
             label: '已同步',

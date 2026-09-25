@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui' show FontFeature;
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
@@ -27,7 +28,7 @@ class HySearchBar extends StatelessWidget {
     onSubmitted: onSubmitted,
     hintText: hintText,
     enabled: enabled,
-    prefix: const Icon(Icons.search_rounded),
+    prefix: const Icon(LucideIcons.search),
   );
 }
 
@@ -180,7 +181,7 @@ class HyTimeline extends StatelessWidget {
                   child: Column(
                     children: [
                       Icon(
-                        items[i].icon ?? Icons.check_circle_rounded,
+                        items[i].icon ?? LucideIcons.circleCheckBig,
                         size: 20,
                         color: items[i].complete
                             ? tokens.primary

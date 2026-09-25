@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
@@ -68,7 +69,7 @@ class _HyNoticeBarState extends State<HyNoticeBar>
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
         children: [
-          Icon(Icons.campaign_outlined, color: tokens.primary),
+          Icon(LucideIcons.megaphone, color: tokens.primary),
           const SizedBox(width: 10),
           Expanded(
             child: LayoutBuilder(
@@ -137,7 +138,7 @@ class _HyNoticeBarState extends State<HyNoticeBar>
           ),
           if (widget.onClose != null)
             HyIconButton(
-              icon: Icons.close,
+              icon: LucideIcons.x,
               size: 28,
               iconSize: 18,
               tooltip: '关闭公告',

@@ -1,5 +1,6 @@
 import 'package:flutter_hyper_ui/hy_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class InputsExample extends StatefulWidget {
   const InputsExample({super.key});
@@ -24,24 +25,24 @@ class _InputsExampleState extends State<InputsExample> {
             HySegmentOption(
               value: 'all',
               label: '全部',
-              icon: Icons.all_inbox_outlined,
+              icon: LucideIcons.inbox,
             ),
             HySegmentOption(
               value: 'note',
               label: '文档',
-              icon: Icons.article_outlined,
+              icon: LucideIcons.fileText,
             ),
             HySegmentOption(
               value: 'sheet',
               label: '表格',
-              icon: Icons.table_chart_outlined,
+              icon: LucideIcons.table,
             ),
           ],
         ),
         const SizedBox(height: HyUiSpacing.md),
         const HyTextField(
           hintText: '输入文件名或关键词',
-          prefix: Icon(Icons.search_rounded),
+          prefix: Icon(LucideIcons.search),
         ),
         const SizedBox(height: HyUiSpacing.md),
         const HyTextField(
