@@ -193,23 +193,28 @@ export const componentGroups: ComponentGroup[] = [
     description: '玻璃表面、即时按压反馈、动作层级和内容容器。',
     page: '/components/actions',
     demos: [
-      demo('buttons', '按钮层级、尺寸与状态', 'buttons_example.dart', 360, '点击真实按钮，检查图标、加载态和不同尺寸。'),
+      demo('buttons', '按钮层级、尺寸、状态与图标按钮', 'buttons_example.dart', 360, '点击真实按钮，检查图标、加载态、胶囊圆形与不同尺寸。'),
       demo('cards', '卡片结构与选择状态', 'cards_example.dart', 520, '包含标题、状态、进度、标签和选中态。'),
     ],
     components: [
-      component('HyButton / HyButtonVariant / HyButtonSize', 'hy_button.dart', '五种视觉层级、三种尺寸、加载、禁用、图标和通栏状态。', {
+      component('HyButton / HyButtonVariant / HyButtonSize', 'hy_button.dart', '五种视觉层级、三种尺寸、加载、禁用、图标按钮和通栏状态。', {
         propsDocs: [
-          { name: 'label', description: '按钮文字' },
+          { name: 'label', description: '按钮文字；省略时配合 icon 自动呈现方形图标按钮' },
           { name: 'onPressed', description: '点击回调' },
           { name: 'variant', description: '按钮视觉层级，默认 HyButtonVariant.filled' },
           { name: 'size', description: '按钮尺寸，默认 HyButtonSize.md' },
-          { name: 'icon', description: '前置图标' },
+          { name: 'icon', description: '前置图标；label 省略时切换为图标按钮' },
           { name: 'trailingIcon', description: '后置图标' },
           { name: 'loading', description: '是否显示加载态，默认 false' },
-          { name: 'expanded', description: '是否通栏铺满，默认 false' },
+          { name: 'expanded', description: '是否通栏铺满，默认 false；不传时按内容收缩（等价 inline-block）' },
           { name: 'radius', description: '圆角大小，默认 16' },
+          { name: 'round', description: '胶囊圆角，默认 false' },
+          { name: 'circle', description: '宽高相等并取胶囊圆角，默认 false' },
+          { name: 'iconSize', description: '图标尺寸覆盖，默认按尺寸自动' },
+          { name: 'tooltip', description: '悬停或长按提示文字' },
+          { name: 'semanticLabel', description: '语义化标签，用于无障碍朗读' },
         ],
-        preview: demo('component-button', 'HyButton 状态', 'buttons_example.dart', 360, '只展示按钮的层级、尺寸和状态。'),
+        preview: demo('component-button', 'HyButton 状态', 'buttons_example.dart', 360, '展示按钮层级、尺寸、状态、图标按钮与宽度表现。'),
       }),
       component('HyIconButton', 'hy_icon_button.dart', '自绘图标按钮：HyPressable 即时反馈，支持提示文字、语义标签、背景与禁用态。', {
         propsDocs: [

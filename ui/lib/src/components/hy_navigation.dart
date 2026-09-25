@@ -127,6 +127,8 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
           radius: barHeight / 2,
           blur: 22,
           weight: HyGlassWeight.prominent,
+          // 悬浮胶囊不投射阴影，避免在浅色底栏上留下灰色光晕
+          shadows: const <BoxShadow>[],
           padding: const EdgeInsets.all(3),
           child: LayoutBuilder(
             builder: (context, constraints) {
