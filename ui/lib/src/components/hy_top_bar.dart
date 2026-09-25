@@ -7,7 +7,7 @@ import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
 import 'hy_icon_button.dart';
 
-/// 页面顶部导航栏。默认使用轻量玻璃材质并允许内容从其下方滚动经过。
+/// 页面顶部导航栏。默认透明，仅保留导航内容本身；需要玻璃背景时开启 [opaque]。
 class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
   const HyTopBar({
     super.key,
@@ -19,6 +19,7 @@ class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.automaticallyImplyLeading = true,
     this.centerTitle = false,
     this.floating = false,
+    this.opaque = false,
   });
 
   final String title;
@@ -32,12 +33,51 @@ class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
   /// 为 true 时使用四周圆角与外边距，适合沉浸式页面。
   final bool floating;
 
+  /// 为 true 时启用玻璃背景（底色 / 模糊 / 阴影）。
+  ///
+  /// 默认透明：仅保留标题与操作按钮，背景由页面底色直接透出，适合贴在
+  /// 页面同色背景上的导航场景。一般不建议开启不透明背景，仅在确实需要
+  /// 玻璃材质兜底时作为备用。
+  final bool opaque;
+
   @override
   Size get preferredSize => Size.fromHeight(subtitle == null ? 56 : 68);
 
   @override
   Widget build(BuildContext context) {
     final glass = HyGlassTheme.of(context);
+    final content = SizedBox(
+      height: preferredSize.height,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: HyUiSpacing.pagePadding,
+          vertical: HyUiSpacing.xs,
+        ),
+        child: Row(
+          children: <Widget>[
+            if (leading == null &&
+                automaticallyImplyLeading &&
+                Navigator.canPop(context))
+              _BackButton(glass: glass),
+            if (leading != null) leading!,
+            if (leading != null ||
+                (automaticallyImplyLeading && Navigator.canPop(context)))
+              const SizedBox(width: HyUiSpacing.sm),
+            Expanded(child: _buildTitle(context)),
+            if (actions.isNotEmpty) ...<Widget>[
+              const SizedBox(width: HyUiSpacing.xs),
+              Wrap(spacing: HyUiSpacing.xs, children: actions),
+            ],
+          ],
+        ),
+      ),
+    );
+
+    // 默认透明：不渲染玻璃材质，仅保留导航内容，背景由页面底色直接透出。
+    if (!opaque) {
+      return safeArea ? SafeArea(bottom: false, child: content) : content;
+    }
+
     final bar = Padding(
       padding: floating
           ? const EdgeInsets.fromLTRB(12, 8, 12, 4)
@@ -56,32 +96,7 @@ class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
                   offset: const Offset(0, 9),
                 ),
               ],
-        child: SizedBox(
-          height: preferredSize.height,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: HyUiSpacing.pagePadding,
-              vertical: HyUiSpacing.xs,
-            ),
-            child: Row(
-              children: <Widget>[
-                if (leading == null &&
-                    automaticallyImplyLeading &&
-                    Navigator.canPop(context))
-                  _BackButton(glass: glass),
-                if (leading != null) leading!,
-                if (leading != null ||
-                    (automaticallyImplyLeading && Navigator.canPop(context)))
-                  const SizedBox(width: HyUiSpacing.sm),
-                Expanded(child: _buildTitle(context)),
-                if (actions.isNotEmpty) ...<Widget>[
-                  const SizedBox(width: HyUiSpacing.xs),
-                  Wrap(spacing: HyUiSpacing.xs, children: actions),
-                ],
-              ],
-            ),
-          ),
-        ),
+        child: content,
       ),
     );
 
@@ -142,6 +157,7 @@ class HyNavBar extends HyTopBar {
     super.automaticallyImplyLeading,
     super.centerTitle,
     super.floating,
+    super.opaque,
   });
 }
 
