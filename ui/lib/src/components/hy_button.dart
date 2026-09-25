@@ -189,7 +189,6 @@ class HyButton extends StatelessWidget {
 
     final content = Container(
       height: metrics.height,
-      alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
         horizontal: isIconOnly ? 0 : metrics.horizontal,
       ),
@@ -200,20 +199,35 @@ class HyButton extends StatelessWidget {
         border: Border.all(color: visual.border),
         boxShadow: visual.shadows,
       ),
-      child: IconTheme(
-        data: IconThemeData(color: visual.foreground, size: effectiveIconSize),
-        child: isIconOnly
-            ? _buildIconOnly(visual.foreground, effectiveIconSize)
-            : DefaultTextStyle(
-                style: TextStyle(
-                  color: visual.foreground,
-                  fontSize: metrics.fontSize,
-                  fontWeight: FontWeight.w600,
-                  height: 1.2,
-                  letterSpacing: 0.05,
+      child: Align(
+        alignment: Alignment.center,
+        // widthFactor: 1 让宽度跟随内容收缩（等价 inline-block），
+        // 避免 Container 的 Align 在受限宽度下填满父级；通栏由外层 SizedBox 收紧。
+        widthFactor: 1,
+        child: IconTheme(
+          data: IconThemeData(
+            color: visual.foreground,
+            size: effectiveIconSize,
+          ),
+          child: isIconOnly
+              ? _buildIconOnly(visual.foreground, effectiveIconSize)
+              : DefaultTextStyle(
+                  style: TextStyle(
+                    color: visual.foreground,
+                    fontSize: metrics.fontSize,
+                    fontWeight: FontWeight.w600,
+                    height: 1.2,
+                    letterSpacing: 0.05,
+                  ),
+                  // 圆形（宽高相等）按钮内空间有限，文字按比例缩小而非溢出。
+                  child: isSquare
+                      ? FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: _buildContent(visual.foreground),
+                        )
+                      : _buildContent(visual.foreground),
                 ),
-                child: _buildContent(visual.foreground),
-              ),
+        ),
       ),
     );
 
