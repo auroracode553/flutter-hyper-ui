@@ -114,7 +114,7 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
     final glass = HyGlassTheme.of(context);
-    final textHeight = MediaQuery.textScalerOf(context).scale(10) * 1.1;
+    final textHeight = MediaQuery.textScalerOf(context).scale(11) * 1.1;
     final barHeight = math.max(HyTabBar.height, textHeight + 34);
 
     final bar = Padding(
@@ -125,12 +125,14 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
           radius: barHeight / 2,
           blur: 22,
           weight: HyGlassWeight.prominent,
+          padding: const EdgeInsets.all(3),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final barWidth = constraints.maxWidth;
+              // 选中背景接近整格宽度，留出细小间隙，呼应日历底栏的浅灰圆角块。
               final pillWidth = math.min(
-                60.0,
-                (barWidth / widget.items.length) - 4,
+                112.0,
+                (barWidth / widget.items.length) - 8,
               );
               return Listener(
                 behavior: HitTestBehavior.opaque,
@@ -157,9 +159,9 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
                           pressDepth: pressDepth,
                           pillWidth: pillWidth,
                           color: Color.lerp(
-                            glass.selection,
-                            glass.pressed,
-                            pressDepth,
+                            tokens.muted,
+                            Color.alphaBlend(glass.pressed, tokens.muted),
+                            pressDepth * 0.5,
                           )!,
                         ),
                         Row(
@@ -381,10 +383,8 @@ class _HyTabIndicator extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final width = pillWidth + 5 * pressDepth;
-          final height = math.min(
-            constraints.maxHeight - 4,
-            48 + 3 * pressDepth,
-          );
+          // 内容区之外还有玻璃内边距；按压放大时也保留可见的四周留白。
+          final height = constraints.maxHeight - 4 + 2 * pressDepth;
           final step = (constraints.maxWidth - pillWidth) / (itemCount - 1);
           final centerX = pillWidth / 2 + step * position;
           final left = (centerX - width / 2)
@@ -445,7 +445,7 @@ class _HyTabButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(item.icon, color: foreground, size: 18),
+            Icon(item.icon, color: foreground, size: 20),
             const SizedBox(height: 2),
             Text(
               item.label,
@@ -453,7 +453,7 @@ class _HyTabButton extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: foreground,
-                fontSize: 10,
+                fontSize: 11,
                 height: 1.1,
                 letterSpacing: 0.1,
                 fontWeight: FontWeight.lerp(
