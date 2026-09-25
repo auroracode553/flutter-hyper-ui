@@ -231,9 +231,9 @@ class TabsComponentExample extends StatelessWidget {
       children: [
         const HyTabs(
           tabs: [
-            Tab(text: '概览'),
-            Tab(text: '动态'),
-            Tab(text: '成员'),
+            Text('概览'),
+            Text('动态'),
+            Text('成员'),
           ],
         ),
         SizedBox(

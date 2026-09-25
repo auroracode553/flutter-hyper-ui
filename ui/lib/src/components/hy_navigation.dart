@@ -10,6 +10,7 @@ import '../theme/hy_ui_effects.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
 import 'hy_layout.dart';
+import 'hy_pressable.dart';
 
 class HyTabItem {
   const HyTabItem({required this.icon, required this.label});
@@ -486,34 +487,208 @@ class HyTabs extends StatelessWidget implements PreferredSizeWidget {
   final ValueChanged<int>? onTap;
 
   @override
-  Size get preferredSize => const Size.fromHeight(48);
+  Size get preferredSize => Size.fromHeight(_tabHeight + 6);
+
+  double get _tabHeight {
+    var height = 48.0;
+    for (final tab in tabs) {
+      if (tab is PreferredSizeWidget) {
+        height = math.max(height, tab.preferredSize.height);
+      }
+    }
+    return height;
+  }
 
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
-    final glass = HyGlassTheme.of(context);
+    final tabController = controller ?? DefaultTabController.of(context);
+    assert(tabController.length == tabs.length);
+    final tabHeight = _tabHeight;
+    if (tabs.isEmpty) {
+      return HyGlass(
+        radius: preferredSize.height / 2,
+        weight: HyGlassWeight.subtle,
+        child: SizedBox(height: tabHeight),
+      );
+    }
     return HyGlass(
-      radius: 24,
+      radius: preferredSize.height / 2,
       blur: 12,
       weight: HyGlassWeight.subtle,
-      padding: const EdgeInsets.all(4),
-      child: TabBar(
-        controller: controller,
-        tabs: tabs,
-        isScrollable: scrollable,
-        onTap: onTap,
-        dividerColor: Colors.transparent,
-        indicatorSize: TabBarIndicatorSize.tab,
-        indicatorPadding: const EdgeInsets.all(1),
-        indicator: BoxDecoration(
-          color: tokens.muted,
-          borderRadius: BorderRadius.circular(20),
+      padding: const EdgeInsets.all(3),
+      child: SizedBox(
+        height: tabHeight,
+        child: AnimatedBuilder(
+          animation: tabController.animation ?? tabController,
+          builder: (context, _) {
+            final position = (tabController.animation?.value ??
+                    tabController.index.toDouble())
+                .clamp(0.0, (tabs.length - 1).toDouble());
+            if (scrollable) {
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: <Widget>[
+                    for (var index = 0; index < tabs.length; index++)
+                      _buildItem(
+                        context,
+                        tabController,
+                        tokens,
+                        index,
+                        position,
+                        tabHeight,
+                        showSelection: true,
+                      ),
+                  ],
+                ),
+              );
+            }
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final itemWidth = constraints.maxWidth / tabs.length;
+                return Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    // 指示器只画一次，跟随控制器位置，不叠加旧标签的背景。
+                    Positioned(
+                      left: itemWidth * position + 2,
+                      top: 2,
+                      width: math.max(0, itemWidth - 4),
+                      height: tabHeight - 4,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: tokens.muted,
+                          borderRadius: BorderRadius.circular(tabHeight / 2),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        for (var index = 0; index < tabs.length; index++)
+                          Expanded(
+                            child: _buildItem(
+                              context,
+                              tabController,
+                              tokens,
+                              index,
+                              position,
+                              tabHeight,
+                              showSelection: false,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          },
         ),
-        labelColor: tokens.foreground,
-        unselectedLabelColor: tokens.mutedForeground,
-        labelStyle: const TextStyle(fontWeight: FontWeight.w600),
-        overlayColor: WidgetStatePropertyAll(glass.pressed),
       ),
+    );
+  }
+
+  Widget _buildItem(
+    BuildContext context,
+    TabController tabController,
+    HyUiThemeTokens tokens,
+    int index,
+    double position,
+    double tabHeight, {
+    required bool showSelection,
+  }) {
+    final selected = tabController.index == index;
+    final strength = (1 - (position - index).abs()).clamp(0.0, 1.0);
+    final foreground = Color.lerp(
+      tokens.mutedForeground,
+      tokens.foreground,
+      strength,
+    )!;
+    final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    void selectTab() {
+      tabController.animateTo(
+        index,
+        duration: reduceMotion ? Duration.zero : null,
+      );
+      onTap?.call(index);
+    }
+
+    return FocusableActionDetector(
+      shortcuts: const <ShortcutActivator, Intent>{
+        SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
+        SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),
+      },
+      actions: <Type, Action<Intent>>{
+        ActivateIntent: CallbackAction<ActivateIntent>(
+          onInvoke: (_) {
+            selectTab();
+            return null;
+          },
+        ),
+      },
+      child: Semantics(
+        selected: selected,
+        child: HyPressable(
+          onPressed: selectTab,
+          pressedScale: 0.985,
+          borderRadius: BorderRadius.circular(tabHeight / 2),
+          child: Padding(
+            padding: const EdgeInsets.all(2),
+            child: AnimatedContainer(
+              duration: reduceMotion
+                  ? Duration.zero
+                  : const Duration(milliseconds: 160),
+              curve: Curves.easeOutCubic,
+              height: tabHeight - 4,
+              constraints: showSelection
+                  ? const BoxConstraints(minWidth: 72)
+                  : null,
+              padding: EdgeInsets.symmetric(horizontal: showSelection ? 16 : 4),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: showSelection && selected
+                    ? tokens.muted
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(tabHeight / 2),
+              ),
+              child: DefaultTextStyle.merge(
+                style: TextStyle(
+                  color: foreground,
+                  fontWeight: FontWeight.lerp(
+                    FontWeight.w500,
+                    FontWeight.w600,
+                    strength,
+                  ),
+                ),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: foreground),
+                  child: _tabContent(tabs[index]),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _tabContent(Widget tab) {
+    if (tab is! Tab) return tab;
+    final label = tab.child ??
+        (tab.text == null
+            ? null
+            : Text(tab.text!, maxLines: 1, overflow: TextOverflow.ellipsis));
+    if (tab.icon == null) return label ?? const SizedBox.shrink();
+    if (label == null) return tab.icon!;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        tab.icon!,
+        const SizedBox(height: 4),
+        label,
+      ],
     );
   }
 }

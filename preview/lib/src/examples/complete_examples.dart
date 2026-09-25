@@ -154,7 +154,7 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
     ])),
     const HyCard(title: '标签与联动页面', child: SizedBox(height: 220,
       child: DefaultTabController(length: 3, child: Column(children: [
-        HyTabs(tabs: [Tab(text: '推荐'), Tab(text: '关注'), Tab(text: '收藏')]),
+        HyTabs(tabs: [Text('推荐'), Text('关注'), Text('收藏')]),
         Expanded(child: HyTabBarView(children: [Center(child: Text('为你推荐')),
           Center(child: Text('你关注的内容')), Center(child: Text('收藏的灵感'))])),
       ])))),
