@@ -131,10 +131,11 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final barWidth = constraints.maxWidth;
-              // 选中背景接近整格宽度，留出细小间隙，呼应日历底栏的浅灰圆角块。
-              final pillWidth = math.min(
-                112.0,
-                (barWidth / widget.items.length) - 8,
+              // 选中背景接近整格宽度，留出细小间隙；首帧约束宽度可能为 0，
+              // 取最小正值避免产生负宽度约束导致断言异常。
+              final pillWidth = math.max(
+                16.0,
+                math.min(112.0, (barWidth / widget.items.length) - 8),
               );
               return Listener(
                 behavior: HitTestBehavior.opaque,
@@ -386,11 +387,15 @@ class _HyTabIndicator extends StatelessWidget {
         builder: (context, constraints) {
           final width = pillWidth + 5 * pressDepth;
           // 内容区之外还有玻璃内边距；按压放大时也保留可见的四周留白。
-          final height = constraints.maxHeight - 4 + 2 * pressDepth;
+          // 首帧约束可能为 0，对高度与 clamp 上下限做最小保护避免断言异常。
+          final height = math.max(0.0, constraints.maxHeight - 4 + 2 * pressDepth);
           final step = (constraints.maxWidth - pillWidth) / (itemCount - 1);
           final centerX = pillWidth / 2 + step * position;
           final left = (centerX - width / 2)
-              .clamp(2.0, constraints.maxWidth - width - 2)
+              .clamp(
+                2.0,
+                math.max(2.0, constraints.maxWidth - width - 2),
+              )
               .toDouble();
           return Stack(
             children: <Widget>[

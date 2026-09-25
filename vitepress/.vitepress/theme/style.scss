@@ -11,3 +11,12 @@
 @use './styles/catalog';
 @use './styles/a11y';
 @use './styles/scrollbar';
+
+// Lucide 图标字体（与 flutter 端 lucide_icons_flutter 包同源，码点一致）
+@font-face {
+  font-family: 'lucide';
+  src: url('/fonts/lucide.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
