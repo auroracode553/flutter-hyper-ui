@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
 import 'hy_icon_button.dart';
@@ -45,7 +44,6 @@ class HyPagination extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
-    final glass = HyGlassTheme.of(context);
     final rtl = Directionality.of(context) == TextDirection.rtl;
 
     return SingleChildScrollView(
@@ -54,7 +52,7 @@ class HyPagination extends StatelessWidget {
         radius: 16,
         blur: 12,
         weight: HyGlassWeight.subtle,
-        padding: const EdgeInsets.all(3),
+        padding: const EdgeInsets.all(4),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -101,7 +99,7 @@ class HyPagination extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 6),
                             decoration: BoxDecoration(
                               color: number == page
-                                  ? glass.selection
+                                  ? tokens.muted
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(11),
                             ),

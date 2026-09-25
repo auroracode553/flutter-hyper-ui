@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
 import 'hy_pressable.dart';
@@ -60,7 +59,7 @@ class HyDropdown<T> extends StatelessWidget {
                   radius: 18,
                   blur: 28,
                   weight: HyGlassWeight.prominent,
-                  padding: const EdgeInsets.all(6),
+                  padding: const EdgeInsets.all(5),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(maxHeight: menuMaxHeight),
                     child: options.isEmpty
@@ -174,7 +173,6 @@ class _DropdownOption<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
-    final glass = HyGlassTheme.of(context);
     return HyPressable(
       onPressed: option.enabled
           ? () {
@@ -185,7 +183,7 @@ class _DropdownOption<T> extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: Container(
         decoration: BoxDecoration(
-          color: selected ? glass.selection : Colors.transparent,
+          color: selected ? tokens.muted : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),

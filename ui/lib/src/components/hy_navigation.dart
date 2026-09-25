@@ -504,8 +504,9 @@ class HyTabs extends StatelessWidget implements PreferredSizeWidget {
         onTap: onTap,
         dividerColor: Colors.transparent,
         indicatorSize: TabBarIndicatorSize.tab,
+        indicatorPadding: const EdgeInsets.all(1),
         indicator: BoxDecoration(
-          color: glass.selection,
+          color: tokens.muted,
           borderRadius: BorderRadius.circular(20),
         ),
         labelColor: tokens.foreground,

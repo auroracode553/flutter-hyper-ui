@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../theme/hy_ui_radii.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
-import '../theme/hy_glass_theme.dart';
 import 'hy_glass.dart';
 import 'hy_pressable.dart';
 
@@ -76,13 +75,12 @@ class _HySegmentItem<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
-    final glass = HyGlassTheme.of(context);
     final foreground = selected
         ? tokens.foreground
         : option.enabled
         ? tokens.foreground
         : tokens.mutedForeground;
-    final background = selected ? glass.selection : Colors.transparent;
+    final background = selected ? tokens.muted : Colors.transparent;
 
     return HyPressable(
       onPressed: option.enabled ? () => onSelected(option.value) : null,

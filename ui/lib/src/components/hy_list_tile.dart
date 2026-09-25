@@ -45,14 +45,14 @@ class HyListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
     final glass = HyGlassTheme.of(context);
-    final radius = BorderRadius.circular(grouped ? 12 : 18);
+    final radius = BorderRadius.circular(grouped ? 12 : 15);
     final row = AnimatedContainer(
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
       constraints: const BoxConstraints(minHeight: 46),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: selected ? glass.selection : Colors.transparent,
+        color: selected ? tokens.muted : Colors.transparent,
         borderRadius: radius,
       ),
       child: Row(
@@ -137,6 +137,7 @@ class HyListTile extends StatelessWidget {
       radius: 18,
       blur: 14,
       weight: HyGlassWeight.regular,
+      padding: const EdgeInsets.all(3),
       onTap: enabled ? onTap : null,
       color: selected ? glass.surfaceStrong : null,
       borderColor: selected ? tokens.primary.withAlpha(90) : null,
