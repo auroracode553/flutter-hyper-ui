@@ -211,6 +211,8 @@ class HyRate extends StatelessWidget {
                     ? null
                     : () => onChanged!(index + 1.0),
                 color: tokens.warning,
+                // 星星是评分图标而非按钮，保持无背景。
+                backgroundColor: Colors.transparent,
               ),
             ),
           ),

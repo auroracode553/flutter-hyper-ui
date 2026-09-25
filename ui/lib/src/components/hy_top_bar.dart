@@ -58,7 +58,7 @@ class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
             if (leading == null &&
                 automaticallyImplyLeading &&
                 Navigator.canPop(context))
-              _BackButton(glass: glass),
+              const _BackButton(),
             if (leading != null) leading!,
             if (leading != null ||
                 (automaticallyImplyLeading && Navigator.canPop(context)))
@@ -162,17 +162,15 @@ class HyNavBar extends HyTopBar {
 }
 
 class _BackButton extends StatelessWidget {
-  const _BackButton({required this.glass});
-
-  final HyGlassTheme glass;
+  const _BackButton();
 
   @override
   Widget build(BuildContext context) {
+    // 背景使用 HyIconButton 默认的白色玻璃表面，不再单独传色。
     return HyIconButton(
       icon: LucideIcons.chevronLeft,
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       onPressed: () => Navigator.maybePop(context),
-      backgroundColor: glass.selection,
     );
   }
 }

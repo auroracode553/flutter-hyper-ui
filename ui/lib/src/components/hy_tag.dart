@@ -71,6 +71,8 @@ class HyTag extends StatelessWidget {
                 color: foreground,
                 tooltip: '移除 $label',
                 onPressed: onClose,
+                // 标签内的移除按钮保持透明，避免在标签上叠加玻璃圆钮。
+                backgroundColor: Colors.transparent,
               ),
           ],
         ),

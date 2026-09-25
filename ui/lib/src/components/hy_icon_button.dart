@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_radii.dart';
 import 'hy_pressable.dart';
 import 'hy_tooltip.dart';
 
 /// 自绘图标按钮。
 ///
-/// 使用 [HyPressable] 提供即时按压反馈，不依赖 Material 墨水波纹，
-/// 与玻璃拟态设计语言保持一致。
+/// 默认使用白色玻璃表面（[HyGlassTheme.surface]）作为背景，与玻璃拟态
+/// 设计语言保持一致；需要无背景的纯图标按钮时请显式传
+/// `backgroundColor: Colors.transparent`。
 class HyIconButton extends StatelessWidget {
   const HyIconButton({
     super.key,
@@ -29,21 +31,28 @@ class HyIconButton extends StatelessWidget {
   final double size;
   final double iconSize;
   final Color? color;
+
+  /// 背景色，默认使用玻璃表面色（浅色 = 白色玻璃，深色 = 深色玻璃）。
+  /// 显式传值可覆盖默认玻璃样式。
   final Color? backgroundColor;
   final double radius;
 
   @override
   Widget build(BuildContext context) {
     final enabled = onPressed != null;
+    final glass = HyGlassTheme.of(context);
     final effectiveColor =
         color ?? Theme.of(context).colorScheme.onSurfaceVariant;
+    final effectiveBackground = backgroundColor ?? glass.surface;
+    final effectiveBorder = Color.alphaBlend(glass.edgeShade, glass.edgeHighlight);
     Widget child = Container(
       width: size,
       height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: effectiveBackground,
         borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: effectiveBorder),
       ),
       child: Icon(icon, size: iconSize, color: effectiveColor),
     );
