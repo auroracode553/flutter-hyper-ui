@@ -276,7 +276,7 @@ class _HyUploaderState extends State<HyUploader> {
                         label: item.status == HyUploadStatus.error
                             ? '失败 · 重试'
                             : '上传',
-                        size: HyButtonSize.sm,
+                        height: 32,
                         onPressed: widget.enabled
                             ? () => _send(item.file)
                             : null,

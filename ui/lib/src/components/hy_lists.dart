@@ -248,7 +248,7 @@ class _HyLoadMoreState extends State<HyLoadMore> {
         else if (_error != null)
           HyButton.ghost(
             label: '加载失败，点击重试',
-            size: HyButtonSize.sm,
+            height: 32,
             onPressed: _load,
           )
         else if (!widget.hasMore)
@@ -256,7 +256,7 @@ class _HyLoadMoreState extends State<HyLoadMore> {
         else
           HyButton.ghost(
             label: '加载更多',
-            size: HyButtonSize.sm,
+            height: 32,
             onPressed: _load,
           ),
       ],

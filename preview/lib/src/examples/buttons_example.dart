@@ -18,7 +18,7 @@ class ButtonsExample extends StatelessWidget {
           children: [
             HyButton.filled(
               label: '小按钮',
-              size: HyButtonSize.sm,
+              height: 32,
               onPressed: _noop,
             ),
             HyButton.filled(

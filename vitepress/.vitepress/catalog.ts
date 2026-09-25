@@ -197,20 +197,20 @@ export const componentGroups: ComponentGroup[] = [
       demo('cards', '卡片结构与选择状态', 'cards_example.dart', 520, '包含标题、状态、进度、标签和选中态。'),
     ],
     components: [
-      component('HyButton / HyButtonVariant / HyButtonSize', 'hy_button.dart', '五种视觉层级、三种尺寸、加载、禁用、图标按钮和通栏状态。', {
+      component('HyButton / HyButtonVariant', 'hy_button.dart', '五种视觉层级（具名构造 filled/tonal/outline/ghost/danger 优先）、高度数值可调、加载、禁用、图标按钮和通栏状态。', {
         propsDocs: [
           { name: 'label', description: '按钮文字；省略时配合 icon 自动呈现方形图标按钮' },
-          { name: 'onPressed', description: '点击回调' },
-          { name: 'variant', description: '按钮视觉层级，默认 HyButtonVariant.filled' },
-          { name: 'size', description: '按钮尺寸，默认 HyButtonSize.md' },
+          { name: 'onPressed', description: '点击回调；为 null 时按钮进入禁用态' },
+          { name: 'variant', description: '视觉层级，默认 HyButtonVariant.filled；程序化切换时使用，声明式场景建议用下方具名构造' },
+          { name: 'height', description: '按钮高度（px），默认 38；字号、内边距、图标尺寸随高度联动推导' },
           { name: 'icon', description: '前置图标；label 省略时切换为图标按钮' },
           { name: 'trailingIcon', description: '后置图标' },
-          { name: 'loading', description: '是否显示加载态，默认 false' },
+          { name: 'loading', description: '是否显示加载态，默认 false；加载期间禁止点击' },
           { name: 'expanded', description: '是否通栏铺满，默认 false；不传时按内容收缩（等价 inline-block）' },
-          { name: 'radius', description: '圆角大小，默认 16' },
+          { name: 'radius', description: '圆角大小，默认 HyUiRadii.sm（16）；round/circle 为 true 时忽略，恒取高度一半' },
           { name: 'round', description: '胶囊圆角，默认 false' },
           { name: 'circle', description: '宽高相等并取胶囊圆角，默认 false' },
-          { name: 'iconSize', description: '图标尺寸覆盖，默认按尺寸自动' },
+          { name: 'iconSize', description: '图标尺寸覆盖，默认随高度联动' },
           { name: 'tooltip', description: '悬停或长按提示文字' },
           { name: 'semanticLabel', description: '语义化标签，用于无障碍朗读' },
         ],

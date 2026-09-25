@@ -3,34 +3,42 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../theme/hy_glass_theme.dart';
+import '../theme/hy_ui_radii.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_pressable.dart';
 import 'hy_tooltip.dart';
 
+/// 按钮视觉层级。filled / tonal / outline / ghost 视觉重量依次递减，
+/// danger 为危险语义的红色强调（等效 filled 层级的红）。
 enum HyButtonVariant { filled, tonal, outline, ghost, danger }
-
-enum HyButtonSize { sm, md, lg }
 
 /// 通用柔性玻璃按钮。
 ///
 /// 各变体共享相同尺寸、触控反馈和无障碍行为；颜色仅表达动作层级，不绑定业务。
 ///
-/// 宽度默认按内容收缩（等价 CSS 的 inline-block），需要铺满父级时传
-/// [expanded]。仅提供 [icon] 而不传 [label] 时自动呈现为方形图标按钮，
-/// 也可以直接用 [HyButton.icon] 构造；[round] / [circle] 控制胶囊与圆形外观。
+/// 属性约定：
+/// - 变体优先使用具名构造 `HyButton.filled / tonal / outline / ghost / danger`，
+///   需要程序化切换时才用底层 [variant] 参数。
+/// - 高度用数值 [height] 控制（默认 38），字号、内边距与图标尺寸随高度联动推导，
+///   不需要枚举档位；更小/更大的按钮直接传对应像素值。
+/// - 宽度默认按内容收缩（等价 CSS 的 inline-block），需要铺满父级时传 [expanded]。
+/// - 仅提供 [icon] 而不传 [label] 时自动呈现方形图标按钮，也可直接用
+///   [HyButton.icon] 构造；[round] 取胶囊圆角、[circle] 强制宽高相等并取胶囊圆角，
+///   二者为 true 时忽略 [radius]（圆角恒为高度的一半）。
+/// - 图标尺寸默认随 [height] 联动，[iconSize] 可覆盖。
 class HyButton extends StatelessWidget {
   const HyButton({
     super.key,
     this.label,
     this.onPressed,
     this.variant = HyButtonVariant.filled,
-    this.size = HyButtonSize.md,
+    this.height = 38,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.radius = 16,
+    this.radius = HyUiRadii.sm,
     this.round = false,
     this.circle = false,
     this.iconSize,
@@ -47,9 +55,9 @@ class HyButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.variant = HyButtonVariant.filled,
-    this.size = HyButtonSize.md,
+    this.height = 38,
     this.loading = false,
-    this.radius = 16,
+    this.radius = HyUiRadii.sm,
     this.round = false,
     this.circle = false,
     this.iconSize,
@@ -63,12 +71,12 @@ class HyButton extends StatelessWidget {
     super.key,
     this.label,
     this.onPressed,
-    this.size = HyButtonSize.md,
+    this.height = 38,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.radius = 16,
+    this.radius = HyUiRadii.sm,
     this.round = false,
     this.circle = false,
     this.iconSize,
@@ -80,12 +88,12 @@ class HyButton extends StatelessWidget {
     super.key,
     this.label,
     this.onPressed,
-    this.size = HyButtonSize.md,
+    this.height = 38,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.radius = 16,
+    this.radius = HyUiRadii.sm,
     this.round = false,
     this.circle = false,
     this.iconSize,
@@ -97,12 +105,12 @@ class HyButton extends StatelessWidget {
     super.key,
     this.label,
     this.onPressed,
-    this.size = HyButtonSize.md,
+    this.height = 38,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.radius = 16,
+    this.radius = HyUiRadii.sm,
     this.round = false,
     this.circle = false,
     this.iconSize,
@@ -114,12 +122,12 @@ class HyButton extends StatelessWidget {
     super.key,
     this.label,
     this.onPressed,
-    this.size = HyButtonSize.md,
+    this.height = 38,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.radius = 16,
+    this.radius = HyUiRadii.sm,
     this.round = false,
     this.circle = false,
     this.iconSize,
@@ -131,12 +139,12 @@ class HyButton extends StatelessWidget {
     super.key,
     this.label,
     this.onPressed,
-    this.size = HyButtonSize.md,
+    this.height = 38,
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.radius = 16,
+    this.radius = HyUiRadii.sm,
     this.round = false,
     this.circle = false,
     this.iconSize,
@@ -147,7 +155,7 @@ class HyButton extends StatelessWidget {
   final String? label;
   final VoidCallback? onPressed;
   final HyButtonVariant variant;
-  final HyButtonSize size;
+  final double height;
   final IconData? icon;
   final IconData? trailingIcon;
   final bool loading;
@@ -165,7 +173,7 @@ class HyButton extends StatelessWidget {
     final glass = HyGlassTheme.of(context);
     final disabled = onPressed == null;
     final blocked = disabled || loading;
-    final metrics = _HyButtonMetrics.resolve(size);
+    final metrics = _HyButtonMetrics.fromHeight(height);
     final hasLabel = label != null && label!.isNotEmpty;
     final isIconOnly = !hasLabel && (icon != null || loading);
     assert(
@@ -183,9 +191,9 @@ class HyButton extends StatelessWidget {
     // round / circle 取胶囊圆角；其余用显式 radius。
     final effectiveRadius = (round || circle) ? metrics.height / 2 : radius;
     final borderRadius = BorderRadius.circular(effectiveRadius);
-    // 图标按钮的图标随尺寸放大，带文字时保持既有 17 号图标。
+    // 图标按钮的图标随尺寸放大，带文字时按档位取 labelIconSize。
     final effectiveIconSize =
-        iconSize ?? (isIconOnly ? metrics.iconOnlyIconSize : 17);
+        iconSize ?? (isIconOnly ? metrics.iconOnlyIconSize : metrics.labelIconSize);
 
     final content = Container(
       height: metrics.height,
@@ -312,6 +320,7 @@ class _HyButtonMetrics {
     required this.horizontal,
     required this.fontSize,
     required this.iconOnlyIconSize,
+    required this.labelIconSize,
   });
 
   final double height;
@@ -319,30 +328,23 @@ class _HyButtonMetrics {
   final double horizontal;
   final double fontSize;
   final double iconOnlyIconSize;
+  /// 带文字时前置/后置图标的默认尺寸，随字号联动。
+  final double labelIconSize;
 
-  static _HyButtonMetrics resolve(HyButtonSize size) => switch (size) {
-    HyButtonSize.sm => const _HyButtonMetrics(
-      height: 32,
-      minWidth: 52,
-      horizontal: 10,
-      fontSize: 12,
-      iconOnlyIconSize: 18,
-    ),
-    HyButtonSize.md => const _HyButtonMetrics(
-      height: 38,
-      minWidth: 68,
-      horizontal: 14,
-      fontSize: 13,
-      iconOnlyIconSize: 20,
-    ),
-    HyButtonSize.lg => const _HyButtonMetrics(
-      height: 44,
-      minWidth: 82,
-      horizontal: 18,
-      fontSize: 14,
-      iconOnlyIconSize: 22,
-    ),
-  };
+  /// 由数值高度推导整套尺寸指标（以 38px 为基准档）：
+  /// 字号与带文字图标每 6px 高度步进 1，图标按钮图标每 6px 步进 2，
+  /// 水平内边距每 6px 步进 4，最小宽度每 6px 步进 15。
+  static _HyButtonMetrics fromHeight(double height) {
+    final d = height - 38;
+    return _HyButtonMetrics(
+      height: height,
+      minWidth: 68 + d * 2.5,
+      horizontal: 14 + d * 2 / 3,
+      fontSize: 13 + d / 6,
+      iconOnlyIconSize: 20 + d / 3,
+      labelIconSize: 17 + d / 6,
+    );
+  }
 }
 
 class _HyButtonVisual {
