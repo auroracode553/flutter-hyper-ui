@@ -45,6 +45,41 @@ MaterialApp(
 );
 ```
 
+## 接入与发布
+
+组件库的发布物就是本仓库的 `ui/` 包（包名 `flutter_hyper_ui`），通过 `package:flutter_hyper_ui/hy_ui.dart` 引用。支持本地调试与 Git 依赖两种接入方式。
+
+### 本地调试（推荐开发期使用）
+
+在消费项目（如应用 App）的 `pubspec.yaml` 中通过 path 依赖指向本仓库的 `ui` 目录：
+
+```yaml
+dependencies:
+  flutter_hyper_ui:
+    path: ../flutter-hyper-ui/ui   # 按消费项目与本仓库的实际相对路径调整
+```
+
+- 执行 `flutter pub get` 后即可 `import 'package:flutter_hyper_ui/hy_ui.dart';` 使用全部 Hy 组件。
+- 修改本仓库 `ui/lib` 下的组件源码后，回到消费项目热重载 / 热重启即可即时生效，无需发布。
+- 版本要求：Flutter >= 3.32、Dart >= 3.8，与消费项目 SDK 约束兼容即可。
+
+### 发布共享（推荐团队 / 多项目使用）
+
+将本仓库推送到 Git 远程仓库（GitHub / GitLab 私有仓库等），消费项目改用 Git 依赖，并通过 tag 锁定版本：
+
+```yaml
+dependencies:
+  flutter_hyper_ui:
+    git:
+      url: https://github.com/<org>/flutter-hyper-ui.git
+      path: ui            # 包位于仓库 ui 子目录，必须指定
+      ref: v0.2.0         # 发布版本时打 tag，消费端用 ref 锁定
+```
+
+版本发布流程：组件稳定后打 tag（如 `v0.2.0`），消费项目将 `ref` 指向对应 tag；日常迭代仍建议用本地 path 依赖开发，稳定后再切回 Git 依赖。两者互不冲突，`flutter pub get` 一次即可切换。
+
+组件库定位为私有包（`publish_to: 'none'`）。若后续需要公开到 pub.dev 或接入私有 pub 源做严格版本治理，需另行调整发布策略。
+
 ## 文档预览方案
 
 文档采用 **VitePress + Flutter Web + 官方 DOM 多视图嵌入**。开发模式由 Vite 将 `/preview` 同源代理到 Flutter Debug 服务；默认使用 AMD 调试模块，保存 Dart 后热重启，避免 DDC 在入口阶段加载整套模块。设置 `HY_UI_PREVIEW_AMD=0` 可恢复 DDC 热重载；release 模式读取文档站自己的静态预览包。两种模式都不使用 iframe。
