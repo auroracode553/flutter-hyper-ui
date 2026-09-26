@@ -683,16 +683,17 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-nav-bar', 'HyNavBar 顶部导航', 'component_navigation_examples.dart', 300, '基础（返回 + 居中标题）与悬浮模式。', 'NavBarComponentExample'),
       }),
-      component('HyTabBar / HyTabItem', 'hy_navigation.dart', '支持拖拽、速度投影、弹簧吸附、RTL 与安全区的悬浮导航。', {
+      component('HyTabBar / HyTabItem', 'hy_tab_bar.dart', '透明水珠按压与拖动放大、绿色选中态、释放吸附的悬浮底栏。', {
         propsDocs: [
           { name: 'items', description: '导航项列表' },
           { name: 'selectedIndex', description: '当前选中索引' },
           { name: 'onSelected', description: '选中回调' },
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
           { name: 'enableHaptics', description: '是否启用触感反馈，默认 true' },
+          { name: 'activeColor', description: '选中图文颜色，默认绿色' },
           { name: 'margin', description: '外边距' },
         ],
-        preview: demo('component-tab-bar', 'HyTabBar 底部导航', 'component_navigation_examples.dart', 320, '拖动或点击胶囊切换当前项。', 'TabBarComponentExample'),
+        preview: demo('component-tab-bar', 'HyTabBar 底部导航', 'component_navigation_examples.dart', 320, '长按并拖动，观察水珠放大、跟手和收回。', 'TabBarComponentExample'),
       }),
       component('HyTabs / HyTabBarView', 'hy_navigation.dart', '共享 TabController 的标签与页面联动。', {
         propsDocs: [

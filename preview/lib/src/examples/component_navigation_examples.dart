@@ -71,16 +71,17 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
       children: [
         SizedBox(
           height: 150,
-          child: Center(child: Text('当前页面：${['首页', '发现', '我的'][_index]}')),
+          child: Center(child: Text('当前页面：${['首页', '数码', '发现', '我的'][_index]}')),
         ),
         HyTabBar(
           safeArea: false,
           selectedIndex: _index,
           onSelected: (index) => setState(() => _index = index),
           items: const [
-            HyTabItem(icon: LucideIcons.house, label: '首页'),
-            HyTabItem(icon: LucideIcons.compass, label: '发现'),
-            HyTabItem(icon: LucideIcons.user, label: '我的'),
+            HyTabItem(icon: Icons.home_rounded, label: '首页'),
+            HyTabItem(icon: Icons.smartphone_rounded, label: '数码'),
+            HyTabItem(icon: Icons.explore_rounded, label: '发现'),
+            HyTabItem(icon: Icons.person_rounded, label: '我的'),
           ],
         ),
       ],

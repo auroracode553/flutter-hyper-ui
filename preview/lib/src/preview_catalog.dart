@@ -299,7 +299,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-tab-bar',
       title: 'HyTabBar',
-      description: '可点击和拖拽的底部导航。',
+      description: '长按展开透明水珠，拖动放大并在释放后吸附。',
       loadLibrary: () => example_component_navigation_examples.loadLibrary(),
       builder: (_) => example_component_navigation_examples.TabBarComponentExample(),
     ),
