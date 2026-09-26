@@ -30,7 +30,7 @@ abstract final class HyToast {
           backgroundColor: Colors.transparent,
           elevation: 0,
           padding: EdgeInsets.zero,
-          margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 96),
           behavior: SnackBarBehavior.floating,
           dismissDirection: DismissDirection.down,
           content: HyGlass(

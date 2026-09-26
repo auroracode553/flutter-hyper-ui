@@ -36,7 +36,8 @@ class HyTabBar extends StatefulWidget {
   }) : assert(items.length >= 2),
        assert(selectedIndex >= 0 && selectedIndex < items.length);
 
-  static const double height = 50;
+  /// 胶囊本体高度（不含外部安全区与边距）；内边距、圆角随其自动推导。
+  static const double height = 56;
 
   final List<HyTabItem> items;
   final int selectedIndex;
@@ -116,7 +117,7 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
     final glass = HyGlassTheme.of(context);
-    final textHeight = MediaQuery.textScalerOf(context).scale(11) * 1.1;
+    final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.1;
     final barHeight = math.max(HyTabBar.height, textHeight + 34);
 
     final bar = Padding(
@@ -133,11 +134,13 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final barWidth = constraints.maxWidth;
-              // 选中背景接近整格宽度，留出细小间隙；首帧约束宽度可能为 0，
-              // 取最小正值避免产生负宽度约束导致断言异常。
+              // 选中胶囊呈长胶囊（药丸）状：宽约为单格宽度的 1.2 倍（略伸入
+              // 相邻格，横长而非椭圆），高度保持与内容区等高由指示器推导；
+              // 用上限控制最大宽度，避免标签少时胶囊过宽。首帧约束宽度可能为
+              // 0，取最小正值避免产生负宽度约束导致断言异常。
               final pillWidth = math.max(
                 16.0,
-                math.min(112.0, (barWidth / widget.items.length) - 8),
+                math.min(110.0, (barWidth / widget.items.length) * 1.2),
               );
               return Listener(
                 behavior: HitTestBehavior.opaque,
@@ -155,14 +158,31 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
                     final pressDepth = Curves.easeOutCubic.transform(
                       _pressDepth.value,
                     );
+                    // 胶囊几何在此统一计算：所有菜单胶囊等长（不因贴边收窄），
+                    // 首尾格通过菜单排列微调（_contentShift）保证胶囊居中，文字
+                    // 始终按各自位置渲染、选中时不发生位移。
+                    final width = pillWidth + 5 * pressDepth;
+                    final height = math.max(
+                      0.0,
+                      constraints.maxHeight - 4 + 2 * pressDepth,
+                    );
+                    final step = _step(barWidth, pillWidth);
+                    final firstCenter = _firstCenter(pillWidth);
+                    final centerX = firstCenter + step * position;
+                    final left = (centerX - width / 2)
+                        .clamp(
+                          2.0,
+                          math.max(2.0, barWidth - width - 2),
+                        )
+                        .toDouble();
                     return Stack(
                       fit: StackFit.expand,
                       children: <Widget>[
                         _HyTabIndicator(
-                          position: position,
-                          itemCount: widget.items.length,
-                          pressDepth: pressDepth,
-                          pillWidth: pillWidth,
+                          left: left,
+                          top: (constraints.maxHeight - height) / 2,
+                          width: width,
+                          height: height,
                           color: Color.lerp(
                             tokens.muted,
                             Color.alphaBlend(glass.pressed, tokens.muted),
@@ -178,21 +198,27 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
                               visual < widget.items.length;
                               visual++
                             )
-                              SizedBox(
-                                width: pillWidth,
-                                child: _HyTabButton(
-                                  item: widget.items[_logicalIndex(visual)],
-                                  selected:
-                                      widget.selectedIndex ==
-                                      _logicalIndex(visual),
-                                  selectionStrength:
-                                      (1 - (position - visual).abs()).clamp(
-                                        0.0,
-                                        1.0,
-                                      ),
-                                  activeColor: tokens.foreground,
-                                  inactiveColor: tokens.mutedForeground,
-                                  onTap: () => _selectFromSemantics(visual),
+                              Expanded(
+                                child: Transform.translate(
+                                  // 菜单按胶囊中心排列微调，保证各胶囊等长且居中
+                                  offset: Offset(
+                                    _contentShift(barWidth, pillWidth, visual),
+                                    0,
+                                  ),
+                                  child: _HyTabButton(
+                                    item: widget.items[_logicalIndex(visual)],
+                                    selected:
+                                        widget.selectedIndex ==
+                                        _logicalIndex(visual),
+                                    selectionStrength:
+                                        (1 - (position - visual).abs()).clamp(
+                                          0.0,
+                                          1.0,
+                                        ),
+                                    activeColor: tokens.foreground,
+                                    inactiveColor: tokens.mutedForeground,
+                                    onTap: () => _selectFromSemantics(visual),
+                                  ),
                                 ),
                               ),
                           ],
@@ -240,7 +266,7 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
       pillWidth,
     );
     final centerX =
-        pillWidth / 2 + _step(barWidth, pillWidth) * visual.toDouble();
+        _firstCenter(pillWidth) + _step(barWidth, pillWidth) * visual.toDouble();
     _activePointer = event.pointer;
     _grabOffsetX = event.localPosition.dx - centerX;
     _velocityTracker = VelocityTracker.withKind(event.kind)
@@ -261,7 +287,7 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
     if (_activePointer != event.pointer || barWidth <= 0) return;
     _velocityTracker?.addPosition(event.timeStamp, event.localPosition);
     final step = _step(barWidth, pillWidth);
-    final firstCenter = pillWidth / 2;
+    final firstCenter = _firstCenter(pillWidth);
     final desiredCenter = event.localPosition.dx - _grabOffsetX;
     final visualCenter = _applyHorizontalResistance(
       desiredCenter,
@@ -337,12 +363,26 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
   }
 
   int _nearestVisualIndex(double x, double barWidth, double pillWidth) {
-    final position = (x - pillWidth / 2) / _step(barWidth, pillWidth);
+    final position =
+        (x - _firstCenter(pillWidth)) / _step(barWidth, pillWidth);
     return position.round().clamp(0, widget.items.length - 1).toInt();
   }
 
+  /// 首格中心：胶囊一半 + 贴边呼吸 4px；末格对称，两端胶囊等长且居中。
+  double _firstCenter(double pillWidth) => pillWidth / 2 + 4;
+
+  /// 相邻菜单中心间距：为两端胶囊预留放置空间后均分剩余宽度。
   double _step(double barWidth, double pillWidth) {
-    return math.max(1, (barWidth - pillWidth) / (widget.items.length - 1));
+    return math.max(1, (barWidth - pillWidth - 8) / (widget.items.length - 1));
+  }
+
+  /// 第 [visual] 个菜单相对等分格的横向微调：菜单中心对齐胶囊中心。
+  double _contentShift(double barWidth, double pillWidth, int visual) {
+    final cellStep = barWidth / widget.items.length;
+    final target =
+        _firstCenter(pillWidth) + _step(barWidth, pillWidth) * visual.toDouble();
+    final current = cellStep * visual + cellStep / 2;
+    return target - current;
   }
 
   static double _applyHorizontalResistance(
@@ -369,53 +409,37 @@ class _HyTabBarState extends State<HyTabBar> with TickerProviderStateMixin {
 
 class _HyTabIndicator extends StatelessWidget {
   const _HyTabIndicator({
-    required this.position,
-    required this.itemCount,
-    required this.pressDepth,
-    required this.pillWidth,
+    required this.left,
+    required this.top,
+    required this.width,
+    required this.height,
     required this.color,
   });
 
-  final double position;
-  final int itemCount;
-  final double pressDepth;
-  final double pillWidth;
+  final double left;
+  final double top;
+  final double width;
+  final double height;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final width = pillWidth + 5 * pressDepth;
-          // 内容区之外还有玻璃内边距；按压放大时也保留可见的四周留白。
-          // 首帧约束可能为 0，对高度与 clamp 上下限做最小保护避免断言异常。
-          final height = math.max(0.0, constraints.maxHeight - 4 + 2 * pressDepth);
-          final step = (constraints.maxWidth - pillWidth) / (itemCount - 1);
-          final centerX = pillWidth / 2 + step * position;
-          final left = (centerX - width / 2)
-              .clamp(
-                2.0,
-                math.max(2.0, constraints.maxWidth - width - 2),
-              )
-              .toDouble();
-          return Stack(
-            children: <Widget>[
-              Positioned(
-                left: left,
-                top: (constraints.maxHeight - height) / 2,
-                width: width,
-                height: height,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(height / 2),
-                  ),
-                ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            left: left,
+            top: top,
+            width: width,
+            height: height,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(height / 2),
               ),
-            ],
-          );
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -454,7 +478,7 @@ class _HyTabButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(item.icon, color: foreground, size: 20),
+            Icon(item.icon, color: foreground, size: 22),
             const SizedBox(height: 2),
             Text(
               item.label,
@@ -462,7 +486,7 @@ class _HyTabButton extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: foreground,
-                fontSize: 11,
+                fontSize: 12,
                 height: 1.1,
                 letterSpacing: 0.1,
                 fontWeight: FontWeight.lerp(
