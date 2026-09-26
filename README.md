@@ -15,10 +15,10 @@ Hy UI 是独立、无业务依赖的通用组件库。视觉语言以克制的�
 
 ## 通用组件
 
-- 导航：`HyTabBar`、`HyTabs`、`HyNavBar`、`HyDrawer`、`HyBottomSheet`。
+- 导航：`HyTabBar`、`HyTabs`、`HyNavBar`、`HyDrawer`、`HyActionSheet`。
 - 操作：`HyButton`、`HySlideMenu`、`HyPopupMenu`、`HySegmentedControl`。
 - 表单：`HyTextField`、`HySwitch`、`HyCheckbox`、`HyRadio`、`HySlider`、`HySelect`、`HyDropdown`。
-- 数据与菜单：`HyList`、`HyListTile`、`HyMenuList`、`HyMenuGroup`、`HyCard`。
+- 数据与菜单：`HyBadge`（含 `.tag` / `.count`）、`HyProgress`、`HyListTile`、`HyMenuGroup`、`HyCard`。
 - 反馈：`HyToast`、`HyDialog`、`HyAlert`、`HyLoading`、`HySkeleton`。
 
 所有组件均为受控或回调驱动，不读取业务状态、不内置路由名称、不依赖第三方状态管理方案。

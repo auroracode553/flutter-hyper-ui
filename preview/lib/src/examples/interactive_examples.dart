@@ -26,7 +26,7 @@ class _OverlayExampleState extends State<OverlayExample> {
       const HyAlert(message: '连接失败，请稍后重试。', tone: HyUiTone.error),
       HyCard(
         title: '轻提示',
-        child: HyWrap(
+        child: Wrap(spacing: 8, runSpacing: 8,
           children: [
             for (final tone in [
               HyUiTone.neutral,
@@ -54,7 +54,7 @@ class _OverlayExampleState extends State<OverlayExample> {
       ),
       HyCard(
         title: '弹层与操作',
-        child: HyWrap(
+        child: Wrap(spacing: 8, runSpacing: 8,
           children: [
             HyButton.tonal(
               label: '确认弹窗',
@@ -80,7 +80,7 @@ class _OverlayExampleState extends State<OverlayExample> {
             ),
             HyButton.tonal(
               label: '自定义底部弹窗',
-              onPressed: () => HyBottomSheet.show<void>(
+              onPressed: () => HyActionSheet.show<void>(
                 context,
                 title: '本周灵感',
                 builder: (_) => const HySpace(
@@ -164,7 +164,11 @@ class _BusinessExampleState extends State<BusinessExample> {
     alignment: CrossAxisAlignment.stretch,
     children: [
       const HyText('日常，由细节组成', variant: HyTextStyle.title),
-      HySearchBar(onChanged: (value) => setState(() => _query = value)),
+      HyTextField(
+        prefix: const Icon(LucideIcons.search),
+        hintText: '搜索',
+        onChanged: (value) => setState(() => _query = value),
+      ),
       if (_query.isNotEmpty) Text('正在搜索：$_query'),
       if (_notice)
         HyNoticeBar(

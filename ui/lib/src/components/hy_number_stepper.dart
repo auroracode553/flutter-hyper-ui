@@ -6,7 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
-import 'hy_icon_button.dart';
+import 'hy_button.dart';
 
 /// 用于数量、份数等整数输入的受控步进器。
 class HyNumberStepper extends StatelessWidget {
@@ -41,16 +41,17 @@ class HyNumberStepper extends StatelessWidget {
       value: '$value',
       child: HyGlass(
         radius: 16,
-        blur: 12,
+        blur: 14,
         weight: HyGlassWeight.subtle,
+        borderColor: tokens.input,
         padding: const EdgeInsets.all(3),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.minus,
               semanticLabel: '减少',
-              size: 32,
+              height: 32,
               iconSize: 17,
               radius: 12,
               color: canDecrease ? tokens.foreground : tokens.mutedForeground,
@@ -75,10 +76,10 @@ class HyNumberStepper extends StatelessWidget {
                 ),
               ),
             ),
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.plus,
               semanticLabel: '增加',
-              size: 32,
+              height: 32,
               iconSize: 17,
               radius: 12,
               color: canIncrease ? tokens.foreground : tokens.mutedForeground,

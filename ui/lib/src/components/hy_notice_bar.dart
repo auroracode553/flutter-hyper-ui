@@ -3,7 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
-import 'hy_icon_button.dart';
+import 'hy_button.dart';
 
 /// 短文本静止；长文本匀速滚动，触摸按住或减少动画时停止。
 class HyNoticeBar extends StatefulWidget {
@@ -64,12 +64,13 @@ class _HyNoticeBarState extends State<HyNoticeBar>
     final style = TextStyle(fontSize: 14, color: tokens.primary);
     return HyGlass(
       radius: 16,
-      blur: 0,
+      blur: 14,
       color: tokens.selectionBackground,
+      borderColor: tokens.primary.withAlpha(70),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
         children: [
-          Icon(LucideIcons.megaphone, color: tokens.primary),
+          Icon(LucideIcons.megaphone, size: 18, color: tokens.primary),
           const SizedBox(width: 10),
           Expanded(
             child: LayoutBuilder(
@@ -137,12 +138,14 @@ class _HyNoticeBarState extends State<HyNoticeBar>
             ),
           ),
           if (widget.onClose != null)
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.x,
-              size: 28,
+              height: 28,
               iconSize: 18,
               tooltip: '关闭公告',
               onPressed: widget.onClose,
+              color: tokens.primary,
+              backgroundColor: Colors.transparent,
             ),
         ],
       ),

@@ -35,7 +35,7 @@ class OverviewExample extends StatelessWidget {
           subtitle: '数据展示',
           icon: LucideIcons.list,
           color: tokens.success,
-          child: const HyProgressBar(value: 0.72),
+          child: const HyProgress(value: 0.72, strokeWidth: 8, showLabel: false),
         ),
         _OverviewTile(
           title: 'Feedback',

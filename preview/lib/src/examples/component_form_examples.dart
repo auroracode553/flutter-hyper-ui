@@ -167,11 +167,7 @@ class DropdownComponentExample extends StatefulWidget {
 class _DropdownComponentExampleState extends State<DropdownComponentExample> {
   String? _value = 'recent';
   String? _owner;
-
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
-  );
+  int _pageSize = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +175,6 @@ class _DropdownComponentExampleState extends State<DropdownComponentExample> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('带标签的单选'),
         HyDropdown<String>(
           label: '排序方式',
           value: _value,
@@ -190,10 +185,10 @@ class _DropdownComponentExampleState extends State<DropdownComponentExample> {
             HyOption(value: 'created', label: '创建时间'),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyUiSpacing.xl),
 
-        _label('占位与禁用项'),
         HyDropdown<String>(
+          label: '负责人',
           placeholder: '选择负责人',
           value: _owner,
           onChanged: (value) => setState(() => _owner = value),
@@ -203,15 +198,15 @@ class _DropdownComponentExampleState extends State<DropdownComponentExample> {
             HyOption(value: 'eve', label: 'Eve（已停用）', enabled: false),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyUiSpacing.xl),
 
-        _label('固定宽度与菜单高度'),
         SizedBox(
           width: 220,
           child: HyDropdown<int>(
-            value: 20,
+            label: '每页数量',
+            value: _pageSize,
             menuMaxHeight: 160,
-            onChanged: (value) {},
+            onChanged: (value) => setState(() => _pageSize = value),
             options: const [
               HyOption(value: 10, label: '每页 10 条'),
               HyOption(value: 20, label: '每页 20 条'),
@@ -517,67 +512,6 @@ class _SelectComponentExampleState extends State<SelectComponentExample> {
 }
 // end-doc-region SelectComponentExample
 
-// doc-region RateComponentExample
-class RateComponentExample extends StatefulWidget {
-  const RateComponentExample({super.key});
-
-  @override
-  State<RateComponentExample> createState() => _RateComponentExampleState();
-}
-
-class _RateComponentExampleState extends State<RateComponentExample> {
-  double _value = 4;
-  double _ten = 7;
-
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _label('基础评分'),
-        Row(
-          children: [
-            HyRate(
-              value: _value,
-              onChanged: (value) => setState(() => _value = value),
-            ),
-            const SizedBox(width: 12),
-            Text('${_value.toInt()} / 5'),
-          ],
-        ),
-        const SizedBox(height: HyUiSpacing.lg),
-
-        _label('只读展示（不传 onChanged）'),
-        const Row(
-          children: [HyRate(value: 3.5), SizedBox(width: 12), Text('3.5 / 5')],
-        ),
-        const SizedBox(height: HyUiSpacing.lg),
-
-        _label('数量与尺寸自定义'),
-        Row(
-          children: [
-            HyRate(
-              value: _ten,
-              count: 10,
-              size: 20,
-              onChanged: (value) => setState(() => _ten = value),
-            ),
-            const SizedBox(width: 12),
-            Text('${_ten.toInt()} / 10'),
-          ],
-        ),
-      ],
-    );
-  }
-}
-// end-doc-region RateComponentExample
-
 // doc-region PickerComponentExample
 class PickerComponentExample extends StatefulWidget {
   const PickerComponentExample({super.key});
@@ -635,7 +569,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
           children: [
             HyButton.tonal(label: '选择交付周期', onPressed: _pick),
             const SizedBox(width: 14),
-            Text(_value),
+            HyBadge(label: _value),
           ],
         ),
         const SizedBox(height: HyUiSpacing.lg),
@@ -645,7 +579,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
           children: [
             HyButton.tonal(label: '选择城市', onPressed: _pickCity),
             const SizedBox(width: 14),
-            Text(_city),
+            HyBadge(label: _city),
           ],
         ),
       ],
@@ -707,7 +641,7 @@ class _DatePickerComponentExampleState
               onPressed: _pickDate,
             ),
             const SizedBox(width: 14),
-            Text(_date == null ? '未选择' : _format(_date!)),
+            HyBadge(label: _date == null ? '未选择' : _format(_date!)),
           ],
         ),
         const SizedBox(height: HyUiSpacing.lg),
@@ -721,8 +655,8 @@ class _DatePickerComponentExampleState
               onPressed: _pickTime,
             ),
             const SizedBox(width: 14),
-            Text(
-              _time == null
+            HyBadge(
+              label: _time == null
                   ? '未选择'
                   : '${_time!.hour.toString().padLeft(2, '0')}:${_time!.minute.toString().padLeft(2, '0')}',
             ),
@@ -740,8 +674,8 @@ class _DatePickerComponentExampleState
             ),
             const SizedBox(width: 14),
             Expanded(
-              child: Text(
-                _range == null
+              child: HyBadge(
+                label: _range == null
                     ? '未选择'
                     : '${_format(_range!.start)} ~ ${_format(_range!.end)}',
               ),

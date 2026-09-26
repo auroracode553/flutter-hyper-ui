@@ -1,47 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'hy_bottom_sheet.dart';
-import 'hy_glass.dart';
+import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_action_sheet.dart';
+import 'hy_anchored_surface.dart';
+import 'hy_button.dart';
+import 'hy_list_tile.dart';
 import 'hy_pressable.dart';
 
+/// 锚定控件的补充内容。
 class HyPopover extends StatelessWidget {
   const HyPopover({super.key, required this.child, required this.content});
-  final Widget child, content;
+
+  final Widget child;
+  final Widget content;
+
   @override
-  Widget build(BuildContext context) => MenuAnchor(
-    style: const MenuStyle(
-      backgroundColor: WidgetStatePropertyAll(Colors.transparent),
-      elevation: WidgetStatePropertyAll(0),
-      padding: WidgetStatePropertyAll(EdgeInsets.zero),
+  Widget build(BuildContext context) => buildHyAnchoredSurface(
+    width: (MediaQuery.sizeOf(context).width - 32)
+        .clamp(0.0, 280.0)
+        .toDouble(),
+    maxHeight: MediaQuery.sizeOf(context).height * .4,
+    padding: const EdgeInsets.all(14),
+    triggerBuilder: (_, controller) => HyPressable(
+      onPressed: () => controller.isOpen
+          ? controller.close()
+          : controller.open(),
+      child: child,
     ),
-    menuChildren: [
-      SizedBox(
-        width: (MediaQuery.sizeOf(context).width - 32)
-            .clamp(0.0, 280.0)
-            .toDouble(),
-        child: HyGlass(
-          radius: 18,
-          blur: 28,
-          weight: HyGlassWeight.prominent,
-          padding: const EdgeInsets.all(14),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.sizeOf(context).height * .4,
-            ),
-            child: SingleChildScrollView(child: content),
-          ),
-        ),
-      ),
-    ],
-    builder: (_, controller, child) => HyPressable(
-      onPressed: () =>
-          controller.isOpen ? controller.close() : controller.open(),
-      child: this.child,
-    ),
+    contentBuilder: (_) => content,
   );
 }
 
+/// 与 HyPopover 共用玻璃锚点表面，菜单项使用 HyListTile 的统一交互样式。
 class HyPopupMenu<T> extends StatelessWidget {
   const HyPopupMenu({
     super.key,
@@ -50,41 +41,53 @@ class HyPopupMenu<T> extends StatelessWidget {
     this.icon = LucideIcons.ellipsis,
     this.tooltip = '更多操作',
   });
+
   final List<HyAction<T>> actions;
   final ValueChanged<T> onSelected;
   final IconData icon;
   final String tooltip;
+
   @override
-  Widget build(BuildContext context) => PopupMenuButton<T>(
-    tooltip: tooltip,
-    icon: Icon(icon),
-    onSelected: onSelected,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    itemBuilder: (_) => actions
-        .map(
-          (action) => PopupMenuItem<T>(
-            value: action.value,
-            enabled: action.enabled,
-            child: Row(
-              children: [
-                if (action.icon != null) ...[
-                  Icon(action.icon, size: 20),
-                  const SizedBox(width: 12),
-                ],
-                Flexible(
-                  child: Text(
-                    action.label,
-                    style: TextStyle(
-                      color: action.destructive
-                          ? Theme.of(context).colorScheme.error
-                          : null,
-                    ),
-                  ),
-                ),
-              ],
+  Widget build(BuildContext context) => buildHyAnchoredSurface(
+    width: (MediaQuery.sizeOf(context).width - 32)
+        .clamp(0.0, 240.0)
+        .toDouble(),
+    maxHeight: MediaQuery.sizeOf(context).height * .4,
+    padding: const EdgeInsets.all(5),
+    triggerBuilder: (_, controller) => HyButton.icon(
+      icon: icon,
+      tooltip: tooltip,
+      onPressed: () => controller.isOpen
+          ? controller.close()
+          : controller.open(),
+    ),
+    contentBuilder: (menuContext) {
+      final tokens = HyUiThemeTokens.of(menuContext);
+      if (actions.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.all(14),
+          child: Text('暂无操作', style: TextStyle(color: tokens.mutedForeground)),
+        );
+      }
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final action in actions)
+            HyListTile(
+              title: action.label,
+              leadingIcon: action.icon,
+              leadingColor: action.destructive ? tokens.error : tokens.primary,
+              titleColor: action.destructive ? tokens.error : null,
+              grouped: true,
+              enabled: action.enabled,
+              showChevron: false,
+              onTap: () {
+                MenuController.maybeOf(menuContext)?.close();
+                onSelected(action.value);
+              },
             ),
-          ),
-        )
-        .toList(),
+        ],
+      );
+    },
   );
 }

@@ -2,35 +2,9 @@ import 'dart:async';
 import 'dart:ui' show FontFeature;
 
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
-import 'hy_text_field.dart';
-
-class HySearchBar extends StatelessWidget {
-  const HySearchBar({
-    super.key,
-    this.controller,
-    this.onChanged,
-    this.onSubmitted,
-    this.hintText = '搜索',
-    this.enabled = true,
-  });
-  final TextEditingController? controller;
-  final ValueChanged<String>? onChanged, onSubmitted;
-  final String hintText;
-  final bool enabled;
-  @override
-  Widget build(BuildContext context) => HyTextField(
-    controller: controller,
-    onChanged: onChanged,
-    onSubmitted: onSubmitted,
-    hintText: hintText,
-    enabled: enabled,
-    prefix: const Icon(LucideIcons.search),
-  );
-}
 
 /// 使用绝对截止时间，应用进入后台后不会积累计时漂移。
 class HyCountDown extends StatefulWidget {

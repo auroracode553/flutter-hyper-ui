@@ -12,17 +12,17 @@ class NavigationExample extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        HyTopBar(
+        HyNavBar(
           title: '最近文档',
           subtitle: '共 24 个项目',
           safeArea: false,
           actions: [
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.search,
               tooltip: '搜索',
               onPressed: () {},
             ),
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.listChecks,
               tooltip: '选择',
               onPressed: () {},

@@ -23,7 +23,7 @@ class CardComponentExample extends StatelessWidget {
           subtitle: '保持轻量、清晰的内容层级',
           leading: const Icon(LucideIcons.sparkles),
           actions: [
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () {},

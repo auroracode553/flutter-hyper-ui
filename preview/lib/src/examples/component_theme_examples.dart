@@ -45,7 +45,7 @@ class UiThemeTokensComponentExample extends StatelessWidget {
         Text(label, style: const TextStyle(fontSize: 11)),
       ],
     );
-    return HyWrap(children: [
+    return Wrap(spacing: 8, runSpacing: 8, children: [
       swatch('Primary', tokens.primary),
       swatch('Card', tokens.card),
       swatch('Muted', tokens.muted),
@@ -75,7 +75,7 @@ class GlassThemeComponentExample extends StatelessWidget {
         Text(label, style: const TextStyle(fontSize: 11)),
       ],
     );
-    return HyWrap(children: [
+    return Wrap(spacing: 8, runSpacing: 8, children: [
       swatch('Surface', glass.surface),
       swatch('Strong', glass.surfaceStrong),
       swatch('Subtle', glass.surfaceSubtle),
@@ -101,7 +101,7 @@ class UiColorsComponentExample extends StatelessWidget {
         Text(label, style: const TextStyle(fontSize: 11)),
       ],
     );
-    return HyWrap(children: [
+    return Wrap(spacing: 8, runSpacing: 8, children: [
       swatch('Primary', HyUiColors.primary),
       swatch('Success', HyUiColors.success),
       swatch('Warning', HyUiColors.warning),
@@ -134,7 +134,7 @@ class UiRadiiComponentExample extends StatelessWidget {
   const UiRadiiComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => HyWrap(children: [
+  Widget build(BuildContext context) => Wrap(spacing: 8, runSpacing: 8, children: [
     for (final item in [('sm', HyUiRadii.sm), ('md', HyUiRadii.md), ('lg', HyUiRadii.lg), ('full', HyUiRadii.full)])
       Container(width: 76, height: 62, alignment: Alignment.center, decoration: BoxDecoration(color: context.hyUi.selectionBackground, borderRadius: BorderRadius.circular(item.$2)), child: Text(item.$1)),
   ]);

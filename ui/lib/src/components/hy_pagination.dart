@@ -5,7 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
-import 'hy_icon_button.dart';
+import 'hy_button.dart';
 import 'hy_pressable.dart';
 
 /// 适合明确跳页场景的受控分页导航；页码从 1 开始。
@@ -57,10 +57,10 @@ class HyPagination extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            HyIconButton(
+            HyButton.icon(
               icon: rtl ? LucideIcons.chevronRight : LucideIcons.chevronLeft,
               semanticLabel: '上一页',
-              size: 32,
+              height: 32,
               iconSize: 18,
               radius: 12,
               color: page > 1 ? tokens.foreground : tokens.mutedForeground,
@@ -119,10 +119,10 @@ class HyPagination extends StatelessWidget {
                           ),
                         ),
                       ),
-            HyIconButton(
+            HyButton.icon(
               icon: rtl ? LucideIcons.chevronLeft : LucideIcons.chevronRight,
               semanticLabel: '下一页',
-              size: 32,
+              height: 32,
               iconSize: 18,
               radius: 12,
               color: page < pageCount

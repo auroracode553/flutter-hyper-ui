@@ -33,44 +33,6 @@ class HySpace extends StatelessWidget {
   );
 }
 
-class HyWrap extends StatelessWidget {
-  const HyWrap({
-    super.key,
-    required this.children,
-    this.spacing = 8,
-    this.runSpacing = 8,
-  });
-  final List<Widget> children;
-  final double spacing, runSpacing;
-  @override
-  Widget build(BuildContext context) =>
-      Wrap(spacing: spacing, runSpacing: runSpacing, children: children);
-}
-
-class HyGrid extends StatelessWidget {
-  const HyGrid({
-    super.key,
-    required this.children,
-    this.columns = 3,
-    this.spacing = 12,
-    this.childAspectRatio = 1,
-  }) : assert(columns > 0);
-  final List<Widget> children;
-  final int columns;
-  final double spacing, childAspectRatio;
-  @override
-  Widget build(BuildContext context) => GridView.count(
-    crossAxisCount: columns,
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    padding: EdgeInsets.zero,
-    mainAxisSpacing: spacing,
-    crossAxisSpacing: spacing,
-    childAspectRatio: childAspectRatio,
-    children: children,
-  );
-}
-
 class HyDivider extends StatelessWidget {
   const HyDivider({
     super.key,

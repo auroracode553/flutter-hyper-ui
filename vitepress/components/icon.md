@@ -20,7 +20,7 @@ HyButton(
 )
 ```
 
-`HyIcon`、`HyIconButton`、`HyButton`、`HyListTile` 等组件的 `icon` / `leadingIcon` / `trailingIcon` 参数都遵循同一约定，并支持 `lucide_icons_flutter` 的可变字重变体（`LucideIcons.xxx100` ~ `xxx600`），需要更细或更粗的描边时可直接替换。
+`HyIcon`、`HyButton`、`HyListTile` 等组件的 `icon` / `leadingIcon` / `trailingIcon` 参数都遵循同一约定，并支持 `lucide_icons_flutter` 的可变字重变体（`LucideIcons.xxx100` ~ `xxx600`），需要更细或更粗的描边时可直接替换。
 
 ## 常用图标速查
 

@@ -60,7 +60,7 @@ class IconComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('常用语义图标（带无障碍标签）'),
-        const HyWrap(
+        const Wrap(
           spacing: 22,
           runSpacing: 22,
           children: [
@@ -75,7 +75,7 @@ class IconComponentExample extends StatelessWidget {
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('尺寸与颜色'),
-        const HyWrap(
+        const Wrap(
           spacing: 18,
           runSpacing: 18,
           children: [
@@ -171,7 +171,7 @@ class AvatarComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('文字头像与尺寸'),
-        const HyWrap(
+        const Wrap(
           spacing: 18,
           runSpacing: 18,
           children: [
@@ -183,7 +183,7 @@ class AvatarComponentExample extends StatelessWidget {
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('圆角与背景色'),
-        const HyWrap(
+        const Wrap(
           spacing: 18,
           runSpacing: 18,
           children: [
@@ -199,9 +199,26 @@ class AvatarComponentExample extends StatelessWidget {
 }
 // end-doc-region AvatarComponentExample
 
-// doc-region CountBadgeComponentExample
-class CountBadgeComponentExample extends StatelessWidget {
-  const CountBadgeComponentExample({super.key});
+// doc-region BadgeComponentExample
+class BadgeComponentExample extends StatelessWidget {
+  const BadgeComponentExample({super.key});
+
+  @override
+  Widget build(BuildContext context) => const Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      _StatusBadgeExample(),
+      SizedBox(height: HyUiSpacing.xl),
+      _CountBadgeExample(),
+      SizedBox(height: HyUiSpacing.xl),
+      _TagBadgeExample(),
+    ],
+  );
+}
+
+class _CountBadgeExample extends StatelessWidget {
+  const _CountBadgeExample();
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
@@ -215,18 +232,18 @@ class CountBadgeComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('数字角标与最大值'),
-        const HyWrap(
+        const Wrap(
           spacing: 26,
           runSpacing: 26,
           children: [
-            HyCountBadge(count: 8, child: HyAvatar(text: '消息')),
+            HyBadge.count(count: 8, child: HyAvatar(text: '消息')),
             // 超过 max（默认 99）显示 99+。
-            HyCountBadge(
+            HyBadge.count(
               count: 128,
               child: HyIcon(LucideIcons.mail, size: 32),
             ),
             // showZero: 数字为 0 也显示。
-            HyCountBadge(
+            HyBadge.count(
               count: 0,
               showZero: true,
               child: HyIcon(LucideIcons.inbox, size: 32),
@@ -236,10 +253,11 @@ class CountBadgeComponentExample extends StatelessWidget {
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('红点模式'),
-        const HyWrap(
+        const Wrap(
           spacing: 26,
+          runSpacing: 8,
           children: [
-            HyCountBadge(
+            HyBadge.count(
               dot: true,
               child: HyIcon(LucideIcons.bell, size: 32),
             ),
@@ -249,11 +267,8 @@ class CountBadgeComponentExample extends StatelessWidget {
     );
   }
 }
-// end-doc-region CountBadgeComponentExample
-
-// doc-region BadgeComponentExample
-class BadgeComponentExample extends StatelessWidget {
-  const BadgeComponentExample({super.key});
+class _StatusBadgeExample extends StatelessWidget {
+  const _StatusBadgeExample();
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
@@ -267,7 +282,7 @@ class BadgeComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('弱化样式（subtle，默认）'),
-        const HyWrap(
+        const Wrap(
           spacing: 10,
           runSpacing: 10,
           children: [
@@ -289,7 +304,7 @@ class BadgeComponentExample extends StatelessWidget {
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('强调样式（subtle: false）'),
-        const HyWrap(
+        const Wrap(
           spacing: 10,
           runSpacing: 10,
           children: [
@@ -302,17 +317,14 @@ class BadgeComponentExample extends StatelessWidget {
     );
   }
 }
-// end-doc-region BadgeComponentExample
-
-// doc-region TagComponentExample
-class TagComponentExample extends StatefulWidget {
-  const TagComponentExample({super.key});
+class _TagBadgeExample extends StatefulWidget {
+  const _TagBadgeExample();
 
   @override
-  State<TagComponentExample> createState() => _TagComponentExampleState();
+  State<_TagBadgeExample> createState() => _TagBadgeExampleState();
 }
 
-class _TagComponentExampleState extends State<TagComponentExample> {
+class _TagBadgeExampleState extends State<_TagBadgeExample> {
   bool _selected = true;
   bool _visible = true;
 
@@ -328,17 +340,17 @@ class _TagComponentExampleState extends State<TagComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('可选择（点击切换选中态）'),
-        HyWrap(
+        Wrap(
           spacing: 10,
           runSpacing: 10,
           children: [
-            HyTag(
+            HyBadge.tag(
               label: '可选标签',
               selected: _selected,
               icon: LucideIcons.sparkles,
               onTap: () => setState(() => _selected = !_selected),
             ),
-            HyTag(
+            HyBadge.tag(
               label: '设计',
               selected: !_selected,
               onTap: () => setState(() => _selected = !_selected),
@@ -348,13 +360,13 @@ class _TagComponentExampleState extends State<TagComponentExample> {
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('语义色与图标'),
-        const HyWrap(
+        const Wrap(
           spacing: 10,
           runSpacing: 10,
           children: [
-            HyTag(label: '成功', tone: HyUiTone.success),
-            HyTag(label: '警告', tone: HyUiTone.warning),
-            HyTag(
+            HyBadge.tag(label: '成功', tone: HyUiTone.success),
+            HyBadge.tag(label: '警告', tone: HyUiTone.warning),
+            HyBadge.tag(
               label: '错误',
               tone: HyUiTone.error,
               icon: LucideIcons.circleAlert,
@@ -364,16 +376,17 @@ class _TagComponentExampleState extends State<TagComponentExample> {
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('可移除'),
-        HyWrap(
+        Wrap(
           spacing: 10,
+          runSpacing: 8,
           children: [
             if (_visible)
-              HyTag(
+              HyBadge.tag(
                 label: '可移除',
                 onClose: () => setState(() => _visible = false),
               )
             else
-              HyTag(
+              HyBadge.tag(
                 label: '恢复',
                 icon: LucideIcons.rotateCcw,
                 onTap: () => setState(() => _visible = true),
@@ -384,7 +397,7 @@ class _TagComponentExampleState extends State<TagComponentExample> {
     );
   }
 }
-// end-doc-region TagComponentExample
+// end-doc-region BadgeComponentExample
 
 // doc-region ToneComponentExample
 class ToneComponentExample extends StatelessWidget {
@@ -402,7 +415,7 @@ class ToneComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('五种语义状态'),
-        HyWrap(
+        Wrap(
           spacing: 10,
           runSpacing: 10,
           children: [

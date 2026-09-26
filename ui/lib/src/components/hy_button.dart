@@ -44,25 +44,29 @@ class HyButton extends StatelessWidget {
     this.iconSize,
     this.tooltip,
     this.semanticLabel,
+    this.color,
+    this.backgroundColor,
   });
 
   /// 方形图标按钮：不展示文字，仅呈现图标（或加载态）。
   ///
-  /// 尺寸与变体语义和普通按钮一致；[tooltip] 会在悬停或长按时提示，
+  /// 默认使用 36 像素的玻璃表面；[tooltip] 会在悬停或长按时提示，
   /// [semanticLabel] 用于无障碍朗读。
   const HyButton.icon({
     super.key,
     required this.icon,
     this.onPressed,
-    this.variant = HyButtonVariant.filled,
-    this.height = 38,
+    this.variant = HyButtonVariant.tonal,
+    this.height = 36,
     this.loading = false,
-    this.radius = HyUiRadii.sm,
+    this.radius = HyUiRadii.full,
     this.round = false,
     this.circle = false,
-    this.iconSize,
+    this.iconSize = 18,
     this.tooltip,
     this.semanticLabel,
+    this.color,
+    this.backgroundColor,
   }) : label = null,
        trailingIcon = null,
        expanded = false;
@@ -82,6 +86,8 @@ class HyButton extends StatelessWidget {
     this.iconSize,
     this.tooltip,
     this.semanticLabel,
+    this.color,
+    this.backgroundColor,
   }) : variant = HyButtonVariant.filled;
 
   const HyButton.tonal({
@@ -99,6 +105,8 @@ class HyButton extends StatelessWidget {
     this.iconSize,
     this.tooltip,
     this.semanticLabel,
+    this.color,
+    this.backgroundColor,
   }) : variant = HyButtonVariant.tonal;
 
   const HyButton.outline({
@@ -116,6 +124,8 @@ class HyButton extends StatelessWidget {
     this.iconSize,
     this.tooltip,
     this.semanticLabel,
+    this.color,
+    this.backgroundColor,
   }) : variant = HyButtonVariant.outline;
 
   const HyButton.ghost({
@@ -133,6 +143,8 @@ class HyButton extends StatelessWidget {
     this.iconSize,
     this.tooltip,
     this.semanticLabel,
+    this.color,
+    this.backgroundColor,
   }) : variant = HyButtonVariant.ghost;
 
   const HyButton.danger({
@@ -150,6 +162,8 @@ class HyButton extends StatelessWidget {
     this.iconSize,
     this.tooltip,
     this.semanticLabel,
+    this.color,
+    this.backgroundColor,
   }) : variant = HyButtonVariant.danger;
 
   final String? label;
@@ -166,6 +180,8 @@ class HyButton extends StatelessWidget {
   final double? iconSize;
   final String? tooltip;
   final String? semanticLabel;
+  final Color? color;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -187,6 +203,11 @@ class HyButton extends StatelessWidget {
       variant: variant,
       disabled: disabled,
     );
+    final foreground = color ?? visual.foreground;
+    final background = backgroundColor ??
+        (isIconOnly && variant == HyButtonVariant.tonal
+            ? glass.surface
+            : visual.background);
     final isSquare = isIconOnly || circle;
     // round / circle 取胶囊圆角；其余用显式 radius。
     final effectiveRadius = (round || circle) ? metrics.height / 2 : radius;
@@ -201,8 +222,15 @@ class HyButton extends StatelessWidget {
         horizontal: isIconOnly ? 0 : metrics.horizontal,
       ),
       decoration: BoxDecoration(
-        color: visual.gradient == null ? visual.background : null,
-        gradient: visual.gradient,
+        color: backgroundColor != null ||
+                (isIconOnly && variant == HyButtonVariant.tonal) ||
+                visual.gradient == null
+            ? background
+            : null,
+        gradient: backgroundColor != null ||
+                (isIconOnly && variant == HyButtonVariant.tonal)
+            ? null
+            : visual.gradient,
         borderRadius: borderRadius,
         border: Border.all(color: visual.border),
         boxShadow: visual.shadows,
@@ -214,14 +242,14 @@ class HyButton extends StatelessWidget {
         widthFactor: 1,
         child: IconTheme(
           data: IconThemeData(
-            color: visual.foreground,
+            color: foreground,
             size: effectiveIconSize,
           ),
           child: isIconOnly
-              ? _buildIconOnly(visual.foreground, effectiveIconSize)
+              ? _buildIconOnly(foreground, effectiveIconSize)
               : DefaultTextStyle(
                   style: TextStyle(
-                    color: visual.foreground,
+                    color: foreground,
                     fontSize: metrics.fontSize,
                     fontWeight: FontWeight.w600,
                     height: 1.2,
@@ -231,9 +259,9 @@ class HyButton extends StatelessWidget {
                   child: isSquare
                       ? FittedBox(
                           fit: BoxFit.scaleDown,
-                          child: _buildContent(visual.foreground),
+                          child: _buildContent(foreground),
                         )
-                      : _buildContent(visual.foreground),
+                      : _buildContent(foreground),
                 ),
         ),
       ),

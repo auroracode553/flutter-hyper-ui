@@ -18,7 +18,7 @@ class ToastComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('语义色调'),
-        HyWrap(
+        Wrap(
           spacing: HyUiSpacing.sm,
           runSpacing: HyUiSpacing.sm,
           children: [
@@ -355,9 +355,9 @@ class _AlertComponentExampleState extends State<AlertComponentExample> {
 }
 // end-doc-region AlertComponentExample
 
-// doc-region BottomSheetComponentExample
-class BottomSheetComponentExample extends StatelessWidget {
-  const BottomSheetComponentExample({super.key});
+// doc-region ActionSheetComponentExample
+class ActionSheetComponentExample extends StatelessWidget {
+  const ActionSheetComponentExample({super.key});
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
@@ -370,10 +370,10 @@ class BottomSheetComponentExample extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('基础弹层（点遮罩关闭）'),
+        _label('自定义内容'),
         HyButton.tonal(
           label: '打开底部弹层',
-          onPressed: () => HyBottomSheet.show<void>(
+          onPressed: () => HyActionSheet.show<void>(
             context,
             title: '分享项目',
             builder: (sheetContext) => const Column(
@@ -392,10 +392,36 @@ class BottomSheetComponentExample extends StatelessWidget {
         ),
         const SizedBox(height: HyUiSpacing.lg),
 
+        _label('操作列表'),
+        HyButton.tonal(
+          label: '打开操作菜单',
+          onPressed: () => HyActionSheet.show<String>(
+            context,
+            title: '项目操作',
+            actions: const [
+              HyAction(value: 'rename', label: '重命名', icon: LucideIcons.pencil),
+              HyAction(value: 'share', label: '分享', icon: LucideIcons.share2),
+              HyAction(
+                value: 'move',
+                label: '移动（无权限）',
+                icon: LucideIcons.folderInput,
+                enabled: false,
+              ),
+              HyAction(
+                value: 'delete',
+                label: '删除',
+                icon: LucideIcons.trash,
+                destructive: true,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: HyUiSpacing.lg),
+
         _label('强制操作（dismissible: false）'),
         HyButton.tonal(
           label: '打开强制阅读弹层',
-          onPressed: () => HyBottomSheet.show<void>(
+          onPressed: () => HyActionSheet.show<void>(
             context,
             title: '服务条款',
             dismissible: false,
@@ -415,38 +441,6 @@ class BottomSheetComponentExample extends StatelessWidget {
       ],
     );
   }
-}
-// end-doc-region BottomSheetComponentExample
-
-// doc-region ActionSheetComponentExample
-class ActionSheetComponentExample extends StatelessWidget {
-  const ActionSheetComponentExample({super.key});
-
-  @override
-  Widget build(BuildContext context) => HyButton.tonal(
-    label: '打开操作菜单',
-    onPressed: () => HyActionSheet.show<String>(
-      context,
-      title: '项目操作',
-      actions: const [
-        HyAction(value: 'rename', label: '重命名', icon: LucideIcons.pencil),
-        HyAction(value: 'share', label: '分享', icon: LucideIcons.share2),
-        // 禁用项：仅展示，不可点击。
-        HyAction(
-          value: 'move',
-          label: '移动（无权限）',
-          icon: LucideIcons.folderInput,
-          enabled: false,
-        ),
-        HyAction(
-          value: 'delete',
-          label: '删除',
-          icon: LucideIcons.trash,
-          destructive: true,
-        ),
-      ],
-    ),
-  );
 }
 // end-doc-region ActionSheetComponentExample
 

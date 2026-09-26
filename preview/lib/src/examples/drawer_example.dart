@@ -82,7 +82,7 @@ class _DrawerExampleState extends State<DrawerExample> {
     child: HySpace(
       alignment: CrossAxisAlignment.stretch,
       children: [
-        HyWrap(children: [
+        Wrap(spacing: 8, runSpacing: 8, children: [
           HyButton.tonal(label: '左侧导航', onPressed: _openMenu),
           HyButton.tonal(label: '右侧筛选', onPressed: _openFilters),
         ]),

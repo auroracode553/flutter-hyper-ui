@@ -19,6 +19,7 @@ class HyListTile extends StatelessWidget {
     this.leading,
     this.leadingIcon,
     this.leadingColor,
+    this.titleColor,
     this.trailing,
     this.onTap,
     this.selected = false,
@@ -33,6 +34,7 @@ class HyListTile extends StatelessWidget {
   final Widget? leading;
   final IconData? leadingIcon;
   final Color? leadingColor;
+  final Color? titleColor;
   final Widget? trailing;
   final VoidCallback? onTap;
   final bool selected;
@@ -71,7 +73,7 @@ class HyListTile extends StatelessWidget {
                   title,
                   style: TextStyle(
                     color: enabled
-                        ? tokens.cardForeground
+                        ? titleColor ?? tokens.cardForeground
                         : tokens.mutedForeground,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,

@@ -4,11 +4,10 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
-import 'hy_bottom_sheet.dart';
+import 'hy_action_sheet.dart';
 import 'hy_button.dart';
-import 'hy_form_field.dart';
-import 'hy_glass.dart';
 import 'hy_pressable.dart';
+import 'hy_selection_field.dart';
 
 class HyOption<T> {
   const HyOption({
@@ -39,7 +38,7 @@ class HySelect<T> extends StatelessWidget {
   final String? label;
 
   Future<void> _open(BuildContext context) async {
-    final result = await HyBottomSheet.show<List<T>>(
+    final result = await HyActionSheet.show<List<T>>(
       context,
       title: label ?? placeholder,
       builder: (_) => _HySelectionPanel<T>(
@@ -53,57 +52,17 @@ class HySelect<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
     final selectedLabels = options
         .where((option) => values.contains(option.value))
         .map((option) => option.label)
         .toList();
-    final displayValue = selectedLabels.isEmpty
-        ? placeholder
-        : selectedLabels.join('、');
-
-    // 与 HyTextField 共用输入轮廓，字段标题交给 HyFormField 排版。
-    final field = HyGlass(
-      radius: 16,
-      blur: 14,
-      weight: HyGlassWeight.subtle,
-      borderColor: tokens.input,
+    return buildHySelectionField(
+      context,
+      value: selectedLabels.isEmpty ? placeholder : selectedLabels.join('、'),
+      isPlaceholder: selectedLabels.isEmpty,
+      label: label,
       onTap: onChanged == null ? null : () => _open(context),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 48),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  displayValue,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.3,
-                    fontWeight: FontWeight.w500,
-                    color: selectedLabels.isEmpty
-                        ? tokens.mutedForeground
-                        : tokens.foreground,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Icon(
-                LucideIcons.chevronDown,
-                size: 18,
-                color: tokens.mutedForeground,
-              ),
-            ],
-          ),
-        ),
-      ),
     );
-
-    if (label == null) return field;
-    return HyFormField(label: label!, child: field);
   }
 }
 

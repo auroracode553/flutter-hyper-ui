@@ -2,10 +2,9 @@
 library hy_ui_preview_core;
 
 export 'src/components/hy_button.dart';
+export 'src/components/hy_badge.dart';
 export 'src/components/hy_glass.dart';
-export 'src/components/hy_icon_button.dart';
-export 'src/components/hy_tag.dart';
-export 'src/components/hy_top_bar.dart';
+export 'src/components/hy_nav_bar.dart';
 export 'src/theme/hy_ui_spacing.dart';
 export 'src/theme/hy_ui_theme.dart';
 export 'src/theme/hy_ui_theme_tokens.dart';

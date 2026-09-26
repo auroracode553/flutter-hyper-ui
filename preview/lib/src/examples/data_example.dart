@@ -40,7 +40,7 @@ class DataExample extends StatelessWidget {
           leadingColor: tokens.primary,
         ),
         const SizedBox(height: HyUiSpacing.md),
-        const HyProgressBar(value: 0.42),
+        const HyProgress(value: 0.42, strokeWidth: 8, showLabel: false),
       ],
     );
   }

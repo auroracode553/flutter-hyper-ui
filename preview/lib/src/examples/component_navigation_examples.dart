@@ -24,7 +24,7 @@ class NavBarComponentExample extends StatelessWidget {
           centerTitle: true,
           safeArea: false,
           actions: [
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.share2,
               tooltip: '分享',
               onPressed: () {},
@@ -41,7 +41,7 @@ class NavBarComponentExample extends StatelessWidget {
           floating: true,
           automaticallyImplyLeading: false,
           actions: [
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.share2,
               tooltip: '分享',
               onPressed: () {},
@@ -130,7 +130,7 @@ class ListTileComponentExample extends StatelessWidget {
           title: '项目成员',
           subtitle: '头部与尾部都是任意 Widget',
           leading: HyAvatar(size: 34),
-          trailing: HyTag(label: '管理员'),
+          trailing: HyBadge.tag(label: '管理员'),
           showChevron: false,
         ),
       ],
@@ -139,47 +139,31 @@ class ListTileComponentExample extends StatelessWidget {
 }
 // end-doc-region ListTileComponentExample
 
-// doc-region ListComponentExample
-class ListComponentExample extends StatelessWidget {
-  const ListComponentExample({super.key});
+
+// doc-region MenuGroupComponentExample
+class MenuGroupComponentExample extends StatelessWidget {
+  const MenuGroupComponentExample({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return HyList(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      separator: const HyDivider(),
-      children: const [
-        HyListTile(title: '第一项', subtitle: '列表不绑定数据模型'),
-        HyListTile(title: '第二项', subtitle: '分隔与间距可替换'),
-        HyListTile(title: '第三项', subtitle: '子项可以是任意 Widget'),
-      ],
-    );
-  }
-}
-// end-doc-region ListComponentExample
-
-// doc-region MenuListComponentExample
-class MenuListComponentExample extends StatelessWidget {
-  const MenuListComponentExample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const HyMenuList(
+    return const HyMenuGroup(
       title: '设置',
       subtitle: '账户与应用偏好',
-      items: [
-        HyMenuItem(
+      children: [
+        HyListTile(
+          grouped: true,
           title: '账户与安全',
           subtitle: '密码、设备与登录记录',
           leadingIcon: LucideIcons.shield,
         ),
-        HyMenuItem(
+        HyListTile(
+          grouped: true,
           title: '外观与显示',
           subtitle: '主题、字号与动态效果',
           leadingIcon: LucideIcons.palette,
         ),
-        HyMenuItem(
+        HyListTile(
+          grouped: true,
           title: '关于',
           meta: 'v1.0.0',
           leadingIcon: LucideIcons.info,
@@ -188,7 +172,7 @@ class MenuListComponentExample extends StatelessWidget {
     );
   }
 }
-// end-doc-region MenuListComponentExample
+// end-doc-region MenuGroupComponentExample
 
 // doc-region SlideMenuComponentExample
 class SlideMenuComponentExample extends StatelessWidget {
@@ -240,7 +224,7 @@ class TabsComponentExample extends StatelessWidget {
         ),
         SizedBox(
           height: 150,
-          child: HyTabBarView(
+          child: TabBarView(
             children: [
               Center(
                 child: Text(
@@ -314,6 +298,8 @@ class ProgressComponentExample extends StatelessWidget {
   Widget build(BuildContext context) => const HySpace(
     children: [
       HyProgress(value: .68),
+      HyProgress(value: .72, strokeWidth: 8, showLabel: false),
+      HyProgress(value: .45, strokeWidth: 12, showLabel: false),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -325,32 +311,6 @@ class ProgressComponentExample extends StatelessWidget {
   );
 }
 // end-doc-region ProgressComponentExample
-
-// doc-region ProgressBarComponentExample
-class ProgressBarComponentExample extends StatelessWidget {
-  const ProgressBarComponentExample({super.key});
-
-  @override
-  Widget build(BuildContext context) => const HySpace(
-    children: [
-      Row(
-        children: [
-          Expanded(child: Text('下载中')),
-          Text('72%'),
-        ],
-      ),
-      HyProgressBar(value: .72),
-      Row(
-        children: [
-          Expanded(child: Text('较粗轨道')),
-          Text('45%'),
-        ],
-      ),
-      HyProgressBar(value: .45, height: 12),
-    ],
-  );
-}
-// end-doc-region ProgressBarComponentExample
 
 // doc-region PullRefreshComponentExample
 class PullRefreshComponentExample extends StatelessWidget {

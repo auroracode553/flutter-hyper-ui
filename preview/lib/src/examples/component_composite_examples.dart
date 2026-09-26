@@ -2,42 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
-// doc-region SearchBarComponentExample
-class SearchBarComponentExample extends StatefulWidget {
-  const SearchBarComponentExample({super.key});
-
-  @override
-  State<SearchBarComponentExample> createState() => _SearchBarComponentExampleState();
-}
-
-class _SearchBarComponentExampleState extends State<SearchBarComponentExample> {
-  String _query = '';
-
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
-  );
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      _label('受控输入（onChanged / onSubmitted）'),
-      HySearchBar(
-        hintText: '搜索组件',
-        onChanged: (value) => setState(() => _query = value),
-        onSubmitted: (value) => HyToast.show(context, '提交搜索：$value'),
-      ),
-      const SizedBox(height: 8),
-      Text(_query.isEmpty ? '输入关键词开始搜索' : '正在搜索：$_query'),
-      const SizedBox(height: HyUiSpacing.lg),
-
-      _label('禁用态（enabled: false）'),
-      const HySearchBar(enabled: false, hintText: '当前不可搜索'),
-    ],
-  );
-}
-// end-doc-region SearchBarComponentExample
 
 // doc-region CountDownComponentExample
 class CountDownComponentExample extends StatefulWidget {
@@ -71,7 +35,7 @@ class _CountDownComponentExampleState extends State<CountDownComponentExample> {
               endTime: _endTime,
               onFinished: () => setState(() => _finished = true),
             ),
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.refreshCw,
               tooltip: '重新开始',
               onPressed: () => setState(() {

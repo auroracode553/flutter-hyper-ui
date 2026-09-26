@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/hy_ui_radii.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_glass.dart';
 
 class HyEmptyState extends StatelessWidget {
   final IconData icon;
@@ -28,14 +29,15 @@ class HyEmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                color: tokens.muted,
-                borderRadius: BorderRadius.circular(HyUiRadii.md),
+            HyGlass(
+              radius: HyUiRadii.md,
+              blur: 14,
+              weight: HyGlassWeight.subtle,
+              borderColor: tokens.input,
+              child: SizedBox.square(
+                dimension: 56,
+                child: Icon(icon, size: 24, color: tokens.primary),
               ),
-              child: Icon(icon, size: 24, color: tokens.mutedForeground),
             ),
             const SizedBox(height: HyUiSpacing.sm),
             Text(

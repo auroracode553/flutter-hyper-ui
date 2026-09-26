@@ -5,8 +5,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_effects.dart';
+import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
-import 'hy_icon_button.dart';
+import 'hy_button.dart';
 import 'hy_layout.dart';
 
 /// 逻辑方向；在 RTL 布局中 start 位于右侧，end 位于左侧。
@@ -162,11 +163,15 @@ class HyDrawer extends StatelessWidget {
                       ? const SizedBox.shrink()
                       : Text(
                           title!,
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: TextStyle(
+                            color: HyUiThemeTokens.of(context).foreground,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                 ),
                 if (onClose != null)
-                  HyIconButton(
+                  HyButton.icon(
                     tooltip: MaterialLocalizations.of(
                       context,
                     ).closeButtonTooltip,

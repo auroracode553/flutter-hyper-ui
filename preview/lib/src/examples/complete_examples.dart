@@ -24,16 +24,16 @@ class _AtomsExampleState extends State<AtomsExample> {
       HySpace(direction: Axis.horizontal, children: [HyIcon(HyIcons.home),
         HyIcon(HyIcons.cart), HyIcon(HyIcons.settings), HyIcon(HyIcons.profile)]),
     ])),
-    const HyCard(title: '头像与角标', child: HyWrap(spacing: 24, children: [
+    const HyCard(title: '头像与角标', child: Wrap(runSpacing: 8, spacing: 24, children: [
       HyAvatar(text: '林', size: 56), HyAvatar(text: 'HY', size: 56, radius: 18),
-      HyAvatar(size: 56), HyCountBadge(count: 128, child: HyAvatar(text: '讯')),
-      HyCountBadge(dot: true, child: HyIcon(LucideIcons.bell)),
+      HyAvatar(size: 56), HyBadge.count(count: 128, child: HyAvatar(text: '讯')),
+      HyBadge.count(dot: true, child: HyIcon(LucideIcons.bell)),
     ])),
-    HyCard(title: '状态标签', child: HyWrap(children: [
-      const HyTag(label: '已完成', tone: HyUiTone.success),
-      const HyTag(label: '待处理', tone: HyUiTone.warning),
-      const HyTag(label: '已失败', tone: HyUiTone.error),
-      if (_tagVisible) HyTag(label: '可移除', onClose: () => setState(() => _tagVisible = false)),
+    HyCard(title: '状态标签', child: Wrap(spacing: 8, runSpacing: 8, children: [
+      const HyBadge.tag(label: '已完成', tone: HyUiTone.success),
+      const HyBadge.tag(label: '待处理', tone: HyUiTone.warning),
+      const HyBadge.tag(label: '已失败', tone: HyUiTone.error),
+      if (_tagVisible) HyBadge.tag(label: '可移除', onClose: () => setState(() => _tagVisible = false)),
       if (!_tagVisible) HyButton.ghost(label: '恢复标签', onPressed: () => setState(() => _tagVisible = true)),
     ])),
     HyCard(title: '图片 · 点击缩放预览', subtitle: '网络加载、内存缓存、失败占位',
@@ -48,7 +48,7 @@ class LayoutExample extends StatelessWidget {
   Widget build(BuildContext context) => HySpace(alignment: CrossAxisAlignment.stretch, children: [
     const HyText('有序的空间', variant: HyTextStyle.title),
     HyCard(title: '常用入口 · Grid', footer: const HyText('统一 12 dp 间距', variant: HyTextStyle.caption),
-      child: HyGrid(childAspectRatio: 1.2, children: [
+      child: GridView.count(crossAxisCount: 3, shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), padding: EdgeInsets.zero, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 1.2, children: [
         for (final entry in const [(LucideIcons.wallet, '钱包'), (LucideIcons.receiptText, '订单'),
           (LucideIcons.heart, '收藏'), (LucideIcons.mapPin, '地址'),
           (LucideIcons.headset, '帮助'), (LucideIcons.settings, '设置')])
@@ -57,7 +57,7 @@ class LayoutExample extends StatelessWidget {
               HyIcon(entry.$1), const SizedBox(height: 8), Text(entry.$2)])),
       ])),
     const HyCard(title: '分割与流式布局', child: HySpace(alignment: CrossAxisAlignment.stretch, children: [
-      HyWrap(children: [HyTag(label: '柔光'), HyTag(label: '轻盈'), HyTag(label: '自然'), HyTag(label: '自适应换行')]),
+      Wrap(spacing: 8, runSpacing: 8, children: [HyBadge.tag(label: '柔光'), HyBadge.tag(label: '轻盈'), HyBadge.tag(label: '自然'), HyBadge.tag(label: '自适应换行')]),
       HyDivider(dashed: true),
       HySpace(direction: Axis.horizontal, children: [Text('左侧'), HyDivider(axis: Axis.vertical), Text('右侧')]),
     ])),
@@ -77,7 +77,7 @@ class FormsExample extends StatefulWidget {
 class _FormsExampleState extends State<FormsExample> {
   bool _checked = true, _enabled = true;
   int _radio = 0;
-  double _slider = 64, _rate = 4;
+  double _slider = 64;
   List<String> _single = ['自然'], _multiple = ['柔光'];
   String _date = '选择日期 / 时间 / 区间';
   final _form = GlobalKey<FormState>();
@@ -108,10 +108,9 @@ class _FormsExampleState extends State<FormsExample> {
       HySwitch(label: '柔光效果', value: _enabled, onChanged: (value) => setState(() => _enabled = value)),
       Text('亮度 ${_slider.round()}%'), HySlider(value: _slider, divisions: 100,
         onChanged: (value) => setState(() => _slider = value)),
-      HyRate(value: _rate, onChanged: (value) => setState(() => _rate = value)),
     ])),
     HyCard(title: '底部选择器', child: HySpace(children: [
-      Text(_date), HyWrap(children: [
+      Text(_date), Wrap(spacing: 8, runSpacing: 8, children: [
         HyButton.tonal(label: '选项', onPressed: () async {
           final result = await HyPicker.show(context, options: const [
             HyOption(value: '上海', label: '上海'), HyOption(value: '北京', label: '北京'),
@@ -156,7 +155,7 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
     const HyCard(title: '标签与联动页面', child: SizedBox(height: 220,
       child: DefaultTabController(length: 3, child: Column(children: [
         HyTabs(tabs: [Text('推荐'), Text('关注'), Text('收藏')]),
-        Expanded(child: HyTabBarView(children: [Center(child: Text('为你推荐')),
+        Expanded(child: TabBarView(children: [Center(child: Text('为你推荐')),
           Center(child: Text('你关注的内容')), Center(child: Text('收藏的灵感'))])),
       ])))),
     HyCard(title: '流程步骤', child: HySpace(alignment: CrossAxisAlignment.stretch, children: [

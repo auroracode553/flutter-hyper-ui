@@ -235,23 +235,6 @@ class HyTabs extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class HyTabBarView extends StatelessWidget {
-  const HyTabBarView({
-    super.key,
-    required this.children,
-    this.controller,
-    this.physics,
-  });
-
-  final List<Widget> children;
-  final TabController? controller;
-  final ScrollPhysics? physics;
-
-  @override
-  Widget build(BuildContext context) =>
-      TabBarView(controller: controller, physics: physics, children: children);
-}
-
 class HyStep {
   const HyStep(this.title, {this.subtitle});
 
@@ -374,6 +357,8 @@ class HyProgress extends StatelessWidget {
     this.size = 64,
     this.showLabel = true,
     this.strokeWidth = 6,
+    this.color,
+    this.backgroundColor,
   });
 
   final double? value;
@@ -381,6 +366,8 @@ class HyProgress extends StatelessWidget {
   final bool showLabel;
   final double size;
   final double strokeWidth;
+  final Color? color;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -397,7 +384,8 @@ class HyProgress extends StatelessWidget {
               child: CircularProgressIndicator(
                 value: amount,
                 strokeWidth: strokeWidth,
-                backgroundColor: glass.controlTrack,
+                backgroundColor: backgroundColor ?? glass.controlTrack,
+                color: color,
               ),
             ),
             if (showLabel && label != null)
@@ -414,7 +402,8 @@ class HyProgress extends StatelessWidget {
             child: LinearProgressIndicator(
               value: amount,
               minHeight: strokeWidth,
-              backgroundColor: glass.controlTrack,
+              backgroundColor: backgroundColor ?? glass.controlTrack,
+              color: color,
             ),
           ),
         ),

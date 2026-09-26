@@ -56,24 +56,6 @@ class HyUiTheme {
       fontFamily: fontFamily,
       scaffoldBackgroundColor: tokens.background,
       extensions: <ThemeExtension<dynamic>>[tokens, glass],
-      datePickerTheme: DatePickerThemeData(
-        backgroundColor: tokens.card,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(HyUiRadii.lg),
-        ),
-      ),
-      timePickerTheme: TimePickerThemeData(
-        backgroundColor: tokens.card,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(HyUiRadii.lg),
-        ),
-      ),
-      popupMenuTheme: PopupMenuThemeData(
-        color: glass.surfaceStrong,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(HyUiRadii.md),
-        ),
-      ),
       appBarTheme: AppBarTheme(
         backgroundColor: tokens.background,
         foregroundColor: tokens.foreground,

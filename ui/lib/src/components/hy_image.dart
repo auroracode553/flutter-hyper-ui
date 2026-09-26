@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
-import 'hy_icon_button.dart';
+import 'hy_button.dart';
 
 /// 使用 Flutter ImageCache 的内存缓存；持久缓存可通过 ImageProvider 注入。
 class HyImage extends StatelessWidget {
@@ -94,7 +94,7 @@ class HyImage extends StatelessWidget {
                       SafeArea(
                         child: Align(
                           alignment: Alignment.topRight,
-                          child: HyIconButton(
+                          child: HyButton.icon(
                             icon: LucideIcons.x,
                             tooltip: '关闭预览',
                             color: Colors.white,
@@ -145,15 +145,21 @@ class HyAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
+    final surface = backgroundColor ?? tokens.selectionBackground;
+    final foreground = backgroundColor == null
+        ? tokens.primary
+        : ThemeData.estimateBrightnessForColor(surface) == Brightness.dark
+        ? Colors.white
+        : tokens.foreground;
     final fallback = Center(
       child: text == null || text!.isEmpty
-          ? Icon(LucideIcons.user, size: size * .5, color: tokens.primary)
+          ? Icon(LucideIcons.user, size: size * .5, color: foreground)
           : Text(
               text!.characters.take(2).toString(),
               style: TextStyle(
                 fontSize: size * .34,
                 fontWeight: FontWeight.w600,
-                color: tokens.primary,
+                color: foreground,
               ),
             ),
     );
@@ -162,7 +168,7 @@ class HyAvatar extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        color: backgroundColor ?? tokens.selectionBackground,
+        color: surface,
         child: image == null
             ? fallback
             : HyImage(
@@ -173,64 +179,6 @@ class HyAvatar extends StatelessWidget {
                 errorPlaceholder: fallback,
               ),
       ),
-    );
-  }
-}
-
-class HyCountBadge extends StatelessWidget {
-  const HyCountBadge({
-    super.key,
-    required this.child,
-    this.count = 0,
-    this.max = 99,
-    this.dot = false,
-    this.showZero = false,
-  });
-  final Widget child;
-  final int count, max;
-  final bool dot, showZero;
-  @override
-  Widget build(BuildContext context) {
-    final visible = dot || count > 0 || showZero;
-    final error = HyUiThemeTokens.of(context).error;
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        child,
-        if (visible)
-          Positioned(
-            top: -5,
-            right: -5,
-            child: dot
-                ? Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: error,
-                      shape: BoxShape.circle,
-                    ),
-                  )
-                : Container(
-                    constraints: const BoxConstraints(minWidth: 16),
-                    height: 16,
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: error,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      count > max ? '$max+' : '$count',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        height: 1,
-                      ),
-                    ),
-                  ),
-          ),
-      ],
     );
   }
 }

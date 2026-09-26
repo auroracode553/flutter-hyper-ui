@@ -26,4 +26,4 @@ HyTabBar(
 
 ## MenuList 与 SlideMenu
 
-`HyMenuList` 适合设置页和详情菜单。`HySlideMenu` 用于列表行的快捷操作；破坏性操作仍应由业务层决定是否二次确认或提供撤销。
+`HyMenuGroup` 适合设置页和详情菜单。`HySlideMenu` 用于列表行的快捷操作；破坏性操作仍应由业务层决定是否二次确认或提供撤销。

@@ -5,7 +5,6 @@ import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_button.dart';
 import 'hy_glass.dart';
-import 'hy_icon_button.dart';
 import 'hy_pressable.dart';
 import 'hy_tone.dart';
 
@@ -272,9 +271,9 @@ class HyAlert extends StatelessWidget {
             ),
           ),
           if (onClose != null)
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.x,
-              size: 28,
+              height: 28,
               iconSize: 18,
               tooltip: '关闭通知',
               onPressed: onClose,

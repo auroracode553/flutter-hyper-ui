@@ -5,11 +5,11 @@ import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_glass.dart';
-import 'hy_icon_button.dart';
+import 'hy_button.dart';
 
 /// 页面顶部导航栏。默认透明，仅保留导航内容本身；需要玻璃背景时开启 [opaque]。
-class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
-  const HyTopBar({
+class HyNavBar extends StatelessWidget implements PreferredSizeWidget {
+  const HyNavBar({
     super.key,
     required this.title,
     this.subtitle,
@@ -145,29 +145,13 @@ class HyTopBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/// 更符合导航语义的别名，API 与 [HyTopBar] 一致。
-class HyNavBar extends HyTopBar {
-  const HyNavBar({
-    super.key,
-    required super.title,
-    super.subtitle,
-    super.leading,
-    super.actions,
-    super.safeArea,
-    super.automaticallyImplyLeading,
-    super.centerTitle,
-    super.floating,
-    super.opaque,
-  });
-}
-
 class _BackButton extends StatelessWidget {
   const _BackButton();
 
   @override
   Widget build(BuildContext context) {
-    // 背景使用 HyIconButton 默认的白色玻璃表面，不再单独传色。
-    return HyIconButton(
+    // 返回按钮与其他图标操作共用 HyButton 的玻璃表面。
+    return HyButton.icon(
       icon: LucideIcons.chevronLeft,
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       onPressed: () => Navigator.maybePop(context),

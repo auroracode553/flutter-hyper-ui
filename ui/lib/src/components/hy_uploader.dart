@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
-import 'hy_bottom_sheet.dart';
+import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_action_sheet.dart';
+import 'hy_badge.dart';
 import 'hy_button.dart';
 import 'hy_glass.dart';
-import 'hy_icon_button.dart';
 import 'hy_image.dart';
+import 'hy_navigation.dart';
+import 'hy_tone.dart';
 
 enum HyUploadSource { gallery, camera, file }
 
@@ -204,119 +207,175 @@ class _HyUploaderState extends State<HyUploader> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Wrap(
-        spacing: 12,
-        runSpacing: 12,
-        children: [
-          for (final item in _items)
-            SizedBox(
-              width: 104,
-              child: HyGlass(
-                blur: 0,
-                radius: 16,
-                child: Column(
+  Widget build(BuildContext context) {
+    final tokens = HyUiThemeTokens.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            for (final item in _items)
+              _UploadItemTile(
+                item: item,
+                enabled: widget.enabled,
+                onRemove: () => _remove(item),
+                onRetry: () => _send(item.file),
+              ),
+            if (_items.length < widget.maxCount)
+              _UploadAddTile(
+                picking: _picking,
+                onTap: widget.enabled && !_picking ? _select : null,
+              ),
+          ],
+        ),
+        if (_pickError != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              _pickError!,
+              style: TextStyle(color: tokens.error, fontSize: 12),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _UploadItemTile extends StatelessWidget {
+  const _UploadItemTile({
+    required this.item,
+    required this.enabled,
+    required this.onRemove,
+    required this.onRetry,
+  });
+
+  final HyUploadItem item;
+  final bool enabled;
+  final VoidCallback onRemove;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = HyUiThemeTokens.of(context);
+    final glass = HyGlassTheme.of(context);
+    return SizedBox(
+      width: 104,
+      child: HyGlass(
+        radius: 16,
+        blur: 12,
+        weight: HyGlassWeight.subtle,
+        borderColor: tokens.input,
+        padding: const EdgeInsets.all(6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                item.file.isImage
+                    ? HyImage(
+                        provider: MemoryImage(item.file.bytes),
+                        width: 90,
+                        height: 72,
+                        radius: 12,
+                        preview: true,
+                      )
+                    : SizedBox(
+                        width: 90,
+                        height: 72,
+                        child: Icon(
+                          LucideIcons.file,
+                          size: 28,
+                          color: tokens.primary,
+                        ),
+                      ),
+                if (enabled)
+                  Positioned(
+                    top: 2,
+                    right: 2,
+                    child: HyButton.icon(
+                      icon: LucideIcons.x,
+                      height: 24,
+                      iconSize: 13,
+                      tooltip: '删除 ${item.file.name}',
+                      onPressed: onRemove,
+                      backgroundColor: glass.surfaceStrong,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              item.file.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: tokens.foreground,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 6),
+            if (item.status == HyUploadStatus.uploading)
+              HyProgress(
+                value: item.progress,
+                strokeWidth: 4,
+                showLabel: false,
+              )
+            else if (item.status == HyUploadStatus.success)
+              const HyBadge(label: '已上传', tone: HyUiTone.success)
+            else
+              HyButton.tonal(
+                label: item.status == HyUploadStatus.error ? '重试' : '上传',
+                height: 28,
+                expanded: true,
+                onPressed: enabled ? onRetry : null,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _UploadAddTile extends StatelessWidget {
+  const _UploadAddTile({required this.picking, required this.onTap});
+
+  final bool picking;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = HyUiThemeTokens.of(context);
+    return SizedBox(
+      width: 104,
+      height: 136,
+      child: HyGlass(
+        radius: 16,
+        blur: 12,
+        weight: HyGlassWeight.subtle,
+        borderColor: tokens.input,
+        onTap: onTap,
+        child: Center(
+          child: picking
+              ? const CircularProgressIndicator(strokeWidth: 2)
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Stack(
-                      children: [
-                        if (item.file.isImage)
-                          HyImage(
-                            provider: MemoryImage(item.file.bytes),
-                            width: 104,
-                            height: 84,
-                            preview: true,
-                          )
-                        else
-                          const SizedBox(
-                            width: 104,
-                            height: 84,
-                            child: Icon(
-                              LucideIcons.file,
-                              size: 28,
-                            ),
-                          ),
-                        if (widget.enabled)
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: HyIconButton(
-                              icon: LucideIcons.x,
-                              size: 26,
-                              iconSize: 14,
-                              tooltip: '删除 ${item.file.name}',
-                              onPressed: () => _remove(item),
-                              backgroundColor: HyGlassTheme.of(
-                                context,
-                              ).surfaceStrong,
-                            ),
-                          ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: Text(
-                        item.file.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 11),
+                    Icon(LucideIcons.plus, color: tokens.primary),
+                    const SizedBox(height: 8),
+                    Text(
+                      '添加文件',
+                      style: TextStyle(
+                        color: tokens.mutedForeground,
+                        fontSize: 12,
                       ),
                     ),
-                    if (item.status == HyUploadStatus.uploading)
-                      LinearProgressIndicator(value: item.progress),
-                    if (item.status == HyUploadStatus.success)
-                      const Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('已上传'),
-                      ),
-                    if (item.status == HyUploadStatus.error ||
-                        item.status == HyUploadStatus.ready)
-                      HyButton.ghost(
-                        label: item.status == HyUploadStatus.error
-                            ? '失败 · 重试'
-                            : '上传',
-                        height: 32,
-                        onPressed: widget.enabled
-                            ? () => _send(item.file)
-                            : null,
-                      ),
                   ],
                 ),
-              ),
-            ),
-          if (_items.length < widget.maxCount)
-            SizedBox(
-              width: 104,
-              height: 104,
-              child: HyGlass(
-                blur: 0,
-                radius: 16,
-                onTap: widget.enabled && !_picking ? _select : null,
-                child: Center(
-                  child: _picking
-                      ? const CircularProgressIndicator(strokeWidth: 2)
-                      : const Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(LucideIcons.plus),
-                            SizedBox(height: 8),
-                            Text('添加文件'),
-                          ],
-                        ),
-                ),
-              ),
-            ),
-        ],
-      ),
-      if (_pickError != null)
-        Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Text(
-            _pickError!,
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
         ),
-    ],
-  );
+      ),
+    );
+  }
 }

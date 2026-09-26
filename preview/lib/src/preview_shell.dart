@@ -95,12 +95,12 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
         child: SafeArea(
           child: Column(
             children: [
-              HyTopBar(
+              HyNavBar(
                 title: 'Flutter Hyper UI Preview',
                 subtitle: selected.description,
                 safeArea: false,
                 actions: [
-                  HyIconButton(
+                  HyButton.icon(
                     icon: LucideIcons.sun,
                     tooltip: '切换明暗主题',
                     onPressed: widget.onToggleTheme,
@@ -120,7 +120,7 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
                       const SizedBox(width: HyUiSpacing.xs),
                   itemBuilder: (context, index) {
                     final item = PreviewCatalog.items[index];
-                    return HyTag(
+                    return HyBadge.tag(
                       label: item.title,
                       selected: item.id == selected.id,
                       onTap: () => setState(() => _selectedId = item.id),

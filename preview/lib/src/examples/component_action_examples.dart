@@ -7,7 +7,7 @@ class GlassWeightComponentExample extends StatelessWidget {
   const GlassWeightComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => const HyWrap(
+  Widget build(BuildContext context) => const Wrap(spacing: 8, runSpacing: 8,
     children: [
       HyGlass(weight: HyGlassWeight.subtle, padding: EdgeInsets.all(16), child: Text('Subtle')),
       HyGlass(weight: HyGlassWeight.regular, padding: EdgeInsets.all(16), child: Text('Regular')),
@@ -68,32 +68,3 @@ class SoftBackgroundComponentExample extends StatelessWidget {
   );
 }
 // end-doc-region SoftBackgroundComponentExample
-
-// doc-region IconButtonComponentExample
-class IconButtonComponentExample extends StatelessWidget {
-  const IconButtonComponentExample({super.key});
-
-  @override
-  Widget build(BuildContext context) => const HyWrap(
-    spacing: 14,
-    runSpacing: 14,
-    children: [
-      HyIconButton(icon: LucideIcons.heart, tooltip: '喜欢'),
-      HyIconButton(
-        icon: LucideIcons.trash,
-        color: Colors.white,
-        backgroundColor: Color(0xFFE5484D),
-        tooltip: '删除',
-      ),
-      HyIconButton(
-        icon: LucideIcons.share,
-        semanticLabel: '分享',
-        size: 44,
-        iconSize: 22,
-        backgroundColor: Color(0x14000000),
-      ),
-      HyIconButton(icon: LucideIcons.pencil, tooltip: '编辑', onPressed: null),
-    ],
-  );
-}
-// end-doc-region IconButtonComponentExample

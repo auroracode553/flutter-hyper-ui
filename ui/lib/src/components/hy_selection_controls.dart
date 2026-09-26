@@ -3,8 +3,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_glass_theme.dart';
 import '../theme/hy_ui_theme_tokens.dart';
-import 'hy_icon_button.dart';
 import 'hy_list_tile.dart';
+import 'hy_pressable.dart';
 
 class HyCheckbox extends StatelessWidget {
   const HyCheckbox({
@@ -22,31 +22,52 @@ class HyCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = _selectionTheme(context);
-    final checkbox = Checkbox(
-      value: value,
-      onChanged: onChanged,
-      tristate: tristate,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+    final tokens = HyUiThemeTokens.of(context);
+    final glass = HyGlassTheme.of(context);
+    final selected = value == true || (tristate && value == null);
+    final box = AnimatedContainer(
+      duration: MediaQuery.disableAnimationsOf(context)
+          ? Duration.zero
+          : const Duration(milliseconds: 160),
+      width: 21,
+      height: 21,
+      decoration: BoxDecoration(
+        color: selected ? tokens.primary : glass.surfaceSubtle,
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(
+          color: selected ? tokens.primary : tokens.input,
+          width: 1.5,
+        ),
+      ),
+      child: selected
+          ? Icon(
+              value == null ? LucideIcons.minus : LucideIcons.check,
+              size: 15,
+              color: tokens.primaryForeground,
+            )
+          : null,
     );
-    if (label == null) return Theme(data: theme, child: checkbox);
+    void toggle() {
+      if (tristate) {
+        onChanged?.call(value == true ? null : value == false ? true : false);
+      } else {
+        onChanged?.call(!(value ?? false));
+      }
+    }
+    if (label == null) {
+      return HyPressable(
+        onPressed: onChanged == null ? null : toggle,
+        semanticLabel: '复选',
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox.square(dimension: 44, child: Center(child: box)),
+      );
+    }
     return HyListTile(
       title: label!,
-      trailing: Theme(data: theme, child: checkbox),
-      grouped: true,
+      trailing: box,
       enabled: onChanged != null,
       showChevron: false,
-      onTap: onChanged == null
-          ? null
-          : () {
-              if (tristate) {
-                onChanged!(
-                  value == true ? null : value == false ? true : false,
-                );
-              } else {
-                onChanged!(!(value ?? false));
-              }
-            },
+      onTap: onChanged == null ? null : toggle,
     );
   }
 }
@@ -170,53 +191,6 @@ class HySlider extends StatelessWidget {
         onChangeEnd: onChangeEnd,
         label: showValue ? value.toStringAsFixed(0) : null,
       ),
-    );
-  }
-}
-
-class HyRate extends StatelessWidget {
-  const HyRate({
-    super.key,
-    required this.value,
-    this.onChanged,
-    this.count = 5,
-    this.size = 20,
-  }) : assert(count > 0);
-
-  final double value;
-  final double size;
-  final int count;
-  final ValueChanged<double>? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
-    return Wrap(
-      children: <Widget>[
-        for (var index = 0; index < count; index++)
-          Semantics(
-            selected: value >= index + 1,
-            child: Opacity(
-              opacity: onChanged == null ? 0.5 : 1,
-              child: HyIconButton(
-                icon: value >= index + 1
-                    ? LucideIcons.star
-                    : value > index
-                    ? LucideIcons.starHalf
-                    : LucideIcons.star,
-                semanticLabel: '${index + 1} 星',
-                size: size + 12,
-                iconSize: size,
-                onPressed: onChanged == null
-                    ? null
-                    : () => onChanged!(index + 1.0),
-                color: tokens.warning,
-                // 星星是评分图标而非按钮，保持无背景。
-                backgroundColor: Colors.transparent,
-              ),
-            ),
-          ),
-      ],
     );
   }
 }

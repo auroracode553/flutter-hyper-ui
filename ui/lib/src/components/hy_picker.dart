@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'hy_bottom_sheet.dart';
+import '../theme/hy_ui_spacing.dart';
+import '../theme/hy_ui_theme_tokens.dart';
+import 'hy_action_sheet.dart';
 import 'hy_button.dart';
 import 'hy_select.dart';
 
@@ -17,7 +19,7 @@ abstract final class HyPicker {
     var index = initialIndex.clamp(0, enabled.length - 1).toInt();
     final controller = FixedExtentScrollController(initialItem: index);
     try {
-      return await HyBottomSheet.show<T>(
+      return await HyActionSheet.show<T>(
         context,
         title: title,
         builder: (sheetContext) => Column(
@@ -25,17 +27,30 @@ abstract final class HyPicker {
           children: [
             SizedBox(
               height: 200,
-              child: CupertinoPicker(
-                scrollController: controller,
-                itemExtent: 40,
-                onSelectedItemChanged: (value) => index = value,
-                children: enabled
-                    .map((option) => Center(child: Text(option.label)))
-                    .toList(),
+              child: CupertinoTheme(
+                data: CupertinoThemeData(
+                  brightness: Theme.of(sheetContext).brightness,
+                  textTheme: CupertinoTextThemeData(
+                    pickerTextStyle: TextStyle(
+                      color: HyUiThemeTokens.of(sheetContext).foreground,
+                      fontSize: 17,
+                    ),
+                  ),
+                ),
+                child: CupertinoPicker(
+                  scrollController: controller,
+                  itemExtent: 40,
+                  onSelectedItemChanged: (value) => index = value,
+                  children: enabled
+                      .map((option) => Center(child: Text(option.label)))
+                      .toList(),
+                ),
               ),
             ),
-            HyButton(
+            const SizedBox(height: HyUiSpacing.sm),
+            HyButton.filled(
               label: '确定',
+              height: 44,
               expanded: true,
               onPressed: () =>
                   Navigator.pop(sheetContext, enabled[index].value),
@@ -47,47 +62,4 @@ abstract final class HyPicker {
       controller.dispose();
     }
   }
-}
-
-abstract final class HyDatePicker {
-  static Future<DateTime?> date(
-    BuildContext context, {
-    DateTime? initialDate,
-    DateTime? firstDate,
-    DateTime? lastDate,
-  }) {
-    final first = firstDate ?? DateTime(1900);
-    final last = lastDate ?? DateTime(2100, 12, 31);
-    assert(!last.isBefore(first));
-    final initial = initialDate ?? DateTime.now();
-    return showDatePicker(
-      context: context,
-      initialDate: initial.isBefore(first)
-          ? first
-          : initial.isAfter(last)
-          ? last
-          : initial,
-      firstDate: first,
-      lastDate: last,
-    );
-  }
-
-  static Future<TimeOfDay?> time(
-    BuildContext context, {
-    TimeOfDay? initialTime,
-  }) => showTimePicker(
-    context: context,
-    initialTime: initialTime ?? TimeOfDay.now(),
-  );
-  static Future<DateTimeRange?> range(
-    BuildContext context, {
-    DateTimeRange? initialRange,
-    DateTime? firstDate,
-    DateTime? lastDate,
-  }) => showDateRangePicker(
-    context: context,
-    initialDateRange: initialRange,
-    firstDate: firstDate ?? DateTime(1900),
-    lastDate: lastDate ?? DateTime(2100, 12, 31),
-  );
 }

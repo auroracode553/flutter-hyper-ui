@@ -16,7 +16,7 @@ class TooltipComponentExample extends StatelessWidget {
         const SizedBox(height: HyUiSpacing.sm),
         HyTooltip(
           message: '更改后会同步到所有设备。',
-          child: HyIconButton(
+          child: HyButton.icon(
             icon: LucideIcons.info,
             semanticLabel: '同步说明',
             onPressed: () {},

@@ -27,7 +27,7 @@ class CardsExample extends StatelessWidget {
             ],
             footer: const Row(
               children: [
-                Expanded(child: HyProgressBar(value: 0.68)),
+                Expanded(child: HyProgress(value: 0.68, strokeWidth: 8, showLabel: false)),
                 SizedBox(width: HyUiSpacing.sm),
                 Text('68%'),
               ],
@@ -56,9 +56,9 @@ class CardsExample extends StatelessWidget {
               spacing: HyUiSpacing.xs,
               runSpacing: HyUiSpacing.xs,
               children: [
-                HyTag(label: '旅行', selected: true),
-                HyTag(label: '精选'),
-                HyTag(label: '日常'),
+                HyBadge.tag(label: '旅行', selected: true),
+                HyBadge.tag(label: '精选'),
+                HyBadge.tag(label: '日常'),
               ],
             ),
           ),

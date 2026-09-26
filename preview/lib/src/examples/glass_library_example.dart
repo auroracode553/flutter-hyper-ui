@@ -33,7 +33,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
           floating: true,
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            HyIconButton(
+            HyButton.icon(
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () => HyToast.show(context, 'Navbar action'),
@@ -57,7 +57,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
         ),
         HyCard(
           title: 'Button',
-          child: HyWrap(
+          child: Wrap(spacing: 8, runSpacing: 8,
             children: <Widget>[
               HyButton.filled(
                 label: '主要操作',
@@ -129,18 +129,20 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             ],
           ),
         ),
-        HyMenuList(
-          title: 'MenuList',
+        HyMenuGroup(
+          title: 'MenuGroup',
           subtitle: '适用于设置页、个人中心与详情菜单。',
-          items: <HyMenuItem>[
-            HyMenuItem(
+          children: <Widget>[
+            HyListTile(
+              grouped: true,
               title: '外观与显示',
               subtitle: '主题、字号和动态效果',
               leadingIcon: LucideIcons.palette,
               leadingColor: const Color(0xFF8C79CF),
               onTap: () => HyToast.show(context, '外观与显示'),
             ),
-            HyMenuItem(
+            HyListTile(
+              grouped: true,
               title: '通知',
               leadingIcon: LucideIcons.bell,
               leadingColor: const Color(0xFFD69A4A),
@@ -150,7 +152,8 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
               ),
               showChevron: false,
             ),
-            HyMenuItem(
+            HyListTile(
+              grouped: true,
               title: '隐私与安全',
               leadingIcon: LucideIcons.shield,
               leadingColor: const Color(0xFF5C9C88),
@@ -202,18 +205,18 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
           child: HySpace(
             alignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              HyWrap(
+              Wrap(spacing: 8, runSpacing: 8,
                 children: <Widget>[
                   HyButton.tonal(
                     label: '打开抽屉',
                     onPressed: () => HyDrawer.show<void>(
                       context,
                       title: '通用抽屉',
-                      builder: (_) => const HyMenuList(
-                        items: <HyMenuItem>[
-                          HyMenuItem(title: '筛选条件'),
-                          HyMenuItem(title: '排序方式'),
-                          HyMenuItem(title: '显示选项'),
+                      builder: (_) => const HyMenuGroup(
+                        children: <Widget>[
+                          HyListTile(grouped: true, title: '筛选条件'),
+                          HyListTile(grouped: true, title: '排序方式'),
+                          HyListTile(grouped: true, title: '显示选项'),
                         ],
                       ),
                     ),
