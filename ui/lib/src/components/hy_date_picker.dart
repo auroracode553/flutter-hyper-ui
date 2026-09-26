@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_action_sheet.dart';
 import 'hy_button.dart';
+import 'hy_pressable.dart';
 import 'hy_segmented_control.dart';
 
-/// 日期、时间与区间统一使用 HyActionSheet 的玻璃弹层。
+/// 日期与区间使用月历，时间使用滚轮，弹层共用 HyActionSheet。
 abstract final class HyDatePicker {
   static Future<DateTime?> date(
     BuildContext context, {
@@ -114,18 +116,12 @@ class _DatePanelState extends State<_DatePanel> {
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      SizedBox(
-        height: 216,
-        child: _pickerTheme(
-          context,
-          CupertinoDatePicker(
-            mode: CupertinoDatePickerMode.date,
-            initialDateTime: widget.initial,
-            minimumDate: widget.first,
-            maximumDate: widget.last,
-            onDateTimeChanged: (date) => _selected = _dateOnly(date),
-          ),
-        ),
+      _CalendarMonth(
+        initialMonth: widget.initial,
+        first: widget.first,
+        last: widget.last,
+        start: _selected,
+        onSelected: (date) => setState(() => _selected = date),
       ),
       const SizedBox(height: HyUiSpacing.sm),
       HyButton.filled(
@@ -226,29 +222,27 @@ class _DateRangePanelState extends State<_DateRangePanel> {
           fontSize: 12,
         ),
       ),
-      SizedBox(
-        height: 216,
-        child: _pickerTheme(
-          context,
-          CupertinoDatePicker(
-            key: ValueKey(_editingStart),
-            mode: CupertinoDatePickerMode.date,
-            initialDateTime: _editingStart ? _start : _end,
-            minimumDate: _editingStart ? widget.first : _start,
-            maximumDate: widget.last,
-            onDateTimeChanged: (date) {
-              final selected = _dateOnly(date);
-              setState(() {
-                if (_editingStart) {
-                  _start = selected;
-                  if (_end.isBefore(_start)) _end = _start;
-                } else {
-                  _end = selected;
-                }
-              });
-            },
-          ),
-        ),
+      _CalendarMonth(
+        key: ValueKey(_editingStart),
+        initialMonth: _editingStart ? _start : _end,
+        first: widget.first,
+        last: widget.last,
+        start: _start,
+        end: _end,
+        onSelected: (selected) {
+          setState(() {
+            if (_editingStart) {
+              _start = selected;
+              if (_end.isBefore(_start)) _end = _start;
+              _editingStart = false;
+            } else if (selected.isBefore(_start)) {
+              _start = selected;
+              _end = selected;
+            } else {
+              _end = selected;
+            }
+          });
+        },
       ),
       const SizedBox(height: HyUiSpacing.sm),
       HyButton.filled(
@@ -262,4 +256,298 @@ class _DateRangePanelState extends State<_DateRangePanel> {
       ),
     ],
   );
+}
+
+/// 日期与区间共用的月历；选择状态由外层持有，翻月状态留在月历内部。
+class _CalendarMonth extends StatefulWidget {
+  const _CalendarMonth({
+    super.key,
+    required this.initialMonth,
+    required this.first,
+    required this.last,
+    required this.start,
+    required this.onSelected,
+    this.end,
+  });
+
+  final DateTime initialMonth;
+  final DateTime first;
+  final DateTime last;
+  final DateTime start;
+  final DateTime? end;
+  final ValueChanged<DateTime> onSelected;
+
+  @override
+  State<_CalendarMonth> createState() => _CalendarMonthState();
+}
+
+class _CalendarMonthState extends State<_CalendarMonth> {
+  late DateTime _visibleMonth = DateTime(
+    widget.initialMonth.year,
+    widget.initialMonth.month,
+  );
+  bool _choosingMonth = false;
+
+  bool _monthAvailable(DateTime month) {
+    final firstDay = DateTime(month.year, month.month);
+    final lastDay = DateTime(month.year, month.month + 1, 0);
+    return !lastDay.isBefore(widget.first) &&
+        !firstDay.isAfter(widget.last);
+  }
+
+  void _changeMonth(int offset) {
+    final next = DateTime(_visibleMonth.year, _visibleMonth.month + offset);
+    if (_monthAvailable(next)) setState(() => _visibleMonth = next);
+  }
+
+  void _changeYear(int offset) {
+    final year = _visibleMonth.year + offset;
+    if (year < widget.first.year || year > widget.last.year) return;
+    var month = _visibleMonth.month;
+    if (year == widget.first.year && month < widget.first.month) {
+      month = widget.first.month;
+    }
+    if (year == widget.last.year && month > widget.last.month) {
+      month = widget.last.month;
+    }
+    setState(() => _visibleMonth = DateTime(year, month));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = HyUiThemeTokens.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          children: [
+            HyButton.icon(
+              icon: LucideIcons.chevronLeft,
+              tooltip: '上个月',
+              height: 34,
+              radius: 12,
+              onPressed: _monthAvailable(
+                DateTime(_visibleMonth.year, _visibleMonth.month - 1),
+              )
+                  ? () => _changeMonth(-1)
+                  : null,
+            ),
+            Expanded(
+              child: HyButton.ghost(
+                label: '${_visibleMonth.year} 年 ${_visibleMonth.month} 月',
+                trailingIcon: LucideIcons.chevronDown,
+                height: 38,
+                expanded: true,
+                onPressed: () => setState(
+                  () => _choosingMonth = !_choosingMonth,
+                ),
+              ),
+            ),
+            HyButton.icon(
+              icon: LucideIcons.chevronRight,
+              tooltip: '下个月',
+              height: 34,
+              radius: 12,
+              onPressed: _monthAvailable(
+                DateTime(_visibleMonth.year, _visibleMonth.month + 1),
+              )
+                  ? () => _changeMonth(1)
+                  : null,
+            ),
+          ],
+        ),
+        const SizedBox(height: HyUiSpacing.sm),
+        if (_choosingMonth)
+          _buildMonthChooser(tokens)
+        else
+          _buildDays(tokens),
+      ],
+    );
+  }
+
+  Widget _buildMonthChooser(HyUiThemeTokens tokens) {
+    final year = _visibleMonth.year;
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            HyButton.ghost(
+              label: '−10 年',
+              height: 34,
+              onPressed: year - 10 >= widget.first.year
+                  ? () => _changeYear(-10)
+                  : null,
+            ),
+            HyButton.icon(
+              icon: LucideIcons.chevronLeft,
+              tooltip: '上一年',
+              height: 34,
+              onPressed: year > widget.first.year
+                  ? () => _changeYear(-1)
+                  : null,
+            ),
+            Text(
+              '$year 年',
+              style: TextStyle(
+                color: tokens.foreground,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            HyButton.icon(
+              icon: LucideIcons.chevronRight,
+              tooltip: '下一年',
+              height: 34,
+              onPressed: year < widget.last.year
+                  ? () => _changeYear(1)
+                  : null,
+            ),
+            HyButton.ghost(
+              label: '+10 年',
+              height: 34,
+              onPressed: year + 10 <= widget.last.year
+                  ? () => _changeYear(10)
+                  : null,
+            ),
+          ],
+        ),
+        const SizedBox(height: HyUiSpacing.sm),
+        for (var row = 0; row < 4; row++) ...[
+          Row(
+            children: [
+              for (var column = 0; column < 3; column++) ...[
+                if (column > 0) const SizedBox(width: HyUiSpacing.xs),
+                Expanded(
+                  child: Builder(
+                    builder: (context) {
+                      final month = row * 3 + column + 1;
+                      final target = DateTime(year, month);
+                      return HyButton(
+                        label: '$month 月',
+                        variant: month == _visibleMonth.month
+                            ? HyButtonVariant.filled
+                            : HyButtonVariant.tonal,
+                        height: 42,
+                        expanded: true,
+                        onPressed: _monthAvailable(target)
+                            ? () => setState(() {
+                                _visibleMonth = target;
+                                _choosingMonth = false;
+                              })
+                            : null,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ],
+          ),
+          if (row < 3) const SizedBox(height: HyUiSpacing.xs),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildDays(HyUiThemeTokens tokens) {
+    final year = _visibleMonth.year;
+    final month = _visibleMonth.month;
+    final firstWeekday = DateTime(year, month).weekday - 1;
+    final daysInMonth = DateTime(year, month + 1, 0).day;
+    final today = _dateOnly(DateTime.now());
+    const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            for (final weekday in weekdays)
+              Expanded(
+                child: Center(
+                  child: Text(
+                    weekday,
+                    style: TextStyle(
+                      color: tokens.mutedForeground,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: HyUiSpacing.xs),
+        for (var row = 0; row < 6; row++)
+          Row(
+            children: [
+              for (var column = 0; column < 7; column++)
+                _buildDayCell(
+                  tokens,
+                  row * 7 + column - firstWeekday + 1,
+                  daysInMonth,
+                  today,
+                ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget _buildDayCell(
+    HyUiThemeTokens tokens,
+    int day,
+    int daysInMonth,
+    DateTime today,
+  ) {
+    if (day < 1 || day > daysInMonth) {
+      return const Expanded(child: SizedBox(height: 42));
+    }
+    final date = DateTime(_visibleMonth.year, _visibleMonth.month, day);
+    final enabled = !date.isBefore(widget.first) && !date.isAfter(widget.last);
+    final isStart = date == widget.start;
+    final isEnd = widget.end != null && date == widget.end;
+    final selected = isStart || isEnd;
+    final between = widget.end != null &&
+        date.isAfter(widget.start) &&
+        date.isBefore(widget.end!);
+    final isToday = date == today;
+
+    return Expanded(
+      child: Semantics(
+        selected: selected,
+        child: HyPressable(
+          onPressed: enabled ? () => widget.onSelected(date) : null,
+          semanticLabel: _formatDate(date),
+          borderRadius: BorderRadius.circular(21),
+          child: Container(
+            height: 42,
+            alignment: Alignment.center,
+            color: between ? tokens.selectionBackground : null,
+            child: Container(
+              width: 36,
+              height: 36,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: selected ? tokens.primary : null,
+                shape: BoxShape.circle,
+                border: isToday && enabled && !selected
+                    ? Border.all(color: tokens.primary)
+                    : null,
+              ),
+              child: Text(
+                '$day',
+                style: TextStyle(
+                  color: selected
+                      ? tokens.primaryForeground
+                      : enabled
+                          ? tokens.foreground
+                          : tokens.mutedForeground.withAlpha(105),
+                  fontSize: 14,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

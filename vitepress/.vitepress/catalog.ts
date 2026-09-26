@@ -456,7 +456,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-picker', 'HyPicker 滚轮选择器', 'component_form_examples.dart', 420, '基础滚轮选择与指定初始项。', 'PickerComponentExample'),
       }),
-      component('HyDatePicker', 'hy_date_picker.dart', '在统一玻璃底部弹层中选择日期、时间和日期区间。', {
+      component('HyDatePicker', 'hy_date_picker.dart', '在玻璃底部弹层中通过月历选择日期或区间，时间单独使用滚轮。', {
         propsDocs: [
           { name: 'initialDate', description: '初始日期' },
           { name: 'initialTime', description: '初始时间' },
@@ -464,7 +464,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'firstDate', description: '最早可选日期' },
           { name: 'lastDate', description: '最晚可选日期' },
         ],
-        preview: demo('component-date-picker', 'HyDatePicker 日期选择', 'component_form_examples.dart', 500, '日期、时间与日期区间三种入口。', 'DatePickerComponentExample'),
+        preview: demo('component-date-picker', 'HyDatePicker 月历选择', 'component_form_examples.dart', 500, '月历单日与区间选择、时间选择。', 'DatePickerComponentExample'),
       }),
       component('HyUploader / HyUploadSource / HyUploadStatus / HyUploadFile / HyUploadCancellation / HyUploadItem', 'hy_uploader.dart', '通过注入式适配器完成选择、上传、进度、取消、失败与重试。', {
         propsDocs: [

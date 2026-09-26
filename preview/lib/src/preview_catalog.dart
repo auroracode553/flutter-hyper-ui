@@ -338,7 +338,7 @@ class PreviewCatalog {
     _componentPreview('component-empty-state', 'HyEmptyState', '空状态与恢复操作。', () => example_component_layout_examples.loadLibrary(), (_) => example_component_layout_examples.EmptyStateComponentExample()),
     _componentPreview('component-select', 'HySelect', '底部弹层选择。', () => example_component_form_examples.loadLibrary(), (_) => example_component_form_examples.SelectComponentExample()),
     _componentPreview('component-picker', 'HyPicker', '滚轮选择器。', () => example_component_form_examples.loadLibrary(), (_) => example_component_form_examples.PickerComponentExample()),
-    _componentPreview('component-date-picker', 'HyDatePicker', '日期选择入口。', () => example_component_form_examples.loadLibrary(), (_) => example_component_form_examples.DatePickerComponentExample()),
+    _componentPreview('component-date-picker', 'HyDatePicker', '月历选择日期与区间。', () => example_component_form_examples.loadLibrary(), (_) => example_component_form_examples.DatePickerComponentExample()),
     _componentPreview('component-file-picker', 'HyFilePicker', '文件能力注入边界。', () => example_component_form_examples.loadLibrary(), (_) => example_component_form_examples.FilePickerComponentExample()),
     _componentPreview('component-dialog', 'HyDialog', '玻璃确认对话框。', () => example_component_feedback_examples.loadLibrary(), (_) => example_component_feedback_examples.DialogComponentExample()),
     _componentPreview('component-loading', 'HyLoading', '局部与全局加载状态。', () => example_component_feedback_examples.loadLibrary(), (_) => example_component_feedback_examples.LoadingComponentExample()),

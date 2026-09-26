@@ -632,7 +632,7 @@ class _DatePickerComponentExampleState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('日期选择'),
+        _label('月历选择日期'),
         Row(
           children: [
             HyButton.tonal(
@@ -664,7 +664,7 @@ class _DatePickerComponentExampleState
         ),
         const SizedBox(height: HyUiSpacing.lg),
 
-        _label('日期区间'),
+        _label('月历选择日期区间'),
         Row(
           children: [
             HyButton.tonal(
