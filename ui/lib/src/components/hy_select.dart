@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../theme/hy_glass_theme.dart';
+import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_bottom_sheet.dart';
 import 'hy_button.dart';
+import 'hy_form_field.dart';
 import 'hy_glass.dart';
 import 'hy_pressable.dart';
 
@@ -51,56 +54,56 @@ class HySelect<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
-    final labels = options
+    final selectedLabels = options
         .where((option) => values.contains(option.value))
-        .map((option) => option.label);
-    return HyGlass(
+        .map((option) => option.label)
+        .toList();
+    final displayValue = selectedLabels.isEmpty
+        ? placeholder
+        : selectedLabels.join('、');
+
+    // 与 HyTextField 共用输入轮廓，字段标题交给 HyFormField 排版。
+    final field = HyGlass(
       radius: 16,
       blur: 14,
       weight: HyGlassWeight.subtle,
+      borderColor: tokens.input,
       onTap: onChanged == null ? null : () => _open(context),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 44),
+        constraints: const BoxConstraints(minHeight: 48),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
           child: Row(
             children: [
               Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (label != null) ...[
-                      Text(
-                        label!,
-                        style: TextStyle(
-                          color: tokens.mutedForeground,
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                    ],
-                    Text(
-                      labels.isEmpty ? placeholder : labels.join('、'),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: labels.isEmpty
-                            ? tokens.mutedForeground
-                            : tokens.foreground,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  displayValue,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.3,
+                    fontWeight: FontWeight.w500,
+                    color: selectedLabels.isEmpty
+                        ? tokens.mutedForeground
+                        : tokens.foreground,
+                  ),
                 ),
               ),
               const SizedBox(width: 10),
-              Icon(LucideIcons.chevronsDownUp, color: tokens.mutedForeground),
+              Icon(
+                LucideIcons.chevronDown,
+                size: 18,
+                color: tokens.mutedForeground,
+              ),
             ],
           ),
         ),
       ),
     );
+
+    if (label == null) return field;
+    return HyFormField(label: label!, child: field);
   }
 }
 
@@ -119,59 +122,140 @@ class _HySelectionPanel<T> extends StatefulWidget {
 
 class _HySelectionPanelState<T> extends State<_HySelectionPanel<T>> {
   late final List<T> selected = List.of(widget.values);
+
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (final option in widget.options)
-          HyPressable(
-            onPressed: !option.enabled
-                ? null
-                : () {
-                    if (!widget.multiple) {
-                      Navigator.pop(context, <T>[option.value]);
-                      return;
-                    }
-                    setState(() {
-                      if (selected.contains(option.value)) {
-                        selected.remove(option.value);
-                      } else {
-                        selected.add(option.value);
-                      }
-                    });
-                  },
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 44),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      option.label,
-                      style: TextStyle(
-                        color: option.enabled
-                            ? null
-                            : tokens.mutedForeground,
-                      ),
-                    ),
-                  ),
-                  if (selected.contains(option.value))
-                    Icon(LucideIcons.check, size: 18, color: tokens.primary),
-                ],
-              ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
+            child: _HySelectOptionRow<T>(
+              option: option,
+              selected: selected.contains(option.value),
+              multiple: widget.multiple,
+              onPressed: () {
+                if (!widget.multiple) {
+                  Navigator.pop(context, <T>[option.value]);
+                  return;
+                }
+                setState(() {
+                  if (selected.contains(option.value)) {
+                    selected.remove(option.value);
+                  } else {
+                    selected.add(option.value);
+                  }
+                });
+              },
             ),
           ),
         if (widget.options.isEmpty)
-          const Padding(padding: EdgeInsets.all(24), child: Text('暂无选项')),
+          Padding(
+            padding: const EdgeInsets.all(HyUiSpacing.xl),
+            child: Text(
+              '暂无选项',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: tokens.mutedForeground),
+            ),
+          ),
         if (widget.multiple)
-          HyButton(
-            label: '确定',
-            expanded: true,
-            onPressed: () => Navigator.pop(context, List<T>.of(selected)),
+          Padding(
+            padding: const EdgeInsets.only(top: HyUiSpacing.xs),
+            child: HyButton.filled(
+              label: selected.isEmpty ? '确定' : '确定（${selected.length}）',
+              height: 44,
+              expanded: true,
+              onPressed: () => Navigator.pop(context, List<T>.of(selected)),
+            ),
           ),
       ],
+    );
+  }
+}
+
+class _HySelectOptionRow<T> extends StatelessWidget {
+  const _HySelectOptionRow({
+    required this.option,
+    required this.selected,
+    required this.multiple,
+    required this.onPressed,
+  });
+
+  final HyOption<T> option;
+  final bool selected;
+  final bool multiple;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = HyUiThemeTokens.of(context);
+    final glass = HyGlassTheme.of(context);
+    final indicatorRadius = BorderRadius.circular(multiple ? 6 : 10);
+    return HyPressable(
+      onPressed: option.enabled ? onPressed : null,
+      borderRadius: BorderRadius.circular(14),
+      semanticLabel: option.label,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 52),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: selected ? glass.selection : glass.surfaceSubtle,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: selected ? tokens.primary.withAlpha(90) : tokens.input,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                option.label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                  color: option.enabled
+                      ? tokens.foreground
+                      : tokens.mutedForeground,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: selected ? tokens.primary : Colors.transparent,
+                borderRadius: indicatorRadius,
+                border: Border.all(
+                  color: selected ? tokens.primary : tokens.input,
+                  width: 1.5,
+                ),
+              ),
+              child: selected
+                  ? multiple
+                        ? Icon(
+                            LucideIcons.check,
+                            size: 14,
+                            color: tokens.primaryForeground,
+                          )
+                        : Center(
+                            child: Container(
+                              width: 7,
+                              height: 7,
+                              decoration: BoxDecoration(
+                                color: tokens.primaryForeground,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          )
+                  : null,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

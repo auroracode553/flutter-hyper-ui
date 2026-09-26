@@ -467,13 +467,9 @@ class SelectComponentExample extends StatefulWidget {
 }
 
 class _SelectComponentExampleState extends State<SelectComponentExample> {
-  List<String> _single = const [];
-  List<String> _multi = const ['design'];
-
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
-  );
+  List<String> _single = const ['test'];
+  List<String> _multi = const ['design', 'develop'];
+  List<String> _team = const [];
 
   @override
   Widget build(BuildContext context) {
@@ -488,40 +484,29 @@ class _SelectComponentExampleState extends State<SelectComponentExample> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('单选'),
         HySelect<String>(
           label: '交付状态',
           values: _single,
           onChanged: (values) => setState(() => _single = values),
           options: options,
         ),
-        const SizedBox(height: HyUiSpacing.sm),
-        HyText(
-          _single.isEmpty ? '尚未选择' : '已选择：${_single.first}',
-          variant: HyTextStyle.caption,
-        ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyUiSpacing.xl),
 
-        _label('多选与禁用项'),
         HySelect<String>(
-          label: '选择协作角色',
+          label: '协作角色',
           multiple: true,
           values: _multi,
           onChanged: (values) => setState(() => _multi = values),
           options: options,
         ),
-        const SizedBox(height: HyUiSpacing.sm),
-        HyText(
-          _multi.isEmpty ? '尚未选择' : '已选择：${_multi.join('、')}',
-          variant: HyTextStyle.caption,
-        ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyUiSpacing.xl),
 
-        _label('占位文案（未选择时）'),
-        const HySelect<String>(
+        HySelect<String>(
+          label: '所在团队',
           placeholder: '请选择所在团队',
-          values: [],
-          options: [
+          values: _team,
+          onChanged: (values) => setState(() => _team = values),
+          options: const [
             HyOption(value: 'app', label: '应用组'),
             HyOption(value: 'web', label: '平台组'),
           ],

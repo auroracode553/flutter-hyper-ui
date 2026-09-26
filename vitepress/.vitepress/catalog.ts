@@ -429,9 +429,9 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'onChanged', description: '选中变化回调' },
           { name: 'multiple', description: '是否多选，默认 false' },
           { name: 'placeholder', description: '占位文字，默认 请选择' },
-          { name: 'label', description: '标签文字' },
+          { name: 'label', description: '选择框上方的字段标题' },
         ],
-        preview: demo('component-select', 'HySelect 底部选择', 'component_form_examples.dart', 560, '单选、多选、禁用项与占位文案。', 'SelectComponentExample'),
+        preview: demo('component-select', 'HySelect 底部选择', 'component_form_examples.dart', 480, '单选、多选、禁用项与占位文案。', 'SelectComponentExample'),
       }),
       component('HyDropdown', 'hy_dropdown.dart', '锚定触发器展开、适合在选择时保持页面上下文的泛型下拉。', {
         propsDocs: [
