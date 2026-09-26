@@ -16,6 +16,7 @@ export 'src/components/hy_drawer.dart';
 export 'src/components/hy_feedback.dart';
 export 'src/components/hy_popover.dart';
 export 'src/components/hy_navigation.dart';
+export 'src/components/hy_tab_bar.dart';
 export 'src/components/hy_lists.dart';
 export 'src/components/hy_business.dart';
 export 'src/components/hy_notice_bar.dart';
