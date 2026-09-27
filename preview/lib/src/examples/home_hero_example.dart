@@ -19,7 +19,7 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
   Widget build(BuildContext context) {
     final muted = HyperUiThemeTokens.of(context).mutedForeground;
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -73,7 +73,9 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
           label: '开始使用',
           onPressed: () => HyperToast.show(context, '开始使用 Hyper UI'),
         ),
-        const SizedBox(height: 2),
+
+        // 把底部导航顶到屏幕底部、home indicator 上方
+        const Spacer(),
 
         // 底部导航
         HyperTabBar(
@@ -85,6 +87,8 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
             HyperTabItem(icon: LucideIcons.palette, label: '主题'),
           ],
         ),
+        // 让出底部 home indicator 安全区
+        const SizedBox(height: 18),
       ],
     );
   }

@@ -172,6 +172,19 @@
   width: 232px;
   height: 484px;
 
+  /* Flutter 按 350 逻辑宽渲染（与组件文档手机预览一致），再整体缩放到机身可视宽度，
+     避免窄 host 导致文字、卡片被放大或异常换行。 */
+  .demo-block__flutter-host {
+    top: 52px;
+    bottom: auto;
+    left: 50%;
+    width: 350px;
+    height: 652px;
+    margin-left: -175px; /* 350/2，配合 top center 原点水平居中 */
+    transform: scale(0.663); /* 232 / 350 */
+    transform-origin: top center;
+  }
+
   /* 左侧侧边按键 */
   &::before {
     position: absolute;
@@ -277,6 +290,11 @@
     min-height: 440px;
     width: 216px;
     height: 450px;
+
+    .demo-block__flutter-host {
+      height: 645px;
+      transform: scale(0.617); /* 216 / 350 */
+    }
   }
 
   .hyper-home__section {
