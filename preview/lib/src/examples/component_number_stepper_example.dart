@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region NumberStepperComponentExample
 class NumberStepperComponentExample extends StatefulWidget {
@@ -21,29 +21,28 @@ class _NumberStepperComponentExampleState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const HyText('数量（1–8）', type: 'h5'),
-        const SizedBox(height: HyUiSpacing.xs),
-        HyNumberStepper(
+        const HyperText('数量（1–8）', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.xs),
+        HyperNumberStepper(
           value: _quantity,
           min: 1,
           max: 8,
-          semanticLabel: '数量',
           onChanged: (value) => setState(() => _quantity = value),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
-        const HyText('以 5 为步长', type: 'h5'),
-        const SizedBox(height: HyUiSpacing.xs),
-        HyNumberStepper(
+        const SizedBox(height: HyperUiSpacing.lg),
+        const HyperText('以 5 为步长', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.xs),
+        HyperNumberStepper(
           value: _interval,
           min: 0,
           max: 20,
           step: 5,
           onChanged: (value) => setState(() => _interval = value),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
-        const HyText('只读状态', type: 'h5'),
-        const SizedBox(height: HyUiSpacing.xs),
-        const HyNumberStepper(value: 3),
+        const SizedBox(height: HyperUiSpacing.lg),
+        const HyperText('只读状态', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.xs),
+        const HyperNumberStepper(value: 3),
       ],
     );
   }

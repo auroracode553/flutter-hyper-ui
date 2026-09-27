@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region CardComponentExample
 class CardComponentExample extends StatelessWidget {
   const CardComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -18,12 +18,12 @@ class CardComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('完整结构（标题 / 副标题 / 操作 / 正文 / 底部）'),
-        HyCard(
+        HyperCard(
           title: '本周专注',
           subtitle: '保持轻量、清晰的内容层级',
           leading: const Icon(LucideIcons.sparkles),
           actions: [
-            HyButton.icon(
+            HyperButton.icon(
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () {},
@@ -32,17 +32,17 @@ class CardComponentExample extends StatelessWidget {
           footer: const Text('上次更新：今天 09:30'),
           child: const Text('卡片负责组织标题、正文、操作区与底部信息，不持有业务状态。'),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('选中态（selected）与无标题纯内容'),
-        HyCard(
+        HyperCard(
           selected: true,
           title: '已选择的方案',
           subtitle: '选中时边缘使用主色强调',
           child: const Text('适合在多个卡片中标记当前选项。'),
         ),
         const SizedBox(height: 12),
-        const HyCard(
+        const HyperCard(
           child: Text('没有标题与副标题时，卡片只作为内容容器使用。'),
         ),
       ],
@@ -56,8 +56,8 @@ class GlassComponentExample extends StatelessWidget {
   const GlassComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -67,27 +67,27 @@ class GlassComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('四档重量（weight 控制表面层级）'),
-        const HyGlass(
-          weight: HyGlassWeight.subtle,
+        const HyperGlass(
+          weight: HyperGlassWeight.subtle,
           padding: EdgeInsets.all(18),
           child: Text('Subtle · 小面积辅助表面'),
         ),
         const SizedBox(height: 12),
-        const HyGlass(
-          weight: HyGlassWeight.regular,
+        const HyperGlass(
+          weight: HyperGlassWeight.regular,
           padding: EdgeInsets.all(18),
           child: Text('Regular · 常规内容表面'),
         ),
         const SizedBox(height: 12),
-        const HyGlass(
-          weight: HyGlassWeight.prominent,
+        const HyperGlass(
+          weight: HyperGlassWeight.prominent,
           padding: EdgeInsets.all(18),
           child: Text('Prominent · 浮层和模态表面'),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('自定义圆角与模糊（radius: 16 / blur: 0）'),
-        const HyGlass(
+        const HyperGlass(
           radius: 16,
           blur: 0,
           padding: EdgeInsets.all(18),

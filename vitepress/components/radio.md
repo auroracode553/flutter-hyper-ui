@@ -1,6 +1,6 @@
 ---
-title: HyRadio
-description: HyRadio 组件与公开 API
+title: HyperRadio
+description: HyperRadio 组件与公开 API
 ---
 
 <ComponentDoc component-id="radio" />

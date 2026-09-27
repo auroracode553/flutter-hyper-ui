@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region FormFieldComponentExample
 class FormFieldComponentExample extends StatefulWidget {
@@ -20,24 +20,24 @@ class _FormFieldComponentExampleState extends State<FormFieldComponentExample> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        HyFormField(
+        HyperFormField(
           label: '项目名称',
           isRequired: true,
           helperText: '最多填写 30 个字符',
           errorText: _name.isEmpty ? '请输入项目名称' : null,
-          child: HyTextField(
+          child: HyperTextField(
             hintText: '例如：组件设计',
             maxLength: 30,
             onChanged: (value) => setState(() => _name = value),
           ),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
-        HyFormField(
+        const SizedBox(height: HyperUiSpacing.lg),
+        HyperFormField(
           label: '数量',
           helperText: '可选择 1–8 个',
           child: Align(
             alignment: Alignment.centerLeft,
-            child: HyNumberStepper(
+            child: HyperNumberStepper(
               value: _quantity,
               min: 1,
               max: 8,

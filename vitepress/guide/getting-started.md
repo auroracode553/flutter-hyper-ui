@@ -1,6 +1,6 @@
 # 快速开始
 
-Hy UI 是一个独立的 Flutter 移动端组件包。它只依赖 Flutter SDK，不要求特定路由、状态管理、网络或持久化方案。
+Hyper UI 是一个独立的 Flutter 移动端组件包。它只依赖 Flutter SDK，不要求特定路由、状态管理、网络或持久化方案。
 
 ## 环境要求
 
@@ -27,24 +27,24 @@ dependencies:
 公开 API 全部由一个入口导出：
 
 ```dart
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 ```
 
-在应用根节点使用 Hy UI 的明暗主题：
+在应用根节点使用 Hyper UI 的明暗主题：
 
 ```dart
 MaterialApp(
-  theme: HyUiTheme.light(),
-  darkTheme: HyUiTheme.dark(),
+  theme: HyperUiTheme.light(),
+  darkTheme: HyperUiTheme.dark(),
   themeMode: ThemeMode.system,
   home: const AppHome(),
 );
 ```
 
-`HyUiTheme` 仍然是标准 `ThemeData`，可以继续使用 Flutter 原生主题机制。品牌色和字体可在构建主题时覆盖：
+`HyperUiTheme` 仍然是标准 `ThemeData`，可以继续使用 Flutter 原生主题机制。品牌色和字体可在构建主题时覆盖：
 
 ```dart
-theme: HyUiTheme.light(
+theme: HyperUiTheme.light(
   primary: const Color(0xFF6750A4),
   fontFamily: 'YourFont',
 ),
@@ -52,7 +52,7 @@ theme: HyUiTheme.light(
 
 ## 创建第一个页面
 
-`HySoftBackground` 提供低饱和环境色，让透明材质具有可见景深；它不是必需的业务容器。
+使用 Flutter 的 `Scaffold` 和 `CustomScrollView` 组织页面内容，导航栏可直接放在 `appBar`。
 
 ```dart
 class AppHome extends StatefulWidget {
@@ -69,28 +69,25 @@ class _AppHomeState extends State<AppHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      body: HySoftBackground(
-        child: HyNavBarPage(
-          backgroundColor: Colors.transparent,
-          navBar: const HyNavBar(title: Text('收藏'), subtitle: Text('12 个项目')),
-          slivers: const [
-            SliverPadding(
-              padding: EdgeInsets.all(HyUiSpacing.pagePadding),
-              sliver: SliverToBoxAdapter(
-                child: HyCard(
-                  title: '开始创作',
-                  subtitle: '所有组件共享同一套材质与交互规则。',
-                ),
+      appBar: const HyperNavBar(title: Text('收藏'), subtitle: Text('12 个项目')),
+      body: CustomScrollView(
+        slivers: const [
+          SliverPadding(
+            padding: EdgeInsets.all(HyperUiSpacing.pagePadding),
+            sliver: SliverToBoxAdapter(
+              child: HyperCard(
+                title: '开始创作',
+                subtitle: '所有组件共享同一套材质与交互规则。',
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      bottomNavigationBar: HyTabBar(
+      bottomNavigationBar: HyperTabBar(
         items: const [
-          HyTabItem(icon: Icons.home_outlined, label: '首页'),
-          HyTabItem(icon: Icons.favorite_outline, label: '收藏'),
-          HyTabItem(icon: Icons.person_outline, label: '我的'),
+          HyperTabItem(icon: Icons.home_outlined, label: '首页'),
+          HyperTabItem(icon: Icons.favorite_outline, label: '收藏'),
+          HyperTabItem(icon: Icons.person_outline, label: '我的'),
         ],
         selectedIndex: selectedIndex,
         onSelected: (value) => setState(() => selectedIndex = value),
@@ -102,10 +99,10 @@ class _AppHomeState extends State<AppHome> {
 
 ## 受控组件
 
-Hy UI 不持有业务状态。输入和选择组件通过值与回调工作：
+Hyper UI 不持有业务状态。输入和选择组件通过值与回调工作：
 
 ```dart
-HySwitch(
+HyperSwitch(
   value: notificationsEnabled,
   onChanged: (value) {
     setState(() => notificationsEnabled = value);

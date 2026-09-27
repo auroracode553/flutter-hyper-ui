@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -7,18 +7,18 @@ class OverviewExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
 
     return Wrap(
-      spacing: HyUiSpacing.sm,
-      runSpacing: HyUiSpacing.sm,
+      spacing: HyperUiSpacing.sm,
+      runSpacing: HyperUiSpacing.sm,
       children: [
         _OverviewTile(
           title: 'Button',
           subtitle: '动作按钮',
           icon: LucideIcons.hand,
           color: tokens.primary,
-          child: HyButton.filled(
+          child: HyperButton.filled(
             label: '打开',
             onPressed: _noop,
           ),
@@ -28,23 +28,23 @@ class OverviewExample extends StatelessWidget {
           subtitle: '输入控件',
           icon: LucideIcons.squarePen,
           color: tokens.warning,
-          child: const HyTextField(hintText: '搜索文件'),
+          child: const HyperTextField(hintText: '搜索文件'),
         ),
         _OverviewTile(
           title: 'Data',
           subtitle: '数据展示',
           icon: LucideIcons.list,
           color: tokens.success,
-          child: const HyProgress(value: 0.72, strokeWidth: 8, showLabel: false),
+          child: const HyperProgress(value: 0.72, strokeWidth: 8, showLabel: false),
         ),
         _OverviewTile(
           title: 'Feedback',
           subtitle: '状态反馈',
           icon: LucideIcons.lightbulb,
           color: tokens.info,
-          child: const HyBadge(
+          child: const HyperBadge(
             label: '已同步',
-            tone: HyUiTone.success,
+            tone: HyperUiTone.success,
           ),
         ),
       ],
@@ -69,11 +69,11 @@ class _OverviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
 
     return SizedBox(
       width: 220,
-      child: HyCard(
+      child: HyperCard(
         title: title,
         subtitle: subtitle,
         leading: Container(
@@ -81,7 +81,7 @@ class _OverviewTile extends StatelessWidget {
           height: 40,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(HyUiRadii.sm),
+            borderRadius: BorderRadius.circular(HyperUiRadii.sm),
           ),
           child: Icon(
             icon,

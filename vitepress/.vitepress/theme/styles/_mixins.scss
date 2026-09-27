@@ -4,8 +4,9 @@
 // =============================================================
 
 /// 断点速记：@include bp(700) { ... } → @media (max-width: 700px)
+/// 注：$max 为无单位数字，需显式拼接 px，否则媒体查询无效、响应式不会生效。
 @mixin bp($max) {
-  @media (max-width: $max) {
+  @media (max-width: #{$max}px) {
     @content;
   }
 }
@@ -21,9 +22,9 @@
 @mixin glass(
   $blur,
   $saturate,
-  $bg: var(--hy-glass),
-  $edge: var(--hy-edge),
-  $shadow: var(--hy-shadow)
+  $bg: var(--hyper-glass),
+  $edge: var(--hyper-edge),
+  $shadow: var(--hyper-shadow)
 ) {
   border: 1px solid $edge;
   background: $bg;
@@ -32,7 +33,7 @@
 }
 
 /// 卡片上浮交互：hover 抬高 + 品牌色描边 + 可选背景 / 阴影变化
-/// $edge 为描边混色基准（transparent 或 --hy-edge），$edge-mix 为品牌色占比
+/// $edge 为描边混色基准（transparent 或 --hyper-edge），$edge-mix 为品牌色占比
 @mixin lift-hover(
   $y: -2px,
   $edge-mix: 42%,
@@ -59,10 +60,10 @@
 /// hover / active 状态因作用域差异，由调用方按需补充
 @mixin tool-button {
   min-height: 32px;
-  border: 1px solid var(--hy-edge-shade);
+  border: 1px solid var(--hyper-edge-shade);
   border-radius: 10px;
   padding: 5px 10px;
-  background: var(--hy-glass-subtle);
+  background: var(--hyper-glass-subtle);
   color: var(--vp-c-text-2);
   font-size: 12px;
   font-weight: 600;

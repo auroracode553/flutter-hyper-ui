@@ -1,0 +1,134 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
+import '../theme/hyper_ui_theme_tokens.dart';
+import 'hyper_glass.dart';
+import 'hyper_button.dart';
+import 'hyper_pressable.dart';
+
+/// 适合明确跳页场景的受控分页导航；页码从 1 开始。
+class HyperPagination extends StatelessWidget {
+  const HyperPagination({
+    super.key,
+    required this.page,
+    required this.pageCount,
+    this.onChanged,
+    this.maxVisiblePages = 5,
+  }) : assert(pageCount >= 0),
+       assert(maxVisiblePages >= 1),
+       assert((pageCount == 0 && page == 0) ||
+           (pageCount > 0 && page >= 1 && page <= pageCount));
+
+  final int page;
+  final int pageCount;
+  final ValueChanged<int>? onChanged;
+  final int maxVisiblePages;
+
+  List<int?> _visiblePages() {
+    if (pageCount == 0) return const <int?>[];
+    final start = math.max(
+      1,
+      math.min(page - maxVisiblePages ~/ 2, pageCount - maxVisiblePages + 1),
+    );
+    final end = math.min(pageCount, start + maxVisiblePages - 1);
+    return <int?>[
+      if (start > 1) 1,
+      if (start > 2) null,
+      for (var number = start; number <= end; number++) number,
+      if (end < pageCount - 1) null,
+      if (end < pageCount) pageCount,
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = HyperUiThemeTokens.of(context);
+    final rtl = Directionality.of(context) == TextDirection.rtl;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: HyperGlass(
+        radius: 16,
+        blur: 12,
+        weight: HyperGlassWeight.subtle,
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            HyperButton.icon(
+              icon: rtl ? LucideIcons.chevronRight : LucideIcons.chevronLeft,
+              height: 32,
+              iconSize: 18,
+              radius: 12,
+              color: page > 1 ? tokens.foreground : tokens.mutedForeground,
+              onPressed: page > 1 && onChanged != null
+                  ? () => onChanged!(page - 1)
+                  : null,
+            ),
+            if (pageCount == 0)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text('0 / 0', style: TextStyle(color: tokens.mutedForeground)),
+              )
+            else
+              for (final number in _visiblePages())
+                number == null
+                    ? SizedBox(
+                        width: 22,
+                        child: Text(
+                          '…',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: tokens.mutedForeground),
+                        ),
+                      )
+                    : HyperPressable(
+                        onPressed: onChanged == null || number == page
+                            ? null
+                            : () => onChanged!(number),
+                        borderRadius: BorderRadius.circular(11),
+                        child: Container(
+                          constraints: const BoxConstraints(minWidth: 32),
+                          height: 32,
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.symmetric(horizontal: 1),
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          decoration: BoxDecoration(
+                            color: number == page
+                                ? tokens.muted
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(11),
+                          ),
+                          child: Text(
+                            '$number',
+                            style: TextStyle(
+                              color: number == page
+                                  ? tokens.primary
+                                  : tokens.foreground,
+                              fontSize: 12,
+                              fontWeight: number == page
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+            HyperButton.icon(
+              icon: rtl ? LucideIcons.chevronLeft : LucideIcons.chevronRight,
+              height: 32,
+              iconSize: 18,
+              radius: 12,
+              color: page < pageCount
+                  ? tokens.foreground
+                  : tokens.mutedForeground,
+              onPressed: page < pageCount && onChanged != null
+                  ? () => onChanged!(page + 1)
+                  : null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

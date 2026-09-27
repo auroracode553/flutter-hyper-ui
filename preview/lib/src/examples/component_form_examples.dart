@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region TextFieldComponentExample
 class TextFieldComponentExample extends StatelessWidget {
@@ -8,8 +8,8 @@ class TextFieldComponentExample extends StatelessWidget {
 
   // 字段标题写在输入框外部：输入组件本身不携带标题与说明。
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -19,53 +19,53 @@ class TextFieldComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('基础输入'),
-        const HyTextField(hintText: '请输入内容'),
-        const SizedBox(height: HyUiSpacing.lg),
+        const HyperTextField(hintText: '请输入内容'),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('可清空'),
-        const HyTextField(
+        const HyperTextField(
           clearable: true,
           initialValue: '示例内容',
           hintText: '输入后右侧显示清空按钮',
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('密码显隐'),
-        const HyTextField(
+        const HyperTextField(
           type: 'password',
           showPasswordToggle: true,
           hintText: '请输入密码',
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('前缀与后缀插槽'),
-        const HyTextField(
+        const HyperTextField(
           hintText: '搜索组件',
           prefix: Icon(LucideIcons.search),
           suffix: Icon(LucideIcons.slidersHorizontal),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('多行输入'),
-        const HyTextField(type: 'textarea', rows: 3, hintText: '请输入多行内容'),
-        const SizedBox(height: HyUiSpacing.lg),
+        const HyperTextField(type: 'textarea', rows: 3, hintText: '请输入多行内容'),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('字数统计'),
-        const HyTextField(
+        const HyperTextField(
           maxLength: 50,
           showCounter: true,
           hintText: '最多输入 50 个字符',
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('禁用与只读'),
-        const HyTextField(enabled: false, initialValue: '禁用状态'),
-        const SizedBox(height: HyUiSpacing.sm),
-        const HyTextField(readOnly: true, initialValue: '只读状态'),
-        const SizedBox(height: HyUiSpacing.lg),
+        const HyperTextField(enabled: false, initialValue: '禁用状态'),
+        const SizedBox(height: HyperUiSpacing.sm),
+        const HyperTextField(readOnly: true, initialValue: '只读状态'),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('错误态'),
-        const HyTextField(initialValue: '错误内容', errorText: '内容格式不正确'),
+        const HyperTextField(initialValue: '错误内容', errorText: '内容格式不正确'),
       ],
     );
   }
@@ -88,8 +88,8 @@ class _SegmentedControlComponentExampleState
   String _view = 'list';
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -99,49 +99,49 @@ class _SegmentedControlComponentExampleState
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('受控切换'),
-        HySegmentedControl<String>(
+        HyperSegmentedControl<String>(
           selectedValue: _value,
           onChanged: (value) => setState(() => _value = value),
           options: const [
-            HySegmentOption(value: 'day', label: '日'),
-            HySegmentOption(value: 'week', label: '周'),
-            HySegmentOption(value: 'month', label: '月'),
+            HyperSegmentOption(value: 'day', label: '日'),
+            HyperSegmentOption(value: 'week', label: '周'),
+            HyperSegmentOption(value: 'month', label: '月'),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.sm),
-        HyText('当前值：$_value', type: 'h5'),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.sm),
+        HyperText('当前值：$_value', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('非等宽布局'),
-        HySegmentedControl<String>(
+        HyperSegmentedControl<String>(
           equalWidth: false,
           selectedValue: _scope,
           onChanged: (value) => setState(() => _scope = value),
           options: const [
-            HySegmentOption(value: 'all', label: '全部'),
-            HySegmentOption(value: 'todo', label: '待办'),
-            HySegmentOption(value: 'done', label: '已完成'),
-            HySegmentOption(value: 'draft', label: '草稿箱'),
+            HyperSegmentOption(value: 'all', label: '全部'),
+            HyperSegmentOption(value: 'todo', label: '待办'),
+            HyperSegmentOption(value: 'done', label: '已完成'),
+            HyperSegmentOption(value: 'draft', label: '草稿箱'),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('图标与禁用项'),
-        HySegmentedControl<String>(
+        HyperSegmentedControl<String>(
           selectedValue: _view,
           onChanged: (value) => setState(() => _view = value),
           options: const [
-            HySegmentOption(
+            HyperSegmentOption(
               value: 'list',
               label: '列表',
               icon: LucideIcons.list,
             ),
-            HySegmentOption(
+            HyperSegmentOption(
               value: 'chart',
               label: '图表',
               icon: LucideIcons.trendingUp,
             ),
-            HySegmentOption(
+            HyperSegmentOption(
               value: 'board',
               label: '看板（未开放）',
               icon: LucideIcons.layoutDashboard,
@@ -175,43 +175,43 @@ class _DropdownComponentExampleState extends State<DropdownComponentExample> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        HyDropdown<String>(
+        HyperDropdown<String>(
           label: '排序方式',
           value: _value,
           onChanged: (value) => setState(() => _value = value),
           options: const [
-            HyOption(value: 'recent', label: '最近更新'),
-            HyOption(value: 'name', label: '按名称'),
-            HyOption(value: 'created', label: '创建时间'),
+            HyperOption(value: 'recent', label: '最近更新'),
+            HyperOption(value: 'name', label: '按名称'),
+            HyperOption(value: 'created', label: '创建时间'),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.xl),
+        const SizedBox(height: HyperUiSpacing.xl),
 
-        HyDropdown<String>(
+        HyperDropdown<String>(
           label: '负责人',
           placeholder: '选择负责人',
           value: _owner,
           onChanged: (value) => setState(() => _owner = value),
           options: const [
-            HyOption(value: 'ada', label: 'Ada'),
-            HyOption(value: 'bob', label: 'Bob'),
-            HyOption(value: 'eve', label: 'Eve（已停用）', enabled: false),
+            HyperOption(value: 'ada', label: 'Ada'),
+            HyperOption(value: 'bob', label: 'Bob'),
+            HyperOption(value: 'eve', label: 'Eve（已停用）', enabled: false),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.xl),
+        const SizedBox(height: HyperUiSpacing.xl),
 
         SizedBox(
           width: 220,
-          child: HyDropdown<int>(
+          child: HyperDropdown<int>(
             label: '每页数量',
             value: _pageSize,
             menuMaxHeight: 160,
             onChanged: (value) => setState(() => _pageSize = value),
             options: const [
-              HyOption(value: 10, label: '每页 10 条'),
-              HyOption(value: 20, label: '每页 20 条'),
-              HyOption(value: 50, label: '每页 50 条'),
-              HyOption(value: 100, label: '每页 100 条'),
+              HyperOption(value: 10, label: '每页 10 条'),
+              HyperOption(value: 20, label: '每页 20 条'),
+              HyperOption(value: 50, label: '每页 50 条'),
+              HyperOption(value: 100, label: '每页 100 条'),
             ],
           ),
         ),
@@ -236,8 +236,8 @@ class _CheckboxComponentExampleState extends State<CheckboxComponentExample> {
   bool _plain = false;
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -247,39 +247,39 @@ class _CheckboxComponentExampleState extends State<CheckboxComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('受控复选'),
-        HyCheckbox(
+        HyperCheckbox(
           value: _value,
           label: '同步到所有设备',
           onChanged: (value) => setState(() => _value = value),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('三态（全选 / 部分 / 空）'),
-        HyCheckbox(
+        HyperCheckbox(
           tristate: true,
           value: _partial,
           label: '已选择 2 / 4 项',
           onChanged: (value) => setState(() => _partial = value),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('禁用状态'),
-        const HyCheckbox(value: false, label: '禁用 · 未选中'),
-        const SizedBox(height: HyUiSpacing.sm),
-        const HyCheckbox(value: true, label: '禁用 · 已选中'),
-        const SizedBox(height: HyUiSpacing.lg),
+        const HyperCheckbox(value: false, label: '禁用 · 未选中'),
+        const SizedBox(height: HyperUiSpacing.sm),
+        const HyperCheckbox(value: true, label: '禁用 · 已选中'),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('纯控件（无标签）'),
         Row(
           children: [
-            HyCheckbox(
+            HyperCheckbox(
               value: _plain,
               onChanged: (value) => setState(() => _plain = value ?? false),
             ),
-            const SizedBox(width: HyUiSpacing.md),
-            const HyCheckbox(value: true),
-            const SizedBox(width: HyUiSpacing.md),
-            const HyCheckbox(value: false, tristate: true),
+            const SizedBox(width: HyperUiSpacing.md),
+            const HyperCheckbox(value: true),
+            const SizedBox(width: HyperUiSpacing.md),
+            const HyperCheckbox(value: false, tristate: true),
           ],
         ),
       ],
@@ -300,8 +300,8 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
   String _value = 'system';
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -319,7 +319,7 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
       children: [
         _label('互斥单选'),
         for (final entry in labels.entries)
-          HyRadio<String>(
+          HyperRadio<String>(
             value: entry.key,
             groupValue: _value,
             label: entry.value,
@@ -328,8 +328,8 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
                 ? null
                 : (value) => setState(() => _value = value),
           ),
-        const SizedBox(height: HyUiSpacing.sm),
-        HyText('当前值：$_value', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.sm),
+        HyperText('当前值：$_value', type: 'h5'),
       ],
     );
   }
@@ -349,8 +349,8 @@ class _SwitchComponentExampleState extends State<SwitchComponentExample> {
   bool _plain = false;
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -360,28 +360,28 @@ class _SwitchComponentExampleState extends State<SwitchComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('受控开关'),
-        HySwitch(
+        HyperSwitch(
           value: _enabled,
           label: '接收消息通知',
           onChanged: (value) => setState(() => _enabled = value),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('禁用状态'),
-        const HySwitch(value: true, label: '禁用 · 开启'),
-        const SizedBox(height: HyUiSpacing.sm),
-        const HySwitch(value: false, label: '禁用 · 关闭'),
-        const SizedBox(height: HyUiSpacing.lg),
+        const HyperSwitch(value: true, label: '禁用 · 开启'),
+        const SizedBox(height: HyperUiSpacing.sm),
+        const HyperSwitch(value: false, label: '禁用 · 关闭'),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('纯控件（无标签）'),
         Row(
           children: [
-            HySwitch(
+            HyperSwitch(
               value: _plain,
               onChanged: (value) => setState(() => _plain = value),
             ),
-            const SizedBox(width: HyUiSpacing.md),
-            const HySwitch(value: true),
+            const SizedBox(width: HyperUiSpacing.md),
+            const HyperSwitch(value: true),
           ],
         ),
       ],
@@ -405,8 +405,8 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
   String? _committedAge;
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -416,23 +416,23 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('连续取值'),
-        HySlider(
+        HyperSlider(
           value: _continuous,
           onChanged: (value) => setState(() => _continuous = value),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('离散分段（divisions: 5）'),
-        HySlider(
+        HyperSlider(
           value: _discrete,
           max: 5,
           divisions: 5,
           onChanged: (value) => setState(() => _discrete = value),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('自定义范围与提交回调'),
-        HySlider(
+        HyperSlider(
           value: _age,
           min: 18,
           max: 60,
@@ -442,8 +442,8 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
           onChangeEnd: (value) =>
               setState(() => _committedAge = '已提交：${value.toInt()} 岁'),
         ),
-        const SizedBox(height: HyUiSpacing.sm),
-        HyText(
+        const SizedBox(height: HyperUiSpacing.sm),
+        HyperText(
           '当前：${_age.toInt()} 岁${_committedAge == null ? '' : ' · $_committedAge'}',
           type: 'h5',
         ),
@@ -468,42 +468,42 @@ class _SelectComponentExampleState extends State<SelectComponentExample> {
 
   @override
   Widget build(BuildContext context) {
-    const options = <HyOption<String>>[
-      HyOption(value: 'design', label: '设计'),
-      HyOption(value: 'develop', label: '开发'),
-      HyOption(value: 'test', label: '测试'),
-      HyOption(value: 'archive', label: '已归档', enabled: false),
+    const options = <HyperOption<String>>[
+      HyperOption(value: 'design', label: '设计'),
+      HyperOption(value: 'develop', label: '开发'),
+      HyperOption(value: 'test', label: '测试'),
+      HyperOption(value: 'archive', label: '已归档', enabled: false),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        HySelect<String>(
+        HyperSelect<String>(
           label: '交付状态',
           values: _single,
           onChanged: (values) => setState(() => _single = values),
           options: options,
         ),
-        const SizedBox(height: HyUiSpacing.xl),
+        const SizedBox(height: HyperUiSpacing.xl),
 
-        HySelect<String>(
+        HyperSelect<String>(
           label: '协作角色',
           multiple: true,
           values: _multi,
           onChanged: (values) => setState(() => _multi = values),
           options: options,
         ),
-        const SizedBox(height: HyUiSpacing.xl),
+        const SizedBox(height: HyperUiSpacing.xl),
 
-        HySelect<String>(
+        HyperSelect<String>(
           label: '所在团队',
           placeholder: '请选择所在团队',
           values: _team,
           onChanged: (values) => setState(() => _team = values),
           options: const [
-            HyOption(value: 'app', label: '应用组'),
-            HyOption(value: 'web', label: '平台组'),
+            HyperOption(value: 'app', label: '应用组'),
+            HyperOption(value: 'web', label: '平台组'),
           ],
         ),
       ],
@@ -525,34 +525,34 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
   String _city = '上海';
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   Future<void> _pick() async {
-    final value = await HyPicker.show<String>(
+    final value = await HyperPicker.show<String>(
       context,
       title: '选择交付周期',
       options: const [
-        HyOption(value: '今天', label: '今天'),
-        HyOption(value: '本周', label: '本周'),
-        HyOption(value: '下周', label: '下周'),
+        HyperOption(value: '今天', label: '今天'),
+        HyperOption(value: '本周', label: '本周'),
+        HyperOption(value: '下周', label: '下周'),
       ],
     );
     if (mounted && value != null) setState(() => _value = value);
   }
 
   Future<void> _pickCity() async {
-    final value = await HyPicker.show<String>(
+    final value = await HyperPicker.show<String>(
       context,
       title: '常用城市',
       // initialIndex 让滚轮停在指定项。
       initialIndex: 2,
       options: const [
-        HyOption(value: '北京', label: '北京'),
-        HyOption(value: '广州', label: '广州'),
-        HyOption(value: '上海', label: '上海'),
-        HyOption(value: '深圳', label: '深圳'),
+        HyperOption(value: '北京', label: '北京'),
+        HyperOption(value: '广州', label: '广州'),
+        HyperOption(value: '上海', label: '上海'),
+        HyperOption(value: '深圳', label: '深圳'),
       ],
     );
     if (mounted && value != null) setState(() => _city = value);
@@ -567,19 +567,19 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
         _label('基础滚轮选择'),
         Row(
           children: [
-            HyButton.tonal(label: '选择交付周期', onPressed: _pick),
+            HyperButton.tonal(label: '选择交付周期', onPressed: _pick),
             const SizedBox(width: 14),
-            HyBadge(label: _value),
+            HyperBadge(label: _value),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('指定初始项（initialIndex: 2）'),
         Row(
           children: [
-            HyButton.tonal(label: '选择城市', onPressed: _pickCity),
+            HyperButton.tonal(label: '选择城市', onPressed: _pickCity),
             const SizedBox(width: 14),
-            HyBadge(label: _city),
+            HyperBadge(label: _city),
           ],
         ),
       ],
@@ -604,22 +604,22 @@ class _DatePickerComponentExampleState
   DateTimeRange? _range;
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   Future<void> _pickDate() async {
-    final value = await HyDatePicker.date(context, initialDate: _date);
+    final value = await HyperDatePicker.date(context, initialDate: _date);
     if (mounted && value != null) setState(() => _date = value);
   }
 
   Future<void> _pickTime() async {
-    final value = await HyDatePicker.time(context, initialTime: _time);
+    final value = await HyperDatePicker.time(context, initialTime: _time);
     if (mounted && value != null) setState(() => _time = value);
   }
 
   Future<void> _pickRange() async {
-    final value = await HyDatePicker.range(context, initialRange: _range);
+    final value = await HyperDatePicker.range(context, initialRange: _range);
     if (mounted && value != null) setState(() => _range = value);
   }
 
@@ -635,46 +635,46 @@ class _DatePickerComponentExampleState
         _label('月历选择日期'),
         Row(
           children: [
-            HyButton.tonal(
+            HyperButton.tonal(
               label: '选择日期',
               icon: LucideIcons.calendar,
               onPressed: _pickDate,
             ),
             const SizedBox(width: 14),
-            HyBadge(label: _date == null ? '未选择' : _format(_date!)),
+            HyperBadge(label: _date == null ? '未选择' : _format(_date!)),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('时间选择'),
         Row(
           children: [
-            HyButton.tonal(
+            HyperButton.tonal(
               label: '选择时间',
               icon: LucideIcons.clock,
               onPressed: _pickTime,
             ),
             const SizedBox(width: 14),
-            HyBadge(
+            HyperBadge(
               label: _time == null
                   ? '未选择'
                   : '${_time!.hour.toString().padLeft(2, '0')}:${_time!.minute.toString().padLeft(2, '0')}',
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('月历选择日期区间'),
         Row(
           children: [
-            HyButton.tonal(
+            HyperButton.tonal(
               label: '选择区间',
               icon: LucideIcons.calendarDays,
               onPressed: _pickRange,
             ),
             const SizedBox(width: 14),
             Expanded(
-              child: HyBadge(
+              child: HyperBadge(
                 label: _range == null
                     ? '未选择'
                     : '${_format(_range!.start)} ~ ${_format(_range!.end)}',
@@ -693,10 +693,10 @@ class FilePickerComponentExample extends StatelessWidget {
   const FilePickerComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => const HyCard(
+  Widget build(BuildContext context) => const HyperCard(
     title: '能力由业务层注入',
     leading: Icon(LucideIcons.puzzle),
-    child: Text('HyFilePicker 负责选择文件，HyFileUpload 负责上传；组件库不绑定平台插件或网络实现。'),
+    child: Text('HyperFilePicker 负责选择文件，HyperFileUpload 负责上传；组件库不绑定平台插件或网络实现。'),
   );
 }
 // end-doc-region FilePickerComponentExample

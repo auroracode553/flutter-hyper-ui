@@ -1,10 +1,10 @@
 # 主题与令牌
 
-Hy UI 使用两个 `ThemeExtension` 分离语义颜色和玻璃材质。应用可以只覆盖品牌色，也可以完整定义一套材质语言。
+Hyper UI 使用两个 `ThemeExtension` 分离语义颜色和玻璃材质。应用可以只覆盖品牌色，也可以完整定义一套材质语言。
 
 ## 两层令牌
 
-### `HyUiThemeTokens`
+### `HyperUiThemeTokens`
 
 负责内容与状态语义：
 
@@ -13,7 +13,7 @@ Hy UI 使用两个 `ThemeExtension` 分离语义颜色和玻璃材质。应用�
 - 弱化文字与边界
 - success、warning、error、info
 
-### `HyGlassTheme`
+### `HyperGlassTheme`
 
 负责空间与材质语义：
 
@@ -29,11 +29,11 @@ Hy UI 使用两个 `ThemeExtension` 分离语义颜色和玻璃材质。应用�
 只改变主色时使用主题构造参数：
 
 ```dart
-final lightTheme = HyUiTheme.light(
+final lightTheme = HyperUiTheme.light(
   primary: const Color(0xFF5C6BC0),
 );
 
-final darkTheme = HyUiTheme.dark(
+final darkTheme = HyperUiTheme.dark(
   primary: const Color(0xFF9FA8DA),
 );
 ```
@@ -44,16 +44,16 @@ final darkTheme = HyUiTheme.dark(
 
 ```dart
 ThemeData createLightTheme() {
-  final base = HyUiTheme.light(
+  final base = HyperUiTheme.light(
     primary: const Color(0xFF5C6BC0),
   );
 
   return base.copyWith(
     extensions: [
       ...base.extensions.values.where(
-        (extension) => extension is! HyGlassTheme,
+        (extension) => extension is! HyperGlassTheme,
       ),
-      HyGlassTheme.light().copyWith(
+      HyperGlassTheme.light().copyWith(
         surface: const Color(0xDDF8F7FF),
         surfaceStrong: const Color(0xF8F8F7FF),
         selection: const Color(0x205C6BC0),
@@ -74,10 +74,10 @@ ThemeData createLightTheme() {
 Theme(
   data: Theme.of(context).copyWith(
     extensions: [
-      HyUiThemeTokens.of(context).copyWith(
+      HyperUiThemeTokens.of(context).copyWith(
         primary: const Color(0xFF00897B),
       ),
-      HyGlassTheme.of(context),
+      HyperGlassTheme.of(context),
     ],
   ),
   child: const ProfileEditor(),
@@ -91,10 +91,10 @@ Theme(
 自定义组件可以直接复用相同语言：
 
 ```dart
-final colors = context.hyUi;
-final glass = context.hyGlass;
+final colors = context.hyperUi;
+final glass = context.hyperGlass;
 
-return HyGlass(
+return HyperGlass(
   borderColor: glass.edgeHighlight,
   child: Text(
     '自定义内容',
@@ -106,7 +106,7 @@ return HyGlass(
 ## 透明度与性能
 
 - 长列表中不要为每一行单独开启大半径模糊；使用一个分组材质包住多行内容。
-- `HyGlass(blur: 0)` 保留表面、边界和阴影，但不执行背景模糊。
+- `HyperGlass(blur: 0)` 保留表面、边界和阴影，但不执行背景模糊。
 - 大型弹层使用 `prominent`，小控件使用 `subtle`，避免透明表面层层叠加。
-- 系统高对比度开启时，`HyGlass` 会自动转向更实的表面和更强边界。
+- 系统高对比度开启时，`HyperGlass` 会自动转向更实的表面和更强边界。
 

@@ -1,6 +1,6 @@
 ---
-title: HyToast
-description: HyToast 组件与公开 API
+title: HyperToast
+description: HyperToast 组件与公开 API
 ---
 
 <ComponentDoc component-id="toast" />

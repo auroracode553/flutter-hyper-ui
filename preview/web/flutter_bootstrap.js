@@ -2,7 +2,7 @@
 {{flutter_build_config}}
 
 // 唯一宿主接口；脚本加载时不自动启动，避免覆盖文档页面。
-window.hyUiPreviewBundle = (() => {
+window.hyperUiPreviewBundle = (() => {
   let appPromise;
   return {
     protocolVersion: 2,

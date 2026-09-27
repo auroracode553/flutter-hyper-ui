@@ -4,7 +4,7 @@ import { PreviewView, selectedTheme } from './preview/preview-view';
 
 export type { PreviewStatus } from './preview/contracts';
 
-const developmentServer = import.meta.env.VITE_HY_UI_PREVIEW_MODE === 'dev-server';
+const developmentServer = import.meta.env.VITE_HYPER_UI_PREVIEW_MODE === 'dev-server';
 // 开发模式走 Vite 同源代理，发布模式读取同站点静态包。
 const loader = new PreviewBundleLoader(
   `${import.meta.env.BASE_URL}preview/`,

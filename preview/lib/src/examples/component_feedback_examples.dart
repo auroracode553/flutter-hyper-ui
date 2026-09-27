@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region ToastComponentExample
 class ToastComponentExample extends StatelessWidget {
   const ToastComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -19,43 +19,43 @@ class ToastComponentExample extends StatelessWidget {
       children: [
         _label('语义色调'),
         Wrap(
-          spacing: HyUiSpacing.sm,
-          runSpacing: HyUiSpacing.sm,
+          spacing: HyperUiSpacing.sm,
+          runSpacing: HyperUiSpacing.sm,
           children: [
-            HyButton.tonal(
+            HyperButton.tonal(
               label: '默认',
-              onPressed: () => HyToast.show(context, '已复制到剪贴板'),
+              onPressed: () => HyperToast.show(context, '已复制到剪贴板'),
             ),
-            HyButton.tonal(
+            HyperButton.tonal(
               label: '成功',
               onPressed: () =>
-                  HyToast.show(context, '保存成功', tone: HyUiTone.success),
+                  HyperToast.show(context, '保存成功', tone: HyperUiTone.success),
             ),
-            HyButton.tonal(
+            HyperButton.tonal(
               label: '警告',
               onPressed: () =>
-                  HyToast.show(context, '请检查输入内容', tone: HyUiTone.warning),
+                  HyperToast.show(context, '请检查输入内容', tone: HyperUiTone.warning),
             ),
-            HyButton.tonal(
+            HyperButton.tonal(
               label: '错误',
               onPressed: () =>
-                  HyToast.show(context, '网络连接失败', tone: HyUiTone.error),
+                  HyperToast.show(context, '网络连接失败', tone: HyperUiTone.error),
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('操作按钮与时长'),
-        HyButton.tonal(
+        HyperButton.tonal(
           label: '可撤销（4 秒）',
-          onPressed: () => HyToast.show(
+          onPressed: () => HyperToast.show(
             context,
             '已删除 3 个文件',
-            tone: HyUiTone.warning,
+            tone: HyperUiTone.warning,
             duration: const Duration(seconds: 4),
             actionLabel: '撤销',
             onAction: () =>
-                HyToast.show(context, '已恢复删除', tone: HyUiTone.success),
+                HyperToast.show(context, '已恢复删除', tone: HyperUiTone.success),
           ),
         ),
       ],
@@ -77,14 +77,14 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
 
   /// 右侧抽屉：选择后通过 Navigator.pop 返回泛型结果。
   Future<void> _openEnd() async {
-    final result = await HyDrawer.show<String>(
+    final result = await HyperDrawer.show<String>(
       context,
       title: '选择工作空间',
       width: 320,
       builder: (drawerContext) => Column(
         children: [
           for (final label in const ['产品设计', '移动端', '文档站'])
-            HyListTile(
+            HyperListTile(
               title: label,
               showChevron: true,
               onTap: () => Navigator.pop(drawerContext, label),
@@ -98,25 +98,25 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
 
   /// 左侧抽屉：placement 指定起始侧，footerBuilder 提供固定底部操作区。
   Future<void> _openStart() async {
-    await HyDrawer.show<void>(
+    await HyperDrawer.show<void>(
       context,
       title: '筛选条件',
-      placement: HyDrawerPlacement.start,
+      placement: HyperDrawerPlacement.start,
       width: 300,
       builder: (drawerContext) => Column(
         children: [
-          HyListTile(
+          HyperListTile(
             title: '仅显示收藏',
-            trailing: HyCheckbox(value: true, onChanged: (_) {}),
+            trailing: HyperCheckbox(value: true, onChanged: (_) {}),
             onTap: () {},
           ),
-          HyListTile(
+          HyperListTile(
             title: '包含已归档',
-            trailing: const HyCheckbox(value: false, onChanged: null),
+            trailing: const HyperCheckbox(value: false, onChanged: null),
           ),
-          HyListTile(
+          HyperListTile(
             title: '全部时间',
-            trailing: const HyRadio<String>(
+            trailing: const HyperRadio<String>(
               value: 'all',
               groupValue: 'all',
               onChanged: null,
@@ -124,7 +124,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
           ),
         ],
       ),
-      footerBuilder: (footerContext) => HyButton.filled(
+      footerBuilder: (footerContext) => HyperButton.filled(
         label: '应用筛选',
         expanded: true,
         onPressed: () => Navigator.pop(footerContext),
@@ -133,8 +133,8 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
   }
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -144,13 +144,13 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('右侧抽屉与返回值'),
-        HyButton.filled(label: '打开抽屉', onPressed: _openEnd),
-        const SizedBox(height: HyUiSpacing.sm),
-        HyText('返回结果：$_result', type: 'h5'),
-        const SizedBox(height: HyUiSpacing.lg),
+        HyperButton.filled(label: '打开抽屉', onPressed: _openEnd),
+        const SizedBox(height: HyperUiSpacing.sm),
+        HyperText('返回结果：$_result', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('左侧抽屉与底部操作区'),
-        HyButton.tonal(label: '打开筛选抽屉', onPressed: _openStart),
+        HyperButton.tonal(label: '打开筛选抽屉', onPressed: _openStart),
       ],
     );
   }
@@ -162,8 +162,8 @@ class SkeletonComponentExample extends StatelessWidget {
   const SkeletonComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -173,11 +173,11 @@ class SkeletonComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('卡片骨架（card: true）'),
-        const HySkeleton(card: true, rows: 3),
-        const SizedBox(height: HyUiSpacing.lg),
+        const HyperSkeleton(card: true, rows: 3),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('列表骨架（rows: 2）'),
-        const HySkeleton(rows: 2),
+        const HyperSkeleton(rows: 2),
       ],
     );
   }
@@ -189,8 +189,8 @@ class DialogComponentExample extends StatelessWidget {
   const DialogComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -200,21 +200,21 @@ class DialogComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('标准确认'),
-        HyButton.filled(
+        HyperButton.filled(
           label: '保存确认',
-          onPressed: () => HyDialog.confirm(
+          onPressed: () => HyperDialog.confirm(
             context,
             title: '保存本次修改？',
             message: '保存后，新的设置会立即在所有设备生效。',
             confirmLabel: '保存',
           ),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('危险操作与自定义按钮'),
-        HyButton.tonal(
+        HyperButton.tonal(
           label: '删除确认（dangerous）',
-          onPressed: () => HyDialog.confirm(
+          onPressed: () => HyperDialog.confirm(
             context,
             title: '删除这个项目？',
             message: '删除后无法恢复，所有成员将失去访问权限。',
@@ -222,12 +222,12 @@ class DialogComponentExample extends StatelessWidget {
             dangerous: true,
           ),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('仅确认按钮与自定义正文'),
-        HyButton.tonal(
+        HyperButton.tonal(
           label: '公告（showCancel: false）',
-          onPressed: () => HyDialog.confirm(
+          onPressed: () => HyperDialog.confirm(
             context,
             title: '版本更新',
             // content 插槽可放任意组件，优先于 message。
@@ -236,7 +236,7 @@ class DialogComponentExample extends StatelessWidget {
               children: [
                 Text('本次更新内容：'),
                 SizedBox(height: 8),
-                Text('· 新增 HyTextField 组件文档\n· 示例支持明暗主题切换'),
+                Text('· 新增 HyperTextField 组件文档\n· 示例支持明暗主题切换'),
               ],
             ),
             confirmLabel: '知道了',
@@ -254,8 +254,8 @@ class LoadingComponentExample extends StatelessWidget {
   const LoadingComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -265,23 +265,24 @@ class LoadingComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('局部加载'),
-        HySpace(
-          direction: Axis.horizontal,
-          alignment: CrossAxisAlignment.center,
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: const [
-            HyLoading(),
-            SizedBox(width: HyUiSpacing.md),
-            HyLoading(label: '同步中'),
-            SizedBox(width: HyUiSpacing.md),
-            HyLoading(label: '上传', size: 32),
+            HyperLoading(),
+            SizedBox(width: HyperUiSpacing.md),
+            HyperLoading(label: '同步中'),
+            SizedBox(width: HyperUiSpacing.md),
+            HyperLoading(label: '上传', size: 32),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('全局任务遮罩'),
-        HyButton.tonal(
+        HyperButton.tonal(
           label: '预览全局加载',
-          onPressed: () => HyLoading.during<void>(
+          onPressed: () => HyperLoading.during<void>(
             context,
             () => Future<void>.delayed(const Duration(milliseconds: 900)),
             label: '正在保存',
@@ -293,75 +294,13 @@ class LoadingComponentExample extends StatelessWidget {
 }
 // end-doc-region LoadingComponentExample
 
-// doc-region AlertComponentExample
-class AlertComponentExample extends StatefulWidget {
-  const AlertComponentExample({super.key});
-
-  @override
-  State<AlertComponentExample> createState() => _AlertComponentExampleState();
-}
-
-class _AlertComponentExampleState extends State<AlertComponentExample> {
-  bool _dismissibleVisible = true;
-
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _label('语义色调（带标题）'),
-        const HyAlert(
-          title: '信息',
-          message: '新的组件示例已经准备完成。',
-          tone: HyUiTone.info,
-        ),
-        const SizedBox(height: HyUiSpacing.sm),
-        const HyAlert(
-          title: '成功',
-          message: '配置已同步到所有设备。',
-          tone: HyUiTone.success,
-        ),
-        const SizedBox(height: HyUiSpacing.sm),
-        const HyAlert(
-          title: '警告',
-          message: '存储空间即将用完。',
-          tone: HyUiTone.warning,
-        ),
-        const SizedBox(height: HyUiSpacing.sm),
-        const HyAlert(title: '错误', message: '无法连接到同步服务。', tone: HyUiTone.error),
-        const SizedBox(height: HyUiSpacing.lg),
-
-        _label('无标题与可关闭'),
-        if (_dismissibleVisible)
-          HyAlert(
-            message: '点击右侧关闭按钮可以移除这条通知。',
-            tone: HyUiTone.info,
-            onClose: () => setState(() => _dismissibleVisible = false),
-          )
-        else
-          HyButton.ghost(
-            label: '重新显示通知',
-            onPressed: () => setState(() => _dismissibleVisible = true),
-          ),
-      ],
-    );
-  }
-}
-// end-doc-region AlertComponentExample
-
 // doc-region ActionSheetComponentExample
 class ActionSheetComponentExample extends StatelessWidget {
   const ActionSheetComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -371,43 +310,37 @@ class ActionSheetComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('自定义内容'),
-        HyButton.tonal(
+        HyperButton.tonal(
           label: '打开底部弹层',
-          onPressed: () => HyActionSheet.show<void>(
+          onPressed: () => HyperActionSheet.show<void>(
             context,
             title: '分享项目',
             builder: (sheetContext) => const Column(
               children: [
-                HyListTile(
-                  leadingIcon: LucideIcons.link,
-                  title: '复制链接',
-                ),
-                HyListTile(
-                  leadingIcon: LucideIcons.userPlus,
-                  title: '邀请成员',
-                ),
+                HyperListTile(leadingIcon: LucideIcons.link, title: '复制链接'),
+                HyperListTile(leadingIcon: LucideIcons.userPlus, title: '邀请成员'),
               ],
             ),
           ),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('操作列表'),
-        HyButton.tonal(
+        HyperButton.tonal(
           label: '打开操作菜单',
-          onPressed: () => HyActionSheet.show<String>(
+          onPressed: () => HyperActionSheet.show<String>(
             context,
             title: '项目操作',
             actions: const [
-              HyAction(value: 'rename', label: '重命名', icon: LucideIcons.pencil),
-              HyAction(value: 'share', label: '分享', icon: LucideIcons.share2),
-              HyAction(
+              HyperAction(value: 'rename', label: '重命名', icon: LucideIcons.pencil),
+              HyperAction(value: 'share', label: '分享', icon: LucideIcons.share2),
+              HyperAction(
                 value: 'move',
                 label: '移动（无权限）',
                 icon: LucideIcons.folderInput,
                 enabled: false,
               ),
-              HyAction(
+              HyperAction(
                 value: 'delete',
                 label: '删除',
                 icon: LucideIcons.trash,
@@ -416,20 +349,20 @@ class ActionSheetComponentExample extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('强制操作（dismissible: false）'),
-        HyButton.tonal(
+        HyperButton.tonal(
           label: '打开强制阅读弹层',
-          onPressed: () => HyActionSheet.show<void>(
+          onPressed: () => HyperActionSheet.show<void>(
             context,
             title: '服务条款',
             dismissible: false,
             builder: (sheetContext) => Column(
               children: [
                 const Text('点击遮罩无法关闭，只能通过按钮确认。'),
-                const SizedBox(height: HyUiSpacing.md),
-                HyButton.filled(
+                const SizedBox(height: HyperUiSpacing.md),
+                HyperButton.filled(
                   label: '同意并继续',
                   expanded: true,
                   onPressed: () => Navigator.pop(sheetContext),
@@ -449,7 +382,7 @@ class PopoverComponentExample extends StatelessWidget {
   const PopoverComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => const HyPopover(
+  Widget build(BuildContext context) => const HyperPopover(
     content: Text('Popover 保持页面上下文，适合展示简短补充说明。'),
     child: Text('点击查看说明'),
   );
@@ -471,12 +404,12 @@ class _PopupMenuComponentExampleState extends State<PopupMenuComponentExample> {
   @override
   Widget build(BuildContext context) => Row(
     children: [
-      HyPopupMenu<String>(
+      HyperPopupMenu<String>(
         onSelected: (value) => setState(() => _selected = value),
         actions: const [
-          HyAction(value: '编辑', label: '编辑', icon: LucideIcons.pencil),
-          HyAction(value: '复制', label: '复制', icon: LucideIcons.copy),
-          HyAction(
+          HyperAction(value: '编辑', label: '编辑', icon: LucideIcons.pencil),
+          HyperAction(value: '复制', label: '复制', icon: LucideIcons.copy),
+          HyperAction(
             value: '删除',
             label: '删除',
             icon: LucideIcons.trash,
@@ -503,14 +436,14 @@ class _NoticeBarComponentExampleState extends State<NoticeBarComponentExample> {
   bool _visible = true;
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
   Widget build(BuildContext context) {
     if (!_visible) {
-      return HyButton.ghost(
+      return HyperButton.ghost(
         label: '重新显示公告',
         onPressed: () => setState(() => _visible = true),
       );
@@ -521,11 +454,11 @@ class _NoticeBarComponentExampleState extends State<NoticeBarComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('短公告（静止展示）'),
-        const HyNoticeBar(message: '暂不支持离线编辑。'),
-        const SizedBox(height: HyUiSpacing.lg),
+        const HyperNoticeBar(message: '暂不支持离线编辑。'),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('长公告（自动滚动，可关闭）'),
-        HyNoticeBar(
+        HyperNoticeBar(
           message: '组件文档已升级：每个组件现在都有独立、可交互的运行预览，支持明暗主题实时切换。',
           onClose: () => setState(() => _visible = false),
         ),

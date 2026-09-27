@@ -1,38 +1,15 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { withBase } from 'vitepress';
-import { componentSidebarSections, featuredDemo } from '../../catalog';
-import DemoBlock from './DemoBlock.vue';
+import { componentGroups } from '../../catalog';
 import DeviceFrame from './DeviceFrame.vue';
-import { exampleSourceFor } from '../example-source';
 import { registerPreview } from '../preview-runtime';
 
-const principles = [
-  {
-    number: '01',
-    title: '一种材质语言',
-    description: '表面厚度、边缘高光、阴影和遮罩全部由主题令牌控制，明暗模式自然一致。',
-  },
-  {
-    number: '02',
-    title: '真实触控反馈',
-    description: '按下即响应，拖拽连续跟手，释放继承速度；减少动画时自动退化为稳定反馈。',
-  },
-  {
-    number: '03',
-    title: '完全通用',
-    description: '组件只接受值、Widget 与回调，不绑定路由、业务模型或状态管理框架。',
-  },
-];
-
-const componentCount = componentSidebarSections.reduce(
-  (total, section) => total + section.components.length,
+/** 组件总数：只统计侧栏可见组件，与导航目录保持一致。 */
+const componentCount = componentGroups.reduce(
+  (total, group) => total + group.components.filter((entry) => entry.sidebar !== false).length,
   0,
 );
-
-function sectionPreview(section: (typeof componentSidebarSections)[number]) {
-  return section.components.slice(0, 4).map((item) => item.navName).join(' · ');
-}
 
 const phoneTarget = ref<HTMLElement>();
 let disposePhone: (() => void) | undefined;
@@ -42,108 +19,70 @@ onMounted(() => {
   disposePhone = registration.dispose;
 });
 onBeforeUnmount(() => disposePhone?.());
-
-const quickCode = `import 'package:flutter/material.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
-
-MaterialApp(
-  theme: HyUiTheme.light(),
-  darkTheme: HyUiTheme.dark(),
-  home: const HySoftBackground(
-    child: YourApp(),
-  ),
-);`;
 </script>
 
 <template>
-  <main class="hy-home">
-    <section class="hy-home__hero">
-      <div class="hy-home__ambient hy-home__ambient--blue" />
-      <div class="hy-home__ambient hy-home__ambient--violet" />
-      <div class="hy-home__hero-copy">
-        <div class="hy-home__eyebrow">
-          <img :src="withBase('/hy-ui-logo.svg')" alt="" />
-          <span>HY UI · FLUTTER</span>
-        </div>
-        <h1>让界面像玻璃一样<br /><span>轻盈，也清晰。</span></h1>
-        <p>
-          一套面向 Flutter 移动端的通用柔性玻璃 UI 库。统一材质、状态、动效和无障碍行为，
-          让业务只关注内容与流程。
+  <main class="hyper-home">
+    <!-- 简介区 -->
+    <section class="hyper-home__intro">
+      <div class="hyper-home__intro-copy">
+        <h1>为 Flutter 而生的<span>柔性玻璃 UI 库</span></h1>
+        <p class="hyper-home__lede">
+          一套流行的 Flutter 柔性玻璃组件库，用统一的材质令牌、细腻的边缘高光与自然连贯的动效，让界面自带通透质感。
         </p>
-        <div class="hy-home__actions">
-          <a class="hy-button hy-button--primary" :href="withBase('/guide/getting-started')">开始使用</a>
-          <a class="hy-button hy-button--glass" :href="withBase('/components/catalog')">浏览组件</a>
+        <ul class="hyper-home__chips">
+          <li>柔性玻璃材质</li>
+          <li>桌面端 · 移动端自适应</li>
+          <li>明暗双主题</li>
+          <li>零运行时依赖</li>
+        </ul>
+        <div class="hyper-home__actions">
+          <a class="hyper-button hyper-button--primary" :href="withBase('/guide/getting-started')">开始使用</a>
+          <a class="hyper-button hyper-button--glass" :href="withBase('/components/catalog')">浏览组件</a>
         </div>
-        <ul class="hy-home__facts" aria-label="库特性">
+        <ul class="hyper-home__facts" aria-label="库特性">
           <li><strong>{{ componentCount }}</strong><span>组件文档</span></li>
           <li><strong>0</strong><span>运行时第三方依赖</span></li>
-          <li><strong>A11y</strong><span>动效与对比度适配</span></li>
+          <li><strong>无障碍</strong><span>动效与对比度适配</span></li>
         </ul>
       </div>
 
-      <div class="hy-home__hero-object">
-        <DeviceFrame class="hy-home__phone" mode="mobile">
+      <div class="hyper-home__intro-object">
+        <DeviceFrame class="hyper-home__phone" mode="mobile">
           <div ref="phoneTarget" class="demo-block__flutter-host" />
         </DeviceFrame>
       </div>
     </section>
 
-    <section class="hy-home__section hy-home__principles">
-      <div class="hy-home__section-heading">
-        <span>DESIGN FOUNDATION</span>
-        <h2>不是套一层模糊，<br />而是一套完整的界面行为。</h2>
-      </div>
-      <div class="hy-home__principle-grid">
-        <article v-for="principle in principles" :key="principle.number">
-          <small>{{ principle.number }}</small>
-          <h3>{{ principle.title }}</h3>
-          <p>{{ principle.description }}</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="hy-home__section hy-home__live">
-      <div class="hy-home__section-heading">
-        <span>LIVE FLUTTER PREVIEW</span>
-        <h2>文档里的每一个控件，<br />都是真实运行的 Widget。</h2>
-        <p>拖动 TabBar、侧滑菜单、打开抽屉，直接体验组件的真实状态和交互。</p>
-      </div>
-      <DemoBlock
-        :title="featuredDemo.title"
-        :description="featuredDemo.description"
-        :component="featuredDemo.id"
-        :code="exampleSourceFor(featuredDemo.source)"
-        :height="featuredDemo.height"
-      />
-    </section>
-
-    <section class="hy-home__section hy-home__catalog">
-      <div class="hy-home__section-heading">
-        <span>COMPONENT SYSTEM</span>
-        <h2>从原子控件到完整移动端界面。</h2>
-      </div>
-      <nav class="hy-home__catalog-grid" aria-label="组件分类">
-        <a
-          v-for="(section, index) in componentSidebarSections"
-          :key="section.id"
-          :href="withBase(`/components/catalog#${section.id}`)"
-        >
-          <small>{{ String(index + 1).padStart(2, '0') }}</small>
-          <h3>{{ section.title }}</h3>
-          <p>{{ sectionPreview(section) }}</p>
-          <span>{{ section.components.length }} 个组件 <b>→</b></span>
-        </a>
-      </nav>
-    </section>
-
-    <section class="hy-home__section hy-home__start">
-      <div>
-        <span class="hy-home__kicker">START SMALL</span>
-        <h2>两套主题，<br />一行接入。</h2>
-        <p>Hy UI 不接管你的应用架构。使用主题作为入口，再按需组合组件。</p>
-        <a :href="withBase('/guide/theming')">了解主题定制 →</a>
-      </div>
-      <pre><code>{{ quickCode }}</code></pre>
+    <!-- 特性区：特性优点描述 -->
+    <section class="hyper-home__section hyper-home__features">
+      <h2>特性</h2>
+      <ul class="hyper-home__features-list">
+        <li>
+          <strong>柔性玻璃材质</strong>
+          <span>统一的材质令牌与细腻的边缘高光，让界面自带通透质感。</span>
+        </li>
+        <li>
+          <strong>桌面端 · 移动端自适应</strong>
+          <span>组件随窗口尺寸自动调整布局，一套代码覆盖手机与桌面。</span>
+        </li>
+        <li>
+          <strong>明暗双主题</strong>
+          <span>开箱即得两套主题，令牌统一，可按需定制。</span>
+        </li>
+        <li>
+          <strong>自然连贯的动效</strong>
+          <span>面向触摸反馈与页面切换的轻量动效，并遵循系统减弱动效偏好。</span>
+        </li>
+        <li>
+          <strong>零运行时依赖</strong>
+          <span>不引入任何第三方运行时库，接入即用，包体积可控。</span>
+        </li>
+        <li>
+          <strong>无障碍适配</strong>
+          <span>对比度与动效自动适配系统的无障碍偏好。</span>
+        </li>
+      </ul>
     </section>
   </main>
 </template>

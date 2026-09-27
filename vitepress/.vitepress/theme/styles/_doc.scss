@@ -43,8 +43,8 @@
     width: 100%;
     overflow: hidden;
     border: 1px solid var(--vp-c-divider);
-    border-radius: var(--hy-radius-sm);
-    background: var(--hy-glass-subtle);
+    border-radius: var(--hyper-radius-sm);
+    background: var(--hyper-glass-subtle);
   }
 
   tr:nth-child(2n) {
@@ -64,8 +64,8 @@
   }
 }
 
-.hy-kicker,
-.hy-home__kicker {
+.hyper-kicker,
+.hyper-home__kicker {
   display: inline-block;
   color: var(--vp-c-brand-1);
   font-size: 11px;

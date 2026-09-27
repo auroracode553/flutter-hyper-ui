@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region GlassWeightComponentExample
 class GlassWeightComponentExample extends StatelessWidget {
   const GlassWeightComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => const Wrap(spacing: 8, runSpacing: 8,
+  Widget build(BuildContext context) => const Wrap(
+    spacing: 8,
+    runSpacing: 8,
     children: [
-      HyGlass(weight: HyGlassWeight.subtle, padding: EdgeInsets.all(16), child: Text('Subtle')),
-      HyGlass(weight: HyGlassWeight.regular, padding: EdgeInsets.all(16), child: Text('Regular')),
-      HyGlass(weight: HyGlassWeight.prominent, padding: EdgeInsets.all(16), child: Text('Prominent')),
-      HyGlass(weight: HyGlassWeight.solid, padding: EdgeInsets.all(16), child: Text('Solid')),
+      HyperGlass(
+        weight: HyperGlassWeight.subtle,
+        padding: EdgeInsets.all(16),
+        child: Text('Subtle'),
+      ),
+      HyperGlass(
+        weight: HyperGlassWeight.regular,
+        padding: EdgeInsets.all(16),
+        child: Text('Regular'),
+      ),
+      HyperGlass(
+        weight: HyperGlassWeight.prominent,
+        padding: EdgeInsets.all(16),
+        child: Text('Prominent'),
+      ),
+      HyperGlass(
+        weight: HyperGlassWeight.solid,
+        padding: EdgeInsets.all(16),
+        child: Text('Solid'),
+      ),
     ],
   );
 }
@@ -23,18 +41,18 @@ class PressableComponentExample extends StatefulWidget {
   const PressableComponentExample({super.key});
 
   @override
-  State<PressableComponentExample> createState() => _PressableComponentExampleState();
+  State<PressableComponentExample> createState() =>
+      _PressableComponentExampleState();
 }
 
 class _PressableComponentExampleState extends State<PressableComponentExample> {
   int _count = 0;
 
   @override
-  Widget build(BuildContext context) => HyPressable(
-    semanticLabel: '按压反馈示例',
+  Widget build(BuildContext context) => HyperPressable(
     borderRadius: BorderRadius.circular(22),
     onPressed: () => setState(() => _count++),
-    child: HyGlass(
+    child: HyperGlass(
       padding: const EdgeInsets.all(22),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -48,23 +66,3 @@ class _PressableComponentExampleState extends State<PressableComponentExample> {
   );
 }
 // end-doc-region PressableComponentExample
-
-// doc-region SoftBackgroundComponentExample
-class SoftBackgroundComponentExample extends StatelessWidget {
-  const SoftBackgroundComponentExample({super.key});
-
-  @override
-  Widget build(BuildContext context) => const SizedBox(
-    height: 190,
-    child: HySoftBackground(
-      child: Center(
-        child: HyGlass(
-          weight: HyGlassWeight.regular,
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-          child: Text('环境柔光为玻璃提供景深'),
-        ),
-      ),
-    ),
-  );
-}
-// end-doc-region SoftBackgroundComponentExample

@@ -63,7 +63,7 @@
 .demo-block__width-switch {
   padding: 3px;
   border-radius: 12px;
-  background: var(--hy-edge-shade);
+  background: var(--hyper-edge-shade);
 
   button {
     min-height: 28px;
@@ -71,7 +71,7 @@
     background: transparent;
 
     &.is-active {
-      background: var(--hy-glass-strong);
+      background: var(--hyper-glass-strong);
       box-shadow: 0 6px 14px -10px rgba(0, 0, 0, 0.45);
     }
   }
@@ -254,7 +254,7 @@
   overflow: hidden;
   background:
     radial-gradient(circle at 16% 10%, rgba(92, 133, 242, 0.12), transparent 42%),
-    linear-gradient(155deg, var(--vp-c-bg), var(--hy-glass-subtle));
+    linear-gradient(155deg, var(--vp-c-bg), var(--hyper-glass-subtle));
 
   &::after {
     position: absolute;
@@ -272,7 +272,7 @@
 .demo-block__skeleton-tabbar {
   position: relative;
   z-index: 1;
-  @include mixins.glass(18px, 135%, var(--hy-glass), var(--hy-edge), 0 16px 38px -32px rgba(22, 32, 58, 0.58));
+  @include mixins.glass(18px, 135%, var(--hyper-glass), var(--hyper-edge), 0 16px 38px -32px rgba(22, 32, 58, 0.58));
 }
 
 .demo-block__skeleton-nav {
@@ -294,7 +294,7 @@
 .demo-block__skeleton-tabbar span {
   display: block;
   border-radius: 99px;
-  background: var(--hy-edge-shade);
+  background: var(--hyper-edge-shade);
 }
 
 .demo-block__skeleton-nav i { width: 34%; height: 7px; }
@@ -373,7 +373,7 @@
   padding: 11px 12px;
   overflow: hidden;
   border-radius: 15px;
-  @include mixins.glass(24px, 145%, var(--hy-glass-strong), var(--hy-edge), 0 18px 50px -24px rgba(16, 23, 45, 0.64));
+  @include mixins.glass(24px, 145%, var(--hyper-glass-strong), var(--hyper-edge), 0 18px 50px -24px rgba(16, 23, 45, 0.64));
 }
 
 .demo-block__load-copy {
@@ -404,7 +404,7 @@
   height: 3px;
   overflow: hidden;
   border-radius: 99px;
-  background: var(--hy-edge-shade);
+  background: var(--hyper-edge-shade);
 
   i {
     display: block;

@@ -35,7 +35,7 @@ export interface PreviewBundle {
 
 declare global {
   interface Window {
-    hyUiPreviewBundle?: PreviewBundle;
+    hyperUiPreviewBundle?: PreviewBundle;
   }
 }
 

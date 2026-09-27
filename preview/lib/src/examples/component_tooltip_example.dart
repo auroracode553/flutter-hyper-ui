@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region TooltipComponentExample
 class TooltipComponentExample extends StatelessWidget {
@@ -12,20 +12,19 @@ class TooltipComponentExample extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const HyText('悬停、长按或键盘聚焦查看提示', type: 'h5'),
-        const SizedBox(height: HyUiSpacing.sm),
-        HyTooltip(
+        const HyperText('悬停、长按或键盘聚焦查看提示', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.sm),
+        HyperTooltip(
           message: '更改后会同步到所有设备。',
-          child: HyButton.icon(
+          child: HyperButton.icon(
             icon: LucideIcons.info,
-            semanticLabel: '同步说明',
             onPressed: () {},
           ),
         ),
-        const SizedBox(height: HyUiSpacing.lg),
-        HyTooltip(
+        const SizedBox(height: HyperUiSpacing.lg),
+        HyperTooltip(
           message: '这是一段较长的说明，会在可用宽度内自动换行。',
-          child: HyButton.tonal(label: '查看权限说明', onPressed: () {}),
+          child: HyperButton.tonal(label: '查看权限说明', onPressed: () {}),
         ),
       ],
     );

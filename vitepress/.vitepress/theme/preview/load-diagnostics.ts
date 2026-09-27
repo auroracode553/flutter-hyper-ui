@@ -47,7 +47,7 @@ export class PreviewLoadDiagnostics {
           传输KB: Math.round(script.transferSize / 1024),
         })),
     };
-    console.info(`[Hy UI 预览] 首次加载耗时 ${JSON.stringify(summary)}`);
+    console.info(`[Hyper UI 预览] 首次加载耗时 ${JSON.stringify(summary)}`);
   }
 
   private get scripts() {

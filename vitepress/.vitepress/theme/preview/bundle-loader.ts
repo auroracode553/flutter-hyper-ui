@@ -52,7 +52,7 @@ export class PreviewBundleLoader {
       this.preload(new URL('ddc_module_loader.js', base).href, 'script');
       this.preload(new URL('main_module.bootstrap.js', base).href, 'script');
     }
-    const bundle = window.hyUiPreviewBundle;
+    const bundle = window.hyperUiPreviewBundle;
     if (!bundle || bundle.protocolVersion !== 2) {
       throw new PreviewFailure('预览接口版本不匹配。组件预览已拆分，请重新生成完整预览包并刷新页面。', true);
     }
@@ -108,11 +108,11 @@ export class PreviewBundleLoader {
   }
 
   private loadScript(url: string): Promise<void> {
-    if (window.hyUiPreviewBundle) return Promise.resolve();
+    if (window.hyperUiPreviewBundle) return Promise.resolve();
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = url;
-      script.onload = () => window.hyUiPreviewBundle ? resolve() : reject(new PreviewFailure(
+      script.onload = () => window.hyperUiPreviewBundle ? resolve() : reject(new PreviewFailure(
         '预览启动脚本缺少宿主接口，请重新生成预览构建。', true,
       ));
       script.onerror = () => {

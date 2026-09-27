@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region TextComponentExample
 class TextComponentExample extends StatelessWidget {
   const TextComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -18,23 +18,25 @@ class TextComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('文字层级'),
-        const HySpace(
-          alignment: CrossAxisAlignment.start,
+        const Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HyText('Display 展示文字', type: 'h1'),
-            HyText('Title 页面标题', type: 'h2'),
-            HyText('Heading 小节标题', type: 'h3'),
-            HyText('Body 正文用于清晰、连续的内容阅读。'),
-            HyText('Caption 辅助说明', type: 'h5'),
-            HyText('Hint 弱提示信息', type: 'h6'),
+            HyperText('Display 展示文字', type: 'h1'),
+            HyperText('Title 页面标题', type: 'h2'),
+            HyperText('Heading 小节标题', type: 'h3'),
+            HyperText('Body 正文用于清晰、连续的内容阅读。'),
+            HyperText('Caption 辅助说明', type: 'h5'),
+            HyperText('Hint 弱提示信息', type: 'h6'),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('颜色、字重与行数截断'),
-        HyText('自定义颜色', color: HyUiColors.primary),
-        const HyText('加粗正文', weight: FontWeight.w600),
-        const HyText(
+        HyperText('自定义颜色', color: HyperUiColors.primary),
+        const HyperText('加粗正文', weight: FontWeight.w600),
+        const HyperText(
           'maxLines: 1 时超长文本自动省略：统一文字层级让界面在不同密度下保持稳定节奏。',
           maxLines: 1,
         ),
@@ -49,8 +51,8 @@ class IconComponentExample extends StatelessWidget {
   const IconComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -59,31 +61,31 @@ class IconComponentExample extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('常用语义图标（带无障碍标签）'),
+        _label('常用语义图标'),
         const Wrap(
           spacing: 22,
           runSpacing: 22,
           children: [
-            HyIcon(HyIcons.home, label: '首页'),
-            HyIcon(HyIcons.search, label: '搜索'),
-            HyIcon(HyIcons.cart, label: '购物袋'),
-            HyIcon(HyIcons.settings, label: '设置'),
-            HyIcon(HyIcons.profile, label: '个人中心'),
-            HyIcon(HyIcons.success, label: '成功'),
+            HyperIcon(HyperIcons.home),
+            HyperIcon(HyperIcons.search),
+            HyperIcon(HyperIcons.cart),
+            HyperIcon(HyperIcons.settings),
+            HyperIcon(HyperIcons.profile),
+            HyperIcon(HyperIcons.success),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('尺寸与颜色'),
         const Wrap(
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyIcon(HyIcons.image, size: 18),
-            HyIcon(HyIcons.image, size: 24),
-            HyIcon(HyIcons.image, size: 32),
-            HyIcon(HyIcons.warning, size: 28, color: HyUiColors.warning),
-            HyIcon(HyIcons.success, size: 28, color: HyUiColors.success),
+            HyperIcon(HyperIcons.image, size: 18),
+            HyperIcon(HyperIcons.image, size: 24),
+            HyperIcon(HyperIcons.image, size: 32),
+            HyperIcon(HyperIcons.warning, size: 28, color: HyperUiColors.warning),
+            HyperIcon(HyperIcons.success, size: 28, color: HyperUiColors.success),
           ],
         ),
       ],
@@ -97,8 +99,8 @@ class ImageComponentExample extends StatelessWidget {
   const ImageComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -108,32 +110,32 @@ class ImageComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('网络图片与点击预览'),
-        HyImage.network(
+        HyperImage.network(
           'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900',
           height: 180,
           width: double.infinity,
           radius: 22,
           preview: true,
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('加载占位与失败兜底'),
         Row(
           children: [
             Expanded(
               // provider 直连时可用 placeholder / errorPlaceholder 定制状态。
-              child: HyImage(
+              child: HyperImage(
                 provider: NetworkImage(
                   'https://images.unsplash.com/photo-1742666553489-3b34b0c8b77b?w=600',
                 ),
                 height: 110,
                 radius: 16,
-                placeholder: const Center(child: HyLoading()),
+                placeholder: const Center(child: HyperLoading()),
               ),
             ),
-            SizedBox(width: HyUiSpacing.md),
+            SizedBox(width: HyperUiSpacing.md),
             Expanded(
-              child: HyImage(
+              child: HyperImage(
                 provider: NetworkImage('https://invalid.example/broken.png'),
                 height: 110,
                 radius: 16,
@@ -142,7 +144,7 @@ class ImageComponentExample extends StatelessWidget {
                   children: [
                     Icon(LucideIcons.imageOff),
                     SizedBox(height: 4),
-                    HyText('加载失败', type: 'h6'),
+                    HyperText('加载失败', type: 'h6'),
                   ],
                 ),
               ),
@@ -160,8 +162,8 @@ class AvatarComponentExample extends StatelessWidget {
   const AvatarComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -175,22 +177,22 @@ class AvatarComponentExample extends StatelessWidget {
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyAvatar(text: '林', size: 44),
-            HyAvatar(text: 'HY', size: 56),
-            HyAvatar(size: 56),
+            HyperAvatar(text: '林', size: 44),
+            HyperAvatar(text: 'UI', size: 56),
+            HyperAvatar(size: 56),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('圆角与背景色'),
         const Wrap(
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyAvatar(text: '设计', size: 64, radius: 20),
-            HyAvatar(text: '品', size: 56, radius: 16),
-            HyAvatar(text: 'A', size: 56, backgroundColor: HyUiColors.primary),
-            HyAvatar(text: 'B', size: 56, backgroundColor: HyUiColors.success),
+            HyperAvatar(text: '设计', size: 64, radius: 20),
+            HyperAvatar(text: '品', size: 56, radius: 16),
+            HyperAvatar(text: 'A', size: 56, backgroundColor: HyperUiColors.primary),
+            HyperAvatar(text: 'B', size: 56, backgroundColor: HyperUiColors.success),
           ],
         ),
       ],
@@ -209,9 +211,9 @@ class BadgeComponentExample extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     children: [
       _StatusBadgeExample(),
-      SizedBox(height: HyUiSpacing.xl),
+      SizedBox(height: HyperUiSpacing.xl),
       _CountBadgeExample(),
-      SizedBox(height: HyUiSpacing.xl),
+      SizedBox(height: HyperUiSpacing.xl),
       _TagBadgeExample(),
     ],
   );
@@ -221,8 +223,8 @@ class _CountBadgeExample extends StatelessWidget {
   const _CountBadgeExample();
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -236,43 +238,41 @@ class _CountBadgeExample extends StatelessWidget {
           spacing: 26,
           runSpacing: 26,
           children: [
-            HyBadge.count(count: 8, child: HyAvatar(text: '消息')),
+            HyperBadge.count(count: 8, child: HyperAvatar(text: '消息')),
             // 超过 max（默认 99）显示 99+。
-            HyBadge.count(
+            HyperBadge.count(
               count: 128,
-              child: HyIcon(LucideIcons.mail, size: 32),
+              child: HyperIcon(LucideIcons.mail, size: 32),
             ),
             // showZero: 数字为 0 也显示。
-            HyBadge.count(
+            HyperBadge.count(
               count: 0,
               showZero: true,
-              child: HyIcon(LucideIcons.inbox, size: 32),
+              child: HyperIcon(LucideIcons.inbox, size: 32),
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('红点模式'),
         const Wrap(
           spacing: 26,
           runSpacing: 8,
           children: [
-            HyBadge.count(
-              dot: true,
-              child: HyIcon(LucideIcons.bell, size: 32),
-            ),
+            HyperBadge.count(dot: true, child: HyperIcon(LucideIcons.bell, size: 32)),
           ],
         ),
       ],
     );
   }
 }
+
 class _StatusBadgeExample extends StatelessWidget {
   const _StatusBadgeExample();
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -286,37 +286,38 @@ class _StatusBadgeExample extends StatelessWidget {
           spacing: 10,
           runSpacing: 10,
           children: [
-            HyBadge(label: '默认'),
-            HyBadge(
+            HyperBadge(label: '默认'),
+            HyperBadge(
               label: '处理中',
-              tone: HyUiTone.info,
+              tone: HyperUiTone.info,
               icon: LucideIcons.refreshCw,
             ),
-            HyBadge(
+            HyperBadge(
               label: '已完成',
-              tone: HyUiTone.success,
+              tone: HyperUiTone.success,
               icon: LucideIcons.check,
             ),
-            HyBadge(label: '需注意', tone: HyUiTone.warning),
-            HyBadge(label: '失败', tone: HyUiTone.error),
+            HyperBadge(label: '需注意', tone: HyperUiTone.warning),
+            HyperBadge(label: '失败', tone: HyperUiTone.error),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('强调样式（subtle: false）'),
         const Wrap(
           spacing: 10,
           runSpacing: 10,
           children: [
-            HyBadge(label: '默认', subtle: false),
-            HyBadge(label: '处理中', tone: HyUiTone.info, subtle: false),
-            HyBadge(label: '失败', tone: HyUiTone.error, subtle: false),
+            HyperBadge(label: '默认', subtle: false),
+            HyperBadge(label: '处理中', tone: HyperUiTone.info, subtle: false),
+            HyperBadge(label: '失败', tone: HyperUiTone.error, subtle: false),
           ],
         ),
       ],
     );
   }
 }
+
 class _TagBadgeExample extends StatefulWidget {
   const _TagBadgeExample();
 
@@ -329,8 +330,8 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
   bool _visible = true;
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -344,36 +345,36 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
           spacing: 10,
           runSpacing: 10,
           children: [
-            HyBadge.tag(
+            HyperBadge.tag(
               label: '可选标签',
               selected: _selected,
               icon: LucideIcons.sparkles,
               onTap: () => setState(() => _selected = !_selected),
             ),
-            HyBadge.tag(
+            HyperBadge.tag(
               label: '设计',
               selected: !_selected,
               onTap: () => setState(() => _selected = !_selected),
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('语义色与图标'),
         const Wrap(
           spacing: 10,
           runSpacing: 10,
           children: [
-            HyBadge.tag(label: '成功', tone: HyUiTone.success),
-            HyBadge.tag(label: '警告', tone: HyUiTone.warning),
-            HyBadge.tag(
+            HyperBadge.tag(label: '成功', tone: HyperUiTone.success),
+            HyperBadge.tag(label: '警告', tone: HyperUiTone.warning),
+            HyperBadge.tag(
               label: '错误',
-              tone: HyUiTone.error,
+              tone: HyperUiTone.error,
               icon: LucideIcons.circleAlert,
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.lg),
+        const SizedBox(height: HyperUiSpacing.lg),
 
         _label('可移除'),
         Wrap(
@@ -381,12 +382,12 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
           runSpacing: 8,
           children: [
             if (_visible)
-              HyBadge.tag(
+              HyperBadge.tag(
                 label: '可移除',
                 onClose: () => setState(() => _visible = false),
               )
             else
-              HyBadge.tag(
+              HyperBadge.tag(
                 label: '恢复',
                 icon: LucideIcons.rotateCcw,
                 onTap: () => setState(() => _visible = true),
@@ -404,8 +405,8 @@ class ToneComponentExample extends StatelessWidget {
   const ToneComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -419,15 +420,12 @@ class ToneComponentExample extends StatelessWidget {
           spacing: 10,
           runSpacing: 10,
           children: [
-            for (final tone in HyUiTone.values)
-              HyBadge(label: '语义色', tone: tone),
+            for (final tone in HyperUiTone.values)
+              HyperBadge(label: '语义色', tone: tone),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.sm),
-        const HyText(
-          'HyUiTone 跨组件复用：徽标、提示、通知等共用同一套语义色。',
-          type: 'h6',
-        ),
+        const SizedBox(height: HyperUiSpacing.sm),
+        const HyperText('HyperUiTone 跨组件复用：徽标、提示、通知等共用同一套语义色。', type: 'h6'),
       ],
     );
   }

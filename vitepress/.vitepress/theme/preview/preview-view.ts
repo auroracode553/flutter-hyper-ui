@@ -82,7 +82,7 @@ export class PreviewView {
                 外壳首帧秒数: ((shellReadyAt - viewStartedAt) / 1000).toFixed(1),
                 当前组件秒数: ((performance.now() - shellReadyAt) / 1000).toFixed(1),
               };
-              console.info(`[Hy UI 预览] 组件加载耗时 ${JSON.stringify(summary)}`);
+              console.info(`[Hyper UI 预览] 组件加载耗时 ${JSON.stringify(summary)}`);
             }
             this.onStatus({ phase: 'ready', message: '' });
           },

@@ -3,24 +3,24 @@ import IconGallery from '../.vitepress/theme/components/IconGallery.vue';
 </script>
 
 ---
-title: HyIcon
-description: HyIcon 组件、图标体系与 Lucide 图标集合
+title: HyperIcon
+description: HyperIcon 组件、图标体系与 Lucide 图标集合
 ---
 
 <ComponentDoc component-id="icon" />
 
-## 在 Hy 组件中使用
+## 在 Hyper 组件中使用
 
-接受图标参数的 Hy 组件统一接收 `IconData`，传入 `LucideIcons` 常量即可：
+接受图标参数的 Hyper 组件统一接收 `IconData`，传入 `LucideIcons` 常量即可：
 
 ```dart
-HyButton(
+HyperButton(
   icon: LucideIcons.download,
   onPressed: () {},
 )
 ```
 
-`HyIcon`、`HyButton`、`HyListTile` 等组件的 `icon` / `leadingIcon` / `trailingIcon` 参数都遵循同一约定，并支持 `lucide_icons_flutter` 的可变字重变体（`LucideIcons.xxx100` ~ `xxx600`），需要更细或更粗的描边时可直接替换。
+`HyperIcon`、`HyperButton`、`HyperListTile` 等组件的 `icon` / `leadingIcon` / `trailingIcon` 参数都遵循同一约定，并支持 `lucide_icons_flutter` 的可变字重变体（`LucideIcons.xxx100` ~ `xxx600`），需要更细或更粗的描边时可直接替换。
 
 ## 常用图标速查
 
@@ -34,7 +34,7 @@ HyButton(
 
 ## 图标集合
 
-Hy UI 的图标体系基于 [`lucide_icons_flutter`](https://pub.dev/packages/lucide_icons_flutter) 包（Lucide 开源图标库，线性描边、圆头端点，与玻璃拟态视觉一致）。在任意组件中直接引用：
+Hyper UI 的图标体系基于 [`lucide_icons_flutter`](https://pub.dev/packages/lucide_icons_flutter) 包（Lucide 开源图标库，线性描边、圆头端点，与玻璃拟态视觉一致）。在任意组件中直接引用：
 
 ```dart
 import 'package:lucide_icons_flutter/lucide_icons.dart';

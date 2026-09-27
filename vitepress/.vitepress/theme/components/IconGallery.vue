@@ -1,9 +1,9 @@
 <template>
-  <section class="hy-icon-gallery">
-    <div class="hy-icon-gallery__toolbar">
-      <label class="hy-icon-gallery__search">
+  <section class="hyper-icon-gallery">
+    <div class="hyper-icon-gallery__toolbar">
+      <label class="hyper-icon-gallery__search">
         <svg
-          class="hy-icon-gallery__search-icon"
+          class="hyper-icon-gallery__search-icon"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -22,45 +22,45 @@
           autocomplete="off"
         />
       </label>
-      <span class="hy-icon-gallery__count">{{ filteredIcons.length }} 个图标</span>
+      <span class="hyper-icon-gallery__count">{{ filteredIcons.length }} 个图标</span>
     </div>
 
-    <p class="hy-icon-gallery__hint">
+    <p class="hyper-icon-gallery__hint">
       点击图标复制 Flutter 引用 <code>LucideIcons.xxx</code>；图标来自
       <code>lucide_icons_flutter</code> 包（Lucide 1.46 全量 2096 个），按分类平铺。
     </p>
 
-    <div v-if="groups.length" class="hy-icon-gallery__groups">
+    <div v-if="groups.length" class="hyper-icon-gallery__groups">
       <section
         v-for="group in groups"
         :key="group.category"
-        class="hy-icon-gallery__group"
+        class="hyper-icon-gallery__group"
       >
         <h3
           :id="`category-${group.category}`"
-          class="hy-icon-gallery__group-title"
+          class="hyper-icon-gallery__group-title"
         >
           <span>{{ group.label }}</span>
           <code>{{ group.icons.length }}</code>
         </h3>
-        <div class="hy-icon-gallery__grid">
+        <div class="hyper-icon-gallery__grid">
           <button
             v-for="item in group.icons"
             :key="item.name"
-            class="hy-icon-gallery__item"
+            class="hyper-icon-gallery__item"
             type="button"
             :title="`复制 LucideIcons.${item.name}`"
             @click="copyIcon(item.name)"
           >
-            <span class="hy-icon-gallery__glyph" :style="glyphStyle">{{ glyph(item) }}</span>
+            <span class="hyper-icon-gallery__glyph" :style="glyphStyle">{{ glyph(item) }}</span>
             <code>{{ item.name }}</code>
-            <span v-if="copiedName === item.name" class="hy-icon-gallery__copied">已复制</span>
+            <span v-if="copiedName === item.name" class="hyper-icon-gallery__copied">已复制</span>
           </button>
         </div>
       </section>
     </div>
 
-    <p v-else class="hy-icon-gallery__empty">当前搜索没有匹配的图标。</p>
+    <p v-else class="hyper-icon-gallery__empty">当前搜索没有匹配的图标。</p>
   </section>
 </template>
 
@@ -133,18 +133,18 @@ async function copyIcon(name: string) {
 </script>
 
 <style scoped>
-.hy-icon-gallery {
+.hyper-icon-gallery {
   margin-top: 18px;
 }
 
-.hy-icon-gallery__toolbar {
+.hyper-icon-gallery__toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.hy-icon-gallery__search {
+.hyper-icon-gallery__search {
   display: flex;
   align-items: center;
   width: min(100%, 460px);
@@ -157,18 +157,18 @@ async function copyIcon(name: string) {
   gap: 8px;
 }
 
-.hy-icon-gallery__search:focus-within {
+.hyper-icon-gallery__search:focus-within {
   border-color: var(--vp-c-brand-1);
   outline: 2px solid color-mix(in srgb, var(--vp-c-brand-1) 18%, transparent);
 }
 
-.hy-icon-gallery__search-icon {
+.hyper-icon-gallery__search-icon {
   width: 18px;
   height: 18px;
   flex: none;
 }
 
-.hy-icon-gallery__search input {
+.hyper-icon-gallery__search input {
   width: 100%;
   min-width: 0;
   border: 0;
@@ -179,28 +179,28 @@ async function copyIcon(name: string) {
   font-size: 14px;
 }
 
-.hy-icon-gallery__count,
-.hy-icon-gallery__hint,
-.hy-icon-gallery__empty {
+.hyper-icon-gallery__count,
+.hyper-icon-gallery__hint,
+.hyper-icon-gallery__empty {
   color: var(--vp-c-text-2);
   font-size: 13px;
 }
 
-.hy-icon-gallery__count {
+.hyper-icon-gallery__count {
   white-space: nowrap;
 }
 
-.hy-icon-gallery__hint {
+.hyper-icon-gallery__hint {
   margin: 12px 0;
 }
 
-.hy-icon-gallery__groups {
+.hyper-icon-gallery__groups {
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
 
-.hy-icon-gallery__group-title {
+.hyper-icon-gallery__group-title {
   display: flex;
   align-items: center;
   margin: 0 0 10px;
@@ -210,7 +210,7 @@ async function copyIcon(name: string) {
   scroll-margin-top: 84px;
 }
 
-.hy-icon-gallery__group-title code {
+.hyper-icon-gallery__group-title code {
   padding: 1px 7px;
   border-radius: 999px;
   color: var(--vp-c-text-2);
@@ -219,7 +219,7 @@ async function copyIcon(name: string) {
   font-weight: 500;
 }
 
-.hy-icon-gallery__grid {
+.hyper-icon-gallery__grid {
   position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(126px, 1fr));
@@ -227,7 +227,7 @@ async function copyIcon(name: string) {
   border-left: 1px solid var(--vp-c-divider);
 }
 
-.hy-icon-gallery__item {
+.hyper-icon-gallery__item {
   position: relative;
   display: flex;
   align-items: center;
@@ -246,18 +246,18 @@ async function copyIcon(name: string) {
   transition: color 0.18s ease, background 0.18s ease;
 }
 
-.hy-icon-gallery__item:hover {
+.hyper-icon-gallery__item:hover {
   color: var(--vp-c-brand-1);
   background: var(--vp-c-default-soft);
 }
 
-.hy-icon-gallery__glyph {
+.hyper-icon-gallery__glyph {
   font-size: 24px;
   line-height: 1;
   font-style: normal;
 }
 
-.hy-icon-gallery__item code {
+.hyper-icon-gallery__item code {
   display: block;
   max-width: 100%;
   padding: 0;
@@ -269,7 +269,7 @@ async function copyIcon(name: string) {
   text-align: center;
 }
 
-.hy-icon-gallery__copied {
+.hyper-icon-gallery__copied {
   position: absolute;
   top: 6px;
   right: 6px;
@@ -281,22 +281,22 @@ async function copyIcon(name: string) {
   line-height: 1.4;
 }
 
-.hy-icon-gallery__empty {
+.hyper-icon-gallery__empty {
   padding: 28px 0;
   text-align: center;
 }
 
 @media (max-width: 640px) {
-  .hy-icon-gallery__toolbar {
+  .hyper-icon-gallery__toolbar {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .hy-icon-gallery__search {
+  .hyper-icon-gallery__search {
     width: 100%;
   }
 
-  .hy-icon-gallery__grid {
+  .hyper-icon-gallery__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/hy_ui_preview_core.dart';
+import 'package:flutter_hyper_ui/hyper_ui_preview_core.dart';
 import 'package:flutter/material.dart';
 
 import 'preview_shell.dart';
@@ -14,7 +14,7 @@ class PreviewApp extends StatefulWidget {
 }
 
 class _PreviewAppState extends State<PreviewApp> {
-  late final _theme = HyThemeController(mode: widget.configuration.themeMode);
+  late final _theme = HyperThemeController(mode: widget.configuration.themeMode);
 
   @override
   void initState() {
@@ -38,8 +38,8 @@ class _PreviewAppState extends State<PreviewApp> {
       builder: (_, _) => MaterialApp(
         title: 'Flutter Hyper UI Preview',
         debugShowCheckedModeBanner: false,
-        theme: HyUiTheme.light(),
-        darkTheme: HyUiTheme.dark(),
+        theme: HyperUiTheme.light(),
+        darkTheme: HyperUiTheme.dark(),
         themeMode: _theme.mode,
         builder: (context, child) {
           final media = MediaQuery.of(context);

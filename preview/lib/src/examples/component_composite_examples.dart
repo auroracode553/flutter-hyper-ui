@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
-
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region CountDownComponentExample
 class CountDownComponentExample extends StatefulWidget {
   const CountDownComponentExample({super.key});
 
   @override
-  State<CountDownComponentExample> createState() => _CountDownComponentExampleState();
+  State<CountDownComponentExample> createState() =>
+      _CountDownComponentExampleState();
 }
 
 class _CountDownComponentExampleState extends State<CountDownComponentExample> {
@@ -17,8 +17,8 @@ class _CountDownComponentExampleState extends State<CountDownComponentExample> {
   bool _finished = false;
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -26,16 +26,16 @@ class _CountDownComponentExampleState extends State<CountDownComponentExample> {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       _label('基础倒计时（onFinished 结束回调）'),
-      HyGlass(
+      HyperGlass(
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             Expanded(child: Text(_finished ? '倒计时已结束' : '限时操作')),
-            HyCountDown(
+            HyperCountDown(
               endTime: _endTime,
               onFinished: () => setState(() => _finished = true),
             ),
-            HyButton.icon(
+            HyperButton.icon(
               icon: LucideIcons.refreshCw,
               tooltip: '重新开始',
               onPressed: () => setState(() {
@@ -46,12 +46,12 @@ class _CountDownComponentExampleState extends State<CountDownComponentExample> {
           ],
         ),
       ),
-      const SizedBox(height: HyUiSpacing.lg),
+      const SizedBox(height: HyperUiSpacing.lg),
 
       _label('自定义渲染（builder 接收剩余时长）'),
-      HyGlass(
+      HyperGlass(
         padding: const EdgeInsets.all(16),
-        child: HyCountDown(
+        child: HyperCountDown(
           endTime: DateTime.now().add(const Duration(hours: 2, minutes: 5)),
           builder: (context, remaining) => Text(
             '剩余 ${remaining.inHours} 小时 ${remaining.inMinutes % 60} 分',
@@ -69,15 +69,16 @@ class CollapseComponentExample extends StatefulWidget {
   const CollapseComponentExample({super.key});
 
   @override
-  State<CollapseComponentExample> createState() => _CollapseComponentExampleState();
+  State<CollapseComponentExample> createState() =>
+      _CollapseComponentExampleState();
 }
 
 class _CollapseComponentExampleState extends State<CollapseComponentExample> {
   String _status = '未展开';
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -85,21 +86,21 @@ class _CollapseComponentExampleState extends State<CollapseComponentExample> {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       _label('基础用法与回调（onChanged 同步展开状态）'),
-      HySpace(
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 12,
         children: [
-          HyCollapse(
+          HyperCollapse(
             title: '组件何时更新？',
             initiallyExpanded: true,
-            onChanged: (expanded) => setState(() => _status = expanded ? '已展开' : '已收起'),
+            onChanged: (expanded) =>
+                setState(() => _status = expanded ? '已展开' : '已收起'),
             child: const Text('状态变化后立即更新，动画可被中断。'),
           ),
-          HyCollapse(
-            title: '是否支持暗色模式？',
-            child: const Text('所有颜色都来自主题语义令牌。'),
-          ),
+          HyperCollapse(title: '是否支持暗色模式？', child: const Text('所有颜色都来自主题语义令牌。')),
         ],
       ),
-      const SizedBox(height: HyUiSpacing.sm),
+      const SizedBox(height: HyperUiSpacing.sm),
       Text('回调状态：$_status'),
     ],
   );
@@ -111,8 +112,8 @@ class TimelineComponentExample extends StatelessWidget {
   const TimelineComponentExample({super.key});
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'h5'),
+    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
+    child: HyperText(text, type: 'h5'),
   );
 
   @override
@@ -120,11 +121,16 @@ class TimelineComponentExample extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       _label('事件状态（complete 标记已完成节点）'),
-      const HyTimeline(
+      const HyperTimeline(
         items: [
-          HyTimelineItem(title: '需求确认', description: '范围与交互已确认', time: '09:30'),
-          HyTimelineItem(title: '组件开发', description: '正在补齐独立预览', time: '11:20'),
-          HyTimelineItem(title: '发布文档', description: '等待构建', time: '稍后', complete: false),
+          HyperTimelineItem(title: '需求确认', description: '范围与交互已确认', time: '09:30'),
+          HyperTimelineItem(title: '组件开发', description: '正在补齐独立预览', time: '11:20'),
+          HyperTimelineItem(
+            title: '发布文档',
+            description: '等待构建',
+            time: '稍后',
+            complete: false,
+          ),
         ],
       ),
     ],

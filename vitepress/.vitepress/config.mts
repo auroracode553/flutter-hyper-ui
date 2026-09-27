@@ -10,7 +10,7 @@ function withTrailingSlash(value: string) {
 
 const siteBase = withTrailingSlash(process.env.VITEPRESS_BASE || '/');
 const repositoryRoot = fileURLToPath(new URL('../..', import.meta.url));
-const previewDevelopmentServer = process.env.VITE_HY_UI_PREVIEW_SERVER;
+const previewDevelopmentServer = process.env.VITE_HYPER_UI_PREVIEW_SERVER;
 // Debug 的 DDC 会请求大量小模块；复用 Vite 到 Flutter 的本地连接。
 const previewProxyAgent = previewDevelopmentServer
   ? new Agent({ keepAlive: true, maxSockets: 128 })
@@ -18,14 +18,14 @@ const previewProxyAgent = previewDevelopmentServer
 validateCatalog(repositoryRoot, componentGroups, [featuredDemo]);
 
 export default defineConfig({
-  title: 'Hy UI',
+  title: 'Hyper UI',
   titleTemplate: ':title · Flutter Hyper UI',
   description: '面向 Flutter 移动端的通用柔性玻璃 UI 组件库',
   base: siteBase,
   cleanUrls: true,
   head: [
     ['meta', { name: 'theme-color', content: '#f4f6fb' }],
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${siteBase}hy-ui-logo.svg` }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${siteBase}hyper-ui-logo.svg` }],
   ],
   markdown: {
     lineNumbers: true,
@@ -55,8 +55,8 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    logo: '/hy-ui-logo.svg',
-    siteTitle: 'Hy UI',
+    logo: '/hyper-ui-logo.svg',
+    siteTitle: 'Hyper UI',
     search: {
       provider: 'local',
     },
@@ -79,7 +79,7 @@ export default defineConfig({
         text: section.title,
         collapsed: false,
         items: section.components.map((entry) => ({
-          text: entry.navName.replace(/^Hy(?=[A-Z])/, ''),
+          text: entry.navName.replace(/^Hyper(?=[A-Z])/, ''),
           link: entry.page,
         })),
       })),

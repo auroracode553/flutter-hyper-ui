@@ -1,6 +1,6 @@
 # 设计系统
 
-Hy UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一组同时约束材质、层级、触控反馈、运动和排版的规则。
+Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一组同时约束材质、层级、触控反馈、运动和排版的规则。
 
 ## 设计目标
 
@@ -18,7 +18,7 @@ Hy UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一组�
 
 ## 材质厚度
 
-`HyGlassWeight` 用面积和层级区分四类材质：
+`HyperGlassWeight` 用面积和层级区分四类材质：
 
 | 厚度 | 用途 | 行为 |
 | --- | --- | --- |
@@ -27,12 +27,12 @@ Hy UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一组�
 | `prominent` | Drawer、Dialog、Toast、BottomSheet | 更实的表面、更强分离度 |
 | `solid` | 高对比或不适合透明的区域 | 使用实色卡片背景，不执行模糊 |
 
-不要在一个轻量玻璃表面上继续叠加另一个轻量玻璃表面。分组菜单由 `HyMenuGroup` 绘制一次外层材质，内部 `HyListTile(grouped: true)` 只绘制状态。
+不要在一个轻量玻璃表面上继续叠加另一个轻量玻璃表面。分组菜单由 `HyperMenuGroup` 绘制一次外层材质，内部 `HyperListTile(grouped: true)` 只绘制状态。
 
 ```dart
-HyGlass(
-  weight: HyGlassWeight.prominent,
-  blur: HyUiEffects.glassBlurStrong,
+HyperGlass(
+  weight: HyperGlassWeight.prominent,
+  blur: HyperUiEffects.glassBlurStrong,
   radius: 28,
   child: content,
 )
@@ -42,7 +42,7 @@ HyGlass(
 
 页面从后向前分为四层：
 
-1. `HySoftBackground`：不移动的环境色背景。
+1. 主题背景色：由页面宿主绘制。
 2. 内容层：列表、正文和普通卡片。
 3. 浮动功能层：Navbar、TabBar、Popover。
 4. 模态层：Drawer、Dialog、BottomSheet，与 `scrim` 遮罩配合。
@@ -53,11 +53,11 @@ HyGlass(
 
 ### 按压
 
-`HyPressable` 在触摸按下时立即缩放和降低少量不透明度，松开或取消时恢复。组件不会在动画期间锁定输入。
+`HyperPressable` 在触摸按下时立即缩放和降低少量不透明度，松开或取消时恢复。组件不会在动画期间锁定输入。
 
 ### 拖拽
 
-`HyTabBar` 与 `HySlideMenu` 遵循以下流程：
+`HyperTabBar` 与 `HyperSlideMenu` 遵循以下流程：
 
 ```text
 按下 → 记录抓取偏移 → 1:1 跟随 → 计算释放速度
@@ -74,15 +74,15 @@ HyGlass(
 
 ## 圆角与间距
 
-基础尺寸由 `HyUiRadii` 和 `HyUiSpacing` 提供：
+基础尺寸由 `HyperUiRadii` 和 `HyperUiSpacing` 提供：
 
 | 令牌 | 默认值 | 常见用途 |
 | --- | ---: | --- |
-| `HyUiRadii.sm` | 16 | 输入框、按钮、紧凑控件 |
-| `HyUiRadii.md` | 24 | 卡片、菜单组 |
-| `HyUiRadii.lg` | 28 | 大型弹层 |
-| `HyUiSpacing.pagePadding` | 16 | 移动端页面边距 |
-| `HyUiSpacing.cardPadding` | 12 | 卡片内部间距 |
+| `HyperUiRadii.sm` | 16 | 输入框、按钮、紧凑控件 |
+| `HyperUiRadii.md` | 24 | 卡片、菜单组 |
+| `HyperUiRadii.lg` | 28 | 大型弹层 |
+| `HyperUiSpacing.pagePadding` | 16 | 移动端页面边距 |
+| `HyperUiSpacing.cardPadding` | 12 | 卡片内部间距 |
 
 同一容器内优先使用相邻间距级别，避免出现大量彼此无关的魔法数字。
 
@@ -92,18 +92,18 @@ HyGlass(
 
 | 组件 | 默认视觉尺寸 | 使用建议 |
 | --- | ---: | --- |
-| `HyNumberStepper` | 按钮 32、整体高 38 | 数值区按内容增长；边界按钮明确弱化 |
-| `HyEmptyState` | 图标容器 56 | 使用精简的图标、标题与说明间距 |
+| `HyperNumberStepper` | 按钮 32、整体高 38 | 数值区按内容增长；边界按钮明确弱化 |
+| `HyperEmptyState` | 图标容器 56 | 使用精简的图标、标题与说明间距 |
 
 尺寸只约束视觉，不应通过固定高度裁切放大的文字。业务需要更醒目的入口时，使用组件已有尺寸参数或在外层提供空间。
 
 ## 排版
 
-`HyText` 提供显示、标题、正文、说明和提示层级。大标题使用更紧的行高，正文使用更宽松的行高；字号变化时布局应跟随 `MediaQuery.textScalerOf(context)`，不要用固定高度裁切正文。
+`HyperText` 提供显示、标题、正文、说明和提示层级。大标题使用更紧的行高，正文使用更宽松的行高；字号变化时布局应跟随 `MediaQuery.textScalerOf(context)`，不要用固定高度裁切正文。
 
 ## 反馈语义
 
-`HyUiTone` 将颜色与业务内容解耦：
+`HyperUiTone` 将颜色与业务内容解耦：
 
 - `neutral`：无倾向的信息。
 - `primary`：品牌强调。

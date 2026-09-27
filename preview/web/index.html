@@ -7,9 +7,9 @@
   <meta name="description" content="Flutter Hyper UI component preview">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Hy UI Preview">
+  <meta name="apple-mobile-web-app-title" content="Hyper UI Preview">
   <link rel="manifest" href="manifest.json">
-  <title>Hy UI Preview</title>
+  <title>Hyper UI Preview</title>
   <style>
     html, body, #flutter-preview-root { width: 100%; height: 100%; margin: 0; background: #f8f9fb; }
     #flutter-preview-root { position: relative; overflow: hidden; }
@@ -36,16 +36,16 @@
     const loader = root.querySelector('.preview-loader');
     const startedAt = performance.now();
     Promise.resolve().then(() => {
-      if (!window.hyUiPreviewBundle) throw new Error('预览启动脚本加载失败');
-      return window.hyUiPreviewBundle.start(new URL('./', document.baseURI).href, {
+      if (!window.hyperUiPreviewBundle) throw new Error('预览启动脚本加载失败');
+      return window.hyperUiPreviewBundle.start(new URL('./', document.baseURI).href, {
         allowDebug: true,
         onEntrypointLoaded: () => {
           loader.textContent = '正在初始化 Flutter 渲染引擎…';
-          console.info(`[Hy UI 独立预览] Dart 入口 ${(performance.now() - startedAt).toFixed(0)}ms`);
+          console.info(`[Hyper UI 独立预览] Dart 入口 ${(performance.now() - startedAt).toFixed(0)}ms`);
         },
       });
     }).then((app) => {
-      console.info(`[Hy UI 独立预览] 引擎启动 ${(performance.now() - startedAt).toFixed(0)}ms，脚本请求 ${performance.getEntriesByType('resource').filter((entry) => entry.name.endsWith('.js')).length} 个`);
+      console.info(`[Hyper UI 独立预览] 引擎启动 ${(performance.now() - startedAt).toFixed(0)}ms，脚本请求 ${performance.getEntriesByType('resource').filter((entry) => entry.name.endsWith('.js')).length} 个`);
       loader.textContent = '正在绘制预览界面…';
       const host = document.createElement('div');
       host.style.cssText = 'width:100%;height:100%';

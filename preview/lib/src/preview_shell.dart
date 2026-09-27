@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/hy_ui_preview_core.dart';
+import 'package:flutter_hyper_ui/hyper_ui_preview_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -82,7 +82,7 @@ class _PreviewContent extends StatelessWidget {
     );
     if (item.fullScreen) return content;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
+      padding: const EdgeInsets.all(HyperUiSpacing.pagePadding),
       child: content,
     );
   }
@@ -112,71 +112,69 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
     final selected = _selected;
 
     return Scaffold(
       backgroundColor: tokens.background,
-      body: HySoftBackground(
-        child: SafeArea(
-          child: Column(
-            children: [
-              HyNavBar(
-                title: const Text(
-                  'Flutter Hyper UI Preview',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Text(
-                  selected.description,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                safeArea: false,
-                actions: [
-                  HyButton.icon(
-                    icon: LucideIcons.sun,
-                    tooltip: '切换明暗主题',
-                    onPressed: widget.onToggleTheme,
-                  ),
-                ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            HyperNavBar(
+              title: const Text(
+                'Flutter Hyper UI Preview',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(
-                height: 52,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: HyUiSpacing.pagePadding,
-                    vertical: HyUiSpacing.xs,
-                  ),
-                  itemCount: PreviewCatalog.items.length,
-                  separatorBuilder: (_, _) =>
-                      const SizedBox(width: HyUiSpacing.xs),
-                  itemBuilder: (context, index) {
-                    final item = PreviewCatalog.items[index];
-                    return HyBadge.tag(
-                      label: item.title,
-                      selected: item.id == selected.id,
-                      onTap: () => setState(() => _selectedId = item.id),
-                    );
-                  },
-                ),
+              subtitle: Text(
+                selected.description,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 960),
-                    child: _PreviewContent(
-                      item: selected,
-                      onReady: widget.onComponentReady,
-                      onError: widget.onComponentError,
-                    ),
+              safeArea: false,
+              actions: [
+                HyperButton.icon(
+                  icon: LucideIcons.sun,
+                  tooltip: '切换明暗主题',
+                  onPressed: widget.onToggleTheme,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 52,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: HyperUiSpacing.pagePadding,
+                  vertical: HyperUiSpacing.xs,
+                ),
+                itemCount: PreviewCatalog.items.length,
+                separatorBuilder: (_, _) =>
+                    const SizedBox(width: HyperUiSpacing.xs),
+                itemBuilder: (context, index) {
+                  final item = PreviewCatalog.items[index];
+                  return HyperBadge.tag(
+                    label: item.title,
+                    selected: item.id == selected.id,
+                    onTap: () => setState(() => _selectedId = item.id),
+                  );
+                },
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 960),
+                  child: _PreviewContent(
+                    item: selected,
+                    onReady: widget.onComponentReady,
+                    onError: widget.onComponentError,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

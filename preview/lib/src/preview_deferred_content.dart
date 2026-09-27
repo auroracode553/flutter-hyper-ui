@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hyper_ui/hy_ui_preview_core.dart';
+import 'package:flutter_hyper_ui/hyper_ui_preview_core.dart';
 
 import 'preview_catalog.dart';
 
@@ -108,7 +108,7 @@ class _PreviewLoadError extends StatelessWidget {
           children: [
             Text('组件加载失败：$message', textAlign: TextAlign.center),
             const SizedBox(height: 12),
-            HyButton.tonal(label: '重试加载', onPressed: onRetry),
+            HyperButton.tonal(label: '重试加载', onPressed: onRetry),
           ],
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region CarouselComponentExample
 class CarouselComponentExample extends StatefulWidget {
@@ -15,11 +15,11 @@ class _CarouselComponentExampleState extends State<CarouselComponentExample> {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        HyCarousel(
+        HyperCarousel(
           height: 150,
           onPageChanged: (page) => setState(() => _page = page),
           items: <Widget>[
@@ -40,8 +40,8 @@ class _CarouselComponentExampleState extends State<CarouselComponentExample> {
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.xs),
-        HyText('当前第 ${_page + 1} 页', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.xs),
+        HyperText('当前第 ${_page + 1} 页', type: 'h5'),
       ],
     );
   }
@@ -60,7 +60,7 @@ class _CarouselPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
     return Container(
       color: color,
       alignment: Alignment.center,
@@ -68,8 +68,8 @@ class _CarouselPanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(icon, size: 30, color: tokens.primary),
-          const SizedBox(height: HyUiSpacing.xs),
-          HyText(title, type: 'h3'),
+          const SizedBox(height: HyperUiSpacing.xs),
+          HyperText(title, type: 'h3'),
         ],
       ),
     );
@@ -96,16 +96,16 @@ class _PageIndicatorComponentExampleState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const HyText('点击圆点切换选中页', type: 'h5'),
-        const SizedBox(height: HyUiSpacing.xs),
-        HyPageIndicator(
+        const HyperText('点击圆点切换选中页', type: 'h5'),
+        const SizedBox(height: HyperUiSpacing.xs),
+        HyperPageIndicator(
           count: 5,
           index: _index,
           onSelected: (index) => setState(() => _index = index),
         ),
-        const SizedBox(height: HyUiSpacing.sm),
-        const HyText('只读指示器', type: 'h5'),
-        const HyPageIndicator(count: 3, index: 1),
+        const SizedBox(height: HyperUiSpacing.sm),
+        const HyperText('只读指示器', type: 'h5'),
+        const HyperPageIndicator(count: 3, index: 1),
       ],
     );
   }

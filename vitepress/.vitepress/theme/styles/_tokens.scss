@@ -20,18 +20,18 @@
   --vp-button-brand-bg: #496fe8;
   --vp-button-brand-hover-bg: #375fdc;
   --vp-code-block-bg: rgba(24, 27, 36, 0.96);
-  --hy-glass: rgba(255, 255, 255, 0.62);
-  --hy-glass-strong: rgba(255, 255, 255, 0.84);
-  --hy-glass-subtle: rgba(255, 255, 255, 0.42);
-  --hy-edge: rgba(255, 255, 255, 0.82);
-  --hy-edge-shade: rgba(17, 18, 22, 0.08);
-  --hy-shadow: 0 24px 60px -32px rgba(28, 40, 72, 0.28),
+  --hyper-glass: rgba(255, 255, 255, 0.62);
+  --hyper-glass-strong: rgba(255, 255, 255, 0.84);
+  --hyper-glass-subtle: rgba(255, 255, 255, 0.42);
+  --hyper-edge: rgba(255, 255, 255, 0.82);
+  --hyper-edge-shade: rgba(17, 18, 22, 0.08);
+  --hyper-shadow: 0 24px 60px -32px rgba(28, 40, 72, 0.28),
     0 8px 20px -14px rgba(28, 40, 72, 0.16);
-  --hy-shadow-strong: 0 36px 80px -34px rgba(28, 40, 72, 0.38),
+  --hyper-shadow-strong: 0 36px 80px -34px rgba(28, 40, 72, 0.38),
     0 12px 30px -18px rgba(28, 40, 72, 0.2);
-  --hy-radius-sm: 14px;
-  --hy-radius-md: 22px;
-  --hy-radius-lg: 30px;
+  --hyper-radius-sm: 14px;
+  --hyper-radius-md: 22px;
+  --hyper-radius-lg: 30px;
 }
 
 .dark {
@@ -49,14 +49,14 @@
   --vp-c-text-3: #7f8590;
   --vp-nav-bg-color: rgba(17, 19, 24, 0.74);
   --vp-sidebar-bg-color: rgba(17, 19, 24, 0.76);
-  --hy-glass: rgba(31, 34, 42, 0.7);
-  --hy-glass-strong: rgba(39, 42, 51, 0.9);
-  --hy-glass-subtle: rgba(31, 34, 42, 0.48);
-  --hy-edge: rgba(255, 255, 255, 0.13);
-  --hy-edge-shade: rgba(255, 255, 255, 0.06);
-  --hy-shadow: 0 26px 60px -30px rgba(0, 0, 0, 0.72),
+  --hyper-glass: rgba(31, 34, 42, 0.7);
+  --hyper-glass-strong: rgba(39, 42, 51, 0.9);
+  --hyper-glass-subtle: rgba(31, 34, 42, 0.48);
+  --hyper-edge: rgba(255, 255, 255, 0.13);
+  --hyper-edge-shade: rgba(255, 255, 255, 0.06);
+  --hyper-shadow: 0 26px 60px -30px rgba(0, 0, 0, 0.72),
     0 8px 22px -14px rgba(0, 0, 0, 0.58);
-  --hy-shadow-strong: 0 38px 90px -34px rgba(0, 0, 0, 0.86),
+  --hyper-shadow-strong: 0 38px 90px -34px rgba(0, 0, 0, 0.86),
     0 14px 34px -18px rgba(0, 0, 0, 0.7);
 }
 

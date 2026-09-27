@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 // doc-region NavBarComponentExample
-/// 直接使用宿主手机屏幕作为页面视口，不添加演示工具或内层设备框。
+/// 使用 HyperNavBar 作为页面导航栏。
 class NavBarComponentExample extends StatelessWidget {
   const NavBarComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => HyNavBarPage(
-    navBar: const HyNavBar(
+  Widget build(BuildContext context) => Scaffold(
+    appBar: const HyperNavBar(
       title: Text('今日灵感'),
       automaticallyImplyLeading: false,
     ),
-    slivers: <Widget>[
-      SliverPadding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-        sliver: SliverList.builder(
-          itemCount: 13,
-          itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: index == 0
-                ? const _InspirationHeader()
-                : _InspirationItem(index: index),
+    body: CustomScrollView(
+      slivers: <Widget>[
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          sliver: SliverList.builder(
+            itemCount: 13,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: index == 0
+                  ? const _InspirationHeader()
+                  : _InspirationItem(index: index),
+            ),
           ),
         ),
-      ),
-    ],
+      ],
+    ),
   );
 }
 
@@ -35,7 +37,7 @@ class _InspirationHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -54,9 +56,9 @@ class _InspirationHeader extends StatelessWidget {
         children: <Widget>[
           Icon(LucideIcons.sparkles, size: 28),
           SizedBox(height: 28),
-          HyText('让内容延伸到\n屏幕的每一寸', type: 'h2'),
+          HyperText('让内容自然流动', type: 'h2'),
           SizedBox(height: 12),
-          HyText('向上滚动，观察这张卡片经过导航标题与状态栏。'),
+          HyperText('向上滚动，观察导航栏保持固定。'),
         ],
       ),
     );
@@ -70,7 +72,7 @@ class _InspirationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
     const titles = <String>['留一点空白', '光影与秩序', '日常里的灵感'];
     return Container(
       padding: const EdgeInsets.all(20),
@@ -82,17 +84,11 @@ class _InspirationItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          HyText(
-            '灵感 ${index.toString().padLeft(2, '0')}',
-            type: 'h5',
-          ),
+          HyperText('灵感 ${index.toString().padLeft(2, '0')}', type: 'h5'),
           const SizedBox(height: 18),
-          HyText(
-            titles[(index - 1) % titles.length],
-            type: 'h2',
-          ),
+          HyperText(titles[(index - 1) % titles.length], type: 'h2'),
           const SizedBox(height: 8),
-          const HyText('导航栏保持透明，内容沿同一个滚动视口连续向上移动。'),
+          const HyperText('导航栏保持透明，列表内容连续向上移动。'),
         ],
       ),
     );

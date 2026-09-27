@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -7,15 +7,15 @@ class CardsExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
 
     return Wrap(
-      spacing: HyUiSpacing.sm,
-      runSpacing: HyUiSpacing.sm,
+      spacing: HyperUiSpacing.sm,
+      runSpacing: HyperUiSpacing.sm,
       children: [
         SizedBox(
           width: 340,
-          child: HyCard(
+          child: HyperCard(
             title: '本周活动计划',
             subtitle: '12 项活动 · 最近更新 09:42',
             leading: _IconBox(
@@ -23,12 +23,12 @@ class CardsExample extends StatelessWidget {
               color: tokens.primary,
             ),
             actions: const [
-              HyBadge(label: '同步中', tone: HyUiTone.info),
+              HyperBadge(label: '同步中', tone: HyperUiTone.info),
             ],
             footer: const Row(
               children: [
-                Expanded(child: HyProgress(value: 0.68, strokeWidth: 8, showLabel: false)),
-                SizedBox(width: HyUiSpacing.sm),
+                Expanded(child: HyperProgress(value: 0.68, strokeWidth: 8, showLabel: false)),
+                SizedBox(width: HyperUiSpacing.sm),
                 Text('68%'),
               ],
             ),
@@ -44,7 +44,7 @@ class CardsExample extends StatelessWidget {
         ),
         SizedBox(
           width: 300,
-          child: HyCard(
+          child: HyperCard(
             selected: true,
             title: '周末出行计划',
             subtitle: '已加入批量处理队列。',
@@ -53,12 +53,12 @@ class CardsExample extends StatelessWidget {
               color: tokens.success,
             ),
             child: const Wrap(
-              spacing: HyUiSpacing.xs,
-              runSpacing: HyUiSpacing.xs,
+              spacing: HyperUiSpacing.xs,
+              runSpacing: HyperUiSpacing.xs,
               children: [
-                HyBadge.tag(label: '旅行', selected: true),
-                HyBadge.tag(label: '精选'),
-                HyBadge.tag(label: '日常'),
+                HyperBadge.tag(label: '旅行', selected: true),
+                HyperBadge.tag(label: '精选'),
+                HyperBadge.tag(label: '日常'),
               ],
             ),
           ),
@@ -79,14 +79,14 @@ class _IconBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
 
     return Container(
       width: 40,
       height: 40,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(HyUiRadii.sm),
+        borderRadius: BorderRadius.circular(HyperUiRadii.sm),
       ),
       child: Icon(
         icon,

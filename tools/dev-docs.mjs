@@ -7,12 +7,12 @@ const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(scriptDirectory, '..');
 const previewDirectory = resolve(repositoryRoot, 'preview');
 const vitepressDirectory = resolve(repositoryRoot, 'vitepress');
-const flutterPort = process.env.HY_UI_FLUTTER_PORT || '4201';
+const flutterPort = process.env.HYPER_UI_FLUTTER_PORT || '4201';
 const flutterOrigin = `http://127.0.0.1:${flutterPort}`;
-const vitepressPort = process.env.HY_UI_VITE_PORT || '9000';
+const vitepressPort = process.env.HYPER_UI_VITE_PORT || '9000';
 // AMD 调试模块不会在入口前拉取整套 DDC 模块，首次预览明显更快。
-// 代价是 Web 热重载不可用，文件变化时改用热重启；可用 HY_UI_PREVIEW_AMD=0 恢复 DDC。
-const useAmdModules = process.env.HY_UI_PREVIEW_AMD !== '0';
+// 代价是 Web 热重载不可用，文件变化时改用热重启；可用 HYPER_UI_PREVIEW_AMD=0 恢复 DDC。
+const useAmdModules = process.env.HYPER_UI_PREVIEW_AMD !== '0';
 
 function start(command, args, options) {
   return spawn([command, ...args].join(' '), {
@@ -64,8 +64,8 @@ const vitepress = start('node', [
   stdio: 'inherit',
   env: {
     ...process.env,
-    VITE_HY_UI_PREVIEW_MODE: 'dev-server',
-    VITE_HY_UI_PREVIEW_SERVER: flutterOrigin,
+    VITE_HYPER_UI_PREVIEW_MODE: 'dev-server',
+    VITE_HYPER_UI_PREVIEW_SERVER: flutterOrigin,
   },
 });
 

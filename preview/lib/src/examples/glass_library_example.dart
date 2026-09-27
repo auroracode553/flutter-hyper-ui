@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 /// 通用组件总览，不依赖任何业务模型或路由结构。
 class GlassLibraryExample extends StatefulWidget {
@@ -20,109 +20,114 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
 
   @override
   Widget build(BuildContext context) {
-    return HySpace(
-      alignment: CrossAxisAlignment.stretch,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: 18,
       children: <Widget>[
-        const HyText('柔性玻璃组件库', type: 'h1'),
-        const HyText('统一材质、状态、动效与无障碍语义，不绑定任何业务。', type: 'h5'),
-        HyNavBar(
+        const HyperText('柔性玻璃组件库', type: 'h1'),
+        const HyperText('统一材质、状态与动效，不绑定任何业务。', type: 'h5'),
+        HyperNavBar(
           title: const Text('Navbar'),
           subtitle: const Text('44px 透明导航栏'),
           safeArea: false,
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            HyButton.icon(
+            HyperButton.icon(
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
-              onPressed: () => HyToast.show(context, 'Navbar action'),
+              onPressed: () => HyperToast.show(context, 'Navbar action'),
             ),
           ],
         ),
-        HyCard(
+        HyperCard(
           title: 'TabBar',
           subtitle: '点击、拖拽、速度投影与边缘阻尼',
-          child: HyTabBar(
+          child: HyperTabBar(
             safeArea: false,
             margin: EdgeInsets.zero,
             selectedIndex: _tab,
             onSelected: (value) => setState(() => _tab = value),
-            items: const <HyTabItem>[
-              HyTabItem(icon: LucideIcons.house, label: '首页'),
-              HyTabItem(icon: LucideIcons.compass, label: '发现'),
-              HyTabItem(icon: LucideIcons.user, label: '我的'),
+            items: const <HyperTabItem>[
+              HyperTabItem(icon: LucideIcons.house, label: '首页'),
+              HyperTabItem(icon: LucideIcons.compass, label: '发现'),
+              HyperTabItem(icon: LucideIcons.user, label: '我的'),
             ],
           ),
         ),
-        HyCard(
+        HyperCard(
           title: 'Button',
           child: Wrap(
             spacing: 8,
             runSpacing: 8,
             children: <Widget>[
-              HyButton.filled(
+              HyperButton.filled(
                 label: '主要操作',
                 icon: LucideIcons.sparkles,
-                onPressed: () => HyToast.show(context, '主要操作'),
+                onPressed: () => HyperToast.show(context, '主要操作'),
               ),
-              HyButton.tonal(label: '柔和', onPressed: () {}),
-              HyButton.outline(label: '描边', onPressed: () {}),
-              HyButton.ghost(label: '幽灵', onPressed: () {}),
-              HyButton.danger(label: '危险', onPressed: () {}),
-              const HyButton.filled(label: '加载中', loading: true),
+              HyperButton.tonal(label: '柔和', onPressed: () {}),
+              HyperButton.outline(label: '描边', onPressed: () {}),
+              HyperButton.ghost(label: '幽灵', onPressed: () {}),
+              HyperButton.danger(label: '危险', onPressed: () {}),
+              const HyperButton.filled(label: '加载中', loading: true),
             ],
           ),
         ),
-        HyCard(
+        HyperCard(
           title: 'TextField / Dropdown',
-          child: HySpace(
-            alignment: CrossAxisAlignment.stretch,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 12,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const HyTextField(
+              const HyperTextField(
                 hintText: '输入关键词',
                 prefix: Icon(LucideIcons.search),
               ),
-              HyDropdown<String>(
+              HyperDropdown<String>(
                 label: '材质厚度',
                 value: _dropdown,
-                options: const <HyOption<String>>[
-                  HyOption(value: 'subtle', label: '轻薄'),
-                  HyOption(value: 'regular', label: '标准'),
-                  HyOption(value: 'prominent', label: '突出'),
+                options: const <HyperOption<String>>[
+                  HyperOption(value: 'subtle', label: '轻薄'),
+                  HyperOption(value: 'regular', label: '标准'),
+                  HyperOption(value: 'prominent', label: '突出'),
                 ],
                 onChanged: (value) => setState(() => _dropdown = value),
               ),
             ],
           ),
         ),
-        HyCard(
+        HyperCard(
           title: 'Selection controls',
-          child: HySpace(
-            alignment: CrossAxisAlignment.stretch,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 12,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              HyCheckbox(
+              HyperCheckbox(
                 value: _checked,
                 label: 'Checkbox',
                 onChanged: (value) => setState(() => _checked = value ?? false),
               ),
-              HyRadio<int>(
+              HyperRadio<int>(
                 value: 0,
                 groupValue: _radio,
                 label: 'Radio A',
                 onChanged: (value) => setState(() => _radio = value),
               ),
-              HyRadio<int>(
+              HyperRadio<int>(
                 value: 1,
                 groupValue: _radio,
                 label: 'Radio B',
                 onChanged: (value) => setState(() => _radio = value),
               ),
-              HySwitch(
+              HyperSwitch(
                 value: _enabled,
                 label: 'Switch',
                 onChanged: (value) => setState(() => _enabled = value),
               ),
-              HySlider(
+              HyperSlider(
                 value: _slider,
                 divisions: 100,
                 onChanged: (value) => setState(() => _slider = value),
@@ -130,30 +135,30 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             ],
           ),
         ),
-        HyMenuGroup(
+        HyperMenuGroup(
           title: 'MenuGroup',
           subtitle: '适用于设置页、个人中心与详情菜单。',
           children: <Widget>[
-            HyListTile(
+            HyperListTile(
               grouped: true,
               title: '外观与显示',
               subtitle: '主题、字号和动态效果',
               leadingIcon: LucideIcons.palette,
               leadingColor: const Color(0xFF8C79CF),
-              onTap: () => HyToast.show(context, '外观与显示'),
+              onTap: () => HyperToast.show(context, '外观与显示'),
             ),
-            HyListTile(
+            HyperListTile(
               grouped: true,
               title: '通知',
               leadingIcon: LucideIcons.bell,
               leadingColor: const Color(0xFFD69A4A),
-              trailing: HySwitch(
+              trailing: HyperSwitch(
                 value: _enabled,
                 onChanged: (value) => setState(() => _enabled = value),
               ),
               showChevron: false,
             ),
-            HyListTile(
+            HyperListTile(
               grouped: true,
               title: '隐私与安全',
               leadingIcon: LucideIcons.shield,
@@ -162,30 +167,30 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             ),
           ],
         ),
-        HyCard(
+        HyperCard(
           title: 'SlideMenu',
           subtitle: '向左拖动显示操作',
           padding: const EdgeInsets.all(8),
-          child: HySlideMenu(
-            endActions: <HySlideAction>[
-              HySlideAction(
+          child: HyperSlideMenu(
+            endActions: <HyperSlideAction>[
+              HyperSlideAction(
                 label: '置顶',
                 icon: LucideIcons.arrowUpToLine,
                 color: const Color(0xFF6B7280),
-                onPressed: () => HyToast.show(context, '已置顶'),
+                onPressed: () => HyperToast.show(context, '已置顶'),
               ),
-              HySlideAction(
+              HyperSlideAction(
                 label: '删除',
                 icon: LucideIcons.trash,
                 onPressed: () =>
-                    HyToast.show(context, '已删除', tone: HyUiTone.error),
+                    HyperToast.show(context, '已删除', tone: HyperUiTone.error),
               ),
             ],
             child: const Padding(
               padding: EdgeInsets.all(16),
               child: Row(
                 children: <Widget>[
-                  HyAvatar(text: 'HY'),
+                  HyperAvatar(text: 'UI'),
                   SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -201,42 +206,44 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             ),
           ),
         ),
-        HyCard(
+        HyperCard(
           title: 'Drawer / Toast / Skeleton',
-          child: HySpace(
-            alignment: CrossAxisAlignment.stretch,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 12,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: <Widget>[
-                  HyButton.tonal(
+                  HyperButton.tonal(
                     label: '打开抽屉',
-                    onPressed: () => HyDrawer.show<void>(
+                    onPressed: () => HyperDrawer.show<void>(
                       context,
                       title: '通用抽屉',
-                      builder: (_) => const HyMenuGroup(
+                      builder: (_) => const HyperMenuGroup(
                         children: <Widget>[
-                          HyListTile(grouped: true, title: '筛选条件'),
-                          HyListTile(grouped: true, title: '排序方式'),
-                          HyListTile(grouped: true, title: '显示选项'),
+                          HyperListTile(grouped: true, title: '筛选条件'),
+                          HyperListTile(grouped: true, title: '排序方式'),
+                          HyperListTile(grouped: true, title: '显示选项'),
                         ],
                       ),
                     ),
                   ),
-                  HyButton.tonal(
+                  HyperButton.tonal(
                     label: '显示 Toast',
-                    onPressed: () => HyToast.show(
+                    onPressed: () => HyperToast.show(
                       context,
                       '操作已完成',
-                      tone: HyUiTone.success,
+                      tone: HyperUiTone.success,
                       actionLabel: '撤销',
                       onAction: () {},
                     ),
                   ),
                 ],
               ),
-              const HySkeleton(card: true, rows: 2),
+              const HyperSkeleton(card: true, rows: 2),
             ],
           ),
         ),

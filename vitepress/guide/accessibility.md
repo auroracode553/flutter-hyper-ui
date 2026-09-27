@@ -1,6 +1,6 @@
 # 无障碍与自适应
 
-Hy UI 将可访问性视为组件行为的一部分，而不是示例应用额外添加的功能。
+Hyper UI 将可访问性视为组件行为的一部分，而不是示例应用额外添加的功能。
 
 ## 减少动态效果
 
@@ -15,7 +15,7 @@ Hy UI 将可访问性视为组件行为的一部分，而不是示例应用额�
 
 ## 高对比度
 
-`HyGlass` 读取 `MediaQuery.highContrast`。启用时会使用更实的卡片背景、移除背景模糊并加强边界，以避免内容随背景变化而失去可读性。
+`HyperGlass` 读取 `MediaQuery.highContrast`。启用时会使用更实的卡片背景、移除背景模糊并加强边界，以避免内容随背景变化而失去可读性。
 
 自定义玻璃颜色时仍需确保：
 
@@ -25,7 +25,7 @@ Hy UI 将可访问性视为组件行为的一部分，而不是示例应用额�
 
 ## 文本缩放
 
-组件应放在可伸缩布局中。Hy TabBar 会根据文字缩放计算最低高度，输入框和菜单行使用最小高度而不是固定裁切。
+组件应放在可伸缩布局中。Hyper TabBar 会根据文字缩放计算最低高度，输入框和菜单行使用最小高度而不是固定裁切。
 
 业务页面应避免：
 
@@ -50,19 +50,12 @@ ConstrainedBox(
 
 方向性组件使用逻辑方向：
 
-- `HyDrawerPlacement.start/end` 跟随 `TextDirection`。
-- `HySlideMenu.startActions/endActions` 自动镜像。
-- `HyTabBar` 保持业务索引顺序，同时镜像视觉位置。
+- `HyperDrawerPlacement.start/end` 跟随 `TextDirection`。
+- `HyperSlideMenu.startActions/endActions` 自动镜像。
+- `HyperTabBar` 保持业务索引顺序，同时镜像视觉位置。
 - 内边距优先使用 `EdgeInsetsDirectional`。
 
 不要根据语言手工反转业务数据列表。
-
-## 语义与触控区域
-
-- Tab、Radio 和 Checkbox 提供 selected/checked 语义。
-- 仅图标按钮必须提供 `tooltip`。
-- 自定义操作可通过 `HyPressable.semanticLabel` 添加语义名称。
-- 常用触控目标建议保持至少 44–48 dp。
 
 ## 键盘与焦点
 

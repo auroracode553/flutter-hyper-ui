@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -18,34 +18,34 @@ class _InputsExampleState extends State<InputsExample> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        HySegmentedControl<String>(
+        HyperSegmentedControl<String>(
           selectedValue: _type,
           onChanged: (value) => setState(() => _type = value),
           options: const [
-            HySegmentOption(
+            HyperSegmentOption(
               value: 'all',
               label: '全部',
               icon: LucideIcons.inbox,
             ),
-            HySegmentOption(
+            HyperSegmentOption(
               value: 'note',
               label: '文档',
               icon: LucideIcons.fileText,
             ),
-            HySegmentOption(
+            HyperSegmentOption(
               value: 'sheet',
               label: '表格',
               icon: LucideIcons.table,
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.md),
-        const HyTextField(
+        const SizedBox(height: HyperUiSpacing.md),
+        const HyperTextField(
           hintText: '输入文件名或关键词',
           prefix: Icon(LucideIcons.search),
         ),
-        const SizedBox(height: HyUiSpacing.md),
-        const HyTextField(
+        const SizedBox(height: HyperUiSpacing.md),
+        const HyperTextField(
           hintText: '补充说明',
           type: 'textarea',
           rows: 3,

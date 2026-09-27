@@ -1,4 +1,4 @@
-import 'package:flutter_hyper_ui/hy_ui.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -13,43 +13,43 @@ class ButtonsExample extends StatelessWidget {
       children: [
         // 文字按钮：尺寸与形状（默认按内容收缩，等价 inline-block）。
         Wrap(
-          spacing: HyUiSpacing.xs,
-          runSpacing: HyUiSpacing.xs,
+          spacing: HyperUiSpacing.xs,
+          runSpacing: HyperUiSpacing.xs,
           children: [
-            HyButton.filled(
+            HyperButton.filled(
               label: '小按钮',
               height: 32,
               onPressed: _noop,
             ),
-            HyButton.filled(
+            HyperButton.filled(
               label: '默认按钮',
               round: true,
               onPressed: _noop,
             ),
-            HyButton.outline(
+            HyperButton.outline(
               label: '处理中',
               loading: true,
               onPressed: _noop,
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.md),
+        const SizedBox(height: HyperUiSpacing.md),
         // 带图标的按钮：图标 + 文字。
         Wrap(
-          spacing: HyUiSpacing.xs,
-          runSpacing: HyUiSpacing.xs,
+          spacing: HyperUiSpacing.xs,
+          runSpacing: HyperUiSpacing.xs,
           children: [
-            HyButton.outline(
+            HyperButton.outline(
               label: '导出',
               icon: LucideIcons.share2,
               onPressed: _noop,
             ),
-            HyButton.danger(
+            HyperButton.danger(
               label: '删除',
               icon: LucideIcons.trash,
               onPressed: _noop,
             ),
-            HyButton.tonal(
+            HyperButton.tonal(
               label: '带图标胶囊',
               icon: LucideIcons.settings,
               round: true,
@@ -57,36 +57,36 @@ class ButtonsExample extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.md),
+        const SizedBox(height: HyperUiSpacing.md),
         // 图标按钮：仅图标，方形（省略 label 自动呈现）。
         Wrap(
-          spacing: HyUiSpacing.xs,
-          runSpacing: HyUiSpacing.xs,
+          spacing: HyperUiSpacing.xs,
+          runSpacing: HyperUiSpacing.xs,
           children: [
-            HyButton.icon(
+            HyperButton.icon(
               icon: LucideIcons.plus,
               onPressed: _noop,
               tooltip: '新建',
             ),
-            HyButton.icon(
+            HyperButton.icon(
               icon: LucideIcons.refreshCw,
               type: 'tonal',
               onPressed: _noop,
               tooltip: '刷新',
             ),
-            HyButton.icon(
+            HyperButton.icon(
               icon: LucideIcons.share2,
               type: 'outline',
               onPressed: _noop,
               tooltip: '分享',
             ),
-            HyButton.icon(
+            HyperButton.icon(
               icon: LucideIcons.trash,
               type: 'danger',
               onPressed: _noop,
               tooltip: '删除',
             ),
-            HyButton.icon(
+            HyperButton.icon(
               icon: LucideIcons.refreshCw,
               loading: true,
               onPressed: _noop,
@@ -94,9 +94,9 @@ class ButtonsExample extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: HyUiSpacing.md),
+        const SizedBox(height: HyperUiSpacing.md),
         // 通栏按钮：显式 expanded 铺满父级宽度。
-        HyButton.filled(
+        HyperButton.filled(
           label: '通栏按钮（expanded: true）',
           expanded: true,
           onPressed: _noop,

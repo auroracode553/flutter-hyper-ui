@@ -2,16 +2,16 @@
 
 ## 包结构
 
-Hy UI 由四层组成，依赖只允许从上向下：
+Hyper UI 由四层组成，依赖只允许从上向下：
 
 ```text
 复合组件与场景组件
         ↓
 基础组件（Button、TextField、TabBar、List）
         ↓
-材质与交互基础设施（HyGlass、HyPressable）
+材质与交互基础设施（HyperGlass、HyperPressable）
         ↓
-主题令牌（HyUiThemeTokens、HyGlassTheme、Effects）
+主题令牌（HyperUiThemeTokens、HyperGlassTheme、Effects）
 ```
 
 主题层不依赖组件；基础材质不读取业务状态；复合组件通过构造参数注入内容、状态与回调。
@@ -20,10 +20,10 @@ Hy UI 由四层组成，依赖只允许从上向下：
 
 受控组件只维护展示交互所需的临时状态：
 
-- `HyTabBar` 持有指示器当前动画位置，但选中索引由调用方提供。
-- `HyTextField` 可以代管未传入的 `TextEditingController`，不会保存业务数据。
-- `HySlideMenu` 持有侧滑偏移，不决定操作结果。
-- `HyDropdown` 返回选中值，不管理选项来源。
+- `HyperTabBar` 持有指示器当前动画位置，但选中索引由调用方提供。
+- `HyperTextField` 可以代管未传入的 `TextEditingController`，不会保存业务数据。
+- `HyperSlideMenu` 持有侧滑偏移，不决定操作结果。
+- `HyperDropdown` 返回选中值，不管理选项来源。
 
 任何需要持久化、网络请求、路由或权限的行为都由业务层通过回调接入。
 
@@ -40,7 +40,7 @@ Hy UI 由四层组成，依赖只允许从上向下：
 - `theme/`：颜色、间距、圆角、玻璃与动效令牌。
 - `components/`：一个文件聚焦一个组件族。
 - `utils/`：不包含组件状态的通用辅助功能。
-- `hy_ui.dart`：唯一公开导出入口。
+- `hyper_ui.dart`：唯一公开导出入口。
 
 单个源码文件应保持明确职责；高阶组件通过组合基础组件实现，不复制材质和状态逻辑。
 

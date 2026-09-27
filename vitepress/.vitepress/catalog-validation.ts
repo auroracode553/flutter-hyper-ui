@@ -47,7 +47,7 @@ export function validateCatalog(
   const previewCatalogPath = resolve(repositoryRoot, 'preview/lib/src/preview_catalog.dart');
   const previewCatalog = readFileSync(previewCatalogPath, 'utf8');
   const registeredPreviewIds = new Set(
-    [...previewCatalog.matchAll(/(?:\bid:\s*|_componentPreview\()'([^']+)'/g)]
+    [...previewCatalog.matchAll(/(?:\bid:\s*|_componentPreview\(\s*)'([^']+)'/g)]
       .map((match) => match[1]),
   );
   const missingComponentPreviews = componentEntries
@@ -102,7 +102,7 @@ export function validateCatalog(
     throw new Error(`文档演示源码不存在: ${[...new Set(missingDemoSources)].join(', ')}`);
   }
 
-  const publicEntryPath = resolve(repositoryRoot, 'ui/lib/hy_ui.dart');
+  const publicEntryPath = resolve(repositoryRoot, 'ui/lib/hyper_ui.dart');
   const publicEntry = readFileSync(publicEntryPath, 'utf8');
   const sourceErrors: string[] = [];
   const documentedSymbols = new Set<string>();
@@ -114,7 +114,7 @@ export function validateCatalog(
       const diskPath = resolve(repositoryRoot, 'ui/lib/src', relativeSource);
       const exportStatement = `export 'src/${relativeSource.replaceAll('\\', '/')}';`;
       if (!existsSync(diskPath)) sourceErrors.push(`${entry.name}: 源文件不存在 (${relativeSource})`);
-      else if (!publicEntry.includes(exportStatement)) sourceErrors.push(`${entry.name}: 未从 hy_ui.dart 导出`);
+      else if (!publicEntry.includes(exportStatement)) sourceErrors.push(`${entry.name}: 未从 hyper_ui.dart 导出`);
       else {
         const source = readFileSync(diskPath, 'utf8');
         for (const rawSymbol of entry.name.split('/')) {
@@ -127,13 +127,14 @@ export function validateCatalog(
     }
   }
 
-  const exportedSources = [...publicEntry.matchAll(/export 'src\/([^']+\.dart)';/g)]
+  // 主题令牌和工具保留为公开基础设施，组件目录只约束自绘组件。
+  const exportedSources = [...publicEntry.matchAll(/export 'src\/(components\/[^']+\.dart)';/g)]
     .map((match) => resolve(repositoryRoot, 'ui/lib/src', match[1]));
   const undocumentedSymbols: string[] = [];
   for (const sourcePath of exportedSources) {
     const source = readFileSync(sourcePath, 'utf8');
     const declarations = source.matchAll(
-      /^(?:abstract\s+final\s+)?(?:class|enum|extension)\s+(Hy\w+)|^typedef\s+(Hy\w+)/gm,
+      /^(?:abstract\s+final\s+)?(?:class|enum|extension)\s+(Hyper\w+)|^typedef\s+(Hyper\w+)/gm,
     );
     for (const declaration of declarations) {
       const symbol = declaration[1] || declaration[2];
