@@ -16,6 +16,11 @@ class HyperMenuGroup extends StatelessWidget {
   final String? title;
   final String? subtitle;
 
+  /// Tiles inside this group share its glass surface automatically.
+  static bool contains(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_HyperMenuGroupScope>() !=
+      null;
+
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
@@ -41,14 +46,20 @@ class HyperMenuGroup extends StatelessWidget {
           blur: 18,
           weight: HyperGlassWeight.regular,
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              for (var index = 0; index < children.length; index++) ...<Widget>[
-                if (index > 0) const HyperDivider(indent: 14, endIndent: 14),
-                children[index],
+          child: _HyperMenuGroupScope(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                for (
+                  var index = 0;
+                  index < children.length;
+                  index++
+                ) ...<Widget>[
+                  if (index > 0) const HyperDivider(indent: 14, endIndent: 14),
+                  children[index],
+                ],
               ],
-            ],
+            ),
           ),
         ),
         if (subtitle != null)
@@ -66,4 +77,11 @@ class HyperMenuGroup extends StatelessWidget {
       ],
     );
   }
+}
+
+class _HyperMenuGroupScope extends InheritedWidget {
+  const _HyperMenuGroupScope({required super.child});
+
+  @override
+  bool updateShouldNotify(_HyperMenuGroupScope oldWidget) => false;
 }

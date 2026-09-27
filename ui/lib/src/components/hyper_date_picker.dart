@@ -23,7 +23,7 @@ class HyperTimeOfDay {
   final int hour;
   final int minute;
 
-  String format(BuildContext context) =>
+  String format() =>
       '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 }
 
@@ -133,7 +133,7 @@ class _DatePanelState extends State<_DatePanel> {
         onSelected: (date) => setState(() => _selected = date),
       ),
       const SizedBox(height: HyperUiSpacing.sm),
-      HyperButton.filled(
+      HyperButton(
         label: '确定',
         height: 44,
         expanded: true,
@@ -200,7 +200,7 @@ class _TimePanelState extends State<_TimePanel> {
         ),
       ),
       const SizedBox(height: HyperUiSpacing.sm),
-      HyperButton.filled(
+      HyperButton(
         label: '确定',
         height: 44,
         expanded: true,
@@ -278,7 +278,7 @@ class _DateRangePanelState extends State<_DateRangePanel> {
         },
       ),
       const SizedBox(height: HyperUiSpacing.sm),
-      HyperButton.filled(
+      HyperButton(
         label: '确定',
         height: 44,
         expanded: true,
@@ -454,7 +454,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                           ? selectMonth
                           : null;
                       return month == _visibleMonth.month
-                          ? HyperButton.filled(
+                          ? HyperButton(
                               label: '$month 月',
                               height: 42,
                               expanded: true,

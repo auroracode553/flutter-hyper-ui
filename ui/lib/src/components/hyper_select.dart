@@ -150,7 +150,7 @@ class _HyperSelectionPanelState<T> extends State<_HyperSelectionPanel<T>> {
         if (widget.multiple)
           Padding(
             padding: const EdgeInsets.only(top: HyperUiSpacing.xs),
-            child: HyperButton.filled(
+            child: HyperButton(
               label: selected.isEmpty ? '确定' : '确定（${selected.length}）',
               height: 44,
               expanded: true,

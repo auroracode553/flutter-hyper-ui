@@ -16,7 +16,7 @@ class _CollapseComponentExampleState extends State<CollapseComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -54,7 +54,7 @@ class TimelineComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override

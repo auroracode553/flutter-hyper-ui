@@ -119,10 +119,9 @@ class HyperRadio<T> extends StatelessWidget {
       ),
     );
     if (label == null) return radio;
-    return HyperListTile(
+    return HyperListTile.plain(
       title: label!,
       trailing: radio,
-      grouped: true,
       enabled: onChanged != null,
       showChevron: false,
       onTap: onChanged == null ? null : () => onChanged!(value),
@@ -146,10 +145,9 @@ class HyperSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     final control = _HyperSwitchControl(value: value, onChanged: onChanged);
     if (label == null) return control;
-    return HyperListTile(
+    return HyperListTile.plain(
       title: label!,
       trailing: control,
-      grouped: true,
       enabled: onChanged != null,
       showChevron: false,
       onTap: onChanged == null ? null : () => onChanged!(!value),

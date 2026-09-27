@@ -36,7 +36,7 @@ class FeedbackExample extends StatelessWidget {
           icon: LucideIcons.folderX,
           title: '暂无最近文档',
           message: '打开文件后，最近访问记录会显示在这里。',
-          action: HyperButton.filled(
+          action: HyperButton(
             label: '选择文件',
             icon: LucideIcons.plus,
             onPressed: _noop,

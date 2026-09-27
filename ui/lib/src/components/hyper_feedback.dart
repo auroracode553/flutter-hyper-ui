@@ -174,7 +174,7 @@ abstract final class HyperDialog {
                             label: confirmLabel,
                             onPressed: () => Navigator.pop(dialogContext, true),
                           )
-                        : HyperButton.filled(
+                        : HyperButton(
                             label: confirmLabel,
                             onPressed: () => Navigator.pop(dialogContext, true),
                           ),

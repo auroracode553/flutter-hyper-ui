@@ -46,7 +46,7 @@ class ListTileComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -100,19 +100,16 @@ class MenuGroupComponentExample extends StatelessWidget {
       subtitle: '账户与应用偏好',
       children: [
         HyperListTile(
-          grouped: true,
           title: '账户与安全',
           subtitle: '密码、设备与登录记录',
           leadingIcon: LucideIcons.shield,
         ),
         HyperListTile(
-          grouped: true,
           title: '外观与显示',
           subtitle: '主题、字号与动态效果',
           leadingIcon: LucideIcons.palette,
         ),
         HyperListTile(
-          grouped: true,
           title: '关于',
           meta: 'v1.0.0',
           leadingIcon: LucideIcons.info,
@@ -161,7 +158,7 @@ class TabsComponentExample extends StatelessWidget {
   const TabsComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => HyperTabs.withPages(
+  Widget build(BuildContext context) => HyperTabs(
     tabs: const [Text('概览'), Text('动态'), Text('成员')],
     pages: [
       Center(
@@ -177,7 +174,7 @@ class TabsComponentExample extends StatelessWidget {
       const Center(child: Text('最近没有新动态')),
       const Center(child: Text('共有 8 位成员')),
     ],
-    height: 150,
+    pageHeight: 150,
   );
 }
 // end-doc-region TabsComponentExample
@@ -195,7 +192,7 @@ class _StepsComponentExampleState extends State<StepsComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -244,8 +241,8 @@ class ProgressComponentExample extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          HyperProgress(value: .42, circular: true),
-          HyperProgress(circular: true, showLabel: false),
+          HyperProgress.circular(value: .42),
+          HyperProgress.circular(showLabel: false),
         ],
       ),
     ],

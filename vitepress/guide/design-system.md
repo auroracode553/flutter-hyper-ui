@@ -27,7 +27,7 @@ Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一�
 | `prominent` | Drawer、Dialog、Toast、BottomSheet | 更实的表面、更强分离度 |
 | `solid` | 高对比或不适合透明的区域 | 使用实色卡片背景，不执行模糊 |
 
-不要在一个轻量玻璃表面上继续叠加另一个轻量玻璃表面。分组菜单由 `HyperMenuGroup` 绘制一次外层材质，内部 `HyperListTile(grouped: true)` 只绘制状态。
+不要在一个轻量玻璃表面上继续叠加另一个轻量玻璃表面。`HyperMenuGroup` 绘制一次外层材质，内部 `HyperListTile` 会自动只绘制状态；在其他自定义玻璃表面内可用 `HyperListTile.plain`。
 
 ```dart
 HyperGlass(

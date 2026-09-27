@@ -8,7 +8,7 @@ class ToastComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -127,7 +127,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
           ),
         ],
       ),
-      footerBuilder: (footerContext) => HyperButton.filled(
+      footerBuilder: (footerContext) => HyperButton(
         label: '应用筛选',
         expanded: true,
         onPressed: () => Navigator.pop(footerContext),
@@ -137,7 +137,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -147,9 +147,9 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('右侧抽屉与返回值'),
-        HyperButton.filled(label: '打开抽屉', onPressed: _openEnd),
+        HyperButton(label: '打开抽屉', onPressed: _openEnd),
         const SizedBox(height: HyperUiSpacing.sm),
-        HyperText('返回结果：$_result', type: 'h5'),
+        HyperText('返回结果：$_result', size: 'small'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('左侧抽屉与底部操作区'),
@@ -166,7 +166,7 @@ class SkeletonComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -193,7 +193,7 @@ class DialogComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -203,7 +203,7 @@ class DialogComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('标准确认'),
-        HyperButton.filled(
+        HyperButton(
           label: '保存确认',
           onPressed: () => HyperDialog.confirm(
             context,
@@ -258,7 +258,7 @@ class LoadingComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -303,7 +303,7 @@ class ActionSheetComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -373,7 +373,7 @@ class ActionSheetComponentExample extends StatelessWidget {
               children: [
                 const Text('点击遮罩无法关闭，只能通过按钮确认。'),
                 const SizedBox(height: HyperUiSpacing.md),
-                HyperButton.filled(
+                HyperButton(
                   label: '同意并继续',
                   expanded: true,
                   onPressed: () => Navigator.pop(sheetContext),
@@ -448,7 +448,7 @@ class _NoticeBarComponentExampleState extends State<NoticeBarComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override

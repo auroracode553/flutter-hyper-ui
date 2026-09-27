@@ -22,7 +22,6 @@ class HyperDrawer extends StatelessWidget {
     this.footer,
     this.onClose,
     this.scrollable = true,
-    this.padding = const EdgeInsets.all(16),
   });
 
   final Widget child;
@@ -32,7 +31,6 @@ class HyperDrawer extends StatelessWidget {
 
   /// ListView 等自带滚动的内容应设为 false，以获得有限高度。
   final bool scrollable;
-  final EdgeInsetsGeometry padding;
 
   /// 打开模态抽屉，通过 Navigator.pop(drawerContext, result) 返回结果。
   /// dismissible 仅控制遮罩点击，系统返回键仍可关闭抽屉。
@@ -44,12 +42,7 @@ class HyperDrawer extends StatelessWidget {
     HyperDrawerPlacement placement = HyperDrawerPlacement.end,
     double width = 320,
     bool dismissible = true,
-    bool showCloseButton = true,
     bool scrollable = true,
-    bool useRootNavigator = true,
-    EdgeInsetsGeometry padding = const EdgeInsets.all(16),
-    Color? barrierColor,
-    RouteSettings? routeSettings,
   }) {
     assert(width > 0 && width.isFinite);
     final direction = Directionality.of(context);
@@ -57,15 +50,14 @@ class HyperDrawer extends StatelessWidget {
         (placement == HyperDrawerPlacement.start) ==
         (direction == TextDirection.ltr);
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
-    final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
+    final navigator = Navigator.of(context, rootNavigator: true);
     final themes = InheritedTheme.capture(from: context, to: navigator.context);
 
     return showGeneralDialog<T>(
       context: context,
-      useRootNavigator: useRootNavigator,
-      routeSettings: routeSettings,
+      useRootNavigator: true,
       barrierDismissible: dismissible,
-      barrierColor: barrierColor ?? HyperGlassTheme.of(context).scrim,
+      barrierColor: HyperGlassTheme.of(context).scrim,
       transitionDuration: reduceMotion
           ? Duration.zero
           : HyperUiEffects.overlayDuration,
@@ -93,13 +85,8 @@ class HyperDrawer extends StatelessWidget {
                         child: HyperDrawer(
                           title: title,
                           footer: footerBuilder?.call(drawerContext),
-                          onClose: showCloseButton
-                              ? () {
-                                  Navigator.of(drawerContext).pop();
-                                }
-                              : null,
+                          onClose: () => Navigator.of(drawerContext).pop(),
                           scrollable: scrollable,
-                          padding: padding,
                           child: builder(drawerContext),
                         ),
                       ),
@@ -167,12 +154,15 @@ class HyperDrawer extends StatelessWidget {
           ),
         Expanded(
           child: scrollable
-              ? SingleChildScrollView(padding: padding, child: child)
-              : Padding(padding: padding, child: child),
+              ? SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: child,
+                )
+              : Padding(padding: const EdgeInsets.all(16), child: child),
         ),
         if (footer != null) ...[
           const HyperDivider(),
-          Padding(padding: padding, child: footer),
+          Padding(padding: const EdgeInsets.all(16), child: footer),
         ],
       ],
     ),

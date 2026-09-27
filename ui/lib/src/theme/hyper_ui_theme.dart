@@ -78,7 +78,7 @@ class HyperUiTheme extends InheritedWidget {
   bool updateShouldNotify(HyperUiTheme oldWidget) => data != oldWidget.data;
 }
 
-class _HyperApp extends StatelessWidget {
+class _HyperApp extends StatefulWidget {
   const _HyperApp({
     required this.home,
     required this.title,
@@ -96,18 +96,45 @@ class _HyperApp extends StatelessWidget {
   final TransitionBuilder? builder;
 
   @override
+  State<_HyperApp> createState() => _HyperAppState();
+}
+
+class _HyperAppState extends State<_HyperApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    if (widget.brightness == null) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final resolvedBrightness =
-        brightness ??
-        MediaQuery.maybePlatformBrightnessOf(context) ??
+        widget.brightness ??
         WidgetsBinding.instance.platformDispatcher.platformBrightness;
     final theme = resolvedBrightness == Brightness.dark
-        ? HyperUiTheme.dark(primary: primary, fontFamily: fontFamily)
-        : HyperUiTheme.light(primary: primary, fontFamily: fontFamily);
+        ? HyperUiTheme.dark(
+            primary: widget.primary,
+            fontFamily: widget.fontFamily,
+          )
+        : HyperUiTheme.light(
+            primary: widget.primary,
+            fontFamily: widget.fontFamily,
+          );
     return HyperUiTheme(
       data: theme,
       child: WidgetsApp(
-        title: title,
+        title: widget.title,
         debugShowCheckedModeBanner: false,
         color: theme.tokens.background,
         textStyle: TextStyle(
@@ -119,8 +146,8 @@ class _HyperApp extends StatelessWidget {
           pageBuilder: (context, animation, secondaryAnimation) =>
               page(context),
         ),
-        builder: builder,
-        home: home,
+        builder: widget.builder,
+        home: widget.home,
       ),
     );
   }

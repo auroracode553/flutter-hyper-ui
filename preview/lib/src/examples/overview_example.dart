@@ -18,7 +18,7 @@ class OverviewExample extends StatelessWidget {
           subtitle: '动作按钮',
           icon: LucideIcons.hand,
           color: tokens.primary,
-          child: HyperButton.filled(label: '打开', onPressed: _noop),
+          child: HyperButton(label: '打开', onPressed: _noop),
         ),
         _OverviewTile(
           title: 'Input',

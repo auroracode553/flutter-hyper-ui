@@ -28,7 +28,7 @@ class HyperButton extends StatelessWidget {
     this.backgroundColor,
   }) : _variant = _ButtonVariant.filled;
 
-  /// Compact icon button; [child] can replace the icon graphic.
+  /// Compact icon button.
   const HyperButton.icon({
     super.key,
     required this.icon,
@@ -44,22 +44,6 @@ class HyperButton extends StatelessWidget {
        trailingIcon = null,
        expanded = false,
        _variant = _ButtonVariant.tonal;
-
-  const HyperButton.filled({
-    super.key,
-    this.label,
-    this.child,
-    this.onPressed,
-    this.height = 38,
-    this.icon,
-    this.trailingIcon,
-    this.loading = false,
-    this.expanded = false,
-    this.iconSize,
-    this.tooltip,
-    this.color,
-    this.backgroundColor,
-  }) : _variant = _ButtonVariant.filled;
 
   const HyperButton.tonal({
     super.key,
@@ -147,7 +131,8 @@ class HyperButton extends StatelessWidget {
     final blocked = disabled || loading;
     final metrics = _HyperButtonMetrics.fromHeight(height);
     final hasLabel = label != null && label!.isNotEmpty;
-    final isIconOnly = !hasLabel && this.child == null && (icon != null || loading);
+    final isIconOnly =
+        !hasLabel && this.child == null && (icon != null || loading);
     assert(
       (hasLabel ? 1 : 0) +
               (this.child != null ? 1 : 0) +

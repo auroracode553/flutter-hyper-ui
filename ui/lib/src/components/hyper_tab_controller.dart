@@ -25,10 +25,14 @@ class HyperTabHost extends StatefulWidget {
     required this.length,
     required this.child,
     this.initialIndex = 0,
+    this.selectedIndex,
+    this.onChanged,
   });
 
   final int length;
   final int initialIndex;
+  final int? selectedIndex;
+  final ValueChanged<int>? onChanged;
   final Widget child;
 
   @override
@@ -36,33 +40,54 @@ class HyperTabHost extends StatefulWidget {
 
   static HyperTabController of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<_HyperTabScope>()!.controller;
-
-  static HyperTabController? maybeOf(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<_HyperTabScope>()?.controller;
 }
 
 class _HyperTabHostState extends State<HyperTabHost> {
   late HyperTabController _controller = HyperTabController(
     length: widget.length,
-    initialIndex: widget.initialIndex,
+    initialIndex: widget.selectedIndex ?? widget.initialIndex,
   );
+  bool _syncingExternal = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_reportIndex);
+  }
+
+  void _reportIndex() {
+    if (!_syncingExternal) widget.onChanged?.call(_controller.index);
+  }
 
   @override
   void didUpdateWidget(HyperTabHost oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.length == widget.length) return;
-    final previous = _controller;
-    _controller = HyperTabController(
-      length: widget.length,
-      initialIndex: widget.length == 0
-          ? 0
-          : previous.index.clamp(0, widget.length - 1),
-    );
-    previous.dispose();
+    if (oldWidget.length != widget.length) {
+      final previous = _controller;
+      _controller = HyperTabController(
+        length: widget.length,
+        initialIndex: widget.length == 0
+            ? 0
+            : (widget.selectedIndex ?? previous.index).clamp(
+                0,
+                widget.length - 1,
+              ),
+      );
+      _controller.addListener(_reportIndex);
+      previous.dispose();
+      return;
+    }
+    if (widget.selectedIndex != null &&
+        widget.selectedIndex != _controller.index) {
+      _syncingExternal = true;
+      _controller.animateTo(widget.selectedIndex!);
+      _syncingExternal = false;
+    }
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_reportIndex);
     _controller.dispose();
     super.dispose();
   }

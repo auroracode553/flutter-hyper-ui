@@ -64,7 +64,7 @@ class _DrawerExampleState extends State<DrawerExample> {
           ],
         ),
       ),
-      footerBuilder: (drawerContext) => HyperButton.filled(
+      footerBuilder: (drawerContext) => HyperButton(
         label: '应用筛选',
         onPressed: () => Navigator.pop(drawerContext, onlyUnread),
       ),

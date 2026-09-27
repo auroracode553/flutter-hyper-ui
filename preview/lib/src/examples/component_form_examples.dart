@@ -9,7 +9,7 @@ class TextFieldComponentExample extends StatelessWidget {
   // 字段标题写在输入框外部：输入组件本身不携带标题与说明。
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -80,7 +80,7 @@ class _SegmentedControlComponentExampleState
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -100,7 +100,7 @@ class _SegmentedControlComponentExampleState
           ],
         ),
         const SizedBox(height: HyperUiSpacing.sm),
-        HyperText('当前值：$_value', type: 'h5'),
+        HyperText('当前值：$_value', size: 'small'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('非等宽布局'),
@@ -228,7 +228,7 @@ class _CheckboxComponentExampleState extends State<CheckboxComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -292,7 +292,7 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -320,7 +320,7 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
                 : (value) => setState(() => _value = value),
           ),
         const SizedBox(height: HyperUiSpacing.sm),
-        HyperText('当前值：$_value', type: 'h5'),
+        HyperText('当前值：$_value', size: 'small'),
       ],
     );
   }
@@ -341,7 +341,7 @@ class _SwitchComponentExampleState extends State<SwitchComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -397,7 +397,7 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -436,7 +436,7 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
         const SizedBox(height: HyperUiSpacing.sm),
         HyperText(
           '当前：${_age.toInt()} 岁${_committedAge == null ? '' : ' · $_committedAge'}',
-          type: 'h5',
+          size: 'small',
         ),
       ],
     );
@@ -516,7 +516,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   Future<void> _pick() async {
@@ -595,7 +595,7 @@ class _DatePickerComponentExampleState
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   Future<void> _pickDate() async {
@@ -645,11 +645,7 @@ class _DatePickerComponentExampleState
               onPressed: _pickTime,
             ),
             const SizedBox(width: 14),
-            HyperBadge(
-              label: _time == null
-                  ? '未选择'
-                  : '${_time!.hour.toString().padLeft(2, '0')}:${_time!.minute.toString().padLeft(2, '0')}',
-            ),
+            HyperBadge(label: _time == null ? '未选择' : _time!.format()),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.lg),

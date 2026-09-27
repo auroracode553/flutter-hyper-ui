@@ -15,7 +15,7 @@ class _OverlayExampleState extends State<OverlayExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('恰到好处的回应', type: 'h2'),
+      const HyperText('恰到好处的回应', size: 'large'),
       HyperCard(
         title: '轻提示',
         child: Wrap(
@@ -83,7 +83,7 @@ class _OverlayExampleState extends State<OverlayExample> {
                   mainAxisSize: MainAxisSize.min,
                   spacing: 12,
                   children: [
-                    HyperText('把复杂留给系统。', type: 'h2'),
+                    HyperText('把复杂留给系统。', size: 'large'),
                     HyperText('让界面回归轻盈与自然。'),
                     HyperSkeleton(rows: 2),
                   ],
@@ -162,7 +162,7 @@ class _BusinessExampleState extends State<BusinessExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('日常，由细节组成', type: 'h2'),
+      const HyperText('日常，由细节组成', size: 'large'),
       HyperTextField(
         prefix: const Icon(LucideIcons.search),
         hintText: '搜索',
@@ -179,7 +179,6 @@ class _BusinessExampleState extends State<BusinessExample> {
         subtitle: '参考设置页的分组卡片与图标层次',
         children: [
           HyperListTile(
-            grouped: true,
             title: '外观与显示',
             subtitle: '柔光 · 跟随系统',
             leadingIcon: LucideIcons.palette,
@@ -187,7 +186,6 @@ class _BusinessExampleState extends State<BusinessExample> {
             onTap: () => HyperToast.show(context, '可在页面顶部切换明暗主题'),
           ),
           HyperListTile(
-            grouped: true,
             title: '消息通知',
             leadingIcon: LucideIcons.bell,
             leadingColor: const Color(0xFFE1A14D),
@@ -197,7 +195,6 @@ class _BusinessExampleState extends State<BusinessExample> {
             ),
           ),
           HyperListTile(
-            grouped: true,
             title: '隐私与安全',
             leadingIcon: LucideIcons.shield,
             leadingColor: const Color(0xFF69A894),

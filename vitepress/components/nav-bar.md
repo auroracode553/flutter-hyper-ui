@@ -40,7 +40,7 @@ Column(
 
 - 移除 `opaque` 和 `floating`，导航栏始终透明；需要玻璃面板时由页面单独组合 `HyperGlass`。
 - 原先 56px / 带副标题 68px 的高度统一改为 44px；可通过 `height` 显式增加。
-- 默认返回按钮使用透明的 `'ghost'`，保持 44px 点击区域。
+- 默认返回按钮使用透明的 `HyperButton.ghost`，保持 44px 点击区域。
 - `title` / `subtitle` 从字符串改为可选的 `Widget`，原先 `title: '标题'` 改为 `title: Text('标题')`。
 
 ## 自定义插槽

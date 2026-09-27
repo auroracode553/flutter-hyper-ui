@@ -8,7 +8,7 @@ class TextComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -17,24 +17,21 @@ class TextComponentExample extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('文字层级'),
+        _label('文字尺寸'),
         const Column(
           mainAxisSize: MainAxisSize.min,
           spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HyperText('Display 展示文字', type: 'h1'),
-            HyperText('Title 页面标题', type: 'h2'),
-            HyperText('Heading 小节标题', type: 'h3'),
-            HyperText('Body 正文用于清晰、连续的内容阅读。'),
-            HyperText('Caption 辅助说明', type: 'h5'),
-            HyperText('Hint 弱提示信息', type: 'h6'),
+            HyperText('Large 大号文字', size: 'large'),
+            HyperText('Default 默认文字'),
+            HyperText('Small 辅助文字', size: 'small'),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('颜色、字重与行数截断'),
-        HyperText('自定义颜色', color: HyperUiColors.primary),
+        HyperText('主题品牌色', color: HyperUiThemeTokens.of(context).primary),
         const HyperText('加粗正文', weight: FontWeight.w600),
         const HyperText(
           'maxLines: 1 时超长文本自动省略：统一文字层级让界面在不同密度下保持稳定节奏。',
@@ -52,7 +49,7 @@ class IconComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -108,7 +105,7 @@ class ImageComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -152,7 +149,7 @@ class ImageComponentExample extends StatelessWidget {
                   children: [
                     Icon(LucideIcons.imageOff),
                     SizedBox(height: 4),
-                    HyperText('加载失败', type: 'h6'),
+                    HyperText('加载失败', size: 'small'),
                   ],
                 ),
               ),
@@ -171,7 +168,7 @@ class AvatarComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -240,7 +237,7 @@ class _CountBadgeExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -291,7 +288,7 @@ class _StatusBadgeExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -350,7 +347,7 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -425,7 +422,7 @@ class ToneComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
+    child: HyperText(text, size: 'small'),
   );
 
   @override
@@ -444,7 +441,7 @@ class ToneComponentExample extends StatelessWidget {
           ],
         ),
         const SizedBox(height: HyperUiSpacing.sm),
-        const HyperText('HyperUiTone 跨组件复用：徽标、提示、通知等共用同一套语义色。', type: 'h6'),
+        const HyperText('HyperUiTone 跨组件复用：徽标、提示、通知等共用同一套语义色。', size: 'small'),
       ],
     );
   }

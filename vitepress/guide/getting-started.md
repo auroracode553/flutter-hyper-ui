@@ -30,6 +30,21 @@ HyperUiTheme.app(home: const AppHome());
 
 默认跟随系统明暗模式。需要固定模式时传 `brightness: Brightness.light` 或 `Brightness.dark`；品牌色用 `primary`。局部精细覆盖仍可使用 `HyperUiTheme(data: ..., child: ...)`。
 
+## 简化后的组件 API
+
+| 场景 | 现在的写法 |
+| --- | --- |
+| 默认按钮 | `HyperButton(label: '保存', onPressed: save)` |
+| 其他按钮外观 | `HyperButton.tonal(...)`、`.outline(...)`、`.ghost(...)`、`.danger(...)` |
+| 密码或多行输入 | `HyperTextField.password(...)`、`HyperTextField.multiline(...)` |
+| 单选与多选 | `HyperSelect(value: ..., onChanged: ...)`、`HyperSelect<T>.multiple(values: ..., onMultipleChanged: ...)` |
+| 标签与页面 | `HyperTabs(tabs: [...], pages: [...])` |
+| 文字尺寸与颜色 | `HyperText('标题', size: 'large', color: brandColor)` |
+| 操作列表弹层 | `HyperActionSheet.choose(context, actions: [...])` |
+
+组件的颜色、圆角和间距由主题提供默认值。按钮的 `child`、输入框的 `prefix` / `suffix`、卡片与导航栏的内容插槽仍接受自定义 Widget。
+`HyperGlass` 是材质基础层，因此继续开放模糊、边框和颜色等样式参数；`HyperUploader` 的文件选择与上传回调继续由应用注入。
+
 ## 创建第一个页面
 
 页面使用 Flutter 布局基底和 Hyper 组件：

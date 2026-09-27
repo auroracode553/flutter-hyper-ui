@@ -16,8 +16,8 @@ class ButtonsExample extends StatelessWidget {
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
           children: [
-            HyperButton.filled(label: '小按钮', height: 32, onPressed: _noop),
-            HyperButton.filled(label: '默认按钮', onPressed: _noop),
+            HyperButton(label: '小按钮', height: 32, onPressed: _noop),
+            HyperButton(label: '默认按钮', onPressed: _noop),
             HyperButton.outline(label: '处理中', loading: true, onPressed: _noop),
           ],
         ),
@@ -80,7 +80,7 @@ class ButtonsExample extends StatelessWidget {
         ),
         const SizedBox(height: HyperUiSpacing.md),
         // 通栏按钮：显式 expanded 铺满父级宽度。
-        HyperButton.filled(
+        HyperButton(
           label: '通栏按钮（expanded: true）',
           expanded: true,
           onPressed: _noop,

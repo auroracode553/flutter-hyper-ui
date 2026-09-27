@@ -44,7 +44,7 @@ void main() {
 
   testWidgets('默认按内容收缩（inline-block），非通栏', (tester) async {
     await tester.pumpWidget(
-      wrap(HyperButton.filled(label: '导出', onPressed: () {})),
+      wrap(HyperButton(label: '导出', onPressed: () {})),
     );
     final size = tester.getSize(find.byType(HyperButton));
     expect(size.width, lessThan(300), reason: '未显式 expanded 时不应占满父级宽度');
@@ -56,7 +56,7 @@ void main() {
       wrap(
         SizedBox(
           width: 320,
-          child: HyperButton.filled(
+          child: HyperButton(
             label: '通栏按钮',
             expanded: true,
             onPressed: () {},

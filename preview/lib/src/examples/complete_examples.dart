@@ -17,8 +17,8 @@ class _AtomsExampleState extends State<AtomsExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('轻盈，也清晰。', type: 'h1'),
-      const HyperText('HYPER UI / SOFT GLASS', type: 'h5'),
+      const HyperText('轻盈，也清晰。', size: 'large'),
+      const HyperText('HYPER UI / SOFT GLASS', size: 'small'),
       HyperCard(
         title: '文字与图标',
         subtitle: '统一层级，保留呼吸感',
@@ -26,11 +26,11 @@ class _AtomsExampleState extends State<AtomsExample> {
           mainAxisSize: MainAxisSize.min,
           spacing: 12,
           children: [
-            HyperText('柔光玻璃', type: 'h2'),
-            HyperText('为日常体验设计', type: 'h3'),
+            HyperText('柔光玻璃', size: 'large'),
+            HyperText('为日常体验设计', size: 'large'),
             HyperText('清晰的正文与安静的辅助信息。'),
-            HyperText('辅助说明 · 13 pt', type: 'h5'),
-            HyperText('提示信息 · 12 pt', type: 'h6'),
+            HyperText('辅助说明 · 13 pt', size: 'small'),
+            HyperText('提示信息 · 12 pt', size: 'small'),
             Row(
               mainAxisSize: MainAxisSize.min,
               spacing: 12,
@@ -102,10 +102,10 @@ class LayoutExample extends StatelessWidget {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('有序的空间', type: 'h2'),
+      const HyperText('有序的空间', size: 'large'),
       HyperCard(
         title: '常用入口 · Grid',
-        footer: const HyperText('统一 12 dp 间距', type: 'h5'),
+        footer: const HyperText('统一 12 dp 间距', size: 'small'),
         child: GridView.count(
           crossAxisCount: 3,
           shrinkWrap: true,
@@ -212,7 +212,7 @@ class _FormsExampleState extends State<FormsExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('每一次输入，都从容', type: 'h2'),
+      const HyperText('每一次输入，都从容', size: 'large'),
       HyperCard(
         title: '输入与校验',
         child: Form(
@@ -341,7 +341,7 @@ class _FormsExampleState extends State<FormsExample> {
                   onPressed: () async {
                     final result = await HyperDatePicker.time(context);
                     if (mounted && result != null)
-                      setState(() => _date = result.format(context));
+                      setState(() => _date = result.format());
                   },
                 ),
                 HyperButton.tonal(
@@ -379,7 +379,7 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('流动的秩序', type: 'h2'),
+      const HyperText('流动的秩序', size: 'large'),
       HyperCard(
         title: '悬浮导航',
         subtitle: '柔光胶囊 · 选中状态随页面同步',
@@ -413,14 +413,14 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
         title: '标签与联动页面',
         child: SizedBox(
           height: 220,
-          child: HyperTabs.withPages(
+          child: HyperTabs(
             tabs: [Text('推荐'), Text('关注'), Text('收藏')],
             pages: [
               Center(child: Text('为你推荐')),
               Center(child: Text('你关注的内容')),
               Center(child: Text('收藏的灵感')),
             ],
-            height: 160,
+            pageHeight: 160,
           ),
         ),
       ),
@@ -440,7 +440,7 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
               onPressed: () => setState(() => _step = (_step + 1) % 3),
             ),
             const HyperProgress(value: .64),
-            const Center(child: HyperProgress(value: .72, circular: true)),
+            const Center(child: HyperProgress.circular(value: .72)),
           ],
         ),
       ),

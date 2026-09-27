@@ -67,12 +67,11 @@ class HyperPopupMenu<T> extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final action in actions)
-            HyperListTile(
+            HyperListTile.plain(
               title: action.label,
               leadingIcon: action.icon,
               leadingColor: action.destructive ? tokens.error : tokens.primary,
               titleColor: action.destructive ? tokens.error : null,
-              grouped: true,
               enabled: action.enabled,
               showChevron: false,
               onTap: () {

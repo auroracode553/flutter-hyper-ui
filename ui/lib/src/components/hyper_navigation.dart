@@ -15,48 +15,36 @@ import 'hyper_pressable.dart';
 import 'hyper_tab_controller.dart';
 
 export 'hyper_tab_bar.dart';
-export 'hyper_tab_controller.dart';
 
 /// 顶部或内容区使用的玻璃胶囊标签栏。
 class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
   const HyperTabs({
     super.key,
     required this.tabs,
-    this.controller,
+    this.pages,
+    this.pageHeight = 180,
+    this.initialIndex = 0,
+    this.selectedIndex,
+    this.onChanged,
     this.scrollable = false,
-    this.onTap,
-  });
+  }) : _barOnly = false;
+
+  const HyperTabs._bar({required this.tabs, required this.scrollable})
+    : pages = null,
+      pageHeight = 0,
+      initialIndex = 0,
+      selectedIndex = null,
+      onChanged = null,
+      _barOnly = true;
 
   final List<Widget> tabs;
-  final HyperTabController? controller;
+  final List<Widget>? pages;
+  final double pageHeight;
+  final int initialIndex;
+  final int? selectedIndex;
+  final ValueChanged<int>? onChanged;
   final bool scrollable;
-  final ValueChanged<int>? onTap;
-
-  /// A complete tab strip and page area without a separate host or controller.
-  static Widget withPages({
-    required List<Widget> tabs,
-    required List<Widget> pages,
-    double height = 180,
-    int initialIndex = 0,
-    bool scrollable = false,
-    ValueChanged<int>? onTap,
-  }) {
-    assert(tabs.length == pages.length);
-    return HyperTabHost(
-      length: tabs.length,
-      initialIndex: initialIndex,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          HyperTabs(tabs: tabs, scrollable: scrollable, onTap: onTap),
-          SizedBox(
-            height: height,
-            child: HyperTabView(children: pages),
-          ),
-        ],
-      ),
-    );
-  }
+  final bool _barOnly;
 
   @override
   Size get preferredSize => Size.fromHeight(_tabHeight + 6);
@@ -73,14 +61,29 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (controller == null && HyperTabHost.maybeOf(context) == null) {
+    if (!_barOnly) {
+      assert(pages == null || tabs.length == pages!.length);
       return HyperTabHost(
         length: tabs.length,
-        child: HyperTabs(tabs: tabs, scrollable: scrollable, onTap: onTap),
+        initialIndex: initialIndex,
+        selectedIndex: selectedIndex,
+        onChanged: onChanged,
+        child: pages == null
+            ? HyperTabs._bar(tabs: tabs, scrollable: scrollable)
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  HyperTabs._bar(tabs: tabs, scrollable: scrollable),
+                  SizedBox(
+                    height: pageHeight,
+                    child: HyperTabView(children: pages!),
+                  ),
+                ],
+              ),
       );
     }
     final tokens = HyperUiThemeTokens.of(context);
-    final tabController = controller ?? HyperTabHost.of(context);
+    final tabController = HyperTabHost.of(context);
     assert(tabController.length == tabs.length);
     final tabHeight = _tabHeight;
     if (tabs.isEmpty) {
@@ -191,7 +194,6 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
         index,
         duration: reduceMotion ? Duration.zero : null,
       );
-      onTap?.call(index);
     }
 
     return FocusableActionDetector(
@@ -371,16 +373,25 @@ class HyperProgress extends StatelessWidget {
   const HyperProgress({
     super.key,
     this.value,
-    this.circular = false,
+    this.showLabel = true,
+    this.strokeWidth = 6,
+    this.color,
+    this.backgroundColor,
+  }) : size = 64,
+       _circular = false;
+
+  const HyperProgress.circular({
+    super.key,
+    this.value,
     this.size = 64,
     this.showLabel = true,
     this.strokeWidth = 6,
     this.color,
     this.backgroundColor,
-  });
+  }) : _circular = true;
 
   final double? value;
-  final bool circular;
+  final bool _circular;
   final bool showLabel;
   final double size;
   final double strokeWidth;
@@ -392,7 +403,7 @@ class HyperProgress extends StatelessWidget {
     final amount = value?.clamp(0.0, 1.0).toDouble();
     final label = amount == null ? null : '${(amount * 100).round()}%';
     final glass = HyperGlassTheme.of(context);
-    if (circular) {
+    if (_circular) {
       return SizedBox.square(
         dimension: size,
         child: Stack(

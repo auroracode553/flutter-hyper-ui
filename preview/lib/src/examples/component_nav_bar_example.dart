@@ -57,7 +57,7 @@ class _InspirationHeader extends StatelessWidget {
         children: <Widget>[
           Icon(LucideIcons.sparkles, size: 28),
           SizedBox(height: 28),
-          HyperText('让内容自然流动', type: 'h2'),
+          HyperText('让内容自然流动', size: 'large'),
           SizedBox(height: 12),
           HyperText('向上滚动，观察导航栏保持固定。'),
         ],
@@ -85,9 +85,9 @@ class _InspirationItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          HyperText('灵感 ${index.toString().padLeft(2, '0')}', type: 'h5'),
+          HyperText('灵感 ${index.toString().padLeft(2, '0')}', size: 'small'),
           const SizedBox(height: 18),
-          HyperText(titles[(index - 1) % titles.length], type: 'h2'),
+          HyperText(titles[(index - 1) % titles.length], size: 'large'),
           const SizedBox(height: 8),
           const HyperText('导航栏保持透明，列表内容连续向上移动。'),
         ],

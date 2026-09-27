@@ -25,8 +25,8 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: 18,
       children: <Widget>[
-        const HyperText('柔性玻璃组件库', type: 'h1'),
-        const HyperText('统一材质、状态与动效，不绑定任何业务。', type: 'h5'),
+        const HyperText('柔性玻璃组件库', size: 'large'),
+        const HyperText('统一材质、状态与动效，不绑定任何业务。', size: 'small'),
         HyperNavBar(
           title: const Text('Navbar'),
           subtitle: const Text('44px 透明导航栏'),
@@ -45,7 +45,6 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
           subtitle: '点击、拖拽、速度投影与边缘阻尼',
           child: HyperTabBar(
             safeArea: false,
-            margin: EdgeInsets.zero,
             selectedIndex: _tab,
             onSelected: (value) => setState(() => _tab = value),
             items: const <HyperTabItem>[
@@ -61,7 +60,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             spacing: 8,
             runSpacing: 8,
             children: <Widget>[
-              HyperButton.filled(
+              HyperButton(
                 label: '主要操作',
                 icon: LucideIcons.sparkles,
                 onPressed: () => HyperToast.show(context, '主要操作'),
@@ -70,7 +69,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
               HyperButton.outline(label: '描边', onPressed: () {}),
               HyperButton.ghost(label: '幽灵', onPressed: () {}),
               HyperButton.danger(label: '危险', onPressed: () {}),
-              const HyperButton.filled(label: '加载中', loading: true),
+              const HyperButton(label: '加载中', loading: true),
             ],
           ),
         ),
@@ -140,7 +139,6 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
           subtitle: '适用于设置页、个人中心与详情菜单。',
           children: <Widget>[
             HyperListTile(
-              grouped: true,
               title: '外观与显示',
               subtitle: '主题、字号和动态效果',
               leadingIcon: LucideIcons.palette,
@@ -148,7 +146,6 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
               onTap: () => HyperToast.show(context, '外观与显示'),
             ),
             HyperListTile(
-              grouped: true,
               title: '通知',
               leadingIcon: LucideIcons.bell,
               leadingColor: const Color(0xFFD69A4A),
@@ -159,7 +156,6 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
               showChevron: false,
             ),
             HyperListTile(
-              grouped: true,
               title: '隐私与安全',
               leadingIcon: LucideIcons.shield,
               leadingColor: const Color(0xFF5C9C88),
@@ -224,9 +220,9 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
                       title: '通用抽屉',
                       builder: (_) => const HyperMenuGroup(
                         children: <Widget>[
-                          HyperListTile(grouped: true, title: '筛选条件'),
-                          HyperListTile(grouped: true, title: '排序方式'),
-                          HyperListTile(grouped: true, title: '显示选项'),
+                          HyperListTile(title: '筛选条件'),
+                          HyperListTile(title: '排序方式'),
+                          HyperListTile(title: '显示选项'),
                         ],
                       ),
                     ),

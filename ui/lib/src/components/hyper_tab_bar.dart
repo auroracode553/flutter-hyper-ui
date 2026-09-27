@@ -1,5 +1,6 @@
 import 'package:flutter_hyper_ui/src/theme/hyper_ui_theme.dart';
 import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_ui_theme_tokens.dart';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -28,9 +29,6 @@ class HyperTabBar extends StatefulWidget {
     required this.selectedIndex,
     required this.onSelected,
     this.safeArea = true,
-    this.enableHaptics = true,
-    this.activeColor = const Color(0xFF079D62),
-    this.margin = const EdgeInsets.fromLTRB(20, 8, 20, 0),
   }) : assert(items.length >= 2),
        assert(selectedIndex >= 0 && selectedIndex < items.length);
 
@@ -40,9 +38,6 @@ class HyperTabBar extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onSelected;
   final bool safeArea;
-  final bool enableHaptics;
-  final Color activeColor;
-  final EdgeInsetsGeometry margin;
 
   @override
   State<HyperTabBar> createState() => _HyperTabBarState();
@@ -126,7 +121,7 @@ class _HyperTabBarState extends State<HyperTabBar>
     final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
     final barHeight = math.max(HyperTabBar.height, textHeight + 36);
     final bar = Padding(
-      padding: widget.margin,
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
       child: SizedBox(
         height: barHeight,
         child: LayoutBuilder(
@@ -247,7 +242,7 @@ class _HyperTabBarState extends State<HyperTabBar>
               strength: (1 - (position - visual).abs() * 1.6)
                   .clamp(0.0, 1.0)
                   .toDouble(),
-              activeColor: widget.activeColor,
+              activeColor: HyperUiThemeTokens.of(context).primary,
               inactiveColor: foreground,
             ),
           ),
@@ -315,7 +310,7 @@ class _HyperTabBarState extends State<HyperTabBar>
         .round()
         .clamp(0, widget.items.length - 1)
         .toInt();
-    if (nearest != _lastHapticVisualIndex && widget.enableHaptics) {
+    if (nearest != _lastHapticVisualIndex) {
       HapticFeedback.selectionClick();
     }
     _lastHapticVisualIndex = nearest;
@@ -339,7 +334,7 @@ class _HyperTabBarState extends State<HyperTabBar>
     _settleAt(visual, initialVelocity: velocity);
     if (logical != widget.selectedIndex) {
       _pendingSelection = logical;
-      if (widget.enableHaptics && !alreadyHapticallySelected) {
+      if (!alreadyHapticallySelected) {
         HapticFeedback.selectionClick();
       }
     }

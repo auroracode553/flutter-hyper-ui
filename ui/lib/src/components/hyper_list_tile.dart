@@ -6,11 +6,12 @@ import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
+import 'hyper_lists.dart';
 import 'hyper_pressable.dart';
 
 /// 通用列表/设置菜单行。
 ///
-/// [grouped] 为 true 时不重复绘制玻璃表面，交由外部 [HyperMenuGroup] 承载材质。
+/// Inside [HyperMenuGroup], the group owns the surface automatically.
 class HyperListTile extends StatelessWidget {
   const HyperListTile({
     super.key,
@@ -24,10 +25,26 @@ class HyperListTile extends StatelessWidget {
     this.trailing,
     this.onTap,
     this.selected = false,
-    this.grouped = false,
     this.enabled = true,
     this.showChevron = true,
-  });
+  }) : _plain = false;
+
+  /// A row for an existing custom glass surface outside [HyperMenuGroup].
+  const HyperListTile.plain({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.meta,
+    this.leading,
+    this.leadingIcon,
+    this.leadingColor,
+    this.titleColor,
+    this.trailing,
+    this.onTap,
+    this.selected = false,
+    this.enabled = true,
+    this.showChevron = true,
+  }) : _plain = true;
 
   final String title;
   final String? subtitle;
@@ -39,7 +56,7 @@ class HyperListTile extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
   final bool selected;
-  final bool grouped;
+  final bool _plain;
   final bool enabled;
   final bool showChevron;
 
@@ -47,9 +64,10 @@ class HyperListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final plain = _plain || HyperMenuGroup.contains(context);
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
-    final radius = BorderRadius.circular(grouped ? 12 : 15);
+    final radius = BorderRadius.circular(plain ? 12 : 15);
     final row = AnimatedContainer(
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
@@ -126,7 +144,7 @@ class HyperListTile extends StatelessWidget {
       ),
     );
 
-    if (grouped) {
+    if (plain) {
       return HyperPressable(
         onPressed: enabled ? onTap : null,
         enabled: enabled,

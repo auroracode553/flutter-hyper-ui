@@ -33,7 +33,7 @@ abstract final class HyperPicker {
               ),
             ),
             const SizedBox(height: HyperUiSpacing.sm),
-            HyperButton.filled(
+            HyperButton(
               label: '确定',
               height: 44,
               expanded: true,

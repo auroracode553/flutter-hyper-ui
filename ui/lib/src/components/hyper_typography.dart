@@ -7,14 +7,17 @@ class HyperText extends StatelessWidget {
   const HyperText(
     this.data, {
     super.key,
-    this.type = 'h4',
+    this.size = 'default',
     this.color,
     this.weight,
     this.maxLines,
     this.textAlign,
-  });
+  }) : assert(
+         size == 'large' || size == 'default' || size == 'small',
+         'HyperText.size must be large, default, or small.',
+       );
   final String data;
-  final String type;
+  final String size;
   final Color? color;
   final FontWeight? weight;
   final int? maxLines;
@@ -22,14 +25,15 @@ class HyperText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final size = switch (type) {
-      'h1' => 36.0,
-      'h2' => 28.0,
-      'h3' => 20.0,
-      'h4' => 14.0,
-      'h5' => 13.0,
-      'h6' => 12.0,
-      _ => throw ArgumentError.value(type, 'type', '不支持的 HyperText type'),
+    final fontSize = switch (size) {
+      'large' => 18.0,
+      'default' => 14.0,
+      'small' => 12.0,
+      _ => throw ArgumentError.value(
+        size,
+        'size',
+        'Unsupported HyperText size',
+      ),
     };
     return Text(
       data,
@@ -37,11 +41,13 @@ class HyperText extends StatelessWidget {
       textAlign: textAlign,
       overflow: maxLines == null ? null : TextOverflow.ellipsis,
       style: TextStyle(
-        fontSize: size,
+        fontSize: fontSize,
         height: 1.4,
-        fontWeight: weight ?? (size >= 20 ? FontWeight.w700 : FontWeight.w400),
+        fontWeight:
+            weight ?? (size == 'large' ? FontWeight.w700 : FontWeight.w400),
         color:
-            color ?? (size < 14 ? tokens.mutedForeground : tokens.foreground),
+            color ??
+            (size == 'small' ? tokens.mutedForeground : tokens.foreground),
       ),
     );
   }

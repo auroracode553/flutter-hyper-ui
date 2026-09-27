@@ -21,7 +21,7 @@ class _NumberStepperComponentExampleState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const HyperText('数量（1–8）', type: 'h5'),
+        const HyperText('数量（1–8）', size: 'small'),
         const SizedBox(height: HyperUiSpacing.xs),
         HyperNumberStepper(
           value: _quantity,
@@ -30,7 +30,7 @@ class _NumberStepperComponentExampleState
           onChanged: (value) => setState(() => _quantity = value),
         ),
         const SizedBox(height: HyperUiSpacing.lg),
-        const HyperText('以 5 为步长', type: 'h5'),
+        const HyperText('以 5 为步长', size: 'small'),
         const SizedBox(height: HyperUiSpacing.xs),
         HyperNumberStepper(
           value: _interval,
@@ -40,7 +40,7 @@ class _NumberStepperComponentExampleState
           onChanged: (value) => setState(() => _interval = value),
         ),
         const SizedBox(height: HyperUiSpacing.lg),
-        const HyperText('只读状态', type: 'h5'),
+        const HyperText('只读状态', size: 'small'),
         const SizedBox(height: HyperUiSpacing.xs),
         const HyperNumberStepper(value: 3),
       ],

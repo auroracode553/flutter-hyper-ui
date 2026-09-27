@@ -24,8 +24,8 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // 品牌与定位
-        const HyperText('HYPER UI · FLUTTER', type: 'h6'),
-        const HyperText('柔性玻璃组件库', type: 'h3'),
+        const HyperText('HYPER UI · FLUTTER', size: 'small'),
+        const HyperText('柔性玻璃组件库', size: 'large'),
         const SizedBox(height: 2),
 
         // 库数据
@@ -62,7 +62,8 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
               const Expanded(child: HyperText('跟随系统明暗主题')),
               HyperSwitch(
                 value: _followSystemTheme,
-                onChanged: (value) => setState(() => _followSystemTheme = value),
+                onChanged: (value) =>
+                    setState(() => _followSystemTheme = value),
               ),
             ],
           ),
@@ -106,8 +107,8 @@ class _HeroStat extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        HyperText(value, type: 'h4'),
-        HyperText(label, type: 'h6'),
+        HyperText(value, size: 'default'),
+        HyperText(label, size: 'small'),
       ],
     );
   }
