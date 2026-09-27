@@ -41,6 +41,15 @@ class _PreviewAppState extends State<PreviewApp> {
         theme: HyUiTheme.light(),
         darkTheme: HyUiTheme.dark(),
         themeMode: _theme.mode,
+        builder: (context, child) {
+          final media = MediaQuery.of(context);
+          final padding = widget.configuration.safeAreaPadding;
+          if (padding == EdgeInsets.zero) return child!;
+          return MediaQuery(
+            data: media.copyWith(padding: padding, viewPadding: padding),
+            child: child!,
+          );
+        },
         home: PreviewShell(
           componentId: widget.configuration.componentId,
           embedded: widget.configuration.embedded,

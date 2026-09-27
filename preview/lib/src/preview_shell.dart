@@ -48,16 +48,42 @@ class _EmbeddedPreview extends StatelessWidget {
   final VoidCallback? onReady;
   final ValueChanged<String>? onError;
 
-  const _EmbeddedPreview({super.key, required this.item, this.onReady, this.onError});
+  const _EmbeddedPreview({
+    super.key,
+    required this.item,
+    this.onReady,
+    this.onError,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
-        child: PreviewDeferredContent(item: item, onReady: onReady, onError: onError),
-      ),
+      body: _PreviewContent(item: item, onReady: onReady, onError: onError),
+    );
+  }
+}
+
+/// 页面示例拥有完整视口；普通组件示例继续使用外层滚动和内容边距。
+class _PreviewContent extends StatelessWidget {
+  const _PreviewContent({required this.item, this.onReady, this.onError});
+
+  final PreviewItem item;
+  final VoidCallback? onReady;
+  final ValueChanged<String>? onError;
+
+  @override
+  Widget build(BuildContext context) {
+    final content = PreviewDeferredContent(
+      key: ValueKey(item.id),
+      item: item,
+      onReady: onReady,
+      onError: onError,
+    );
+    if (item.fullScreen) return content;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
+      child: content,
     );
   }
 }
@@ -129,17 +155,14 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 960),
-                      child: PreviewDeferredContent(
-                        key: ValueKey(selected.id),
-                        item: selected,
-                        onReady: widget.onComponentReady,
-                        onError: widget.onComponentError,
-                      ),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 960),
+                    child: _PreviewContent(
+                      item: selected,
+                      onReady: widget.onComponentReady,
+                      onError: widget.onComponentError,
                     ),
                   ),
                 ),

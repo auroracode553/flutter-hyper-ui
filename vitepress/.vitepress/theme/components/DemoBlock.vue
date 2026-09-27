@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { registerPreview, type PreviewStatus } from '../preview-runtime';
 import { highlightDart } from '../highlight';
 import DeviceFrame from './DeviceFrame.vue';
@@ -11,10 +11,12 @@ const props = withDefaults(
     code: string;
     description?: string;
     height?: number;
+    fullScreen?: boolean;
   }>(),
   {
     description: '',
     height: 320,
+    fullScreen: false,
   },
 );
 
@@ -42,6 +44,13 @@ const frameStyle = computed(() => ({
 }));
 let disposePreview: (() => void) | undefined;
 let activatePreview: (() => void) | undefined;
+let resetPreview: (() => void) | undefined;
+
+watch([previewWidth, () => props.fullScreen], async () => {
+  // 设备模式改变后同步宿主安全区，避免导航与灵动岛重叠。
+  await nextTick();
+  resetPreview?.();
+});
 
 onMounted(() => {
   if (!previewTarget.value) return;
@@ -52,6 +61,7 @@ onMounted(() => {
   );
   disposePreview = registration.dispose;
   activatePreview = registration.activate;
+  resetPreview = registration.reset;
 });
 
 onBeforeUnmount(() => disposePreview?.());
@@ -85,7 +95,13 @@ async function copyCode() {
 
     <div class="demo-block__stage">
       <DeviceFrame class="demo-block__preview" :mode="previewWidth" :style="frameStyle">
-        <div ref="previewTarget" class="demo-block__flutter-host" />
+        <div
+          ref="previewTarget"
+          class="demo-block__flutter-host"
+          :class="{ 'is-page': fullScreen }"
+          :data-safe-area-top="fullScreen && previewWidth === 'mobile' ? 52 : 0"
+          :data-safe-area-bottom="fullScreen && previewWidth === 'mobile' ? 24 : 0"
+        />
         <div
           v-if="previewStatus.phase !== 'ready'"
           class="demo-block__placeholder"

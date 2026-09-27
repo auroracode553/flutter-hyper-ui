@@ -9,6 +9,8 @@ extension type _PreviewInitialData._(JSObject _) implements JSObject {
   external String get componentId;
   external bool get embedded;
   external String get theme;
+  external double? get safeAreaTop;
+  external double? get safeAreaBottom;
   external JSFunction? get onFirstFrame;
   external JSFunction? get onComponentReady;
   external JSFunction? get onComponentError;
@@ -19,6 +21,7 @@ class PreviewViewConfiguration {
     required this.componentId,
     required this.embedded,
     required this.themeMode,
+    this.safeAreaPadding = EdgeInsets.zero,
     this.onFirstFrame,
     this.onComponentReady,
     this.onComponentError,
@@ -27,6 +30,7 @@ class PreviewViewConfiguration {
   final String componentId;
   final bool embedded;
   final ThemeMode themeMode;
+  final EdgeInsets safeAreaPadding;
   final VoidCallback? onFirstFrame;
   final VoidCallback? onComponentReady;
   final ValueChanged<String>? onComponentError;
@@ -42,11 +46,25 @@ class PreviewViewConfiguration {
           ? requestedId
           : PreviewCatalog.defaultId,
       embedded: data?.embedded ?? true,
-      onFirstFrame: callback == null ? null : () { callback.callAsFunction(); },
-      onComponentReady: readyCallback == null ? null : () { readyCallback.callAsFunction(); },
+      safeAreaPadding: EdgeInsets.only(
+        top: data?.safeAreaTop ?? 0,
+        bottom: data?.safeAreaBottom ?? 0,
+      ),
+      onFirstFrame: callback == null
+          ? null
+          : () {
+              callback.callAsFunction();
+            },
+      onComponentReady: readyCallback == null
+          ? null
+          : () {
+              readyCallback.callAsFunction();
+            },
       onComponentError: errorCallback == null
           ? null
-          : (message) { errorCallback.callAsFunction(null, message.toJS); },
+          : (message) {
+              errorCallback.callAsFunction(null, message.toJS);
+            },
       themeMode: switch (data?.theme) {
         'dark' => ThemeMode.dark,
         'light' => ThemeMode.light,

@@ -203,6 +203,11 @@
   height: auto;
 }
 
+/* 全面屏页面覆盖整块屏幕，安全区由 Flutter 布局处理并随正文滚动。 */
+.device-frame--mobile .demo-block__flutter-host.is-page {
+  top: 0;
+}
+
 .demo-block__preview:fullscreen {
   width: 100% !important;
   height: 100% !important;

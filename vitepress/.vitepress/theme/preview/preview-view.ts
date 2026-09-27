@@ -67,6 +67,8 @@ export class PreviewView {
         hostElement: this.target,
         initialData: {
           componentId: this.componentId, embedded: true, theme: selectedTheme(),
+          safeAreaTop: Number(this.target.dataset.safeAreaTop ?? 0),
+          safeAreaBottom: Number(this.target.dataset.safeAreaBottom ?? 0),
           onFirstFrame: () => {
             if (this.disposed || generation !== this.generation) return;
             shellReadyAt = performance.now();

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hy_glass_theme.dart';
-import '../theme/hy_ui_spacing.dart';
 import '../theme/hy_ui_theme_tokens.dart';
-import 'hy_glass.dart';
 import 'hy_button.dart';
 
-/// 页面顶部导航栏。默认透明，仅保留导航内容本身；需要玻璃背景时开启 [opaque]。
+/// 紧凑的透明导航栏，不绘制背景、模糊、边框或阴影。
+///
+/// [height] 不包含顶部安全区。配合 HyNavBarPage 让内容滚入状态栏区域；
+/// 单独放入 Scaffold.appBar 仍然是普通的占位导航栏。
 class HyNavBar extends StatelessWidget implements PreferredSizeWidget {
   const HyNavBar({
     super.key,
@@ -15,132 +15,101 @@ class HyNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.subtitle,
     this.leading,
     this.actions = const <Widget>[],
+    this.height = 44,
     this.safeArea = true,
     this.automaticallyImplyLeading = true,
     this.centerTitle = false,
-    this.floating = false,
-    this.opaque = false,
-  });
+  }) : assert(height >= 44 && height < double.infinity);
 
   final String title;
   final String? subtitle;
   final Widget? leading;
   final List<Widget> actions;
+
+  /// 导航内容高度，默认 44；大字号或较高的自定义插槽可增加此值。
+  final double height;
   final bool safeArea;
   final bool automaticallyImplyLeading;
   final bool centerTitle;
 
-  /// 为 true 时使用四周圆角与外边距，适合沉浸式页面。
-  final bool floating;
-
-  /// 为 true 时启用玻璃背景（底色 / 模糊 / 阴影）。
-  ///
-  /// 默认透明：仅保留标题与操作按钮，背景由页面底色直接透出，适合贴在
-  /// 页面同色背景上的导航场景。一般不建议开启不透明背景，仅在确实需要
-  /// 玻璃材质兜底时作为备用。
-  final bool opaque;
-
   @override
-  Size get preferredSize => Size.fromHeight(subtitle == null ? 56 : 68);
+  Size get preferredSize => Size.fromHeight(height);
 
   @override
   Widget build(BuildContext context) {
-    final glass = HyGlassTheme.of(context);
+    final effectiveLeading =
+        leading ??
+        (automaticallyImplyLeading && Navigator.canPop(context)
+            ? const _BackButton()
+            : null);
     final content = SizedBox(
-      height: preferredSize.height,
+      height: height,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: HyUiSpacing.pagePadding,
-          vertical: HyUiSpacing.xs,
-        ),
-        child: Row(
-          children: <Widget>[
-            if (leading == null &&
-                automaticallyImplyLeading &&
-                Navigator.canPop(context))
-              const _BackButton(),
-            if (leading != null) leading!,
-            if (leading != null ||
-                (automaticallyImplyLeading && Navigator.canPop(context)))
-              const SizedBox(width: HyUiSpacing.sm),
-            Expanded(child: _buildTitle(context)),
-            if (actions.isNotEmpty) ...<Widget>[
-              const SizedBox(width: HyUiSpacing.xs),
-              Wrap(spacing: HyUiSpacing.xs, children: actions),
-            ],
-          ],
-        ),
-      ),
-    );
-
-    // 默认透明：不渲染玻璃材质，仅保留导航内容，背景由页面底色直接透出。
-    if (!opaque) {
-      return safeArea ? SafeArea(bottom: false, child: content) : content;
-    }
-
-    final bar = Padding(
-      padding: floating
-          ? const EdgeInsets.fromLTRB(12, 8, 12, 4)
-          : EdgeInsets.zero,
-      child: HyGlass(
-        radius: floating ? 24 : 0,
-        blur: 24,
-        weight: HyGlassWeight.regular,
-        shadows: floating
-            ? null
-            : <BoxShadow>[
-                BoxShadow(
-                  color: glass.shadow,
-                  blurRadius: 18,
-                  spreadRadius: -10,
-                  offset: const Offset(0, 9),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        // NavigationToolbar 按整个栏宽居中，并在左右操作区较宽时避让。
+        child: NavigationToolbar(
+          centerMiddle: centerTitle,
+          middleSpacing: 8,
+          leading: effectiveLeading,
+          middle: _buildTitle(context),
+          trailing: actions.isEmpty
+              ? null
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    for (var index = 0; index < actions.length; index++) ...[
+                      if (index > 0) const SizedBox(width: 4),
+                      actions[index],
+                    ],
+                  ],
                 ),
-              ],
-        child: content,
+        ),
       ),
     );
 
-    return safeArea ? SafeArea(bottom: false, child: bar) : bar;
+    return safeArea ? SafeArea(bottom: false, child: content) : content;
   }
 
   Widget _buildTitle(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: centerTitle
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(
-          title,
-          textAlign: centerTitle ? TextAlign.center : TextAlign.start,
-          style: TextStyle(
-            color: tokens.foreground,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            height: 1.15,
-            letterSpacing: -0.2,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        if (subtitle != null) ...<Widget>[
-          const SizedBox(height: 3),
+    return Semantics(
+      header: true,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: centerTitle
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
           Text(
-            subtitle!,
+            title,
             textAlign: centerTitle ? TextAlign.center : TextAlign.start,
             style: TextStyle(
-              color: tokens.mutedForeground,
-              fontSize: 12,
-              height: 1.25,
-              letterSpacing: 0.05,
+              color: tokens.foreground,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              height: 1.2,
+              letterSpacing: -0.2,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
+          if (subtitle != null) ...<Widget>[
+            const SizedBox(height: 2),
+            Text(
+              subtitle!,
+              textAlign: centerTitle ? TextAlign.center : TextAlign.start,
+              style: TextStyle(
+                color: tokens.mutedForeground,
+                fontSize: 11,
+                height: 1.2,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }
@@ -149,12 +118,12 @@ class _BackButton extends StatelessWidget {
   const _BackButton();
 
   @override
-  Widget build(BuildContext context) {
-    // 返回按钮与其他图标操作共用 HyButton 的玻璃表面。
-    return HyButton.icon(
-      icon: LucideIcons.chevronLeft,
-      tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-      onPressed: () => Navigator.maybePop(context),
-    );
-  }
+  Widget build(BuildContext context) => HyButton.icon(
+    icon: LucideIcons.chevronLeft,
+    variant: HyButtonVariant.ghost,
+    height: 44,
+    iconSize: 20,
+    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+    onPressed: () => Navigator.maybePop(context),
+  );
 }

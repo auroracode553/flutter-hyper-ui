@@ -69,17 +69,19 @@ class _AppHomeState extends State<AppHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: const HyNavBar(
-        title: '收藏',
-        subtitle: '12 个项目',
-      ),
       body: HySoftBackground(
-        child: ListView(
-          padding: const EdgeInsets.all(HyUiSpacing.pagePadding),
-          children: const [
-            HyCard(
-              title: '开始创作',
-              subtitle: '所有组件共享同一套材质与交互规则。',
+        child: HyNavBarPage(
+          backgroundColor: Colors.transparent,
+          navBar: const HyNavBar(title: '收藏', subtitle: '12 个项目'),
+          slivers: const [
+            SliverPadding(
+              padding: EdgeInsets.all(HyUiSpacing.pagePadding),
+              sliver: SliverToBoxAdapter(
+                child: HyCard(
+                  title: '开始创作',
+                  subtitle: '所有组件共享同一套材质与交互规则。',
+                ),
+              ),
             ),
           ],
         ),

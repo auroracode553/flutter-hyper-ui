@@ -22,6 +22,7 @@ export interface ComponentDemo {
   height: number;
   source: string;
   symbol?: string;
+  fullScreen?: boolean;
 }
 
 export interface ComponentGroup {
@@ -608,7 +609,7 @@ export const componentGroups: ComponentGroup[] = [
       demo('full-navigation', '导航、步骤与列表联动', 'complete_examples.dart', 860),
     ],
     components: [
-      component('HyNavBar', 'hy_nav_bar.dart', '支持副标题、自定义前导、操作区和悬浮材质的页面顶部栏。', {
+      component('HyNavBar', 'hy_nav_bar.dart', '默认 44px 的纯透明导航栏，支持副标题、真正居中的标题与自定义操作区。', {
         id: 'nav-bar',
         navName: 'HyNavBar',
         propsDocs: [
@@ -619,9 +620,21 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
           { name: 'automaticallyImplyLeading', description: '是否自动添加返回按钮，默认 true' },
           { name: 'centerTitle', description: '标题是否居中，默认 false' },
-          { name: 'floating', description: '是否悬浮材质，默认 false' },
+          { name: 'height', description: '导航内容高度，默认 44，不含顶部安全区' },
         ],
-        preview: demo('component-nav-bar', 'HyNavBar 顶部导航', 'component_navigation_examples.dart', 300, '基础（返回 + 居中标题）与悬浮模式。', 'NavBarComponentExample'),
+        preview: { ...demo('component-nav-bar', '透明导航与全面屏滚动', 'component_nav_bar_example.dart', 680, '在手机屏幕内向上滚动，观察正文穿过透明导航栏进入顶部区域。', 'NavBarComponentExample'), fullScreen: true },
+      }),
+      component('HyNavBarPage', 'hy_nav_bar_page.dart', '固定透明导航与全屏 Sliver 滚动视口；初始留白随内容滚走，正文可进入状态栏区域。', {
+        propsDocs: [
+          { name: 'navBar', description: '固定在顶部的 HyNavBar' },
+          { name: 'slivers', description: '正文 Sliver 列表，无需额外添加顶部安全区留白' },
+          { name: 'controller', description: '可选滚动控制器，由调用方持有和释放' },
+          { name: 'physics', description: '可选滚动物理' },
+          { name: 'backgroundColor', description: '页面底色，默认主题 background' },
+          { name: 'systemOverlayStyle', description: '可选系统状态栏图标样式；默认随主题并请求透明状态栏' },
+          { name: 'bottomSafeArea', description: '在内容末尾添加底部安全区留白，默认 true' },
+        ],
+        preview: { ...demo('component-nav-bar-page', '全面屏导航页面', 'component_nav_bar_example.dart', 680, '首屏避让导航，滚动后正文铺满手机屏幕顶部。', 'NavBarComponentExample'), fullScreen: true },
       }),
       component('HyTabBar / HyTabItem', 'hy_tab_bar.dart', '透明水珠按压与拖动放大、绿色选中态、释放吸附的悬浮底栏。', {
         propsDocs: [

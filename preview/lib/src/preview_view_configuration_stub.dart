@@ -7,6 +7,7 @@ class PreviewViewConfiguration {
     required this.componentId,
     required this.embedded,
     required this.themeMode,
+    this.safeAreaPadding = EdgeInsets.zero,
     this.onFirstFrame,
     this.onComponentReady,
     this.onComponentError,
@@ -15,6 +16,7 @@ class PreviewViewConfiguration {
   final String componentId;
   final bool embedded;
   final ThemeMode themeMode;
+  final EdgeInsets safeAreaPadding;
   final VoidCallback? onFirstFrame;
   final VoidCallback? onComponentReady;
   final ValueChanged<String>? onComponentError;

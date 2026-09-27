@@ -12,6 +12,7 @@ import 'examples/component_form_field_example.dart' deferred as example_componen
 import 'examples/component_form_examples.dart' deferred as example_component_form_examples;
 import 'examples/component_layout_examples.dart' deferred as example_component_layout_examples;
 import 'examples/component_navigation_examples.dart' deferred as example_component_navigation_examples;
+import 'examples/component_nav_bar_example.dart' deferred as example_component_nav_bar_example;
 import 'examples/component_number_stepper_example.dart' deferred as example_component_number_stepper_example;
 import 'examples/component_pagination_example.dart' deferred as example_component_pagination_example;
 import 'examples/component_surface_examples.dart' deferred as example_component_surface_examples;
@@ -39,6 +40,8 @@ class PreviewItem {
   // 同一个示例文件中的多个组件共享 Dart 的延迟加载结果。
   final Future<void> Function() loadLibrary;
   final PreviewBuilder builder;
+  /// 页面示例直接占满宿主视口，由示例自身管理滚动。
+  final bool fullScreen;
 
   const PreviewItem({
     required this.id,
@@ -46,6 +49,7 @@ class PreviewItem {
     required this.description,
     required this.loadLibrary,
     required this.builder,
+    this.fullScreen = false,
   });
 }
 
@@ -291,10 +295,19 @@ class PreviewCatalog {
     ),
     PreviewItem(
       id: 'component-nav-bar',
+      fullScreen: true,
       title: 'HyNavBar',
-      description: '顶部标题、副标题与操作区。',
-      loadLibrary: () => example_component_navigation_examples.loadLibrary(),
-      builder: (_) => example_component_navigation_examples.NavBarComponentExample(),
+      description: '44px 透明导航与可穿透状态栏的全面屏滚动。',
+      loadLibrary: () => example_component_nav_bar_example.loadLibrary(),
+      builder: (_) => example_component_nav_bar_example.NavBarComponentExample(),
+    ),
+    PreviewItem(
+      id: 'component-nav-bar-page',
+      fullScreen: true,
+      title: 'HyNavBarPage',
+      description: '首屏避让导航，滚动内容铺满状态栏区域。',
+      loadLibrary: () => example_component_nav_bar_example.loadLibrary(),
+      builder: (_) => example_component_nav_bar_example.NavBarComponentExample(),
     ),
     PreviewItem(
       id: 'component-tab-bar',

@@ -2,58 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hy_ui.dart';
 
-// doc-region NavBarComponentExample
-class NavBarComponentExample extends StatelessWidget {
-  const NavBarComponentExample({super.key});
-
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _label('基础（自动返回按钮 + 居中标题）'),
-        HyNavBar(
-          title: '项目详情',
-          subtitle: '最后更新于 10:24',
-          centerTitle: true,
-          safeArea: false,
-          actions: [
-            HyButton.icon(
-              icon: LucideIcons.share2,
-              tooltip: '分享',
-              onPressed: () {},
-            ),
-          ],
-        ),
-        const SizedBox(height: HyUiSpacing.lg),
-
-        _label('悬浮模式（floating，无返回按钮）'),
-        HyNavBar(
-          title: '项目详情',
-          subtitle: '最后更新于 10:24',
-          safeArea: false,
-          floating: true,
-          automaticallyImplyLeading: false,
-          actions: [
-            HyButton.icon(
-              icon: LucideIcons.share2,
-              tooltip: '分享',
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-// end-doc-region NavBarComponentExample
-
 // doc-region TabBarComponentExample
 class TabBarComponentExample extends StatefulWidget {
   const TabBarComponentExample({super.key});

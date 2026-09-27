@@ -15,6 +15,8 @@ export interface FlutterPreviewApp {
       componentId: string;
       embedded: boolean;
       theme: 'light' | 'dark';
+      safeAreaTop: number;
+      safeAreaBottom: number;
       onFirstFrame: () => void;
       onComponentReady: () => void;
       onComponentError: (message: string) => void;

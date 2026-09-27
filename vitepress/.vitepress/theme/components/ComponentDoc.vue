@@ -109,6 +109,7 @@ const apiProps = computed<ApiProp[]>(() => {
         :component="demo.id"
         :code="exampleSourceFor(demo.source, demo.symbol)"
         :height="demo.height"
+        :full-screen="demo.fullScreen"
       />
     </section>
 
