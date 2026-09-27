@@ -122,8 +122,16 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
           child: Column(
             children: [
               HyNavBar(
-                title: 'Flutter Hyper UI Preview',
-                subtitle: selected.description,
+                title: const Text(
+                  'Flutter Hyper UI Preview',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  selected.description,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 safeArea: false,
                 actions: [
                   HyButton.icon(

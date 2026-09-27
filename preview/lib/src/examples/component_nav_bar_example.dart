@@ -10,8 +10,7 @@ class NavBarComponentExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) => HyNavBarPage(
     navBar: const HyNavBar(
-      title: '今日灵感',
-      centerTitle: true,
+      title: Text('今日灵感'),
       automaticallyImplyLeading: false,
     ),
     slivers: <Widget>[

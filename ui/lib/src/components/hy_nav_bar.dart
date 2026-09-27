@@ -4,32 +4,65 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../theme/hy_ui_theme_tokens.dart';
 import 'hy_button.dart';
 
-/// 紧凑的透明导航栏，不绘制背景、模糊、边框或阴影。
+/// 透明导航容器，默认从起始侧排列，不绘制背景、模糊、边框或阴影。
 ///
-/// [height] 不包含顶部安全区。配合 HyNavBarPage 让内容滚入状态栏区域；
-/// 单独放入 Scaffold.appBar 仍然是普通的占位导航栏。
+/// [leading]、[title]、[subtitle]、[trailing] 都接受任意 Widget。
+/// [child] 可完全接管内部布局；此时不生成自动返回按钮或默认标题布局。
+/// [height] 不包含安全区，配合 HyNavBarPage 实现全面屏滚动。
 class HyNavBar extends StatelessWidget implements PreferredSizeWidget {
   const HyNavBar({
     super.key,
-    required this.title,
+    this.title,
     this.subtitle,
     this.leading,
+    this.trailing,
     this.actions = const <Widget>[],
+    this.child,
     this.height = 44,
+    this.padding = const EdgeInsets.symmetric(horizontal: 16),
+    this.spacing = 8,
+    this.titleSpacing = 2,
+    this.actionSpacing = 4,
     this.safeArea = true,
     this.automaticallyImplyLeading = true,
     this.centerTitle = false,
-  }) : assert(height >= 44 && height < double.infinity);
+  }) : assert(height > 0 && height < double.infinity),
+       assert(spacing >= 0 && spacing < double.infinity),
+       assert(titleSpacing >= 0 && titleSpacing < double.infinity),
+       assert(actionSpacing >= 0 && actionSpacing < double.infinity),
+       assert(
+         child == null ||
+             (title == null &&
+                 subtitle == null &&
+                 leading == null &&
+                 trailing == null),
+         'child 接管整行布局，不能同时设置其他内容插槽。',
+       );
 
-  final String title;
-  final String? subtitle;
+  /// 主内容插槽：文字、图标、搜索框、分段控件或任意组合。
+  final Widget? title;
+  final Widget? subtitle;
   final Widget? leading;
+
+  /// 完整尾部插槽；与便捷的 [actions] 列表二选一。
+  final Widget? trailing;
   final List<Widget> actions;
 
-  /// 导航内容高度，默认 44；大字号或较高的自定义插槽可增加此值。
+  /// 完整内部布局插槽；仅保留高度、[padding] 和安全区处理。
+  final Widget? child;
+
+  /// 默认 44，调用方按自定义内容高度调整，不限制最小触控高度。
   final double height;
+  final EdgeInsetsGeometry padding;
+
+  /// 主内容与左右插槽之间的间距，不为缺失的插槽额外占位。
+  final double spacing;
+  final double titleSpacing;
+  final double actionSpacing;
   final bool safeArea;
   final bool automaticallyImplyLeading;
+
+  /// 仅对默认插槽布局有效。默认 false，沿文字方向从起始侧排列。
   final bool centerTitle;
 
   @override
@@ -37,79 +70,110 @@ class HyNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveLeading =
-        leading ??
-        (automaticallyImplyLeading && Navigator.canPop(context)
-            ? const _BackButton()
-            : null);
+    // 集合校验放在构建阶段，保证自定义插槽仍可使用 const 构造。
+    assert(
+      trailing == null || actions.isEmpty,
+      'trailing 与 actions 二选一，避免插槽内容被静默覆盖。',
+    );
+    assert(child == null || actions.isEmpty, 'child 接管整行布局，不能同时设置 actions。');
     final content = SizedBox(
       height: height,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        // NavigationToolbar 按整个栏宽居中，并在左右操作区较宽时避让。
-        child: NavigationToolbar(
-          centerMiddle: centerTitle,
-          middleSpacing: 8,
-          leading: effectiveLeading,
-          middle: _buildTitle(context),
-          trailing: actions.isEmpty
-              ? null
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    for (var index = 0; index < actions.length; index++) ...[
-                      if (index > 0) const SizedBox(width: 4),
-                      actions[index],
-                    ],
-                  ],
-                ),
-        ),
-      ),
+      child: Padding(padding: padding, child: child ?? _buildSlots(context)),
     );
-
     return safeArea ? SafeArea(bottom: false, child: content) : content;
   }
 
-  Widget _buildTitle(BuildContext context) {
-    final tokens = HyUiThemeTokens.of(context);
-    return Semantics(
-      header: true,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: centerTitle
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            title,
-            textAlign: centerTitle ? TextAlign.center : TextAlign.start,
-            style: TextStyle(
-              color: tokens.foreground,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              height: 1.2,
-              letterSpacing: -0.2,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          if (subtitle != null) ...<Widget>[
-            const SizedBox(height: 2),
-            Text(
-              subtitle!,
-              textAlign: centerTitle ? TextAlign.center : TextAlign.start,
-              style: TextStyle(
-                color: tokens.mutedForeground,
-                fontSize: 11,
-                height: 1.2,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+  Widget _buildSlots(BuildContext context) {
+    final effectiveLeading =
+        leading ??
+        (automaticallyImplyLeading &&
+                (Navigator.maybeOf(context)?.canPop() ?? false)
+            ? const _BackButton()
+            : null);
+    final effectiveTrailing = trailing ?? _buildActions();
+    final middle = _buildTitle(context);
+    if (centerTitle) {
+      // 居中按整个栏宽计算，并在左右插槽较宽时避让。
+      return NavigationToolbar(
+        centerMiddle: true,
+        middleSpacing: spacing,
+        leading: effectiveLeading,
+        middle: middle,
+        trailing: effectiveTrailing,
+      );
+    }
+    // 起始侧布局不预留不存在的 leading，标题与页面正文共用 16px 边距。
+    return Row(
+      children: <Widget>[
+        if (effectiveLeading != null) ...<Widget>[
+          effectiveLeading,
+          if (middle != null) SizedBox(width: spacing),
         ],
-      ),
+        Expanded(
+          child: middle == null
+              ? const SizedBox.shrink()
+              : Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: middle,
+                ),
+        ),
+        if (effectiveTrailing != null) ...<Widget>[
+          if (middle != null) SizedBox(width: spacing),
+          effectiveTrailing,
+        ],
+      ],
+    );
+  }
+
+  Widget? _buildActions() {
+    if (actions.isEmpty) return null;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        for (var index = 0; index < actions.length; index++) ...<Widget>[
+          if (index > 0) SizedBox(width: actionSpacing),
+          actions[index],
+        ],
+      ],
+    );
+  }
+
+  Widget? _buildTitle(BuildContext context) {
+    if (title == null && subtitle == null) return null;
+    final tokens = HyUiThemeTokens.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: centerTitle
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      children: <Widget>[
+        if (title != null)
+          Semantics(
+            header: true,
+            // 仅提供可覆盖的文字样式，不强制行数、溢出处理或文字内容。
+            child: DefaultTextStyle.merge(
+              style: TextStyle(
+                color: tokens.foreground,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                height: 1.2,
+                letterSpacing: -0.2,
+              ),
+              child: title!,
+            ),
+          ),
+        if (subtitle != null) ...<Widget>[
+          if (title != null) SizedBox(height: titleSpacing),
+          DefaultTextStyle.merge(
+            style: TextStyle(
+              color: tokens.mutedForeground,
+              fontSize: 11,
+              height: 1.2,
+            ),
+            child: subtitle!,
+          ),
+        ],
+      ],
     );
   }
 }

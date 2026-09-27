@@ -72,7 +72,7 @@ class _AppHomeState extends State<AppHome> {
       body: HySoftBackground(
         child: HyNavBarPage(
           backgroundColor: Colors.transparent,
-          navBar: const HyNavBar(title: '收藏', subtitle: '12 个项目'),
+          navBar: const HyNavBar(title: Text('收藏'), subtitle: Text('12 个项目')),
           slivers: const [
             SliverPadding(
               padding: EdgeInsets.all(HyUiSpacing.pagePadding),

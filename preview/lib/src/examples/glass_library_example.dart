@@ -27,8 +27,8 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
         const HyText('柔性玻璃组件库', variant: HyTextStyle.display),
         const HyText('统一材质、状态、动效与无障碍语义，不绑定任何业务。', variant: HyTextStyle.caption),
         HyNavBar(
-          title: 'Navbar',
-          subtitle: '44px 透明导航栏',
+          title: const Text('Navbar'),
+          subtitle: const Text('44px 透明导航栏'),
           safeArea: false,
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -56,7 +56,9 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
         ),
         HyCard(
           title: 'Button',
-          child: Wrap(spacing: 8, runSpacing: 8,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: <Widget>[
               HyButton.filled(
                 label: '主要操作',
@@ -204,7 +206,9 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
           child: HySpace(
             alignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Wrap(spacing: 8, runSpacing: 8,
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: <Widget>[
                   HyButton.tonal(
                     label: '打开抽屉',

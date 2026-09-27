@@ -609,17 +609,23 @@ export const componentGroups: ComponentGroup[] = [
       demo('full-navigation', '导航、步骤与列表联动', 'complete_examples.dart', 860),
     ],
     components: [
-      component('HyNavBar', 'hy_nav_bar.dart', '默认 44px 的纯透明导航栏，支持副标题、真正居中的标题与自定义操作区。', {
+      component('HyNavBar', 'hy_nav_bar.dart', '默认 44px、标题靠左的透明导航容器；所有内容使用 Widget 插槽，也可接管整行布局。', {
         id: 'nav-bar',
         navName: 'HyNavBar',
         propsDocs: [
-          { name: 'title', description: '标题' },
-          { name: 'subtitle', description: '副标题' },
-          { name: 'leading', description: '前导组件' },
+          { name: 'title', description: '可选主内容 Widget 插槽，不限于文字；默认提供可覆盖的标题文字样式' },
+          { name: 'subtitle', description: '可选副内容 Widget 插槽，不强制行数或溢出处理' },
+          { name: 'leading', description: '可选前导 Widget，未提供时可自动显示返回按钮' },
+          { name: 'trailing', description: '完整尾部 Widget 插槽，与 actions 二选一' },
           { name: 'actions', description: '操作区组件列表，默认空数组' },
+          { name: 'child', description: '完整内部布局 Widget，与其他内容插槽互斥，不生成自动返回按钮' },
+          { name: 'padding', description: '内容边距，默认左右 16px，可设置 EdgeInsets.zero' },
+          { name: 'spacing', description: '主内容与左右插槽间距，默认 8px，缺失插槽不占位' },
+          { name: 'titleSpacing', description: '主内容与副内容之间的间距，默认 2px' },
+          { name: 'actionSpacing', description: 'actions 列表项间距，默认 4px' },
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
           { name: 'automaticallyImplyLeading', description: '是否自动添加返回按钮，默认 true' },
-          { name: 'centerTitle', description: '标题是否居中，默认 false' },
+          { name: 'centerTitle', description: '主内容是否按整栏居中，默认 false（从起始侧排列）' },
           { name: 'height', description: '导航内容高度，默认 44，不含顶部安全区' },
         ],
         preview: { ...demo('component-nav-bar', '透明导航与全面屏滚动', 'component_nav_bar_example.dart', 680, '在手机屏幕内向上滚动，观察正文穿过透明导航栏进入顶部区域。', 'NavBarComponentExample'), fullScreen: true },

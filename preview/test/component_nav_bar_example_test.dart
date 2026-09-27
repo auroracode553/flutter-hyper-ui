@@ -41,6 +41,7 @@ void main() {
         final navRect = tester.getRect(find.byType(HyNavBar));
         expect(navRect.height, 96);
         expect(tester.getTopLeft(find.text('今日灵感')).dy, greaterThan(52));
+        expect(tester.getTopLeft(find.text('今日灵感')).dx, 16);
         final heading = find.text('让内容延伸到\n屏幕的每一寸');
         final initialHeadingTop = tester.getTopLeft(heading).dy;
         final position = tester

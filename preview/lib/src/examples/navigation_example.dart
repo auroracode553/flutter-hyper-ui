@@ -13,8 +13,8 @@ class NavigationExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         HyNavBar(
-          title: '最近文档',
-          subtitle: '共 24 个项目',
+          title: const Text('最近文档'),
+          subtitle: const Text('共 24 个项目'),
           safeArea: false,
           actions: [
             HyButton.icon(
