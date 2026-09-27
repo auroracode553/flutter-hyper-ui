@@ -11,7 +11,69 @@ import 'hyper_tooltip.dart';
 class HyperTextField extends StatefulWidget {
   const HyperTextField({
     super.key,
-    this.type = 'text',
+    this.controller,
+    this.focusNode,
+    this.hintText,
+    this.errorText,
+    this.prefix,
+    this.suffix,
+    this.enabled = true,
+    this.readOnly = false,
+    this.maxLength,
+    this.autofocus = false,
+    this.keyboardType,
+    this.textInputAction,
+    this.onChanged,
+    this.onSubmitted,
+    this.validator,
+    this.initialValue,
+  }) : rows = 1,
+       _kind = _FieldKind.text;
+
+  const HyperTextField.password({
+    super.key,
+    this.controller,
+    this.focusNode,
+    this.hintText,
+    this.errorText,
+    this.prefix,
+    this.suffix,
+    this.enabled = true,
+    this.readOnly = false,
+    this.maxLength,
+    this.autofocus = false,
+    this.keyboardType,
+    this.textInputAction,
+    this.onChanged,
+    this.onSubmitted,
+    this.validator,
+    this.initialValue,
+  }) : rows = 1,
+       _kind = _FieldKind.password;
+
+  const HyperTextField.search({
+    super.key,
+    this.controller,
+    this.focusNode,
+    this.hintText,
+    this.errorText,
+    this.prefix,
+    this.suffix,
+    this.enabled = true,
+    this.readOnly = false,
+    this.maxLength,
+    this.autofocus = false,
+    this.keyboardType,
+    this.textInputAction,
+    this.onChanged,
+    this.onSubmitted,
+    this.validator,
+    this.initialValue,
+  }) : rows = 1,
+       _kind = _FieldKind.search;
+
+  const HyperTextField.multiline({
+    super.key,
     this.rows = 3,
     this.controller,
     this.focusNode,
@@ -21,24 +83,17 @@ class HyperTextField extends StatefulWidget {
     this.suffix,
     this.enabled = true,
     this.readOnly = false,
-    this.showPasswordToggle = false,
-    this.clearable = false,
     this.maxLength,
-    this.showCounter = false,
     this.autofocus = false,
-    this.textAlign = TextAlign.start,
     this.keyboardType,
     this.textInputAction,
-    this.textCapitalization = TextCapitalization.none,
-    this.autofillHints,
     this.onChanged,
     this.onSubmitted,
-    this.onTap,
     this.validator,
     this.initialValue,
-  });
+  }) : _kind = _FieldKind.multiline;
 
-  final String type;
+  final _FieldKind _kind;
   final int rows;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -48,19 +103,12 @@ class HyperTextField extends StatefulWidget {
   final Widget? suffix;
   final bool enabled;
   final bool readOnly;
-  final bool showPasswordToggle;
-  final bool clearable;
   final int? maxLength;
-  final bool showCounter;
   final bool autofocus;
-  final TextAlign textAlign;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
-  final TextCapitalization textCapitalization;
-  final Iterable<String>? autofillHints;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
-  final VoidCallback? onTap;
   final FormFieldValidator<String>? validator;
   final String? initialValue;
 
@@ -125,14 +173,6 @@ class _HyperTextFieldState extends State<HyperTextField> {
 
   @override
   Widget build(BuildContext context) {
-    assert(
-      const <String>{
-        'text',
-        'search',
-        'password',
-        'textarea',
-      }.contains(widget.type),
-    );
     assert(widget.rows > 0);
     return FormField<String>(
       initialValue: _controller.text,
@@ -146,8 +186,8 @@ class _HyperTextFieldState extends State<HyperTextField> {
     final glass = HyperGlassTheme.of(context);
     final error = widget.errorText ?? field.errorText;
     final active = widget.enabled && !widget.readOnly;
-    final multiline = widget.type == 'textarea';
-    final password = widget.type == 'password';
+    final multiline = widget._kind == _FieldKind.multiline;
+    final password = widget._kind == _FieldKind.password;
     final borderColor = error != null
         ? tokens.error
         : _focusNode.hasFocus
@@ -164,10 +204,7 @@ class _HyperTextFieldState extends State<HyperTextField> {
           widget.keyboardType ??
           (multiline ? TextInputType.multiline : TextInputType.text),
       textInputAction: widget.textInputAction,
-      textCapitalization: widget.textCapitalization,
-      textAlign: widget.textAlign,
       autofocus: widget.autofocus,
-      autofillHints: widget.autofillHints,
       readOnly: !active,
       obscureText: password && _obscured,
       maxLines: password ? 1 : (multiline ? widget.rows : 1),
@@ -188,81 +225,78 @@ class _HyperTextFieldState extends State<HyperTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        GestureDetector(
-          onTap: widget.onTap,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: widget.enabled ? glass.surfaceSubtle : glass.controlTrack,
-              borderRadius: radius,
-              border: Border.all(
-                color: borderColor,
-                width: _focusNode.hasFocus ? 1.5 : 1,
-              ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: widget.enabled ? glass.surfaceSubtle : glass.controlTrack,
+            borderRadius: radius,
+            border: Border.all(
+              color: borderColor,
+              width: _focusNode.hasFocus ? 1.5 : 1,
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  if (widget.prefix != null) ...<Widget>[
-                    IconTheme.merge(
-                      data: IconThemeData(
-                        color: tokens.mutedForeground,
-                        size: 18,
-                      ),
-                      child: widget.prefix!,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                if (widget.prefix != null) ...<Widget>[
+                  IconTheme.merge(
+                    data: IconThemeData(
+                      color: tokens.mutedForeground,
+                      size: 18,
                     ),
-                    const SizedBox(width: 8),
-                  ],
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        if (_controller.text.isEmpty && widget.hintText != null)
-                          IgnorePointer(
-                            child: Text(
-                              widget.hintText!,
-                              style: TextStyle(
-                                color: tokens.mutedForeground,
-                                fontSize: 16,
-                              ),
+                    child: widget.prefix!,
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      if (_controller.text.isEmpty && widget.hintText != null)
+                        IgnorePointer(
+                          child: Text(
+                            widget.hintText!,
+                            style: TextStyle(
+                              color: tokens.mutedForeground,
+                              fontSize: 16,
                             ),
                           ),
-                        editor,
-                      ],
-                    ),
-                  ),
-                  if (widget.suffix != null) ...<Widget>[
-                    const SizedBox(width: 8),
-                    widget.suffix!,
-                  ],
-                  if (password && widget.showPasswordToggle)
-                    _AffixButton(
-                      icon: _obscured ? LucideIcons.eye : LucideIcons.eyeOff,
-                      tooltip: _obscured ? '显示密码' : '隐藏密码',
-                      color: tokens.mutedForeground,
-                      onPressed: active
-                          ? () => setState(() => _obscured = !_obscured)
-                          : null,
-                    ),
-                  if (widget.clearable)
-                    Opacity(
-                      opacity: active && _controller.text.isNotEmpty ? 1 : 0,
-                      child: IgnorePointer(
-                        ignoring: !active || _controller.text.isEmpty,
-                        child: _AffixButton(
-                          icon: LucideIcons.x,
-                          tooltip: '清空',
-                          color: tokens.mutedForeground,
-                          onPressed: () {
-                            _controller.clear();
-                            field.didChange('');
-                            widget.onChanged?.call('');
-                          },
                         ),
+                      editor,
+                    ],
+                  ),
+                ),
+                if (widget.suffix != null) ...<Widget>[
+                  const SizedBox(width: 8),
+                  widget.suffix!,
+                ],
+                if (password)
+                  _AffixButton(
+                    icon: _obscured ? LucideIcons.eye : LucideIcons.eyeOff,
+                    tooltip: _obscured ? '显示密码' : '隐藏密码',
+                    color: tokens.mutedForeground,
+                    onPressed: active
+                        ? () => setState(() => _obscured = !_obscured)
+                        : null,
+                  ),
+                if (widget._kind == _FieldKind.search)
+                  Opacity(
+                    opacity: active && _controller.text.isNotEmpty ? 1 : 0,
+                    child: IgnorePointer(
+                      ignoring: !active || _controller.text.isEmpty,
+                      child: _AffixButton(
+                        icon: LucideIcons.x,
+                        tooltip: '清空',
+                        color: tokens.mutedForeground,
+                        onPressed: () {
+                          _controller.clear();
+                          field.didChange('');
+                          widget.onChanged?.call('');
+                        },
                       ),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
         ),
@@ -274,7 +308,7 @@ class _HyperTextFieldState extends State<HyperTextField> {
               style: TextStyle(color: tokens.error, fontSize: 12),
             ),
           ),
-        if (widget.showCounter && widget.maxLength != null)
+        if (widget.maxLength != null)
           Align(
             alignment: Alignment.centerRight,
             child: Text(
@@ -286,6 +320,8 @@ class _HyperTextFieldState extends State<HyperTextField> {
     );
   }
 }
+
+enum _FieldKind { text, search, password, multiline }
 
 class _AffixButton extends StatelessWidget {
   const _AffixButton({

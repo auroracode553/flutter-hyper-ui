@@ -25,19 +25,40 @@ class HyperAction<T> {
   final bool enabled;
 }
 
-/// 统一的底部玻璃弹层。传入 builder 展示自定义内容，传入 actions 展示操作列表。
+/// Bottom sheet with separate entry points for custom content and action lists.
 abstract final class HyperActionSheet {
   static Future<T?> show<T>(
     BuildContext context, {
-    WidgetBuilder? builder,
-    List<HyperAction<T>>? actions,
+    required WidgetBuilder builder,
+    String? title,
+    bool dismissible = true,
+  }) => _show<T>(
+    context,
+    builder: builder,
+    title: title,
+    dismissible: dismissible,
+  );
+
+  static Future<T?> choose<T>(
+    BuildContext context, {
+    required List<HyperAction<T>> actions,
     String? title,
     bool dismissible = true,
     String cancelLabel = '取消',
+  }) => _show<T>(
+    context,
+    title: title,
+    dismissible: dismissible,
+    builder: (_) =>
+        _HyperActionList<T>(actions: actions, cancelLabel: cancelLabel),
+  );
+
+  static Future<T?> _show<T>(
+    BuildContext context, {
+    required WidgetBuilder builder,
+    String? title,
+    required bool dismissible,
   }) {
-    if ((builder == null) == (actions == null)) {
-      throw ArgumentError('HyperActionSheet.show 需要且只需 builder 或 actions。');
-    }
     final glass = HyperGlassTheme.of(context);
     return showHyperModal<T>(
       context,
@@ -93,13 +114,7 @@ abstract final class HyperActionSheet {
                             ),
                           ),
                         ),
-                      if (builder != null)
-                        builder(sheetContext)
-                      else
-                        _HyperActionList<T>(
-                          actions: actions!,
-                          cancelLabel: cancelLabel,
-                        ),
+                      builder(sheetContext),
                     ],
                   ),
                 ),

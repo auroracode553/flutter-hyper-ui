@@ -17,13 +17,12 @@ void main() {
     ),
   );
 
-  testWidgets('圆形按钮内长 label 缩小适配而非溢出', (tester) async {
+  testWidgets('按钮内长 label 缩小适配而非溢出', (tester) async {
     await tester.pumpWidget(
       wrap(
         HyperButton.outline(
           label: '圆形胶囊',
           icon: LucideIcons.heart,
-          circle: true,
           onPressed: () {},
         ),
       ),

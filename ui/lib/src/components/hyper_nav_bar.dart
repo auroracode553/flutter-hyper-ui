@@ -20,16 +20,10 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.child,
     this.height = 44,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.spacing = 8,
-    this.titleSpacing = 2,
-    this.actionSpacing = 4,
     this.safeArea = true,
     this.automaticallyImplyLeading = true,
     this.centerTitle = false,
   }) : assert(height > 0 && height < double.infinity),
-       assert(spacing >= 0 && spacing < double.infinity),
-       assert(titleSpacing >= 0 && titleSpacing < double.infinity),
-       assert(actionSpacing >= 0 && actionSpacing < double.infinity),
        assert(
          child == null ||
              (title == null &&
@@ -55,10 +49,6 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final EdgeInsetsGeometry padding;
 
-  /// 主内容与左右插槽之间的间距，不为缺失的插槽额外占位。
-  final double spacing;
-  final double titleSpacing;
-  final double actionSpacing;
   final bool safeArea;
   final bool automaticallyImplyLeading;
 
@@ -96,7 +86,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
       // 居中按整个栏宽计算，并在左右插槽较宽时避让。
       return NavigationToolbar(
         centerMiddle: true,
-        middleSpacing: spacing,
+        middleSpacing: 8,
         leading: effectiveLeading,
         middle: middle,
         trailing: effectiveTrailing,
@@ -107,7 +97,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
       children: <Widget>[
         if (effectiveLeading != null) ...<Widget>[
           effectiveLeading,
-          if (middle != null) SizedBox(width: spacing),
+          if (middle != null) const SizedBox(width: 8),
         ],
         Expanded(
           child: middle == null
@@ -118,7 +108,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
         ),
         if (effectiveTrailing != null) ...<Widget>[
-          if (middle != null) SizedBox(width: spacing),
+          if (middle != null) const SizedBox(width: 8),
           effectiveTrailing,
         ],
       ],
@@ -131,7 +121,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         for (var index = 0; index < actions.length; index++) ...<Widget>[
-          if (index > 0) SizedBox(width: actionSpacing),
+          if (index > 0) const SizedBox(width: 4),
           actions[index],
         ],
       ],
@@ -159,7 +149,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
             child: title!,
           ),
         if (subtitle != null) ...<Widget>[
-          if (title != null) SizedBox(height: titleSpacing),
+          if (title != null) const SizedBox(height: 2),
           DefaultTextStyle.merge(
             style: TextStyle(
               color: tokens.mutedForeground,
@@ -178,9 +168,8 @@ class _BackButton extends StatelessWidget {
   const _BackButton();
 
   @override
-  Widget build(BuildContext context) => HyperButton.icon(
+  Widget build(BuildContext context) => HyperButton.ghost(
     icon: LucideIcons.chevronLeft,
-    type: 'ghost',
     height: 44,
     iconSize: 20,
     tooltip: '返回',

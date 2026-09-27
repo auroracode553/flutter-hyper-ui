@@ -36,6 +36,9 @@ class HyperTabHost extends StatefulWidget {
 
   static HyperTabController of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<_HyperTabScope>()!.controller;
+
+  static HyperTabController? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_HyperTabScope>()?.controller;
 }
 
 class _HyperTabHostState extends State<HyperTabHost> {

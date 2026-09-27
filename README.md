@@ -27,19 +27,7 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言以克制�
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
-final theme = HyperUiTheme.light();
-HyperUiTheme(
-  data: theme,
-  child: WidgetsApp(
-    color: theme.tokens.background,
-    textStyle: TextStyle(color: theme.tokens.foreground),
-    pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
-      settings: settings,
-      pageBuilder: (context, animation, secondaryAnimation) => builder(context),
-    ),
-    home: const YourPage(),
-  ),
-);
+HyperUiTheme.app(home: const YourPage());
 ```
 
 ## 接入与发布

@@ -93,7 +93,7 @@ class _OverlayExampleState extends State<OverlayExample> {
             HyperButton.tonal(
               label: '操作菜单',
               onPressed: () async {
-                final result = await HyperActionSheet.show(
+                final result = await HyperActionSheet.choose(
                   context,
                   title: '照片操作',
                   actions: const [

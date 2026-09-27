@@ -108,7 +108,7 @@ class _HyperUploaderState extends State<HyperUploader> {
       _pickError = null;
     });
     try {
-      final source = await HyperActionSheet.show<HyperUploadSource>(
+      final source = await HyperActionSheet.choose<HyperUploadSource>(
         context,
         title: '添加文件',
         actions: widget.sources

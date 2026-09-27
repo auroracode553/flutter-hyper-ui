@@ -25,23 +25,10 @@ dependencies:
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
-final theme = HyperUiTheme.light();
-
-HyperUiTheme(
-  data: theme,
-  child: WidgetsApp(
-    color: theme.tokens.background,
-    textStyle: TextStyle(color: theme.tokens.foreground),
-    pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
-      settings: settings,
-      pageBuilder: (context, animation, secondaryAnimation) => builder(context),
-    ),
-    home: const AppHome(),
-  ),
-);
+HyperUiTheme.app(home: const AppHome());
 ```
 
-明暗主题分别使用 `HyperUiTheme.light()` 和 `HyperUiTheme.dark()`。应用可以通过 `HyperUiThemeData.copyWith` 替换颜色与玻璃令牌，并在切换后重建根节点。
+默认跟随系统明暗模式。需要固定模式时传 `brightness: Brightness.light` 或 `Brightness.dark`；品牌色用 `primary`。局部精细覆盖仍可使用 `HyperUiTheme(data: ..., child: ...)`。
 
 ## 创建第一个页面
 

@@ -45,7 +45,7 @@ class _InputsExampleState extends State<InputsExample> {
           prefix: Icon(LucideIcons.search),
         ),
         const SizedBox(height: HyperUiSpacing.md),
-        const HyperTextField(hintText: '补充说明', type: 'textarea', rows: 3),
+        const HyperTextField.multiline(hintText: '补充说明', rows: 3),
       ],
     );
   }

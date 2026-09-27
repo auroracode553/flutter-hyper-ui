@@ -331,7 +331,7 @@ class ActionSheetComponentExample extends StatelessWidget {
         _label('操作列表'),
         HyperButton.tonal(
           label: '打开操作菜单',
-          onPressed: () => HyperActionSheet.show<String>(
+          onPressed: () => HyperActionSheet.choose<String>(
             context,
             title: '项目操作',
             actions: const [

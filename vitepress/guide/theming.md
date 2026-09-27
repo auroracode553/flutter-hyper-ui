@@ -14,7 +14,7 @@ final darkTheme = HyperUiTheme.dark(
 );
 ```
 
-应用根节点通过 `HyperUiTheme(data: lightTheme, child: app)` 注入主题。明暗切换时重建该容器，并传入对应主题数据。
+应用根节点直接使用 `HyperUiTheme.app(home: const AppHome(), primary: brandColor)`，默认跟随系统明暗模式。需要局部覆盖时再构造 `HyperUiTheme(data: ..., child: ...)`。
 
 ## 覆盖玻璃表面
 

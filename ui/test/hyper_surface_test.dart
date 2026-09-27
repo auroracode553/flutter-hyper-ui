@@ -30,7 +30,7 @@ void main() {
           builder: (context) => HyperButton.filled(
             label: '打开',
             onPressed: () async {
-              result = await HyperActionSheet.show<String>(
+              result = await HyperActionSheet.choose<String>(
                 context,
                 actions: const <HyperAction<String>>[
                   HyperAction(value: 'save', label: '保存'),

@@ -11,13 +11,13 @@ class ButtonsExample extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 文字按钮：尺寸与形状（默认按内容收缩，等价 inline-block）。
+        // 文字按钮默认按内容收缩。
         Wrap(
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
           children: [
             HyperButton.filled(label: '小按钮', height: 32, onPressed: _noop),
-            HyperButton.filled(label: '默认按钮', round: true, onPressed: _noop),
+            HyperButton.filled(label: '默认按钮', onPressed: _noop),
             HyperButton.outline(label: '处理中', loading: true, onPressed: _noop),
           ],
         ),
@@ -40,7 +40,6 @@ class ButtonsExample extends StatelessWidget {
             HyperButton.tonal(
               label: '带图标胶囊',
               icon: LucideIcons.settings,
-              round: true,
               onPressed: _noop,
             ),
           ],
@@ -56,21 +55,18 @@ class ButtonsExample extends StatelessWidget {
               onPressed: _noop,
               tooltip: '新建',
             ),
-            HyperButton.icon(
+            HyperButton.tonal(
               icon: LucideIcons.refreshCw,
-              type: 'tonal',
               onPressed: _noop,
               tooltip: '刷新',
             ),
-            HyperButton.icon(
+            HyperButton.outline(
               icon: LucideIcons.share2,
-              type: 'outline',
               onPressed: _noop,
               tooltip: '分享',
             ),
-            HyperButton.icon(
+            HyperButton.danger(
               icon: LucideIcons.trash,
-              type: 'danger',
               onPressed: _noop,
               tooltip: '删除',
             ),

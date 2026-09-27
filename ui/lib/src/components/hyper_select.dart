@@ -25,18 +25,36 @@ class HyperSelect<T> extends StatelessWidget {
   const HyperSelect({
     super.key,
     required this.options,
-    required this.values,
+    this.value,
     this.onChanged,
-    this.multiple = false,
     this.placeholder = '请选择',
     this.label,
-  });
+  }) : values = null,
+       onMultipleChanged = null,
+       _multiple = false;
+
+  const HyperSelect.multiple({
+    super.key,
+    required this.options,
+    required this.values,
+    this.onMultipleChanged,
+    this.placeholder = '请选择',
+    this.label,
+  }) : value = null,
+       onChanged = null,
+       _multiple = true;
+
   final List<HyperOption<T>> options;
-  final List<T> values;
-  final ValueChanged<List<T>>? onChanged;
-  final bool multiple;
+  final T? value;
+  final List<T>? values;
+  final ValueChanged<T?>? onChanged;
+  final ValueChanged<List<T>>? onMultipleChanged;
+  final bool _multiple;
   final String placeholder;
   final String? label;
+
+  List<T> get _selectedValues =>
+      _multiple ? values! : (value == null ? <T>[] : <T>[value as T]);
 
   Future<void> _open(BuildContext context) async {
     final result = await HyperActionSheet.show<List<T>>(
@@ -44,17 +62,22 @@ class HyperSelect<T> extends StatelessWidget {
       title: label ?? placeholder,
       builder: (_) => _HyperSelectionPanel<T>(
         options: options,
-        values: values,
-        multiple: multiple,
+        values: _selectedValues,
+        multiple: _multiple,
       ),
     );
-    if (result != null) onChanged?.call(result);
+    if (result == null) return;
+    if (_multiple) {
+      onMultipleChanged?.call(result);
+    } else {
+      onChanged?.call(result.isEmpty ? null : result.first);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final selectedLabels = options
-        .where((option) => values.contains(option.value))
+        .where((option) => _selectedValues.contains(option.value))
         .map((option) => option.label)
         .toList();
     return buildHySelectionField(
@@ -62,7 +85,9 @@ class HyperSelect<T> extends StatelessWidget {
       value: selectedLabels.isEmpty ? placeholder : selectedLabels.join('、'),
       isPlaceholder: selectedLabels.isEmpty,
       label: label,
-      onTap: onChanged == null ? null : () => _open(context),
+      onTap: (onChanged == null && onMultipleChanged == null)
+          ? null
+          : () => _open(context),
     );
   }
 }

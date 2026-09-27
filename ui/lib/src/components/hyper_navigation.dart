@@ -32,6 +32,32 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
   final bool scrollable;
   final ValueChanged<int>? onTap;
 
+  /// A complete tab strip and page area without a separate host or controller.
+  static Widget withPages({
+    required List<Widget> tabs,
+    required List<Widget> pages,
+    double height = 180,
+    int initialIndex = 0,
+    bool scrollable = false,
+    ValueChanged<int>? onTap,
+  }) {
+    assert(tabs.length == pages.length);
+    return HyperTabHost(
+      length: tabs.length,
+      initialIndex: initialIndex,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          HyperTabs(tabs: tabs, scrollable: scrollable, onTap: onTap),
+          SizedBox(
+            height: height,
+            child: HyperTabView(children: pages),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Size get preferredSize => Size.fromHeight(_tabHeight + 6);
 
@@ -47,6 +73,12 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (controller == null && HyperTabHost.maybeOf(context) == null) {
+      return HyperTabHost(
+        length: tabs.length,
+        child: HyperTabs(tabs: tabs, scrollable: scrollable, onTap: onTap),
+      );
+    }
     final tokens = HyperUiThemeTokens.of(context);
     final tabController = controller ?? HyperTabHost.of(context);
     assert(tabController.length == tabs.length);

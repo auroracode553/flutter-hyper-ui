@@ -7,14 +7,11 @@ description: HyperTextField 组件与公开 API
 
 ## 公开用法
 
-`HyperTextField` 使用 `type` 选择输入形态：`text`（单行）、`search`（搜索）、`password`（密码）和 `textarea`（多行）。多行高度由 `rows` 控制，密码显隐由 `showPasswordToggle` 控制，`maxLength` 与 `showCounter` 用于字数限制和计数展示。
+普通输入用 `HyperTextField`；搜索、密码和多行输入分别用 `.search`、`.password`、`.multiline`。搜索框自带清空操作，密码框自带显隐操作；设置 `maxLength` 后自动显示计数。`prefix` 和 `suffix` 保留任意 Widget 插槽。
 
 ```dart
-HyperTextField(
-  type: 'textarea',
-  rows: 3,
+HyperTextField.multiline(
   maxLength: 80,
-  showCounter: true,
   hintText: '请输入多行内容',
 )
 ```

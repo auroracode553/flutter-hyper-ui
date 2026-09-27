@@ -355,7 +355,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               icon: LucideIcons.chevronLeft,
               tooltip: '上个月',
               height: 34,
-              radius: 12,
               onPressed:
                   _monthAvailable(
                     DateTime(_visibleMonth.year, _visibleMonth.month - 1),
@@ -377,7 +376,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               icon: LucideIcons.chevronRight,
               tooltip: '下个月',
               height: 34,
-              radius: 12,
               onPressed:
                   _monthAvailable(
                     DateTime(_visibleMonth.year, _visibleMonth.month + 1),
@@ -448,18 +446,26 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                     builder: (context) {
                       final month = row * 3 + column + 1;
                       final target = DateTime(year, month);
-                      return HyperButton(
-                        label: '$month 月',
-                        type: month == _visibleMonth.month ? 'filled' : 'tonal',
-                        height: 42,
-                        expanded: true,
-                        onPressed: _monthAvailable(target)
-                            ? () => setState(() {
-                                _visibleMonth = target;
-                                _choosingMonth = false;
-                              })
-                            : null,
-                      );
+                      void selectMonth() => setState(() {
+                        _visibleMonth = target;
+                        _choosingMonth = false;
+                      });
+                      final onPressed = _monthAvailable(target)
+                          ? selectMonth
+                          : null;
+                      return month == _visibleMonth.month
+                          ? HyperButton.filled(
+                              label: '$month 月',
+                              height: 42,
+                              expanded: true,
+                              onPressed: onPressed,
+                            )
+                          : HyperButton.tonal(
+                              label: '$month 月',
+                              height: 42,
+                              expanded: true,
+                              onPressed: onPressed,
+                            );
                     },
                   ),
                 ),

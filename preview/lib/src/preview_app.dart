@@ -44,44 +44,29 @@ class _PreviewAppState extends State<PreviewApp> {
           HyperThemeMode.system =>
             MediaQuery.platformBrightnessOf(context) == Brightness.dark,
         };
-        final hyperTheme = dark
-            ? HyperUiTheme.dark(primary: _theme.primary)
-            : HyperUiTheme.light(primary: _theme.primary);
-        return HyperUiTheme(
-          data: hyperTheme,
-          child: WidgetsApp(
-            title: 'Flutter Hyper UI Preview',
-            debugShowCheckedModeBanner: false,
-            color: hyperTheme.tokens.background,
-            textStyle: TextStyle(
-              color: hyperTheme.tokens.foreground,
-              fontFamily: hyperTheme.fontFamily,
+        return HyperUiTheme.app(
+          title: 'Flutter Hyper UI Preview',
+          brightness: dark ? Brightness.dark : Brightness.light,
+          primary: _theme.primary,
+          builder: (context, child) {
+            final media = MediaQuery.of(context);
+            final padding = widget.configuration.safeAreaPadding;
+            if (padding == EdgeInsets.zero) return child!;
+            return MediaQuery(
+              data: media.copyWith(padding: padding, viewPadding: padding),
+              child: child!,
+            );
+          },
+          home: PreviewShell(
+            componentId: widget.configuration.componentId,
+            embedded: widget.configuration.embedded,
+            onToggleTheme: () => _theme.setMode(
+              _theme.mode == HyperThemeMode.dark
+                  ? HyperThemeMode.light
+                  : HyperThemeMode.dark,
             ),
-            pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  builder(context),
-            ),
-            builder: (context, child) {
-              final media = MediaQuery.of(context);
-              final padding = widget.configuration.safeAreaPadding;
-              if (padding == EdgeInsets.zero) return child!;
-              return MediaQuery(
-                data: media.copyWith(padding: padding, viewPadding: padding),
-                child: child!,
-              );
-            },
-            home: PreviewShell(
-              componentId: widget.configuration.componentId,
-              embedded: widget.configuration.embedded,
-              onToggleTheme: () => _theme.setMode(
-                _theme.mode == HyperThemeMode.dark
-                    ? HyperThemeMode.light
-                    : HyperThemeMode.dark,
-              ),
-              onComponentReady: widget.configuration.onComponentReady,
-              onComponentError: widget.configuration.onComponentError,
-            ),
+            onComponentReady: widget.configuration.onComponentReady,
+            onComponentError: widget.configuration.onComponentError,
           ),
         );
       },

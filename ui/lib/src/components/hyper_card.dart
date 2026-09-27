@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'hyper_glass.dart';
 import 'hyper_layout.dart';
 
-import '../theme/hyper_ui_radii.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../theme/hyper_glass_theme.dart';
@@ -18,11 +17,6 @@ class HyperCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final VoidCallback? onTap;
   final bool selected;
-  final double radius;
-  final double blur;
-  final HyperGlassWeight weight;
-  final Color? borderColor;
-  final List<BoxShadow>? shadows;
 
   const HyperCard({
     super.key,
@@ -35,11 +29,6 @@ class HyperCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(HyperUiSpacing.cardPadding),
     this.onTap,
     this.selected = false,
-    this.radius = HyperUiRadii.md,
-    this.blur = 18,
-    this.weight = HyperGlassWeight.regular,
-    this.borderColor,
-    this.shadows,
   });
 
   bool get _hasHeader {
@@ -73,13 +62,9 @@ class HyperCard extends StatelessWidget {
     );
 
     return HyperGlass(
-      radius: radius,
-      blur: blur,
       onTap: onTap,
-      weight: weight,
       color: selected ? HyperGlassTheme.of(context).surfaceStrong : null,
-      borderColor: borderColor ?? (selected ? tokens.primary : null),
-      shadows: shadows,
+      borderColor: selected ? tokens.primary : null,
       child: content,
     );
   }

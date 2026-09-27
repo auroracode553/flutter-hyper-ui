@@ -202,7 +202,8 @@ class _FormsExampleState extends State<FormsExample> {
   bool _checked = true, _enabled = true;
   int _radio = 0;
   double _slider = 64;
-  List<String> _single = ['自然'], _multiple = ['柔光'];
+  String? _single = '自然';
+  List<String> _multiple = ['柔光'];
   String _date = '选择日期 / 时间 / 区间';
   final _form = GlobalKey<FormState>();
   @override
@@ -227,12 +228,8 @@ class _FormsExampleState extends State<FormsExample> {
                 validator: (value) =>
                     value == null || value.trim().isEmpty ? '请输入称呼' : null,
               ),
-              const HyperTextField(
-                type: 'password',
-                showPasswordToggle: true,
-                hintText: '可切换显示与隐藏',
-              ),
-              const HyperTextField(type: 'textarea', rows: 3, maxLength: 120),
+              const HyperTextField.password(hintText: '可切换显示与隐藏'),
+              const HyperTextField.multiline(rows: 3, maxLength: 120),
               const HyperTextField(initialValue: '不可编辑', enabled: false),
               HyperButton(
                 label: '保存',
@@ -259,19 +256,18 @@ class _FormsExampleState extends State<FormsExample> {
                 HyperOption(value: '自然', label: '自然'),
                 HyperOption(value: '鲜明', label: '鲜明'),
               ],
-              values: _single,
+              value: _single,
               onChanged: (value) => setState(() => _single = value),
             ),
-            HyperSelect<String>(
+            HyperSelect<String>.multiple(
               label: '多选',
-              multiple: true,
               options: const [
                 HyperOption(value: '柔光', label: '柔光'),
                 HyperOption(value: '玻璃', label: '玻璃'),
                 HyperOption(value: '景深', label: '景深'),
               ],
               values: _multiple,
-              onChanged: (value) => setState(() => _multiple = value),
+              onMultipleChanged: (value) => setState(() => _multiple = value),
             ),
             HyperCheckbox(
               label: '接收产品更新',
@@ -413,26 +409,18 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
           ],
         ),
       ),
-      const HyperCard(
+      HyperCard(
         title: '标签与联动页面',
         child: SizedBox(
           height: 220,
-          child: HyperTabHost(
-            length: 3,
-            child: Column(
-              children: [
-                HyperTabs(tabs: [Text('推荐'), Text('关注'), Text('收藏')]),
-                Expanded(
-                  child: HyperTabView(
-                    children: [
-                      Center(child: Text('为你推荐')),
-                      Center(child: Text('你关注的内容')),
-                      Center(child: Text('收藏的灵感')),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          child: HyperTabs.withPages(
+            tabs: [Text('推荐'), Text('关注'), Text('收藏')],
+            pages: [
+              Center(child: Text('为你推荐')),
+              Center(child: Text('你关注的内容')),
+              Center(child: Text('收藏的灵感')),
+            ],
+            height: 160,
           ),
         ),
       ),

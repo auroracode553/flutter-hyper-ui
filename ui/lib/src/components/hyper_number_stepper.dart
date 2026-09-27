@@ -47,7 +47,6 @@ class HyperNumberStepper extends StatelessWidget {
             icon: LucideIcons.minus,
             height: 32,
             iconSize: 17,
-            radius: 12,
             color: canDecrease ? tokens.foreground : tokens.mutedForeground,
             backgroundColor: glass.selection,
             onPressed: canDecrease
@@ -76,7 +75,6 @@ class HyperNumberStepper extends StatelessWidget {
             icon: LucideIcons.plus,
             height: 32,
             iconSize: 17,
-            radius: 12,
             color: canIncrease ? tokens.foreground : tokens.mutedForeground,
             backgroundColor: glass.selection,
             onPressed: canIncrease

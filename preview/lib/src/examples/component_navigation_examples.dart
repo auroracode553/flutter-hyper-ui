@@ -161,32 +161,23 @@ class TabsComponentExample extends StatelessWidget {
   const TabsComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => HyperTabHost(
-    length: 3,
-    child: Column(
-      children: [
-        const HyperTabs(tabs: [Text('概览'), Text('动态'), Text('成员')]),
-        SizedBox(
-          height: 150,
-          child: HyperTabView(
-            children: [
-              Center(
-                child: Text(
-                  '项目概览',
-                  style: TextStyle(
-                    color: HyperUiThemeTokens.of(context).foreground,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const Center(child: Text('最近没有新动态')),
-              const Center(child: Text('共有 8 位成员')),
-            ],
+  Widget build(BuildContext context) => HyperTabs.withPages(
+    tabs: const [Text('概览'), Text('动态'), Text('成员')],
+    pages: [
+      Center(
+        child: Text(
+          '项目概览',
+          style: TextStyle(
+            color: HyperUiThemeTokens.of(context).foreground,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
           ),
         ),
-      ],
-    ),
+      ),
+      const Center(child: Text('最近没有新动态')),
+      const Center(child: Text('共有 8 位成员')),
+    ],
+    height: 150,
   );
 }
 // end-doc-region TabsComponentExample
