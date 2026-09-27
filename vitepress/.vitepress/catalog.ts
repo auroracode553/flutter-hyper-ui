@@ -107,10 +107,10 @@ export const componentGroups: ComponentGroup[] = [
       demo('data', '徽标、列表与进度', 'data_example.dart', 460, '用于检查数据展示组件的常用组合。'),
     ],
     components: [
-      component('HyText', 'hy_typography.dart', '统一的显示、标题、正文、说明和提示文字层级，通过 type 选择文字形态。', {
+      component('HyText', 'hy_typography.dart', '统一的 h1 到 h6 文字层级，通过 type 选择文字形态。', {
         propsDocs: [
           { name: 'data', description: '显示的文本内容' },
-          { name: 'type', description: '文字样式类型：display / title / heading / body / caption / hint，默认 body' },
+          { name: 'type', description: '文字样式类型：h1 / h2 / h3 / h4 / h5 / h6，默认 h4' },
           { name: 'color', description: '文字颜色' },
           { name: 'weight', description: '字重' },
           { name: 'maxLines', description: '最大行数' },

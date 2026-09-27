@@ -21,7 +21,7 @@ class _NumberStepperComponentExampleState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const HyText('数量（1–8）', type: 'caption'),
+        const HyText('数量（1–8）', type: 'h5'),
         const SizedBox(height: HyUiSpacing.xs),
         HyNumberStepper(
           value: _quantity,
@@ -31,7 +31,7 @@ class _NumberStepperComponentExampleState
           onChanged: (value) => setState(() => _quantity = value),
         ),
         const SizedBox(height: HyUiSpacing.lg),
-        const HyText('以 5 为步长', type: 'caption'),
+        const HyText('以 5 为步长', type: 'h5'),
         const SizedBox(height: HyUiSpacing.xs),
         HyNumberStepper(
           value: _interval,
@@ -41,7 +41,7 @@ class _NumberStepperComponentExampleState
           onChanged: (value) => setState(() => _interval = value),
         ),
         const SizedBox(height: HyUiSpacing.lg),
-        const HyText('只读状态', type: 'caption'),
+        const HyText('只读状态', type: 'h5'),
         const SizedBox(height: HyUiSpacing.xs),
         const HyNumberStepper(value: 3),
       ],

@@ -20,9 +20,9 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
     return HySpace(
       alignment: CrossAxisAlignment.stretch,
       children: [
-        const HyText('下午好', type: 'caption'),
+        const HyText('下午好', type: 'h5'),
         const HyText('保持从容，专注重要的事。',
-            type: 'display'),
+            type: 'h1'),
         const SizedBox(height: 8),
 
         // 今日进度
@@ -32,7 +32,7 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 HyText('今日进度'),
-                HyText('72%', type: 'title'),
+                HyText('72%', type: 'h2'),
               ],
             ),
             const SizedBox(height: 12),

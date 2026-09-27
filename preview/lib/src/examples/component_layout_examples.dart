@@ -8,7 +8,7 @@ class SpaceComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'caption'),
+    child: HyText(text, type: 'h5'),
   );
 
   @override
@@ -51,7 +51,7 @@ class DividerComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'caption'),
+    child: HyText(text, type: 'h5'),
   );
 
   @override
@@ -95,7 +95,7 @@ class EmptyStateComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'caption'),
+    child: HyText(text, type: 'h5'),
   );
 
   @override
@@ -131,7 +131,7 @@ class PageContentComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, type: 'caption'),
+    child: HyText(text, type: 'h5'),
   );
 
   @override

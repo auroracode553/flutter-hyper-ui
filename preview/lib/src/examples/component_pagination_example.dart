@@ -19,7 +19,7 @@ class _PaginationComponentExampleState extends State<PaginationComponentExample>
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const HyText('共 20 页，点击页码或前后箭头', type: 'caption'),
+        const HyText('共 20 页，点击页码或前后箭头', type: 'h5'),
         const SizedBox(height: HyUiSpacing.xs),
         HyPagination(
           page: _page,
@@ -27,7 +27,7 @@ class _PaginationComponentExampleState extends State<PaginationComponentExample>
           onChanged: (page) => setState(() => _page = page),
         ),
         const SizedBox(height: HyUiSpacing.lg),
-        const HyText('空数据与禁用状态', type: 'caption'),
+        const HyText('空数据与禁用状态', type: 'h5'),
         const SizedBox(height: HyUiSpacing.xs),
         const HyPagination(page: 0, pageCount: 0),
       ],

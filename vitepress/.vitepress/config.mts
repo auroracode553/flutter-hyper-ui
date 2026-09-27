@@ -79,7 +79,7 @@ export default defineConfig({
         text: section.title,
         collapsed: false,
         items: section.components.map((entry) => ({
-          text: entry.navName,
+          text: entry.navName.replace(/^Hy(?=[A-Z])/, ''),
           link: entry.page,
         })),
       })),

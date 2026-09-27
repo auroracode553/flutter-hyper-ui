@@ -12,7 +12,7 @@ class TooltipComponentExample extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const HyText('悬停、长按或键盘聚焦查看提示', type: 'caption'),
+        const HyText('悬停、长按或键盘聚焦查看提示', type: 'h5'),
         const SizedBox(height: HyUiSpacing.sm),
         HyTooltip(
           message: '更改后会同步到所有设备。',

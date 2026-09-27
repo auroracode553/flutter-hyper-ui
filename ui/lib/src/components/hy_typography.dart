@@ -23,12 +23,12 @@ class HyText extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
     final size = switch (type) {
-      'display' => 36.0,
-      'title' => 28.0,
-      'heading' => 20.0,
-      'body' => 14.0,
-      'caption' => 13.0,
-      'hint' => 12.0,
+      'h1' => 36.0,
+      'h2' => 28.0,
+      'h3' => 20.0,
+      'h4' => 14.0,
+      'h5' => 13.0,
+      'h6' => 12.0,
       _ => throw ArgumentError.value(type, 'type', '不支持的 HyText type'),
     };
     return Text(

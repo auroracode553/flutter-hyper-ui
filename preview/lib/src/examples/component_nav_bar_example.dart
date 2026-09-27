@@ -54,7 +54,7 @@ class _InspirationHeader extends StatelessWidget {
         children: <Widget>[
           Icon(LucideIcons.sparkles, size: 28),
           SizedBox(height: 28),
-          HyText('让内容延伸到\n屏幕的每一寸', type: 'title'),
+          HyText('让内容延伸到\n屏幕的每一寸', type: 'h2'),
           SizedBox(height: 12),
           HyText('向上滚动，观察这张卡片经过导航标题与状态栏。'),
         ],
@@ -84,12 +84,12 @@ class _InspirationItem extends StatelessWidget {
         children: <Widget>[
           HyText(
             '灵感 ${index.toString().padLeft(2, '0')}',
-            type: 'caption',
+            type: 'h5',
           ),
           const SizedBox(height: 18),
           HyText(
             titles[(index - 1) % titles.length],
-            type: 'title',
+            type: 'h2',
           ),
           const SizedBox(height: 8),
           const HyText('导航栏保持透明，内容沿同一个滚动视口连续向上移动。'),
