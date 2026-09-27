@@ -124,3 +124,64 @@ class EmptyStateComponentExample extends StatelessWidget {
   }
 }
 // end-doc-region EmptyStateComponentExample
+
+// doc-region PageContentComponentExample
+class PageContentComponentExample extends StatelessWidget {
+  const PageContentComponentExample({super.key});
+
+  Widget _label(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
+    child: HyText(text, variant: HyTextStyle.caption),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _label('统一边距（默认 16/12/16/40）：灰底即屏幕边缘，卡片距边缘 16'),
+        SizedBox(
+          height: 320,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: CustomScrollView(
+              slivers: [
+                HyPageContentSliver(
+                  child: HySpace(
+                    spacing: 10,
+                    alignment: CrossAxisAlignment.stretch,
+                    children: const [
+                      HyListTile(
+                        leadingIcon: Icons.star_rounded,
+                        leadingColor: Color(0xFFF59E0B),
+                        title: '第一项',
+                        subtitle: '统一边距',
+                      ),
+                      HyListTile(
+                        leadingIcon: Icons.favorite_rounded,
+                        leadingColor: Color(0xFFEF4444),
+                        title: '第二项',
+                        subtitle: '宽屏自动居中限宽',
+                      ),
+                      HyListTile(
+                        leadingIcon: Icons.settings_rounded,
+                        leadingColor: Color(0xFF6B7280),
+                        title: '第三项',
+                        subtitle: '手机端占满宽度',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+// end-doc-region PageContentComponentExample

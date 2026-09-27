@@ -32,7 +32,7 @@ class TextFieldComponentExample extends StatelessWidget {
 
         _label('密码显隐'),
         const HyTextField(
-          obscureText: true,
+          type: 'password',
           showPasswordToggle: true,
           hintText: '请输入密码',
         ),
@@ -47,7 +47,7 @@ class TextFieldComponentExample extends StatelessWidget {
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('多行输入'),
-        const HyTextField(maxLines: 3, hintText: '请输入多行内容'),
+        const HyTextField(type: 'textarea', rows: 3, hintText: '请输入多行内容'),
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('字数统计'),

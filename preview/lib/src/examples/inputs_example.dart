@@ -47,7 +47,8 @@ class _InputsExampleState extends State<InputsExample> {
         const SizedBox(height: HyUiSpacing.md),
         const HyTextField(
           hintText: '补充说明',
-          maxLines: 3,
+          type: 'textarea',
+          rows: 3,
         ),
       ],
     );

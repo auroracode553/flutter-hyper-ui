@@ -13,6 +13,8 @@ import 'hy_pressable.dart';
 class HyTextField extends StatefulWidget {
   const HyTextField({
     super.key,
+    this.type = 'text',
+    this.rows = 3,
     this.controller,
     this.focusNode,
     this.hintText,
@@ -21,11 +23,8 @@ class HyTextField extends StatefulWidget {
     this.suffix,
     this.enabled = true,
     this.readOnly = false,
-    this.obscureText = false,
     this.showPasswordToggle = false,
     this.clearable = false,
-    this.maxLines = 1,
-    this.minLines,
     this.maxLength,
     this.showCounter = false,
     this.autofocus = false,
@@ -40,6 +39,12 @@ class HyTextField extends StatefulWidget {
     this.validator,
     this.initialValue,
   });
+
+  /// 输入形态：`text`、`search`、`password` 或 `textarea`。
+  final String type;
+
+  /// `type == 'textarea'` 时的初始行数。
+  final int rows;
 
   /// 文本编辑控制器；为空时组件内部依据 [initialValue] 自建并维护。
   final TextEditingController? controller;
@@ -65,20 +70,11 @@ class HyTextField extends StatefulWidget {
   /// 是否只读，默认 false。
   final bool readOnly;
 
-  /// 是否隐藏输入内容（密码模式），默认 false。
-  final bool obscureText;
-
-  /// 是否显示密码显隐切换按钮，需配合 [obscureText]，默认 false。
+  /// 是否显示密码显隐切换按钮，需配合 `type: 'password'`，默认 false。
   final bool showPasswordToggle;
 
   /// 是否在内容非空时显示清空按钮，默认 false。
   final bool clearable;
-
-  /// 最大行数，默认 1；密码模式下强制为 1。
-  final int maxLines;
-
-  /// 最小行数，用于多行输入。
-  final int? minLines;
 
   /// 最大字符数，超出后阻止继续输入。
   final int? maxLength;
@@ -176,8 +172,8 @@ class _HyTextFieldState extends State<HyTextField> {
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
     final glass = HyGlassTheme.of(context);
-    // 圆角与 HySelect 等表单控件（HyGlass radius: 16）保持一致。
-    final borderRadius = BorderRadius.circular(16);
+    // 输入框统一使用 20dp 圆角，与 Web 和 Compose 预览的字段形态保持一致。
+    final borderRadius = BorderRadius.circular(20);
 
     OutlineInputBorder border(Color color, {double width = 1}) {
       return OutlineInputBorder(
@@ -186,6 +182,14 @@ class _HyTextFieldState extends State<HyTextField> {
       );
     }
 
+    final isTextarea = widget.type == 'textarea';
+    final isPassword = widget.type == 'password';
+    assert(
+      const <String>{'text', 'search', 'password', 'textarea'}.contains(widget.type),
+      'HyTextField.type 必须是 text、search、password 或 textarea。',
+    );
+    assert(widget.rows > 0, 'HyTextField.rows 必须大于 0。');
+
     return TextFormField(
       controller: _controller,
       focusNode: widget.focusNode,
@@ -193,12 +197,12 @@ class _HyTextFieldState extends State<HyTextField> {
       readOnly: widget.readOnly,
       validator: widget.validator,
       autofocus: widget.autofocus,
-      obscureText: widget.obscureText && _obscured,
-      maxLines: widget.obscureText ? 1 : widget.maxLines,
-      minLines: widget.obscureText ? 1 : widget.minLines,
+      obscureText: isPassword && _obscured,
+      maxLines: isPassword ? 1 : (isTextarea ? widget.rows : 1),
+      minLines: isPassword ? 1 : (isTextarea ? widget.rows : 1),
       maxLength: widget.maxLength,
       textAlign: widget.textAlign,
-      keyboardType: widget.keyboardType,
+      keyboardType: widget.keyboardType ?? (widget.type == 'search' ? TextInputType.text : null),
       textInputAction: widget.textInputAction,
       textCapitalization: widget.textCapitalization,
       autofillHints: widget.autofillHints,
@@ -206,7 +210,7 @@ class _HyTextFieldState extends State<HyTextField> {
       onFieldSubmitted: widget.onSubmitted,
       onTap: widget.onTap,
       cursorColor: tokens.primary,
-      style: TextStyle(color: tokens.foreground, fontSize: 14, height: 1.3),
+      style: TextStyle(color: tokens.foreground, fontSize: 16, height: 1.3),
       buildCounter: _buildCounter,
       decoration: InputDecoration(
         hintText: widget.hintText,
@@ -229,10 +233,7 @@ class _HyTextFieldState extends State<HyTextField> {
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         suffixIcon: _buildSuffix(tokens),
         suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 11,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
         // 轮廓使用专用 input 令牌（浅色 #E5E7EB / 深色 #343B47），
         // 避免玻璃高光色 edgeHighlight 在浅色下白边贴白底导致轮廓不可见。
         enabledBorder: border(tokens.input),
@@ -267,7 +268,7 @@ class _HyTextFieldState extends State<HyTextField> {
     final bool interactive = widget.enabled && !widget.readOnly;
 
     final Widget? passwordButton =
-        widget.showPasswordToggle && widget.obscureText
+        widget.showPasswordToggle && widget.type == 'password'
         ? _AffixButton(
             icon: _obscured
                 ? LucideIcons.eye

@@ -284,6 +284,14 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-space', 'HySpace 间距布局', 'component_layout_examples.dart', 340, '垂直排列（默认）与水平方向、自定义间距。', 'SpaceComponentExample'),
       }),
+      component('HyPageContentSliver', 'hy_page_content.dart', '页面内容 sliver：统一内容边距，宽屏（桌面/平板）下居中限宽，手机端占满。配合 HyNavBarPage 使用。', {
+        propsDocs: [
+          { name: 'child', description: '页面内容，通常是 HySpace 或 Column' },
+          { name: 'padding', description: '内容区边距，默认 EdgeInsets.fromLTRB(16, 12, 16, 40)' },
+          { name: 'maxWidth', description: '宽屏下居中内容的最大宽度，默认 800；手机端屏幕更窄时不生效' },
+        ],
+        preview: demo('component-page-content-sliver', 'HyPageContentSliver 页面内容', 'component_layout_examples.dart', 380, '统一边距与宽屏居中限宽。', 'PageContentComponentExample'),
+      }),
       component('HyDivider', 'hy_layout.dart', '横向或纵向、实线或虚线分隔。', {
         propsDocs: [
           { name: 'axis', description: '方向，默认 Axis.horizontal' },

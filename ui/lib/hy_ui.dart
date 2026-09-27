@@ -40,6 +40,7 @@ export 'src/components/hy_text_field.dart';
 export 'src/components/hy_tone.dart';
 export 'src/components/hy_nav_bar.dart';
 export 'src/components/hy_nav_bar_page.dart';
+export 'src/components/hy_page_content.dart';
 export 'src/theme/hy_ui_colors.dart';
 export 'src/theme/hy_ui_context.dart';
 export 'src/theme/hy_ui_radii.dart';

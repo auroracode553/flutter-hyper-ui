@@ -349,6 +349,7 @@ class PreviewCatalog {
     _componentPreview('component-space', 'HySpace', '线性间距布局。', () => example_component_layout_examples.loadLibrary(), (_) => example_component_layout_examples.SpaceComponentExample()),
     _componentPreview('component-divider', 'HyDivider', '横纵与虚实分割线。', () => example_component_layout_examples.loadLibrary(), (_) => example_component_layout_examples.DividerComponentExample()),
     _componentPreview('component-empty-state', 'HyEmptyState', '空状态与恢复操作。', () => example_component_layout_examples.loadLibrary(), (_) => example_component_layout_examples.EmptyStateComponentExample()),
+    _componentPreview('component-page-content-sliver', 'HyPageContentSliver', '统一页面边距与宽屏居中限宽。', () => example_component_layout_examples.loadLibrary(), (_) => example_component_layout_examples.PageContentComponentExample()),
     _componentPreview('component-select', 'HySelect', '底部弹层选择。', () => example_component_form_examples.loadLibrary(), (_) => example_component_form_examples.SelectComponentExample()),
     _componentPreview('component-picker', 'HyPicker', '滚轮选择器。', () => example_component_form_examples.loadLibrary(), (_) => example_component_form_examples.PickerComponentExample()),
     _componentPreview('component-date-picker', 'HyDatePicker', '月历选择日期与区间。', () => example_component_form_examples.loadLibrary(), (_) => example_component_form_examples.DatePickerComponentExample()),
