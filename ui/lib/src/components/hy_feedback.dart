@@ -32,56 +32,67 @@ abstract final class HyToast {
           margin: const EdgeInsets.fromLTRB(16, 0, 16, 96),
           behavior: SnackBarBehavior.floating,
           dismissDirection: DismissDirection.down,
-          content: HyGlass(
-            radius: 18,
-            blur: 28,
-            weight: HyGlassWeight.prominent,
-            borderColor: toneColor.withAlpha(65),
-            padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: 26,
-                  height: 26,
-                  decoration: BoxDecoration(
-                    color: toneColor.withAlpha(28),
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(_iconFor(tone), color: toneColor, size: 16),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    message,
-                    style: TextStyle(
-                      color: tokens.foreground,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                if (actionLabel != null && onAction != null)
-                  HyPressable(
-                    onPressed: () {
-                      messenger.hideCurrentSnackBar();
-                      onAction();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 6,
+          content: Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: 180, maxWidth: 420),
+              child: HyGlass(
+                radius: 18,
+                blur: 28,
+                weight: HyGlassWeight.prominent,
+                color: Color.alphaBlend(toneColor.withAlpha(10), tokens.card),
+                borderColor: toneColor.withAlpha(105),
+                padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: toneColor.withAlpha(24),
+                        shape: BoxShape.circle,
                       ),
+                      alignment: Alignment.center,
+                      child: Icon(_iconFor(tone), color: toneColor, size: 17),
+                    ),
+                    const SizedBox(width: 10),
+                    Flexible(
                       child: Text(
-                        actionLabel,
+                        message,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: toneColor,
-                          fontWeight: FontWeight.w600,
+                          color: tokens.foreground,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          height: 1.35,
                         ),
                       ),
                     ),
-                  ),
-              ],
+                    if (actionLabel != null && onAction != null)
+                      HyPressable(
+                        onPressed: () {
+                          messenger.hideCurrentSnackBar();
+                          onAction();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 6,
+                          ),
+                          child: Text(
+                            actionLabel,
+                            style: TextStyle(
+                              color: toneColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

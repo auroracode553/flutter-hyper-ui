@@ -49,11 +49,18 @@ class HyCheckbox extends StatelessWidget {
     );
     void toggle() {
       if (tristate) {
-        onChanged?.call(value == true ? null : value == false ? true : false);
+        onChanged?.call(
+          value == true
+              ? null
+              : value == false
+              ? true
+              : false,
+        );
       } else {
         onChanged?.call(!(value ?? false));
       }
     }
+
     if (label == null) {
       return HyPressable(
         onPressed: onChanged == null ? null : toggle,
@@ -119,16 +126,86 @@ class HySwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = _selectionTheme(context);
-    final control = Switch(value: value, onChanged: onChanged);
-    if (label == null) return Theme(data: theme, child: control);
+    final control = _HySwitchControl(value: value, onChanged: onChanged);
+    if (label == null) return control;
     return HyListTile(
       title: label!,
-      trailing: Theme(data: theme, child: control),
+      trailing: control,
       grouped: true,
       enabled: onChanged != null,
       showChevron: false,
       onTap: onChanged == null ? null : () => onChanged!(!value),
+    );
+  }
+}
+
+/// 自绘开关轨道，保证关闭态在不同玻璃背景上仍有清晰层次。
+class _HySwitchControl extends StatelessWidget {
+  const _HySwitchControl({required this.value, this.onChanged});
+
+  final bool value;
+  final ValueChanged<bool>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = HyUiThemeTokens.of(context);
+    final glass = HyGlassTheme.of(context);
+    final enabled = onChanged != null;
+    final trackColor = value
+        ? (enabled ? tokens.primary : tokens.primary.withAlpha(90))
+        : Color.alphaBlend(
+            glass.controlTrack,
+            enabled ? glass.surfaceStrong : glass.surfaceSubtle,
+          );
+    final outlineColor = value
+        ? Colors.transparent
+        : Color.alphaBlend(glass.edgeShade, glass.edgeHighlight);
+
+    return Semantics(
+      toggled: value,
+      enabled: enabled,
+      label: '开关',
+      child: HyPressable(
+        onPressed: enabled ? () => onChanged!(!value) : null,
+        borderRadius: BorderRadius.circular(18),
+        child: SizedBox(
+          width: 52,
+          height: 32,
+          child: AnimatedContainer(
+            duration: MediaQuery.disableAnimationsOf(context)
+                ? Duration.zero
+                : const Duration(milliseconds: 180),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: trackColor,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: outlineColor),
+            ),
+            child: AnimatedAlign(
+              duration: MediaQuery.disableAnimationsOf(context)
+                  ? Duration.zero
+                  : const Duration(milliseconds: 180),
+              curve: Curves.easeOutCubic,
+              alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: value ? tokens.primaryForeground : tokens.card,
+                  shape: BoxShape.circle,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black.withAlpha(enabled ? 24 : 12),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: const SizedBox.square(dimension: 24),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
