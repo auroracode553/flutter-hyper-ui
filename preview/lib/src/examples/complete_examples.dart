@@ -13,14 +13,14 @@ class _AtomsExampleState extends State<AtomsExample> {
   bool _tagVisible = true;
   @override
   Widget build(BuildContext context) => HySpace(alignment: CrossAxisAlignment.stretch, children: [
-    const HyText('轻盈，也清晰。', variant: HyTextStyle.display),
-    const HyText('HY UI / SOFT GLASS', variant: HyTextStyle.caption),
+    const HyText('轻盈，也清晰。', type: 'display'),
+    const HyText('HY UI / SOFT GLASS', type: 'caption'),
     HyCard(title: '文字与图标', subtitle: '统一层级，保留呼吸感', child: const HySpace(children: [
-      HyText('柔光玻璃', variant: HyTextStyle.title),
-      HyText('为日常体验设计', variant: HyTextStyle.heading),
+      HyText('柔光玻璃', type: 'title'),
+      HyText('为日常体验设计', type: 'heading'),
       HyText('清晰的正文与安静的辅助信息。'),
-      HyText('辅助说明 · 13 pt', variant: HyTextStyle.caption),
-      HyText('提示信息 · 12 pt', variant: HyTextStyle.hint),
+      HyText('辅助说明 · 13 pt', type: 'caption'),
+      HyText('提示信息 · 12 pt', type: 'hint'),
       HySpace(direction: Axis.horizontal, children: [HyIcon(HyIcons.home),
         HyIcon(HyIcons.cart), HyIcon(HyIcons.settings), HyIcon(HyIcons.profile)]),
     ])),
@@ -46,8 +46,8 @@ class LayoutExample extends StatelessWidget {
   const LayoutExample({super.key});
   @override
   Widget build(BuildContext context) => HySpace(alignment: CrossAxisAlignment.stretch, children: [
-    const HyText('有序的空间', variant: HyTextStyle.title),
-    HyCard(title: '常用入口 · Grid', footer: const HyText('统一 12 dp 间距', variant: HyTextStyle.caption),
+    const HyText('有序的空间', type: 'title'),
+    HyCard(title: '常用入口 · Grid', footer: const HyText('统一 12 dp 间距', type: 'caption'),
       child: GridView.count(crossAxisCount: 3, shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), padding: EdgeInsets.zero, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 1.2, children: [
         for (final entry in const [(LucideIcons.wallet, '钱包'), (LucideIcons.receiptText, '订单'),
           (LucideIcons.heart, '收藏'), (LucideIcons.mapPin, '地址'),
@@ -83,7 +83,7 @@ class _FormsExampleState extends State<FormsExample> {
   final _form = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) => HySpace(alignment: CrossAxisAlignment.stretch, children: [
-    const HyText('每一次输入，都从容', variant: HyTextStyle.title),
+    const HyText('每一次输入，都从容', type: 'title'),
     HyCard(title: '输入与校验', child: Form(key: _form, child: HySpace(
       alignment: CrossAxisAlignment.stretch, children: [
         HyTextField(hintText: '请输入称呼', maxLength: 20,
@@ -144,7 +144,7 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
   int _tab = 0, _step = 1;
   @override
   Widget build(BuildContext context) => HySpace(alignment: CrossAxisAlignment.stretch, children: [
-    const HyText('流动的秩序', variant: HyTextStyle.title),
+    const HyText('流动的秩序', type: 'title'),
     HyCard(title: '悬浮导航', subtitle: '柔光胶囊 · 选中状态随页面同步', child: Column(children: [
       Padding(padding: const EdgeInsets.all(24), child: Text(['首页', '发现', '我的'][_tab],
         style: Theme.of(context).textTheme.headlineMedium)),

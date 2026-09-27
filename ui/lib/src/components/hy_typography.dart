@@ -3,20 +3,18 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hy_ui_theme_tokens.dart';
 
-enum HyTextStyle { display, title, heading, body, caption, hint }
-
 class HyText extends StatelessWidget {
   const HyText(
     this.data, {
     super.key,
-    this.variant = HyTextStyle.body,
+    this.type = 'body',
     this.color,
     this.weight,
     this.maxLines,
     this.textAlign,
   });
   final String data;
-  final HyTextStyle variant;
+  final String type;
   final Color? color;
   final FontWeight? weight;
   final int? maxLines;
@@ -24,13 +22,14 @@ class HyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyUiThemeTokens.of(context);
-    final size = switch (variant) {
-      HyTextStyle.display => 36.0,
-      HyTextStyle.title => 28.0,
-      HyTextStyle.heading => 20.0,
-      HyTextStyle.body => 14.0,
-      HyTextStyle.caption => 13.0,
-      HyTextStyle.hint => 12.0,
+    final size = switch (type) {
+      'display' => 36.0,
+      'title' => 28.0,
+      'heading' => 20.0,
+      'body' => 14.0,
+      'caption' => 13.0,
+      'hint' => 12.0,
+      _ => throw ArgumentError.value(type, 'type', '不支持的 HyText type'),
     };
     return Text(
       data,

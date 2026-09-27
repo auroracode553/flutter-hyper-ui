@@ -194,7 +194,7 @@ void main() {
             actions: <Widget>[
               HyButton.icon(
                 icon: Icons.add,
-                variant: HyButtonVariant.ghost,
+                type: 'ghost',
                 height: 44,
                 onPressed: () => tapped++,
               ),
@@ -288,7 +288,7 @@ void main() {
     await tester.tap(find.text('打开页面'));
     await tester.pumpAndSettle();
     final back = tester.widget<HyButton>(find.byType(HyButton).last);
-    expect(back.variant, HyButtonVariant.ghost);
+    expect(back.type, 'ghost');
     expect(back.height, 44);
     await tester.tap(find.byType(HyButton).last);
     await tester.pumpAndSettle();

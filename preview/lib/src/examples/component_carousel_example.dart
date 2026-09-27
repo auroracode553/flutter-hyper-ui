@@ -41,7 +41,7 @@ class _CarouselComponentExampleState extends State<CarouselComponentExample> {
           ],
         ),
         const SizedBox(height: HyUiSpacing.xs),
-        HyText('当前第 ${_page + 1} 页', variant: HyTextStyle.caption),
+        HyText('当前第 ${_page + 1} 页', type: 'caption'),
       ],
     );
   }
@@ -69,7 +69,7 @@ class _CarouselPanel extends StatelessWidget {
         children: <Widget>[
           Icon(icon, size: 30, color: tokens.primary),
           const SizedBox(height: HyUiSpacing.xs),
-          HyText(title, variant: HyTextStyle.heading),
+          HyText(title, type: 'heading'),
         ],
       ),
     );
@@ -96,7 +96,7 @@ class _PageIndicatorComponentExampleState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const HyText('点击圆点切换选中页', variant: HyTextStyle.caption),
+        const HyText('点击圆点切换选中页', type: 'caption'),
         const SizedBox(height: HyUiSpacing.xs),
         HyPageIndicator(
           count: 5,
@@ -104,7 +104,7 @@ class _PageIndicatorComponentExampleState
           onSelected: (index) => setState(() => _index = index),
         ),
         const SizedBox(height: HyUiSpacing.sm),
-        const HyText('只读指示器', variant: HyTextStyle.caption),
+        const HyText('只读指示器', type: 'caption'),
         const HyPageIndicator(count: 3, index: 1),
       ],
     );

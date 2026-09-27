@@ -184,7 +184,7 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => HyButton.icon(
     icon: LucideIcons.chevronLeft,
-    variant: HyButtonVariant.ghost,
+    type: 'ghost',
     height: 44,
     iconSize: 20,
     tooltip: MaterialLocalizations.of(context).backButtonTooltip,

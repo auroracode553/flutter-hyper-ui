@@ -24,8 +24,8 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
       alignment: CrossAxisAlignment.stretch,
       spacing: 18,
       children: <Widget>[
-        const HyText('柔性玻璃组件库', variant: HyTextStyle.display),
-        const HyText('统一材质、状态、动效与无障碍语义，不绑定任何业务。', variant: HyTextStyle.caption),
+        const HyText('柔性玻璃组件库', type: 'display'),
+        const HyText('统一材质、状态、动效与无障碍语义，不绑定任何业务。', type: 'caption'),
         HyNavBar(
           title: const Text('Navbar'),
           subtitle: const Text('44px 透明导航栏'),

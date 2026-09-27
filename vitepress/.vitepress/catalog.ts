@@ -107,10 +107,10 @@ export const componentGroups: ComponentGroup[] = [
       demo('data', '徽标、列表与进度', 'data_example.dart', 460, '用于检查数据展示组件的常用组合。'),
     ],
     components: [
-      component('HyText / HyTextStyle', 'hy_typography.dart', '统一的显示、标题、正文、说明和提示文字层级。', {
+      component('HyText', 'hy_typography.dart', '统一的显示、标题、正文、说明和提示文字层级，通过 type 选择文字形态。', {
         propsDocs: [
           { name: 'data', description: '显示的文本内容' },
-          { name: 'variant', description: '文字样式层级，默认 HyTextStyle.body' },
+          { name: 'type', description: '文字样式类型：display / title / heading / body / caption / hint，默认 body' },
           { name: 'color', description: '文字颜色' },
           { name: 'weight', description: '字重' },
           { name: 'maxLines', description: '最大行数' },
@@ -180,11 +180,11 @@ export const componentGroups: ComponentGroup[] = [
       demo('cards', '卡片结构与选择状态', 'cards_example.dart', 520, '包含标题、状态、进度、标签和选中态。'),
     ],
     components: [
-      component('HyButton / HyButtonVariant', 'hy_button.dart', '五种视觉层级（具名构造 filled/tonal/outline/ghost/danger 优先）、高度数值可调、加载、禁用、图标按钮和通栏状态。', {
+      component('HyButton', 'hy_button.dart', '通过 type 统一提供 filled、tonal、outline、ghost、danger 五种视觉层级，并支持加载、禁用、图标按钮和通栏状态。', {
         propsDocs: [
           { name: 'label', description: '按钮文字；省略时配合 icon 自动呈现方形图标按钮' },
           { name: 'onPressed', description: '点击回调；为 null 时按钮进入禁用态' },
-          { name: 'variant', description: '视觉层级，默认 HyButtonVariant.filled；程序化切换时使用，声明式场景建议用下方具名构造' },
+          { name: 'type', description: '视觉类型：filled / tonal / outline / ghost / danger，默认 filled' },
           { name: 'height', description: '按钮高度（px），默认 38；字号、内边距、图标尺寸随高度联动推导' },
           { name: 'icon', description: '前置图标；label 省略时切换为图标按钮' },
           { name: 'trailingIcon', description: '后置图标' },
@@ -343,7 +343,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'suffix', description: '后缀插槽，可放置任意组件' },
           { name: 'enabled', description: '是否启用，默认 true' },
           { name: 'readOnly', description: '是否只读，默认 false' },
-          { name: 'obscureText', description: '是否隐藏输入内容（密码模式），默认 false' },
+          { name: 'type', description: '输入类型：text / search / password / textarea，默认 text' },
           { name: 'showPasswordToggle', description: '是否显示密码显隐按钮，默认 false' },
           { name: 'clearable', description: '是否显示清空按钮，默认 false' },
           { name: 'maxLines', description: '最大行数，默认 1' },

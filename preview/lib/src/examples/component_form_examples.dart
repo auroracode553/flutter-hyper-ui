@@ -9,7 +9,7 @@ class TextFieldComponentExample extends StatelessWidget {
   // 字段标题写在输入框外部：输入组件本身不携带标题与说明。
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -89,7 +89,7 @@ class _SegmentedControlComponentExampleState
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -109,7 +109,7 @@ class _SegmentedControlComponentExampleState
           ],
         ),
         const SizedBox(height: HyUiSpacing.sm),
-        HyText('当前值：$_value', variant: HyTextStyle.caption),
+        HyText('当前值：$_value', type: 'caption'),
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('非等宽布局'),
@@ -237,7 +237,7 @@ class _CheckboxComponentExampleState extends State<CheckboxComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -301,7 +301,7 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -329,7 +329,7 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
                 : (value) => setState(() => _value = value),
           ),
         const SizedBox(height: HyUiSpacing.sm),
-        HyText('当前值：$_value', variant: HyTextStyle.caption),
+        HyText('当前值：$_value', type: 'caption'),
       ],
     );
   }
@@ -350,7 +350,7 @@ class _SwitchComponentExampleState extends State<SwitchComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -406,7 +406,7 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -445,7 +445,7 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
         const SizedBox(height: HyUiSpacing.sm),
         HyText(
           '当前：${_age.toInt()} 岁${_committedAge == null ? '' : ' · $_committedAge'}',
-          variant: HyTextStyle.caption,
+          type: 'caption',
         ),
       ],
     );
@@ -526,7 +526,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   Future<void> _pick() async {
@@ -605,7 +605,7 @@ class _DatePickerComponentExampleState
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   Future<void> _pickDate() async {

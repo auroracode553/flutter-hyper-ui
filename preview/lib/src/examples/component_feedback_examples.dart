@@ -8,7 +8,7 @@ class ToastComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -134,7 +134,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -146,7 +146,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
         _label('右侧抽屉与返回值'),
         HyButton.filled(label: '打开抽屉', onPressed: _openEnd),
         const SizedBox(height: HyUiSpacing.sm),
-        HyText('返回结果：$_result', variant: HyTextStyle.caption),
+        HyText('返回结果：$_result', type: 'caption'),
         const SizedBox(height: HyUiSpacing.lg),
 
         _label('左侧抽屉与底部操作区'),
@@ -163,7 +163,7 @@ class SkeletonComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -190,7 +190,7 @@ class DialogComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -255,7 +255,7 @@ class LoadingComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -306,7 +306,7 @@ class _AlertComponentExampleState extends State<AlertComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -361,7 +361,7 @@ class ActionSheetComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -504,7 +504,7 @@ class _NoticeBarComponentExampleState extends State<NoticeBarComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override

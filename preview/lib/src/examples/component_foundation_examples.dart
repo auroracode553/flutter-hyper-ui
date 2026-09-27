@@ -8,7 +8,7 @@ class TextComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -21,12 +21,12 @@ class TextComponentExample extends StatelessWidget {
         const HySpace(
           alignment: CrossAxisAlignment.start,
           children: [
-            HyText('Display 展示文字', variant: HyTextStyle.display),
-            HyText('Title 页面标题', variant: HyTextStyle.title),
-            HyText('Heading 小节标题', variant: HyTextStyle.heading),
+            HyText('Display 展示文字', type: 'display'),
+            HyText('Title 页面标题', type: 'title'),
+            HyText('Heading 小节标题', type: 'heading'),
             HyText('Body 正文用于清晰、连续的内容阅读。'),
-            HyText('Caption 辅助说明', variant: HyTextStyle.caption),
-            HyText('Hint 弱提示信息', variant: HyTextStyle.hint),
+            HyText('Caption 辅助说明', type: 'caption'),
+            HyText('Hint 弱提示信息', type: 'hint'),
           ],
         ),
         const SizedBox(height: HyUiSpacing.lg),
@@ -50,7 +50,7 @@ class IconComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -98,7 +98,7 @@ class ImageComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -142,7 +142,7 @@ class ImageComponentExample extends StatelessWidget {
                   children: [
                     Icon(LucideIcons.imageOff),
                     SizedBox(height: 4),
-                    HyText('加载失败', variant: HyTextStyle.hint),
+                    HyText('加载失败', type: 'hint'),
                   ],
                 ),
               ),
@@ -161,7 +161,7 @@ class AvatarComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -222,7 +222,7 @@ class _CountBadgeExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -272,7 +272,7 @@ class _StatusBadgeExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -330,7 +330,7 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -405,7 +405,7 @@ class ToneComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -426,7 +426,7 @@ class ToneComponentExample extends StatelessWidget {
         const SizedBox(height: HyUiSpacing.sm),
         const HyText(
           'HyUiTone 跨组件复用：徽标、提示、通知等共用同一套语义色。',
-          variant: HyTextStyle.hint,
+          type: 'hint',
         ),
       ],
     );

@@ -20,7 +20,7 @@ class UiThemeComponentExample extends StatelessWidget {
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(22),
                 ),
-                child: HyText(item.$2, variant: HyTextStyle.heading),
+                child: HyText(item.$2, type: 'heading'),
               ),
             ),
           ),

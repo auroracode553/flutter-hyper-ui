@@ -70,19 +70,19 @@ class ButtonsExample extends StatelessWidget {
             ),
             HyButton.icon(
               icon: LucideIcons.refreshCw,
-              variant: HyButtonVariant.tonal,
+              type: 'tonal',
               onPressed: _noop,
               tooltip: '刷新',
             ),
             HyButton.icon(
               icon: LucideIcons.share2,
-              variant: HyButtonVariant.outline,
+              type: 'outline',
               onPressed: _noop,
               tooltip: '分享',
             ),
             HyButton.icon(
               icon: LucideIcons.trash,
-              variant: HyButtonVariant.danger,
+              type: 'danger',
               onPressed: _noop,
               tooltip: '删除',
             ),

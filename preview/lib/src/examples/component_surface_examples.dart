@@ -8,7 +8,7 @@ class CardComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override
@@ -57,7 +57,7 @@ class GlassComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyUiSpacing.xs),
-    child: HyText(text, variant: HyTextStyle.caption),
+    child: HyText(text, type: 'caption'),
   );
 
   @override

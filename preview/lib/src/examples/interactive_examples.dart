@@ -14,7 +14,7 @@ class _OverlayExampleState extends State<OverlayExample> {
   Widget build(BuildContext context) => HySpace(
     alignment: CrossAxisAlignment.stretch,
     children: [
-      const HyText('恰到好处的回应', variant: HyTextStyle.title),
+      const HyText('恰到好处的回应', type: 'title'),
       if (_alert)
         HyAlert(
           title: '一切准备就绪',
@@ -85,7 +85,7 @@ class _OverlayExampleState extends State<OverlayExample> {
                 title: '本周灵感',
                 builder: (_) => const HySpace(
                   children: [
-                    HyText('把复杂留给系统。', variant: HyTextStyle.title),
+                    HyText('把复杂留给系统。', type: 'title'),
                     HyText('让界面回归轻盈与自然。'),
                     HySkeleton(rows: 2),
                   ],
@@ -163,7 +163,7 @@ class _BusinessExampleState extends State<BusinessExample> {
   Widget build(BuildContext context) => HySpace(
     alignment: CrossAxisAlignment.stretch,
     children: [
-      const HyText('日常，由细节组成', variant: HyTextStyle.title),
+      const HyText('日常，由细节组成', type: 'title'),
       HyTextField(
         prefix: const Icon(LucideIcons.search),
         hintText: '搜索',

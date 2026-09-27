@@ -11,15 +11,13 @@ import 'hy_tooltip.dart';
 
 /// 按钮视觉层级。filled / tonal / outline / ghost 视觉重量依次递减，
 /// danger 为危险语义的红色强调（等效 filled 层级的红）。
-enum HyButtonVariant { filled, tonal, outline, ghost, danger }
-
 /// 通用柔性玻璃按钮。
 ///
 /// 各变体共享相同尺寸、触控反馈和无障碍行为；颜色仅表达动作层级，不绑定业务。
 ///
 /// 属性约定：
 /// - 变体优先使用具名构造 `HyButton.filled / tonal / outline / ghost / danger`，
-///   需要程序化切换时才用底层 [variant] 参数。
+///   需要程序化切换时才用底层 [type] 参数。
 /// - 高度用数值 [height] 控制（默认 38），字号、内边距与图标尺寸随高度联动推导，
 ///   不需要枚举档位；更小/更大的按钮直接传对应像素值。
 /// - 宽度默认按内容收缩（等价 CSS 的 inline-block），需要铺满父级时传 [expanded]。
@@ -32,7 +30,7 @@ class HyButton extends StatelessWidget {
     super.key,
     this.label,
     this.onPressed,
-    this.variant = HyButtonVariant.filled,
+    this.type = 'filled',
     this.height = 38,
     this.icon,
     this.trailingIcon,
@@ -56,7 +54,7 @@ class HyButton extends StatelessWidget {
     super.key,
     required this.icon,
     this.onPressed,
-    this.variant = HyButtonVariant.tonal,
+    this.type = 'tonal',
     this.height = 36,
     this.loading = false,
     this.radius = HyUiRadii.full,
@@ -88,7 +86,7 @@ class HyButton extends StatelessWidget {
     this.semanticLabel,
     this.color,
     this.backgroundColor,
-  }) : variant = HyButtonVariant.filled;
+  }) : type = 'filled';
 
   const HyButton.tonal({
     super.key,
@@ -107,7 +105,7 @@ class HyButton extends StatelessWidget {
     this.semanticLabel,
     this.color,
     this.backgroundColor,
-  }) : variant = HyButtonVariant.tonal;
+  }) : type = 'tonal';
 
   const HyButton.outline({
     super.key,
@@ -126,7 +124,7 @@ class HyButton extends StatelessWidget {
     this.semanticLabel,
     this.color,
     this.backgroundColor,
-  }) : variant = HyButtonVariant.outline;
+  }) : type = 'outline';
 
   const HyButton.ghost({
     super.key,
@@ -145,7 +143,7 @@ class HyButton extends StatelessWidget {
     this.semanticLabel,
     this.color,
     this.backgroundColor,
-  }) : variant = HyButtonVariant.ghost;
+  }) : type = 'ghost';
 
   const HyButton.danger({
     super.key,
@@ -164,11 +162,11 @@ class HyButton extends StatelessWidget {
     this.semanticLabel,
     this.color,
     this.backgroundColor,
-  }) : variant = HyButtonVariant.danger;
+  }) : type = 'danger';
 
   final String? label;
   final VoidCallback? onPressed;
-  final HyButtonVariant variant;
+  final String type;
   final double height;
   final IconData? icon;
   final IconData? trailingIcon;
@@ -189,6 +187,10 @@ class HyButton extends StatelessWidget {
     final glass = HyGlassTheme.of(context);
     final disabled = onPressed == null;
     final blocked = disabled || loading;
+    assert(
+      const <String>{'filled', 'tonal', 'outline', 'ghost', 'danger'}.contains(type),
+      'HyButton.type 必须是 filled、tonal、outline、ghost 或 danger。',
+    );
     final metrics = _HyButtonMetrics.fromHeight(height);
     final hasLabel = label != null && label!.isNotEmpty;
     final isIconOnly = !hasLabel && (icon != null || loading);
@@ -200,12 +202,12 @@ class HyButton extends StatelessWidget {
     final visual = _HyButtonVisual.resolve(
       tokens: tokens,
       glass: glass,
-      variant: variant,
+      type: type,
       disabled: disabled,
     );
     final foreground = color ?? visual.foreground;
     final background = backgroundColor ??
-        (isIconOnly && variant == HyButtonVariant.tonal
+        (isIconOnly && type == 'tonal'
             ? glass.surface
             : visual.background);
     final isSquare = isIconOnly || circle;
@@ -223,12 +225,12 @@ class HyButton extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: backgroundColor != null ||
-                (isIconOnly && variant == HyButtonVariant.tonal) ||
+                (isIconOnly && type == 'tonal') ||
                 visual.gradient == null
             ? background
             : null,
         gradient: backgroundColor != null ||
-                (isIconOnly && variant == HyButtonVariant.tonal)
+                (isIconOnly && type == 'tonal')
             ? null
             : visual.gradient,
         borderRadius: borderRadius,
@@ -393,25 +395,24 @@ class _HyButtonVisual {
   static _HyButtonVisual resolve({
     required HyUiThemeTokens tokens,
     required HyGlassTheme glass,
-    required HyButtonVariant variant,
+    required String type,
     required bool disabled,
   }) {
     if (disabled) {
       return _HyButtonVisual(
-        background: variant == HyButtonVariant.ghost
+        background: type == 'ghost'
             ? Colors.transparent
             : glass.controlTrack,
         foreground: tokens.mutedForeground.withAlpha(150),
         // 禁用态保留弱化轮廓，色相与启用态一致（edgeShade 在浅色下仅 7% 黑，轮廓不可见）。
-        border: variant == HyButtonVariant.ghost
+        border: type == 'ghost'
             ? Colors.transparent
             : tokens.border.withAlpha(110),
       );
     }
 
-    if (variant == HyButtonVariant.filled ||
-        variant == HyButtonVariant.danger) {
-      final base = variant == HyButtonVariant.danger
+    if (type == 'filled' || type == 'danger') {
+      final base = type == 'danger'
           ? tokens.error
           : tokens.primary;
       return _HyButtonVisual(
@@ -434,26 +435,24 @@ class _HyButtonVisual {
       );
     }
 
-    return switch (variant) {
-      HyButtonVariant.tonal => _HyButtonVisual(
+    return switch (type) {
+      'tonal' => _HyButtonVisual(
         background: glass.selection,
         foreground: tokens.foreground,
         border: glass.edgeHighlight,
       ),
-      HyButtonVariant.outline => _HyButtonVisual(
+      'outline' => _HyButtonVisual(
         background: glass.surfaceSubtle,
         foreground: tokens.foreground,
         // outline 层级依赖可感知轮廓，使用语义边框令牌而非玻璃分隔色。
         border: tokens.border,
       ),
-      HyButtonVariant.ghost => _HyButtonVisual(
+      'ghost' => _HyButtonVisual(
         background: Colors.transparent,
         foreground: tokens.foreground,
         border: Colors.transparent,
       ),
-      HyButtonVariant.filled || HyButtonVariant.danger => throw StateError(
-        'Filled variants are resolved before the switch.',
-      ),
+      _ => throw ArgumentError.value(type, 'type', '不支持的 HyButton type'),
     };
   }
 }

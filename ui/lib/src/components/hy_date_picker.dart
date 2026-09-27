@@ -424,9 +424,9 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                       final target = DateTime(year, month);
                       return HyButton(
                         label: '$month 月',
-                        variant: month == _visibleMonth.month
-                            ? HyButtonVariant.filled
-                            : HyButtonVariant.tonal,
+                        type: month == _visibleMonth.month
+                            ? 'filled'
+                            : 'tonal',
                         height: 42,
                         expanded: true,
                         onPressed: _monthAvailable(target)
