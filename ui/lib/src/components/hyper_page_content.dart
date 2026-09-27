@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// 页面内容 sliver：统一内容边距，并在宽屏（桌面/平板）下居中限宽。
 ///

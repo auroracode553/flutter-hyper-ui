@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -94,20 +95,33 @@ class HyperRadio<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = _selectionTheme(context);
-    final radio = Radio<T>(
-      value: value,
-      groupValue: groupValue,
-      onChanged: onChanged == null
-          ? null
-          : (next) {
-              if (next != null) onChanged!(next);
-            },
+    final tokens = HyperUiThemeTokens.of(context);
+    final glass = HyperGlassTheme.of(context);
+    final selected = value == groupValue;
+    final radio = HyperPressable(
+      onPressed: onChanged == null ? null : () => onChanged!(value),
+      child: SizedBox.square(
+        dimension: 44,
+        child: Center(
+          child: Container(
+            width: 21,
+            height: 21,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: glass.surfaceSubtle,
+              border: Border.all(
+                color: selected ? tokens.primary : tokens.input,
+                width: selected ? 6 : 1.5,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
-    if (label == null) return Theme(data: theme, child: radio);
+    if (label == null) return radio;
     return HyperListTile(
       title: label!,
-      trailing: Theme(data: theme, child: radio),
+      trailing: radio,
       grouped: true,
       enabled: onChanged != null,
       showChevron: false,
@@ -117,7 +131,12 @@ class HyperRadio<T> extends StatelessWidget {
 }
 
 class HyperSwitch extends StatelessWidget {
-  const HyperSwitch({super.key, required this.value, this.onChanged, this.label});
+  const HyperSwitch({
+    super.key,
+    required this.value,
+    this.onChanged,
+    this.label,
+  });
 
   final bool value;
   final ValueChanged<bool>? onChanged;
@@ -157,7 +176,7 @@ class _HyperSwitchControl extends StatelessWidget {
             enabled ? glass.surfaceStrong : glass.surfaceSubtle,
           );
     final outlineColor = value
-        ? Colors.transparent
+        ? HyperPalette.transparent
         : Color.alphaBlend(glass.edgeShade, glass.edgeHighlight);
 
     return HyperPressable(
@@ -189,7 +208,7 @@ class _HyperSwitchControl extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-                    color: Colors.black.withAlpha(enabled ? 24 : 12),
+                    color: HyperPalette.black.withAlpha(enabled ? 24 : 12),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   ),
@@ -230,91 +249,95 @@ class HyperSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
-    return SliderTheme(
-      data: SliderTheme.of(context).copyWith(
-        activeTrackColor: tokens.primary,
-        inactiveTrackColor: glass.controlTrack,
-        disabledActiveTrackColor: tokens.primary.withAlpha(80),
-        disabledInactiveTrackColor: glass.controlTrack,
-        trackHeight: 6,
-        thumbColor: tokens.card,
-        disabledThumbColor: tokens.muted,
-        overlayColor: tokens.primary.withAlpha(24),
-        valueIndicatorColor: glass.surfaceStrong,
-        valueIndicatorTextStyle: TextStyle(
-          color: tokens.foreground,
-          fontWeight: FontWeight.w600,
+    final amount = ((value.clamp(min, max) - min) / (max - min)).toDouble();
+    double nextValue(double localX, double width) {
+      final fraction = (localX / width).clamp(0.0, 1.0);
+      var next = min + fraction * (max - min);
+      if (divisions != null && divisions! > 0) {
+        next =
+            min +
+            ((next - min) / (max - min) * divisions!).round() *
+                (max - min) /
+                divisions!;
+      }
+      return next;
+    }
+
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) => GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTapDown: onChanged == null
+                  ? null
+                  : (details) => onChanged!(
+                      nextValue(details.localPosition.dx, constraints.maxWidth),
+                    ),
+              onHorizontalDragStart: onChanged == null
+                  ? null
+                  : (_) => onChangeStart?.call(value),
+              onHorizontalDragUpdate: onChanged == null
+                  ? null
+                  : (details) => onChanged!(
+                      nextValue(details.localPosition.dx, constraints.maxWidth),
+                    ),
+              onHorizontalDragEnd: onChanged == null
+                  ? null
+                  : (_) => onChangeEnd?.call(value),
+              child: SizedBox(
+                height: 44,
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: <Widget>[
+                    Container(
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: glass.controlTrack,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                    Container(
+                      width: constraints.maxWidth * amount,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: tokens.primary,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                    Positioned(
+                      left: (constraints.maxWidth * amount - 10).clamp(
+                        0.0,
+                        constraints.maxWidth - 20,
+                      ),
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: onChanged == null ? tokens.muted : tokens.card,
+                          border: Border.all(color: tokens.primary, width: 2),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: HyperPalette.black.withAlpha(30),
+                              blurRadius: 5,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
-        thumbShape: const RoundSliderThumbShape(
-          enabledThumbRadius: 10,
-          elevation: 3,
-          pressedElevation: 5,
-        ),
-        overlayShape: const RoundSliderOverlayShape(overlayRadius: 22),
-      ),
-      child: Slider(
-        value: value.clamp(min, max).toDouble(),
-        min: min,
-        max: max,
-        divisions: divisions,
-        onChanged: onChanged,
-        onChangeStart: onChangeStart,
-        onChangeEnd: onChangeEnd,
-        label: showValue ? value.toStringAsFixed(0) : null,
-      ),
+        if (showValue)
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Text(value.toStringAsFixed(0)),
+          ),
+      ],
     );
   }
-}
-
-ThemeData _selectionTheme(BuildContext context) {
-  final base = Theme.of(context);
-  final tokens = HyperUiThemeTokens.of(context);
-  final glass = HyperGlassTheme.of(context);
-  Color? stateColor(Set<WidgetState> states) {
-    if (states.contains(WidgetState.disabled)) {
-      return tokens.mutedForeground.withAlpha(80);
-    }
-    if (states.contains(WidgetState.selected)) return tokens.primary;
-    return glass.surfaceStrong;
-  }
-
-  return base.copyWith(
-    splashFactory: NoSplash.splashFactory,
-    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    visualDensity: VisualDensity.compact,
-    checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.resolveWith(stateColor),
-      checkColor: WidgetStatePropertyAll(tokens.primaryForeground),
-      overlayColor: WidgetStatePropertyAll(tokens.primary.withAlpha(24)),
-      side: BorderSide(color: tokens.input, width: 1.2),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-    ),
-    radioTheme: RadioThemeData(
-      fillColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.disabled)) {
-          return tokens.mutedForeground.withAlpha(80);
-        }
-        return states.contains(WidgetState.selected)
-            ? tokens.primary
-            : tokens.mutedForeground;
-      }),
-      overlayColor: WidgetStatePropertyAll(tokens.primary.withAlpha(24)),
-    ),
-    switchTheme: SwitchThemeData(
-      trackColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.disabled)) return glass.controlTrack;
-        return states.contains(WidgetState.selected)
-            ? tokens.primary
-            : glass.controlTrack;
-      }),
-      thumbColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.disabled)) return tokens.muted;
-        return states.contains(WidgetState.selected)
-            ? tokens.primaryForeground
-            : tokens.card;
-      }),
-      trackOutlineColor: WidgetStatePropertyAll(tokens.input),
-      overlayColor: WidgetStatePropertyAll(tokens.primary.withAlpha(24)),
-    ),
-  );
 }

@@ -1,68 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
-
-// doc-region CountDownComponentExample
-class CountDownComponentExample extends StatefulWidget {
-  const CountDownComponentExample({super.key});
-
-  @override
-  State<CountDownComponentExample> createState() =>
-      _CountDownComponentExampleState();
-}
-
-class _CountDownComponentExampleState extends State<CountDownComponentExample> {
-  // 用 20 秒演示结束回调，便于在预览中观察 onFinished 触发。
-  late DateTime _endTime = DateTime.now().add(const Duration(seconds: 20));
-  bool _finished = false;
-
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, type: 'h5'),
-  );
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      _label('基础倒计时（onFinished 结束回调）'),
-      HyperGlass(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Expanded(child: Text(_finished ? '倒计时已结束' : '限时操作')),
-            HyperCountDown(
-              endTime: _endTime,
-              onFinished: () => setState(() => _finished = true),
-            ),
-            HyperButton.icon(
-              icon: LucideIcons.refreshCw,
-              tooltip: '重新开始',
-              onPressed: () => setState(() {
-                _endTime = DateTime.now().add(const Duration(seconds: 20));
-                _finished = false;
-              }),
-            ),
-          ],
-        ),
-      ),
-      const SizedBox(height: HyperUiSpacing.lg),
-
-      _label('自定义渲染（builder 接收剩余时长）'),
-      HyperGlass(
-        padding: const EdgeInsets.all(16),
-        child: HyperCountDown(
-          endTime: DateTime.now().add(const Duration(hours: 2, minutes: 5)),
-          builder: (context, remaining) => Text(
-            '剩余 ${remaining.inHours} 小时 ${remaining.inMinutes % 60} 分',
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ),
-      ),
-    ],
-  );
-}
-// end-doc-region CountDownComponentExample
 
 // doc-region CollapseComponentExample
 class CollapseComponentExample extends StatefulWidget {
@@ -97,7 +35,10 @@ class _CollapseComponentExampleState extends State<CollapseComponentExample> {
                 setState(() => _status = expanded ? '已展开' : '已收起'),
             child: const Text('状态变化后立即更新，动画可被中断。'),
           ),
-          HyperCollapse(title: '是否支持暗色模式？', child: const Text('所有颜色都来自主题语义令牌。')),
+          HyperCollapse(
+            title: '是否支持暗色模式？',
+            child: const Text('所有颜色都来自主题语义令牌。'),
+          ),
         ],
       ),
       const SizedBox(height: HyperUiSpacing.sm),
@@ -123,8 +64,16 @@ class TimelineComponentExample extends StatelessWidget {
       _label('事件状态（complete 标记已完成节点）'),
       const HyperTimeline(
         items: [
-          HyperTimelineItem(title: '需求确认', description: '范围与交互已确认', time: '09:30'),
-          HyperTimelineItem(title: '组件开发', description: '正在补齐独立预览', time: '11:20'),
+          HyperTimelineItem(
+            title: '需求确认',
+            description: '范围与交互已确认',
+            time: '09:30',
+          ),
+          HyperTimelineItem(
+            title: '组件开发',
+            description: '正在补齐独立预览',
+            time: '11:20',
+          ),
           HyperTimelineItem(
             title: '发布文档',
             description: '等待构建',

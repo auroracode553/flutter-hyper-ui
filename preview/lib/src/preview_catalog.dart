@@ -163,7 +163,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'business',
       title: '业务组件',
-      description: '设置菜单、搜索、倒计时与时间轴。',
+      description: '设置菜单、搜索与时间轴。',
       loadLibrary: () => example_interactive_examples.loadLibrary(),
       builder: (_) => example_interactive_examples.BusinessExample(),
     ),
@@ -573,13 +573,6 @@ class PreviewCatalog {
       '可直接跳页的受控分页。',
       () => example_component_pagination_example.loadLibrary(),
       (_) => example_component_pagination_example.PaginationComponentExample(),
-    ),
-    _componentPreview(
-      'component-count-down',
-      'HyperCountDown',
-      '绝对时间倒计时。',
-      () => example_component_composite_examples.loadLibrary(),
-      (_) => example_component_composite_examples.CountDownComponentExample(),
     ),
     _componentPreview(
       'component-collapse',

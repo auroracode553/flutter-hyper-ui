@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class HyperScreen {
   const HyperScreen(this.context, {this.designWidth = 375});
@@ -38,8 +38,8 @@ abstract final class HyperRoute {
     WidgetBuilder builder, {
     String? name,
   }) => Navigator.of(context).push<T>(
-    MaterialPageRoute<T>(
-      builder: builder,
+    PageRouteBuilder<T>(
+      pageBuilder: (context, animation, secondaryAnimation) => builder(context),
       settings: RouteSettings(name: name),
     ),
   );
@@ -47,16 +47,20 @@ abstract final class HyperRoute {
       Navigator.of(context).maybePop<T>(result);
 }
 
-/// 由应用持有并释放，通过 ListenableBuilder 连接 MaterialApp。
+/// 由应用持有并释放，通过 ListenableBuilder 连接 HyperUiTheme。
+enum HyperThemeMode { system, light, dark }
+
 class HyperThemeController extends ChangeNotifier {
-  HyperThemeController({ThemeMode mode = ThemeMode.system, Color? primary})
-    : _mode = mode,
-      _primary = primary;
-  ThemeMode _mode;
+  HyperThemeController({
+    HyperThemeMode mode = HyperThemeMode.system,
+    Color? primary,
+  }) : _mode = mode,
+       _primary = primary;
+  HyperThemeMode _mode;
   Color? _primary;
-  ThemeMode get mode => _mode;
+  HyperThemeMode get mode => _mode;
   Color? get primary => _primary;
-  void setMode(ThemeMode value) {
+  void setMode(HyperThemeMode value) {
     if (_mode == value) return;
     _mode = value;
     notifyListeners();

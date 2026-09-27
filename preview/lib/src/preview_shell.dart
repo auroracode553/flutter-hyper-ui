@@ -1,5 +1,5 @@
 import 'package:flutter_hyper_ui/hyper_ui_preview_core.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'preview_catalog.dart';
@@ -57,10 +57,7 @@ class _EmbeddedPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: _PreviewContent(item: item, onReady: onReady, onError: onError),
-    );
+    return _PreviewContent(item: item, onReady: onReady, onError: onError);
   }
 }
 
@@ -115,9 +112,9 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
     final tokens = HyperUiThemeTokens.of(context);
     final selected = _selected;
 
-    return Scaffold(
-      backgroundColor: tokens.background,
-      body: SafeArea(
+    return ColoredBox(
+      color: tokens.background,
+      child: SafeArea(
         child: Column(
           children: [
             HyperNavBar(

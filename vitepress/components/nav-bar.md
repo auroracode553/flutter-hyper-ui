@@ -9,28 +9,32 @@ description: 44px 透明导航栏
 
 `HyperNavBar` 默认高度为 **44px**（不含状态栏），默认左对齐，与正文共享 16px 起始边距。导航容器不绘制背景、模糊、边框或阴影；自定义插槽可以自行渲染所需内容。副内容不自动增加高度，需要较大字号或更高的插槽时，显式设置 `height`。
 
-交互示例使用标准 `Scaffold` 页面。手机安全区由预览宿主提供。
+交互示例使用 Flutter 布局基底。手机安全区由预览宿主提供。
 
-实际页面把 `HyperNavBar` 放在 `Scaffold.appBar` 中：
+实际页面可以用 `Column` 固定导航栏，并让滚动内容占据剩余空间：
 
 ```dart
-Scaffold(
-  appBar: const HyperNavBar(title: Text('今日灵感')),
-  body: CustomScrollView(
-    slivers: [
-      SliverPadding(
-        padding: const EdgeInsets.all(16),
-        sliver: SliverList.builder(
-          itemCount: 30,
-          itemBuilder: (_, index) => HyperListTile(title: '灵感 $index'),
-        ),
+Column(
+  children: <Widget>[
+    const HyperNavBar(title: Text('今日灵感')),
+    Expanded(
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList.builder(
+              itemCount: 30,
+              itemBuilder: (_, index) => HyperListTile(title: '灵感 $index'),
+            ),
+          ),
+        ],
       ),
-    ],
-  ),
+    ),
+  ],
 )
 ```
 
-`Scaffold` 负责导航栏占位和页面布局；滚动内容由 `CustomScrollView` 管理。
+`Expanded` 为导航栏下方的滚动内容提供剩余空间。
 
 ## 破坏性变更
 

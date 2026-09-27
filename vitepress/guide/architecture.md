@@ -29,7 +29,7 @@ Hyper UI 由四层组成，依赖只允许从上向下：
 
 ## 主题边界
 
-组件读取 ThemeExtension，不直接依赖某个应用的常量文件。语义色与玻璃材质分离，因此品牌色变化不会意外改变遮罩、边缘和阴影的空间含义。
+组件通过 `HyperUiTheme` 读取令牌，不直接依赖某个应用的常量文件。语义色与玻璃材质分离，因此品牌色变化不会意外改变遮罩、边缘和阴影的空间含义。
 
 ## 平台能力
 
@@ -41,6 +41,13 @@ Hyper UI 由四层组成，依赖只允许从上向下：
 - `components/`：一个文件聚焦一个组件族。
 - `utils/`：不包含组件状态的通用辅助功能。
 - `hyper_ui.dart`：唯一公开导出入口。
+
+本次基础设施拆分后的文件关系：
+
+- `theme/hyper_ui_theme.dart` 提供主题容器，`hyper_ui_theme_tokens.dart` 和 `hyper_glass_theme.dart` 提供两组令牌；`hyper_palette.dart` 保存绘制基底使用的中性色。
+- `components/hyper_progress_painters.dart` 提供自绘加载环与进度轨道，供按钮、导航、上传和反馈组件复用。
+- `components/hyper_modal.dart` 提供浮层路由，供操作面板、对话框与图片预览复用；`hyper_anchored_surface.dart` 提供下拉菜单和气泡菜单的锚定浮层。
+- `components/hyper_tab_controller.dart` 连接标签栏与内容区；`hyper_wheel_picker.dart` 提供选择器的通用滚轮。
 
 单个源码文件应保持明确职责；高阶组件通过组合基础组件实现，不复制材质和状态逻辑。
 

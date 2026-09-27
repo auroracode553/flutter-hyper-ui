@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region PaginationComponentExample
@@ -10,7 +10,8 @@ class PaginationComponentExample extends StatefulWidget {
       _PaginationComponentExampleState();
 }
 
-class _PaginationComponentExampleState extends State<PaginationComponentExample> {
+class _PaginationComponentExampleState
+    extends State<PaginationComponentExample> {
   int _page = 7;
 
   @override

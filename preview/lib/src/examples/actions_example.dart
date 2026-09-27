@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'buttons_example.dart';
 import 'cards_example.dart';
@@ -12,11 +12,7 @@ class ActionsExample extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
-      children: [
-        ButtonsExample(),
-        SizedBox(height: 24),
-        CardsExample(),
-      ],
+      children: [ButtonsExample(), SizedBox(height: 24), CardsExample()],
     );
   }
 }

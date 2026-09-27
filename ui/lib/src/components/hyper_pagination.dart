@@ -1,6 +1,7 @@
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -18,8 +19,10 @@ class HyperPagination extends StatelessWidget {
     this.maxVisiblePages = 5,
   }) : assert(pageCount >= 0),
        assert(maxVisiblePages >= 1),
-       assert((pageCount == 0 && page == 0) ||
-           (pageCount > 0 && page >= 1 && page <= pageCount));
+       assert(
+         (pageCount == 0 && page == 0) ||
+             (pageCount > 0 && page >= 1 && page <= pageCount),
+       );
 
   final int page;
   final int pageCount;
@@ -70,7 +73,10 @@ class HyperPagination extends StatelessWidget {
             if (pageCount == 0)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Text('0 / 0', style: TextStyle(color: tokens.mutedForeground)),
+                child: Text(
+                  '0 / 0',
+                  style: TextStyle(color: tokens.mutedForeground),
+                ),
               )
             else
               for (final number in _visiblePages())
@@ -97,7 +103,7 @@ class HyperPagination extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: number == page
                                 ? tokens.muted
-                                : Colors.transparent,
+                                : HyperPalette.transparent,
                             borderRadius: BorderRadius.circular(11),
                           ),
                           child: Text(

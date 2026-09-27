@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -84,8 +84,16 @@ class IconComponentExample extends StatelessWidget {
             HyperIcon(HyperIcons.image, size: 18),
             HyperIcon(HyperIcons.image, size: 24),
             HyperIcon(HyperIcons.image, size: 32),
-            HyperIcon(HyperIcons.warning, size: 28, color: HyperUiColors.warning),
-            HyperIcon(HyperIcons.success, size: 28, color: HyperUiColors.success),
+            HyperIcon(
+              HyperIcons.warning,
+              size: 28,
+              color: HyperUiColors.warning,
+            ),
+            HyperIcon(
+              HyperIcons.success,
+              size: 28,
+              color: HyperUiColors.success,
+            ),
           ],
         ),
       ],
@@ -191,8 +199,16 @@ class AvatarComponentExample extends StatelessWidget {
           children: [
             HyperAvatar(text: '设计', size: 64, radius: 20),
             HyperAvatar(text: '品', size: 56, radius: 16),
-            HyperAvatar(text: 'A', size: 56, backgroundColor: HyperUiColors.primary),
-            HyperAvatar(text: 'B', size: 56, backgroundColor: HyperUiColors.success),
+            HyperAvatar(
+              text: 'A',
+              size: 56,
+              backgroundColor: HyperUiColors.primary,
+            ),
+            HyperAvatar(
+              text: 'B',
+              size: 56,
+              backgroundColor: HyperUiColors.success,
+            ),
           ],
         ),
       ],
@@ -259,7 +275,10 @@ class _CountBadgeExample extends StatelessWidget {
           spacing: 26,
           runSpacing: 8,
           children: [
-            HyperBadge.count(dot: true, child: HyperIcon(LucideIcons.bell, size: 32)),
+            HyperBadge.count(
+              dot: true,
+              child: HyperIcon(LucideIcons.bell, size: 32),
+            ),
           ],
         ),
       ],

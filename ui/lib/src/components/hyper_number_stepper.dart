@@ -1,6 +1,6 @@
 import 'dart:ui' show FontFeature;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -65,7 +65,9 @@ class HyperNumberStepper extends StatelessWidget {
                   color: tokens.foreground,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  fontFeatures: const <FontFeature>[FontFeature.tabularFigures()],
+                  fontFeatures: const <FontFeature>[
+                    FontFeature.tabularFigures(),
+                  ],
                 ),
               ),
             ),

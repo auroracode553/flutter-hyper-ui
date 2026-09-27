@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter/widgets.dart';
+import 'hyper_modal.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -69,10 +71,10 @@ class HyperImage extends StatelessWidget {
     );
     return GestureDetector(
       onTap: preview
-          ? () => showDialog<void>(
-              context: context,
-              builder: (dialogContext) => Dialog.fullscreen(
-                backgroundColor: Colors.black,
+          ? () => showHyperModal<void>(
+              context,
+              scrim: HyperPalette.black,
+              builder: (dialogContext) => SizedBox.expand(
                 child: Stack(
                   children: [
                     Positioned.fill(
@@ -92,8 +94,8 @@ class HyperImage extends StatelessWidget {
                         child: HyperButton.icon(
                           icon: LucideIcons.x,
                           tooltip: '关闭预览',
-                          color: Colors.white,
-                          backgroundColor: Colors.black38,
+                          color: HyperPalette.white,
+                          backgroundColor: HyperPalette.black38,
                           onPressed: () => Navigator.pop(dialogContext),
                         ),
                       ),
@@ -141,8 +143,8 @@ class HyperAvatar extends StatelessWidget {
     final surface = backgroundColor ?? tokens.selectionBackground;
     final foreground = backgroundColor == null
         ? tokens.primary
-        : ThemeData.estimateBrightnessForColor(surface) == Brightness.dark
-        ? Colors.white
+        : surface.computeLuminance() < 0.5
+        ? HyperPalette.white
         : tokens.foreground;
     final fallback = Center(
       child: text == null || text!.isEmpty

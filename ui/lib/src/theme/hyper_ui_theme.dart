@@ -1,108 +1,62 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-import 'hyper_ui_radii.dart';
-import 'hyper_ui_spacing.dart';
-import 'hyper_ui_theme_tokens.dart';
 import 'hyper_glass_theme.dart';
+import 'hyper_ui_theme_tokens.dart';
 
-class HyperUiTheme {
-  const HyperUiTheme._();
+/// Hyper UI's own visual configuration.
+@immutable
+class HyperUiThemeData {
+  const HyperUiThemeData({
+    required this.brightness,
+    required this.tokens,
+    required this.glass,
+    this.fontFamily,
+  });
 
-  static ThemeData light({Color? primary, String? fontFamily}) {
-    return _buildTheme(
-      brightness: Brightness.light,
-      tokens: HyperUiThemeTokens.light(primary: primary),
-      fontFamily: fontFamily,
-    );
-  }
+  final Brightness brightness;
+  final HyperUiThemeTokens tokens;
+  final HyperGlassTheme glass;
+  final String? fontFamily;
 
-  static ThemeData dark({Color? primary, String? fontFamily}) {
-    return _buildTheme(
-      brightness: Brightness.dark,
-      tokens: HyperUiThemeTokens.dark(primary: primary),
-      fontFamily: fontFamily,
-    );
-  }
-
-  static ThemeData _buildTheme({
-    required Brightness brightness,
-    required HyperUiThemeTokens tokens,
+  HyperUiThemeData copyWith({
+    Brightness? brightness,
+    HyperUiThemeTokens? tokens,
+    HyperGlassTheme? glass,
     String? fontFamily,
-  }) {
-    final glass = brightness == Brightness.dark
-        ? HyperGlassTheme.dark()
-        : HyperGlassTheme.light();
-    final colorScheme =
-        ColorScheme.fromSeed(
-          seedColor: tokens.primary,
-          brightness: brightness,
-        ).copyWith(
-          primary: tokens.primary,
-          onPrimary: tokens.primaryForeground,
-          surface: tokens.card,
-          onSurface: tokens.cardForeground,
-          surfaceContainerHighest: tokens.muted,
-          onSurfaceVariant: tokens.mutedForeground,
-          outline: tokens.border,
-          outlineVariant: tokens.border,
-          error: tokens.error,
-          onError: tokens.primaryForeground,
-        );
+  }) => HyperUiThemeData(
+    brightness: brightness ?? this.brightness,
+    tokens: tokens ?? this.tokens,
+    glass: glass ?? this.glass,
+    fontFamily: fontFamily ?? this.fontFamily,
+  );
+}
 
-    return ThemeData(
-      useMaterial3: true,
-      brightness: brightness,
-      colorScheme: colorScheme,
-      fontFamily: fontFamily,
-      scaffoldBackgroundColor: tokens.background,
-      extensions: <ThemeExtension<dynamic>>[tokens, glass],
-      appBarTheme: AppBarTheme(
-        backgroundColor: tokens.background,
-        foregroundColor: tokens.foreground,
-        elevation: 0,
-        centerTitle: false,
-        titleSpacing: 0,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: glass.surfaceSubtle,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(HyperUiRadii.sm),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(HyperUiRadii.sm),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(HyperUiRadii.sm),
-          borderSide: BorderSide(color: tokens.primary),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(HyperUiRadii.sm),
-          borderSide: BorderSide(color: tokens.error),
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: HyperUiSpacing.sm,
-          vertical: HyperUiSpacing.sm,
-        ),
-        hintStyle: TextStyle(color: tokens.mutedForeground, fontSize: 14),
-      ),
-      snackBarTheme: SnackBarThemeData(
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        contentTextStyle: TextStyle(color: tokens.foreground, fontSize: 14),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(HyperUiRadii.sm),
-        ),
-      ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: tokens.primary,
-        foregroundColor: tokens.primaryForeground,
-        elevation: 4,
-        shape: const CircleBorder(),
-      ),
-    );
-  }
+/// Provides Hyper colors and glass surfaces to descendant widgets.
+class HyperUiTheme extends InheritedWidget {
+  const HyperUiTheme({super.key, required this.data, required super.child});
+
+  final HyperUiThemeData data;
+
+  static HyperUiThemeData light({Color? primary, String? fontFamily}) =>
+      HyperUiThemeData(
+        brightness: Brightness.light,
+        tokens: HyperUiThemeTokens.light(primary: primary),
+        glass: HyperGlassTheme.light(),
+        fontFamily: fontFamily,
+      );
+
+  static HyperUiThemeData dark({Color? primary, String? fontFamily}) =>
+      HyperUiThemeData(
+        brightness: Brightness.dark,
+        tokens: HyperUiThemeTokens.dark(primary: primary),
+        glass: HyperGlassTheme.dark(),
+        fontFamily: fontFamily,
+      );
+
+  static HyperUiThemeData of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<HyperUiTheme>()?.data ??
+      light();
+
+  @override
+  bool updateShouldNotify(HyperUiTheme oldWidget) => data != oldWidget.data;
 }

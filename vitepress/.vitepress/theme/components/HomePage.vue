@@ -28,13 +28,14 @@ onBeforeUnmount(() => disposePhone?.());
       <div class="hyper-home__intro-copy">
         <h1>为 Flutter 而生的<span>柔性玻璃 UI 库</span></h1>
         <p class="hyper-home__lede">
-          一套流行的 Flutter 柔性玻璃组件库，用统一的材质令牌、细腻的边缘高光与自然连贯的动效，让界面自带通透质感。
+          Hyper UI 是一套流行的 Flutter 柔性玻璃组件库。全部组件自绘实现，不依赖
+          Material 视觉体系；统一材质令牌与边缘高光，桌面端与移动端自适应，明暗双主题开箱即得。
         </p>
         <ul class="hyper-home__chips">
           <li>柔性玻璃材质</li>
           <li>桌面端 · 移动端自适应</li>
           <li>明暗双主题</li>
-          <li>零运行时依赖</li>
+          <li>动效与对比度自适应</li>
         </ul>
         <div class="hyper-home__actions">
           <a class="hyper-button hyper-button--primary" :href="withBase('/guide/getting-started')">开始使用</a>
@@ -42,8 +43,8 @@ onBeforeUnmount(() => disposePhone?.());
         </div>
         <ul class="hyper-home__facts" aria-label="库特性">
           <li><strong>{{ componentCount }}</strong><span>组件文档</span></li>
-          <li><strong>0</strong><span>运行时第三方依赖</span></li>
-          <li><strong>无障碍</strong><span>动效与对比度适配</span></li>
+          <li><strong>1</strong><span>第三方依赖（仅图标）</span></li>
+          <li><strong>自适应</strong><span>动效与对比度适配</span></li>
         </ul>
       </div>
 
@@ -60,27 +61,27 @@ onBeforeUnmount(() => disposePhone?.());
       <ul class="hyper-home__features-list">
         <li>
           <strong>柔性玻璃材质</strong>
-          <span>统一的材质令牌与细腻的边缘高光，让界面自带通透质感。</span>
+          <span>玻璃拟态组件全部自绘，材质令牌集中定义：颜色、透明度、模糊与描边一处调整，全库同步生效。</span>
         </li>
         <li>
           <strong>桌面端 · 移动端自适应</strong>
-          <span>组件随窗口尺寸自动调整布局，一套代码覆盖手机与桌面。</span>
+          <span>组件随窗口尺寸自动重排，一套代码同时覆盖桌面与移动端。</span>
         </li>
         <li>
           <strong>明暗双主题</strong>
-          <span>开箱即得两套主题，令牌统一，可按需定制。</span>
+          <span>开箱即得明暗两套主题，令牌统一，可按需覆盖定制。</span>
         </li>
         <li>
           <strong>自然连贯的动效</strong>
-          <span>面向触摸反馈与页面切换的轻量动效，并遵循系统减弱动效偏好。</span>
+          <span>按压反馈、开关与弹层动画由组件内置，并遵循系统减弱动效偏好。</span>
         </li>
         <li>
-          <strong>零运行时依赖</strong>
-          <span>不引入任何第三方运行时库，接入即用，包体积可控。</span>
+          <strong>依赖最小化</strong>
+          <span>唯一第三方依赖是 lucide 图标库，组件逻辑与样式全部自绘，包体积可控。</span>
         </li>
         <li>
-          <strong>无障碍适配</strong>
-          <span>对比度与动效自动适配系统的无障碍偏好。</span>
+          <strong>对比度与动效自适应</strong>
+          <span>自动适配系统高对比度与减弱动效偏好，保持可读与舒适。</span>
         </li>
       </ul>
     </section>

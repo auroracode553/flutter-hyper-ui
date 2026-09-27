@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -20,8 +20,8 @@ void main() {
             componentId: 'component-nav-bar',
             embedded: true,
             themeMode: brightness == Brightness.dark
-                ? ThemeMode.dark
-                : ThemeMode.light,
+                ? HyperThemeMode.dark
+                : HyperThemeMode.light,
             safeAreaPadding: const EdgeInsets.only(top: 52, bottom: 24),
           ),
         ),

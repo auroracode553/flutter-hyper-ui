@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -76,7 +77,8 @@ class _HyperSelectionPanel<T> extends StatefulWidget {
   final List<T> values;
   final bool multiple;
   @override
-  State<_HyperSelectionPanel<T>> createState() => _HyperSelectionPanelState<T>();
+  State<_HyperSelectionPanel<T>> createState() =>
+      _HyperSelectionPanelState<T>();
 }
 
 class _HyperSelectionPanelState<T> extends State<_HyperSelectionPanel<T>> {
@@ -185,7 +187,7 @@ class _HyperSelectOptionRow<T> extends StatelessWidget {
               width: 20,
               height: 20,
               decoration: BoxDecoration(
-                color: selected ? tokens.primary : Colors.transparent,
+                color: selected ? tokens.primary : HyperPalette.transparent,
                 borderRadius: indicatorRadius,
                 border: Border.all(
                   color: selected ? tokens.primary : tokens.input,

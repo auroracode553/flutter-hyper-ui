@@ -1,11 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+import 'hyper_ui_theme.dart';
 
 /// 柔性玻璃视觉令牌。
 ///
-/// 颜色只描述材质层级，不携带任何业务语义。应用可以通过 [ThemeData.extensions]
+/// 颜色只描述材质层级，不携带任何业务语义。应用可以通过 [HyperUiThemeData.glass]
 /// 覆盖它，从而在不修改组件源码的前提下建立自己的品牌风格。
 @immutable
-class HyperGlassTheme extends ThemeExtension<HyperGlassTheme> {
+class HyperGlassTheme {
   const HyperGlassTheme({
     required this.surface,
     required this.surfaceStrong,
@@ -76,14 +78,9 @@ class HyperGlassTheme extends ThemeExtension<HyperGlassTheme> {
   );
 
   static HyperGlassTheme of(BuildContext context) {
-    final theme = Theme.of(context);
-    return theme.extension<HyperGlassTheme>() ??
-        (theme.brightness == Brightness.dark
-            ? HyperGlassTheme.dark()
-            : HyperGlassTheme.light());
+    return HyperUiTheme.of(context).glass;
   }
 
-  @override
   HyperGlassTheme copyWith({
     Color? surface,
     Color? surfaceStrong,
@@ -110,9 +107,7 @@ class HyperGlassTheme extends ThemeExtension<HyperGlassTheme> {
     );
   }
 
-  @override
-  HyperGlassTheme lerp(ThemeExtension<HyperGlassTheme>? other, double t) {
-    if (other is! HyperGlassTheme) return this;
+  HyperGlassTheme lerp(HyperGlassTheme other, double t) {
     return HyperGlassTheme(
       surface: Color.lerp(surface, other.surface, t)!,
       surfaceStrong: Color.lerp(surfaceStrong, other.surfaceStrong, t)!,

@@ -1,6 +1,7 @@
+import 'package:flutter_hyper_ui/src/theme/hyper_ui_theme.dart';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_effects.dart';
@@ -42,7 +43,7 @@ class HyperGlass extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = HyperUiTheme.of(context);
     final glass = HyperGlassTheme.of(context);
     final tokens = HyperUiThemeTokens.of(context);
     final highContrast = MediaQuery.maybeOf(context)?.highContrast ?? false;
@@ -57,7 +58,7 @@ class HyperGlass extends StatelessWidget {
             ? tokens.foreground.withAlpha(150)
             : Color.alphaBlend(glass.edgeShade, glass.edgeHighlight));
 
-    Widget material = DecoratedBox(
+    Widget surface = DecoratedBox(
       decoration: BoxDecoration(
         color: surfaceColor,
         borderRadius: shape,
@@ -67,16 +68,16 @@ class HyperGlass extends StatelessWidget {
     );
 
     if (effectiveBlur > 0) {
-      material = BackdropFilter(
+      surface = BackdropFilter(
         filter: ImageFilter.blur(sigmaX: effectiveBlur, sigmaY: effectiveBlur),
-        child: material,
+        child: surface,
       );
     }
 
     Widget result = ClipRRect(
       borderRadius: shape,
       clipBehavior: clipBehavior,
-      child: material,
+      child: surface,
     );
 
     if (onTap != null) {

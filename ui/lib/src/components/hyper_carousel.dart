@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -35,7 +35,8 @@ class HyperPageIndicator extends StatelessWidget {
               height: 24,
               child: Center(
                 child: AnimatedContainer(
-                  duration: MediaQuery.maybeOf(context)?.disableAnimations == true
+                  duration:
+                      MediaQuery.maybeOf(context)?.disableAnimations == true
                       ? Duration.zero
                       : const Duration(milliseconds: 180),
                   width: page == index ? 18 : 7,
@@ -65,8 +66,10 @@ class HyperCarousel extends StatefulWidget {
     this.autoPlayInterval,
   }) : assert(items.length > 0),
        assert(height > 0),
-       assert(autoPlayInterval == null ||
-           autoPlayInterval > const Duration(milliseconds: 350)),
+       assert(
+         autoPlayInterval == null ||
+             autoPlayInterval > const Duration(milliseconds: 350),
+       ),
        assert(initialIndex >= 0 && initialIndex < items.length);
 
   final List<Widget> items;
@@ -103,7 +106,8 @@ class _HyperCarouselState extends State<HyperCarousel> {
           _interacting ||
           !_controller.hasClients ||
           _controller.position.isScrollingNotifier.value ||
-          MediaQuery.maybeOf(context)?.disableAnimations == true) return;
+          MediaQuery.maybeOf(context)?.disableAnimations == true)
+        return;
       _controller.animateToPage(
         (_index + 1) % widget.items.length,
         duration: const Duration(milliseconds: 350),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -80,7 +80,7 @@ class HyperDropdown<T> extends StatelessWidget {
                               : null,
                           onTap: () {
                             onChanged?.call(option.value);
-                            MenuController.maybeOf(menuContext)?.close();
+                            hyperMenuOf(menuContext)?.close();
                           },
                         ),
                     ],

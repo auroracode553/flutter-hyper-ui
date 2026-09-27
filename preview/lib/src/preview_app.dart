@@ -1,5 +1,5 @@
 import 'package:flutter_hyper_ui/hyper_ui_preview_core.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'preview_shell.dart';
 import 'preview_view_configuration.dart';
@@ -14,7 +14,9 @@ class PreviewApp extends StatefulWidget {
 }
 
 class _PreviewAppState extends State<PreviewApp> {
-  late final _theme = HyperThemeController(mode: widget.configuration.themeMode);
+  late final _theme = HyperThemeController(
+    mode: widget.configuration.themeMode,
+  );
 
   @override
   void initState() {
@@ -35,31 +37,54 @@ class _PreviewAppState extends State<PreviewApp> {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: _theme,
-      builder: (_, _) => MaterialApp(
-        title: 'Flutter Hyper UI Preview',
-        debugShowCheckedModeBanner: false,
-        theme: HyperUiTheme.light(),
-        darkTheme: HyperUiTheme.dark(),
-        themeMode: _theme.mode,
-        builder: (context, child) {
-          final media = MediaQuery.of(context);
-          final padding = widget.configuration.safeAreaPadding;
-          if (padding == EdgeInsets.zero) return child!;
-          return MediaQuery(
-            data: media.copyWith(padding: padding, viewPadding: padding),
-            child: child!,
-          );
-        },
-        home: PreviewShell(
-          componentId: widget.configuration.componentId,
-          embedded: widget.configuration.embedded,
-          onToggleTheme: () => _theme.setMode(
-            _theme.mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark,
+      builder: (_, _) {
+        final dark = switch (_theme.mode) {
+          HyperThemeMode.dark => true,
+          HyperThemeMode.light => false,
+          HyperThemeMode.system =>
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark,
+        };
+        final hyperTheme = dark
+            ? HyperUiTheme.dark(primary: _theme.primary)
+            : HyperUiTheme.light(primary: _theme.primary);
+        return HyperUiTheme(
+          data: hyperTheme,
+          child: WidgetsApp(
+            title: 'Flutter Hyper UI Preview',
+            debugShowCheckedModeBanner: false,
+            color: hyperTheme.tokens.background,
+            textStyle: TextStyle(
+              color: hyperTheme.tokens.foreground,
+              fontFamily: hyperTheme.fontFamily,
+            ),
+            pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
+              settings: settings,
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  builder(context),
+            ),
+            builder: (context, child) {
+              final media = MediaQuery.of(context);
+              final padding = widget.configuration.safeAreaPadding;
+              if (padding == EdgeInsets.zero) return child!;
+              return MediaQuery(
+                data: media.copyWith(padding: padding, viewPadding: padding),
+                child: child!,
+              );
+            },
+            home: PreviewShell(
+              componentId: widget.configuration.componentId,
+              embedded: widget.configuration.embedded,
+              onToggleTheme: () => _theme.setMode(
+                _theme.mode == HyperThemeMode.dark
+                    ? HyperThemeMode.light
+                    : HyperThemeMode.dark,
+              ),
+              onComponentReady: widget.configuration.onComponentReady,
+              onComponentError: widget.configuration.onComponentError,
+            ),
           ),
-          onComponentReady: widget.configuration.onComponentReady,
-          onComponentError: widget.configuration.onComponentError,
-        ),
-      ),
+        );
+      },
     );
   }
 }

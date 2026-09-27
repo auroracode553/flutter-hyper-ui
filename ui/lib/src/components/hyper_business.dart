@@ -1,102 +1,13 @@
-import 'dart:async';
 import 'dart:ui' show FontFeature;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
+import 'hyper_pressable.dart';
 
-/// 使用绝对截止时间，应用进入后台后不会积累计时漂移。
-class HyperCountDown extends StatefulWidget {
-  const HyperCountDown({
-    super.key,
-    required this.endTime,
-    this.onFinished,
-    this.builder,
-  });
-  final DateTime endTime;
-  final VoidCallback? onFinished;
-  final Widget Function(BuildContext, Duration)? builder;
-  @override
-  State<HyperCountDown> createState() => _HyperCountDownState();
-}
-
-class _HyperCountDownState extends State<HyperCountDown> with WidgetsBindingObserver {
-  Timer? _timer;
-  Duration _remaining = Duration.zero;
-  bool _finished = false;
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    _start();
-  }
-
-  @override
-  void didUpdateWidget(covariant HyperCountDown old) {
-    super.didUpdateWidget(old);
-    if (old.endTime != widget.endTime) {
-      _finished = false;
-      _start();
-    }
-  }
-
-  void _start() {
-    _timer?.cancel();
-    _update();
-    if (!_finished)
-      _timer = Timer.periodic(
-        const Duration(milliseconds: 250),
-        (_) => _update(),
-      );
-  }
-
-  void _update() {
-    final difference = widget.endTime.difference(DateTime.now());
-    _remaining = difference.isNegative ? Duration.zero : difference;
-    if (mounted) setState(() {});
-    if (_remaining == Duration.zero && !_finished) {
-      _finished = true;
-      _timer?.cancel();
-      final deadline = widget.endTime;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && widget.endTime == deadline) widget.onFinished?.call();
-      });
-    }
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed)
-      _start();
-    else
-      _timer?.cancel();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final seconds = (_remaining.inMilliseconds / 1000).ceil();
-    String pad(int n) => n.toString().padLeft(2, '0');
-    return widget.builder?.call(context, _remaining) ??
-        Text(
-          '${pad(seconds ~/ 3600)}:${pad(seconds ~/ 60 % 60)}:${pad(seconds % 60)}',
-          style: const TextStyle(
-            fontFeatures: [FontFeature.tabularFigures()],
-            fontWeight: FontWeight.w600,
-          ),
-        );
-  }
-}
-
-class HyperCollapse extends StatelessWidget {
+class HyperCollapse extends StatefulWidget {
   const HyperCollapse({
     super.key,
     required this.title,
@@ -109,19 +20,54 @@ class HyperCollapse extends StatelessWidget {
   final bool initiallyExpanded;
   final ValueChanged<bool>? onChanged;
   @override
-  Widget build(BuildContext context) => HyperGlass(
-    blur: 0,
-    radius: 20,
-    child: ExpansionTile(
-      title: Text(title),
-      initiallyExpanded: initiallyExpanded,
-      onExpansionChanged: onChanged,
-      shape: const Border(),
-      collapsedShape: const Border(),
-      childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-      children: [child],
-    ),
-  );
+  State<HyperCollapse> createState() => _HyperCollapseState();
+}
+
+class _HyperCollapseState extends State<HyperCollapse> {
+  late bool _expanded = widget.initiallyExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = HyperUiThemeTokens.of(context);
+    return HyperGlass(
+      blur: 0,
+      radius: 20,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          HyperPressable(
+            onPressed: () {
+              setState(() => _expanded = !_expanded);
+              widget.onChanged?.call(_expanded);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      style: TextStyle(color: tokens.foreground),
+                    ),
+                  ),
+                  AnimatedRotation(
+                    turns: _expanded ? .5 : 0,
+                    duration: const Duration(milliseconds: 180),
+                    child: const Icon(LucideIcons.chevronDown, size: 18),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_expanded)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              child: widget.child,
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 class HyperTimelineItem {

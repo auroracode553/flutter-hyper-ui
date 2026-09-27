@@ -59,5 +59,4 @@ ConstrainedBox(
 
 ## 键盘与焦点
 
-Flutter Web 和桌面环境中，输入组件沿用 Flutter 原生焦点系统。Popover 与 Dropdown 使用 `MenuAnchor`，焦点关系由触发器锚定。业务层自定义快捷键时，不应覆盖 Tab、Escape 和方向键的常规导航行为。
-
+Flutter Web 和桌面环境中，输入组件沿用 Flutter 焦点系统。Popover 与 Dropdown 使用 Hyper 自绘锚定浮层。业务层自定义快捷键时，应保留常规键盘导航行为。

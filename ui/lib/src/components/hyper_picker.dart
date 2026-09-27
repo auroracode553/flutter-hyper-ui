@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_ui_spacing.dart';
-import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_action_sheet.dart';
 import 'hyper_button.dart';
 import 'hyper_select.dart';
+import 'hyper_wheel_picker.dart';
 
 abstract final class HyperPicker {
   static Future<T?> show<T>(
@@ -27,24 +26,10 @@ abstract final class HyperPicker {
           children: [
             SizedBox(
               height: 200,
-              child: CupertinoTheme(
-                data: CupertinoThemeData(
-                  brightness: Theme.of(sheetContext).brightness,
-                  textTheme: CupertinoTextThemeData(
-                    pickerTextStyle: TextStyle(
-                      color: HyperUiThemeTokens.of(sheetContext).foreground,
-                      fontSize: 17,
-                    ),
-                  ),
-                ),
-                child: CupertinoPicker(
-                  scrollController: controller,
-                  itemExtent: 40,
-                  onSelectedItemChanged: (value) => index = value,
-                  children: enabled
-                      .map((option) => Center(child: Text(option.label)))
-                      .toList(),
-                ),
+              child: HyperWheelPicker(
+                controller: controller,
+                labels: enabled.map((option) => option.label).toList(),
+                onSelected: (value) => index = value,
               ),
             ),
             const SizedBox(height: HyperUiSpacing.sm),

@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_spacing.dart';
@@ -8,6 +7,33 @@ import 'hyper_action_sheet.dart';
 import 'hyper_button.dart';
 import 'hyper_pressable.dart';
 import 'hyper_segmented_control.dart';
+import 'hyper_wheel_picker.dart';
+
+@immutable
+class HyperTimeOfDay {
+  const HyperTimeOfDay({required this.hour, required this.minute})
+    : assert(hour >= 0 && hour < 24),
+      assert(minute >= 0 && minute < 60);
+
+  factory HyperTimeOfDay.now() {
+    final now = DateTime.now();
+    return HyperTimeOfDay(hour: now.hour, minute: now.minute);
+  }
+
+  final int hour;
+  final int minute;
+
+  String format(BuildContext context) =>
+      '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+}
+
+@immutable
+class HyperDateRange {
+  const HyperDateRange({required this.start, required this.end});
+
+  final DateTime start;
+  final DateTime end;
+}
 
 /// 日期与区间使用月历，时间使用滚轮，弹层共用 HyperActionSheet。
 abstract final class HyperDatePicker {
@@ -28,18 +54,18 @@ abstract final class HyperDatePicker {
     );
   }
 
-  static Future<TimeOfDay?> time(
+  static Future<HyperTimeOfDay?> time(
     BuildContext context, {
-    TimeOfDay? initialTime,
-  }) => HyperActionSheet.show<TimeOfDay>(
+    HyperTimeOfDay? initialTime,
+  }) => HyperActionSheet.show<HyperTimeOfDay>(
     context,
     title: '选择时间',
-    builder: (_) => _TimePanel(initial: initialTime ?? TimeOfDay.now()),
+    builder: (_) => _TimePanel(initial: initialTime ?? HyperTimeOfDay.now()),
   );
 
-  static Future<DateTimeRange?> range(
+  static Future<HyperDateRange?> range(
     BuildContext context, {
-    DateTimeRange? initialRange,
+    HyperDateRange? initialRange,
     DateTime? firstDate,
     DateTime? lastDate,
   }) {
@@ -52,7 +78,7 @@ abstract final class HyperDatePicker {
       last,
     );
     final end = _clampDate(initialRange?.end ?? start, start, last);
-    return HyperActionSheet.show<DateTimeRange>(
+    return HyperActionSheet.show<HyperDateRange>(
       context,
       title: '选择日期区间',
       builder: (_) => _DateRangePanel(
@@ -76,23 +102,6 @@ DateTime _clampDate(DateTime date, DateTime first, DateTime last) {
 
 String _formatDate(DateTime date) =>
     '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-
-Widget _pickerTheme(BuildContext context, Widget child) {
-  final tokens = HyperUiThemeTokens.of(context);
-  return CupertinoTheme(
-    data: CupertinoThemeData(
-      brightness: Theme.of(context).brightness,
-      primaryColor: tokens.primary,
-      textTheme: CupertinoTextThemeData(
-        dateTimePickerTextStyle: TextStyle(
-          color: tokens.foreground,
-          fontSize: 18,
-        ),
-      ),
-    ),
-    child: child,
-  );
-}
 
 class _DatePanel extends StatefulWidget {
   const _DatePanel({
@@ -137,14 +146,26 @@ class _DatePanelState extends State<_DatePanel> {
 class _TimePanel extends StatefulWidget {
   const _TimePanel({required this.initial});
 
-  final TimeOfDay initial;
+  final HyperTimeOfDay initial;
 
   @override
   State<_TimePanel> createState() => _TimePanelState();
 }
 
 class _TimePanelState extends State<_TimePanel> {
-  late TimeOfDay _selected = widget.initial;
+  late int _hour = widget.initial.hour;
+  late int _minute = widget.initial.minute;
+  late final FixedExtentScrollController _hourController =
+      FixedExtentScrollController(initialItem: _hour);
+  late final FixedExtentScrollController _minuteController =
+      FixedExtentScrollController(initialItem: _minute);
+
+  @override
+  void dispose() {
+    _hourController.dispose();
+    _minuteController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Column(
@@ -152,21 +173,30 @@ class _TimePanelState extends State<_TimePanel> {
     children: [
       SizedBox(
         height: 216,
-        child: _pickerTheme(
-          context,
-          CupertinoDatePicker(
-            mode: CupertinoDatePickerMode.time,
-            use24hFormat: true,
-            initialDateTime: DateTime(
-              2020,
-              1,
-              1,
-              widget.initial.hour,
-              widget.initial.minute,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: HyperWheelPicker(
+                controller: _hourController,
+                labels: List<String>.generate(
+                  24,
+                  (value) => value.toString().padLeft(2, '0'),
+                ),
+                onSelected: (value) => _hour = value,
+              ),
             ),
-            onDateTimeChanged: (date) =>
-                _selected = TimeOfDay(hour: date.hour, minute: date.minute),
-          ),
+            const Text(' : '),
+            Expanded(
+              child: HyperWheelPicker(
+                controller: _minuteController,
+                labels: List<String>.generate(
+                  60,
+                  (value) => value.toString().padLeft(2, '0'),
+                ),
+                onSelected: (value) => _minute = value,
+              ),
+            ),
+          ],
         ),
       ),
       const SizedBox(height: HyperUiSpacing.sm),
@@ -174,7 +204,10 @@ class _TimePanelState extends State<_TimePanel> {
         label: '确定',
         height: 44,
         expanded: true,
-        onPressed: () => Navigator.pop(context, _selected),
+        onPressed: () => Navigator.pop(
+          context,
+          HyperTimeOfDay(hour: _hour, minute: _minute),
+        ),
       ),
     ],
   );
@@ -249,10 +282,8 @@ class _DateRangePanelState extends State<_DateRangePanel> {
         label: '确定',
         height: 44,
         expanded: true,
-        onPressed: () => Navigator.pop(
-          context,
-          DateTimeRange(start: _start, end: _end),
-        ),
+        onPressed: () =>
+            Navigator.pop(context, HyperDateRange(start: _start, end: _end)),
       ),
     ],
   );
@@ -291,8 +322,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
   bool _monthAvailable(DateTime month) {
     final firstDay = DateTime(month.year, month.month);
     final lastDay = DateTime(month.year, month.month + 1, 0);
-    return !lastDay.isBefore(widget.first) &&
-        !firstDay.isAfter(widget.last);
+    return !lastDay.isBefore(widget.first) && !firstDay.isAfter(widget.last);
   }
 
   void _changeMonth(int offset) {
@@ -326,9 +356,10 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               tooltip: '上个月',
               height: 34,
               radius: 12,
-              onPressed: _monthAvailable(
-                DateTime(_visibleMonth.year, _visibleMonth.month - 1),
-              )
+              onPressed:
+                  _monthAvailable(
+                    DateTime(_visibleMonth.year, _visibleMonth.month - 1),
+                  )
                   ? () => _changeMonth(-1)
                   : null,
             ),
@@ -338,9 +369,8 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                 trailingIcon: LucideIcons.chevronDown,
                 height: 38,
                 expanded: true,
-                onPressed: () => setState(
-                  () => _choosingMonth = !_choosingMonth,
-                ),
+                onPressed: () =>
+                    setState(() => _choosingMonth = !_choosingMonth),
               ),
             ),
             HyperButton.icon(
@@ -348,19 +378,17 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               tooltip: '下个月',
               height: 34,
               radius: 12,
-              onPressed: _monthAvailable(
-                DateTime(_visibleMonth.year, _visibleMonth.month + 1),
-              )
+              onPressed:
+                  _monthAvailable(
+                    DateTime(_visibleMonth.year, _visibleMonth.month + 1),
+                  )
                   ? () => _changeMonth(1)
                   : null,
             ),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.sm),
-        if (_choosingMonth)
-          _buildMonthChooser(tokens)
-        else
-          _buildDays(tokens),
+        if (_choosingMonth) _buildMonthChooser(tokens) else _buildDays(tokens),
       ],
     );
   }
@@ -398,9 +426,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               icon: LucideIcons.chevronRight,
               tooltip: '下一年',
               height: 34,
-              onPressed: year < widget.last.year
-                  ? () => _changeYear(1)
-                  : null,
+              onPressed: year < widget.last.year ? () => _changeYear(1) : null,
             ),
             HyperButton.ghost(
               label: '+10 年',
@@ -424,9 +450,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                       final target = DateTime(year, month);
                       return HyperButton(
                         label: '$month 月',
-                        type: month == _visibleMonth.month
-                            ? 'filled'
-                            : 'tonal',
+                        type: month == _visibleMonth.month ? 'filled' : 'tonal',
                         height: 42,
                         expanded: true,
                         onPressed: _monthAvailable(target)
@@ -505,7 +529,8 @@ class _CalendarMonthState extends State<_CalendarMonth> {
     final isStart = date == widget.start;
     final isEnd = widget.end != null && date == widget.end;
     final selected = isStart || isEnd;
-    final between = widget.end != null &&
+    final between =
+        widget.end != null &&
         date.isAfter(widget.start) &&
         date.isBefore(widget.end!);
     final isToday = date == today;
@@ -514,36 +539,36 @@ class _CalendarMonthState extends State<_CalendarMonth> {
       child: HyperPressable(
         onPressed: enabled ? () => widget.onSelected(date) : null,
         borderRadius: BorderRadius.circular(21),
+        child: Container(
+          height: 42,
+          alignment: Alignment.center,
+          color: between ? tokens.selectionBackground : null,
           child: Container(
-            height: 42,
+            width: 36,
+            height: 36,
             alignment: Alignment.center,
-            color: between ? tokens.selectionBackground : null,
-            child: Container(
-              width: 36,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: selected ? tokens.primary : null,
-                shape: BoxShape.circle,
-                border: isToday && enabled && !selected
-                    ? Border.all(color: tokens.primary)
-                    : null,
-              ),
-              child: Text(
-                '$day',
-                style: TextStyle(
-                  color: selected
-                      ? tokens.primaryForeground
-                      : enabled
-                          ? tokens.foreground
-                          : tokens.mutedForeground.withAlpha(105),
-                  fontSize: 14,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                ),
+            decoration: BoxDecoration(
+              color: selected ? tokens.primary : null,
+              shape: BoxShape.circle,
+              border: isToday && enabled && !selected
+                  ? Border.all(color: tokens.primary)
+                  : null,
+            ),
+            child: Text(
+              '$day',
+              style: TextStyle(
+                color: selected
+                    ? tokens.primaryForeground
+                    : enabled
+                    ? tokens.foreground
+                    : tokens.mutedForeground.withAlpha(105),
+                fontSize: 14,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
               ),
             ),
           ),
         ),
+      ),
     );
   }
 }

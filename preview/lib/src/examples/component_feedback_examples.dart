@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -33,8 +33,11 @@ class ToastComponentExample extends StatelessWidget {
             ),
             HyperButton.tonal(
               label: '警告',
-              onPressed: () =>
-                  HyperToast.show(context, '请检查输入内容', tone: HyperUiTone.warning),
+              onPressed: () => HyperToast.show(
+                context,
+                '请检查输入内容',
+                tone: HyperUiTone.warning,
+              ),
             ),
             HyperButton.tonal(
               label: '错误',
@@ -332,8 +335,16 @@ class ActionSheetComponentExample extends StatelessWidget {
             context,
             title: '项目操作',
             actions: const [
-              HyperAction(value: 'rename', label: '重命名', icon: LucideIcons.pencil),
-              HyperAction(value: 'share', label: '分享', icon: LucideIcons.share2),
+              HyperAction(
+                value: 'rename',
+                label: '重命名',
+                icon: LucideIcons.pencil,
+              ),
+              HyperAction(
+                value: 'share',
+                label: '分享',
+                icon: LucideIcons.share2,
+              ),
               HyperAction(
                 value: 'move',
                 label: '移动（无权限）',

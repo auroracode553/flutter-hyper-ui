@@ -444,7 +444,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-picker', 'HyperPicker 滚轮选择器', 'component_form_examples.dart', 420, '基础滚轮选择与指定初始项。', 'PickerComponentExample'),
       }),
-      component('HyperDatePicker', 'hyper_date_picker.dart', '在玻璃底部弹层中通过月历选择日期或区间，时间单独使用滚轮。', {
+      component('HyperDatePicker / HyperTimeOfDay / HyperDateRange', 'hyper_date_picker.dart', '在玻璃底部弹层中通过月历选择日期或区间，时间单独使用滚轮。', {
         propsDocs: [
           { name: 'initialDate', description: '初始日期' },
           { name: 'initialTime', description: '初始时间' },
@@ -620,10 +620,10 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 320, '长按并拖动，观察水珠放大、跟手和收回。', 'TabBarComponentExample'),
       }),
-      component('HyperTabs', 'hyper_navigation.dart', '与 Flutter TabBarView 共享 TabController 的玻璃标签栏。', {
+      component('HyperTabs', 'hyper_navigation.dart', '与 HyperTabView 共享控制器的玻璃标签栏。', {
         propsDocs: [
           { name: 'tabs', description: '标签组件列表' },
-          { name: 'controller', description: 'TabController 控制器' },
+          { name: 'controller', description: 'HyperTabController 控制器' },
           { name: 'scrollable', description: '标签是否可滚动，默认 false' },
           { name: 'onTap', description: '标签点击回调' },
         ],
@@ -716,28 +716,20 @@ export const componentGroups: ComponentGroup[] = [
       }),
     ],
     conventions: [
-      '`HyperTabs` 与 `HyperTabBarView` 应共享同一个 `TabController`，或位于同一个 `DefaultTabController`。',
+      '`HyperTabs` 与 `HyperTabView` 应位于同一个 `HyperTabHost` 中。',
     ],
   },
   {
     id: 'business',
     title: '复合组件',
     navTitle: '复合组件',
-    description: '由基础组件组合而成的搜索、倒计时、折叠面板和时间轴，仍保持业务无关。',
+    description: '由基础组件组合而成的搜索、折叠面板和时间轴，仍保持业务无关。',
     page: '/components/composites',
     demos: [
-      demo('business', '业务组件组合', 'interactive_examples.dart', 850, '搜索、通知、倒计时、设置菜单、折叠面板与时间轴。'),
+      demo('business', '业务组件组合', 'interactive_examples.dart', 850, '搜索、通知、设置菜单、折叠面板与时间轴。'),
     ],
     components: [
-      component('HyperCountDown', 'hyper_business.dart', '基于截止时间计算，并在应用恢复前台时校准。', {
-        propsDocs: [
-          { name: 'endTime', description: '截止时间' },
-          { name: 'onFinished', description: '倒计时结束回调' },
-          { name: 'builder', description: '自定义构建器' },
-        ],
-        preview: demo('component-count-down', 'HyperCountDown 倒计时', 'component_composite_examples.dart', 300, '结束回调 onFinished 与自定义 builder。', 'CountDownComponentExample'),
-      }),
-      component('HyperCollapse', 'hyper_business.dart', '标题与正文组成的折叠内容。', {
+            component('HyperCollapse', 'hyper_business.dart', '标题与正文组成的折叠内容。', {
         propsDocs: [
           { name: 'title', description: '标题' },
           { name: 'child', description: '内容组件' },
@@ -753,7 +745,6 @@ export const componentGroups: ComponentGroup[] = [
         preview: demo('component-timeline', 'HyperTimeline 时间轴', 'component_composite_examples.dart', 370, '展示已完成、当前和待处理事件。', 'TimelineComponentExample'),
       }),
     ],
-    conventions: ['`HyperCountDown.endTime` 应由 State 或业务模型持有，避免在每次 build 时重建截止时间。'],
   },
 ];
 

@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -158,9 +158,7 @@ class HyperDrawer extends StatelessWidget {
                 ),
                 if (onClose != null)
                   HyperButton.icon(
-                    tooltip: MaterialLocalizations.of(
-                      context,
-                    ).closeButtonTooltip,
+                    tooltip: '关闭',
                     onPressed: onClose,
                     icon: LucideIcons.x,
                   ),

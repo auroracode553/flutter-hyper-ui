@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_hyper_ui/hyper_ui_preview_core.dart';
 
 import 'preview_catalog.dart';
 
@@ -15,7 +16,7 @@ class PreviewViewConfiguration {
 
   final String componentId;
   final bool embedded;
-  final ThemeMode themeMode;
+  final HyperThemeMode themeMode;
   final EdgeInsets safeAreaPadding;
   final VoidCallback? onFirstFrame;
   final VoidCallback? onComponentReady;
@@ -28,7 +29,7 @@ class PreviewViewConfiguration {
           ? requestedId
           : PreviewCatalog.defaultId,
       embedded: Uri.base.queryParameters['mode'] == 'docs',
-      themeMode: ThemeMode.system,
+      themeMode: HyperThemeMode.system,
     );
   }
 }

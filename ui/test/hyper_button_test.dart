@@ -1,12 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 void main() {
-  Widget wrap(Widget child) => MaterialApp(
-    home: Scaffold(
-      body: Center(child: child),
+  Widget wrap(Widget child) => HyperUiTheme(
+    data: HyperUiTheme.light(),
+    child: WidgetsApp(
+      color: const Color(0xFFFFFFFF),
+      pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
+        settings: settings,
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            builder(context),
+      ),
+      home: Center(child: child),
     ),
   );
 
@@ -28,12 +35,7 @@ void main() {
   testWidgets('图标按钮渲染且点击回调触发', (tester) async {
     var tapped = 0;
     await tester.pumpWidget(
-      wrap(
-        HyperButton.icon(
-          icon: Icons.add,
-          onPressed: () => tapped++,
-        ),
-      ),
+      wrap(HyperButton.icon(icon: LucideIcons.plus, onPressed: () => tapped++)),
     );
     await tester.tap(find.byType(HyperButton));
     await tester.pump();
@@ -43,12 +45,7 @@ void main() {
 
   testWidgets('默认按内容收缩（inline-block），非通栏', (tester) async {
     await tester.pumpWidget(
-      wrap(
-        HyperButton.filled(
-          label: '导出',
-          onPressed: () {},
-        ),
-      ),
+      wrap(HyperButton.filled(label: '导出', onPressed: () {})),
     );
     final size = tester.getSize(find.byType(HyperButton));
     expect(size.width, lessThan(300), reason: '未显式 expanded 时不应占满父级宽度');

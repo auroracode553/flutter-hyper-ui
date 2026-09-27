@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'hyper_progress_painters.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_ui_theme.dart';
 import 'hyper_button.dart';
 import 'hyper_glass.dart';
+import 'hyper_modal.dart';
 import 'hyper_pressable.dart';
 import 'hyper_tone.dart';
 
@@ -20,19 +23,24 @@ abstract final class HyperToast {
   }) {
     final tokens = HyperUiThemeTokens.of(context);
     final toneColor = tone.color(tokens);
-    final messenger = ScaffoldMessenger.of(context);
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          duration: duration,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          padding: EdgeInsets.zero,
-          margin: const EdgeInsets.fromLTRB(16, 0, 16, 96),
-          behavior: SnackBarBehavior.floating,
-          dismissDirection: DismissDirection.down,
-          content: Align(
+    final theme = HyperUiTheme.of(context);
+    late final OverlayEntry entry;
+    var visible = true;
+    void hide() {
+      if (!visible) return;
+      visible = false;
+      entry.remove();
+      entry.dispose();
+    }
+
+    entry = OverlayEntry(
+      builder: (overlayContext) => HyperUiTheme(
+        data: theme,
+        child: Positioned(
+          left: 16,
+          right: 16,
+          bottom: 96,
+          child: Align(
             alignment: Alignment.center,
             child: ConstrainedBox(
               constraints: const BoxConstraints(minWidth: 180, maxWidth: 420),
@@ -73,7 +81,7 @@ abstract final class HyperToast {
                     if (actionLabel != null && onAction != null)
                       HyperPressable(
                         onPressed: () {
-                          messenger.hideCurrentSnackBar();
+                          hide();
                           onAction();
                         },
                         child: Padding(
@@ -96,7 +104,10 @@ abstract final class HyperToast {
             ),
           ),
         ),
-      );
+      ),
+    );
+    Overlay.of(context, rootOverlay: true).insert(entry);
+    Future<void>.delayed(duration, hide);
   }
 
   static IconData _iconFor(HyperUiTone tone) => switch (tone) {
@@ -120,12 +131,10 @@ abstract final class HyperDialog {
     bool dangerous = false,
     bool showCancel = true,
   }) {
-    return showDialog<bool>(
-      context: context,
-      barrierColor: HyperGlassTheme.of(context).scrim,
-      builder: (dialogContext) => Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+    return showHyperModal<bool>(
+      context,
+      builder: (dialogContext) => ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420),
         child: HyperGlass(
           radius: 26,
           blur: 30,
@@ -136,7 +145,14 @@ abstract final class HyperDialog {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Text(title, style: Theme.of(context).textTheme.titleLarge),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: HyperUiThemeTokens.of(context).foreground,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 if (content != null ||
                     (message?.isNotEmpty ?? false)) ...<Widget>[
                   const SizedBox(height: 10),
@@ -186,13 +202,10 @@ class HyperLoading extends StatelessWidget {
       children: <Widget>[
         SizedBox.square(
           dimension: size,
-          child: const CircularProgressIndicator(strokeWidth: 2.5),
+          child: const HyperSpinner(strokeWidth: 2.5),
         ),
         if (label != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: Text(label!),
-          ),
+          Padding(padding: const EdgeInsets.only(top: 12), child: Text(label!)),
       ],
     );
   }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -16,10 +16,7 @@ class TooltipComponentExample extends StatelessWidget {
         const SizedBox(height: HyperUiSpacing.sm),
         HyperTooltip(
           message: '更改后会同步到所有设备。',
-          child: HyperButton.icon(
-            icon: LucideIcons.info,
-            onPressed: () {},
-          ),
+          child: HyperButton.icon(icon: LucideIcons.info, onPressed: () {}),
         ),
         const SizedBox(height: HyperUiSpacing.lg),
         HyperTooltip(

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'hyper_progress_painters.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -183,7 +184,11 @@ class _HyperUploaderState extends State<HyperUploader> {
       if (!token.isCancelled && mounted) {
         _replace(
           file.id,
-          HyperUploadItem(file: file, status: HyperUploadStatus.error, error: error),
+          HyperUploadItem(
+            file: file,
+            status: HyperUploadStatus.error,
+            error: error,
+          ),
         );
         widget.onError?.call(error);
       }
@@ -359,7 +364,7 @@ class _UploadAddTile extends StatelessWidget {
         onTap: onTap,
         child: Center(
           child: picking
-              ? const CircularProgressIndicator(strokeWidth: 2)
+              ? const HyperSpinner(strokeWidth: 2)
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

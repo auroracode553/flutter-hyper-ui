@@ -1,9 +1,11 @@
+import 'package:flutter_hyper_ui/src/theme/hyper_ui_theme.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 
@@ -46,7 +48,8 @@ class HyperTabBar extends StatefulWidget {
   State<HyperTabBar> createState() => _HyperTabBarState();
 }
 
-class _HyperTabBarState extends State<HyperTabBar> with TickerProviderStateMixin {
+class _HyperTabBarState extends State<HyperTabBar>
+    with TickerProviderStateMixin {
   static const double _inset = 4;
   static const double _projectionSeconds = 0.09;
   static const SpringDescription _snapSpring = SpringDescription(
@@ -119,7 +122,7 @@ class _HyperTabBarState extends State<HyperTabBar> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
+    final dark = HyperUiTheme.of(context).brightness == Brightness.dark;
     final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
     final barHeight = math.max(HyperTabBar.height, textHeight + 36);
     final bar = Padding(
@@ -166,7 +169,7 @@ class _HyperTabBarState extends State<HyperTabBar> with TickerProviderStateMixin
                       .toDouble();
                   final lensTop = (barHeight - lensHeight) / 2;
                   final foreground = dark
-                      ? Colors.white
+                      ? HyperPalette.white
                       : const Color(0xFF101010);
                   final content = _buildTabRow(
                     position: position,
@@ -405,7 +408,7 @@ class _HyperTabSurface extends StatelessWidget {
         borderRadius: radius,
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withAlpha(dark ? 80 : 24),
+            color: HyperPalette.black.withAlpha(dark ? 80 : 24),
             blurRadius: 26,
             spreadRadius: -4,
             offset: const Offset(0, 9),
@@ -522,7 +525,7 @@ class _HyperLiquidLens extends StatelessWidget {
               borderRadius: BorderRadius.circular(height / 2),
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                  color: Colors.black.withAlpha((29 * expansion).round()),
+                  color: HyperPalette.black.withAlpha((29 * expansion).round()),
                   blurRadius: 22 * expansion,
                   spreadRadius: -3,
                   offset: Offset(0, 5 * expansion),
@@ -627,17 +630,17 @@ class _HyperLensRimPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5
       ..shader = ui.Gradient.sweep(bounds.center, <Color>[
-        Colors.white.withAlpha((205 * opacity).round()),
+        HyperPalette.white.withAlpha((205 * opacity).round()),
         const Color(0xFF9FE7F8).withAlpha((125 * opacity).round()),
-        Colors.white.withAlpha((220 * opacity).round()),
+        HyperPalette.white.withAlpha((220 * opacity).round()),
         const Color(0xFFFFD7EC).withAlpha((110 * opacity).round()),
-        Colors.white.withAlpha((205 * opacity).round()),
+        HyperPalette.white.withAlpha((205 * opacity).round()),
       ]);
     canvas.drawPath(path, rim);
     final highlight = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
-      ..color = Colors.white.withAlpha((110 * opacity).round());
+      ..color = HyperPalette.white.withAlpha((110 * opacity).round());
     canvas.drawArc(
       Rect.fromLTWH(3, 2, size.width - 6, size.height * 0.8),
       math.pi * 1.07,

@@ -1,7 +1,8 @@
 import 'dart:js_interop';
 import 'dart:ui_web' as ui_web;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_hyper_ui/hyper_ui_preview_core.dart';
 
 import 'preview_catalog.dart';
 
@@ -29,7 +30,7 @@ class PreviewViewConfiguration {
 
   final String componentId;
   final bool embedded;
-  final ThemeMode themeMode;
+  final HyperThemeMode themeMode;
   final EdgeInsets safeAreaPadding;
   final VoidCallback? onFirstFrame;
   final VoidCallback? onComponentReady;
@@ -66,9 +67,9 @@ class PreviewViewConfiguration {
               errorCallback.callAsFunction(null, message.toJS);
             },
       themeMode: switch (data?.theme) {
-        'dark' => ThemeMode.dark,
-        'light' => ThemeMode.light,
-        _ => ThemeMode.system,
+        'dark' => HyperThemeMode.dark,
+        'light' => HyperThemeMode.light,
+        _ => HyperThemeMode.system,
       },
     );
   }

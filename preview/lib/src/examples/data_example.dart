@@ -1,5 +1,5 @@
 import 'package:flutter_hyper_ui/hyper_ui.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class DataExample extends StatelessWidget {

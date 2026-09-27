@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -97,7 +97,11 @@ class _OverlayExampleState extends State<OverlayExample> {
                   context,
                   title: '照片操作',
                   actions: const [
-                    HyperAction(value: '收藏', label: '收藏', icon: LucideIcons.heart),
+                    HyperAction(
+                      value: '收藏',
+                      label: '收藏',
+                      icon: LucideIcons.heart,
+                    ),
                     HyperAction(
                       value: '删除',
                       label: '删除',
@@ -150,7 +154,6 @@ class BusinessExample extends StatefulWidget {
 }
 
 class _BusinessExampleState extends State<BusinessExample> {
-  DateTime _deadline = DateTime.now().add(const Duration(seconds: 60));
   String _query = '';
   bool _notice = true, _notifications = true;
   @override
@@ -171,23 +174,6 @@ class _BusinessExampleState extends State<BusinessExample> {
           message: '欢迎体验 Hyper UI 柔光玻璃组件库。所有组件共享主题、间距与视觉规范，让每一页都自然一致。',
           onClose: () => setState(() => _notice = false),
         ),
-      HyperCard(
-        title: '验证码倒计时',
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 12,
-          children: [
-            HyperCountDown(endTime: _deadline),
-            HyperButton.tonal(
-              label: '重新计时',
-              onPressed: () => setState(
-                () =>
-                    _deadline = DateTime.now().add(const Duration(seconds: 60)),
-              ),
-            ),
-          ],
-        ),
-      ),
       HyperMenuGroup(
         title: '偏好设置',
         subtitle: '参考设置页的分组卡片与图标层次',

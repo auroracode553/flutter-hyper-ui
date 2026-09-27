@@ -1,13 +1,24 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 Widget _host(Widget child, {EdgeInsets padding = EdgeInsets.zero}) =>
-    MaterialApp(
-      home: Scaffold(
-        body: MediaQuery(
+    HyperUiTheme(
+      data: HyperUiTheme.light(),
+      child: WidgetsApp(
+        color: const Color(0xFFFFFFFF),
+        pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              builder(context),
+        ),
+        home: MediaQuery(
           data: MediaQueryData(padding: padding, viewPadding: padding),
-          child: child,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(width: double.infinity, child: child),
+          ),
         ),
       ),
     );
@@ -29,15 +40,15 @@ void main() {
         HyperNavBar(
           height: 64,
           safeArea: false,
-          leading: const Icon(Icons.menu),
+          leading: const Icon(LucideIcons.menu),
           title: const Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Icon(Icons.favorite, size: 16),
+              Icon(LucideIcons.heart, size: 16),
               SizedBox(width: 6),
               Text(
                 '自定义内容',
-                style: TextStyle(fontSize: 22, color: Colors.purple),
+                style: TextStyle(fontSize: 22, color: Color(0xFF800080)),
               ),
             ],
           ),
@@ -45,14 +56,14 @@ void main() {
             key: subtitleKey,
             width: 80,
             height: 10,
-            child: ColoredBox(color: Colors.green),
+            child: ColoredBox(color: Color(0xFF008000)),
           ),
           trailing: HyperButton.ghost(label: '保存', onPressed: () => tapped++),
         ),
       ),
     );
     expect(find.byKey(subtitleKey), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsOneWidget);
+    expect(find.byIcon(LucideIcons.heart), findsOneWidget);
     expect(tester.widget<Text>(find.text('自定义内容')).style!.fontSize, 22);
     await tester.tap(find.text('保存'));
     await tester.pump();
@@ -76,7 +87,7 @@ void main() {
               Positioned(
                 right: 0,
                 bottom: 0,
-                child: Icon(Icons.search, size: 16),
+                child: Icon(LucideIcons.search, size: 16),
               ),
             ],
           ),
@@ -98,12 +109,16 @@ void main() {
       _host(
         const HyperNavBar(
           safeArea: false,
-          trailing: SizedBox(width: 24, height: 24, child: Icon(Icons.search)),
+          trailing: SizedBox(
+            width: 24,
+            height: 24,
+            child: Icon(LucideIcons.search),
+          ),
         ),
       ),
     );
     expect(
-      tester.getTopRight(find.byIcon(Icons.search)).dx,
+      tester.getTopRight(find.byIcon(LucideIcons.search)).dx,
       tester.getTopRight(find.byType(HyperNavBar)).dx - 16,
     );
     expect(tester.takeException(), isNull);

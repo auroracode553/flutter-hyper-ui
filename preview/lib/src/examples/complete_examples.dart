@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'upload_example.dart';
@@ -393,7 +393,11 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
               padding: const EdgeInsets.all(24),
               child: Text(
                 ['首页', '发现', '我的'][_tab],
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: TextStyle(
+                  color: HyperUiThemeTokens.of(context).foreground,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             HyperTabBar(
@@ -413,13 +417,13 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
         title: '标签与联动页面',
         child: SizedBox(
           height: 220,
-          child: DefaultTabController(
+          child: HyperTabHost(
             length: 3,
             child: Column(
               children: [
                 HyperTabs(tabs: [Text('推荐'), Text('关注'), Text('收藏')]),
                 Expanded(
-                  child: TabBarView(
+                  child: HyperTabView(
                     children: [
                       Center(child: Text('为你推荐')),
                       Center(child: Text('你关注的内容')),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui_preview_core.dart';
 
 import 'preview_catalog.dart';
@@ -82,7 +82,7 @@ class _PreviewLoading extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(strokeWidth: 2),
+            SizedBox.square(dimension: 22, child: HyperSpinner(strokeWidth: 2)),
             SizedBox(height: 14),
             Text('正在加载当前组件…'),
           ],

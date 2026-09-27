@@ -1,6 +1,7 @@
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/physics.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -255,7 +256,7 @@ class _ActionStrip extends StatelessWidget {
                         Icon(
                           action.icon,
                           size: 18,
-                          color: action.foregroundColor ?? Colors.white,
+                          color: action.foregroundColor ?? HyperPalette.white,
                         ),
                         const SizedBox(height: 4),
                       ],
@@ -264,7 +265,7 @@ class _ActionStrip extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: action.foregroundColor ?? Colors.white,
+                          color: action.foregroundColor ?? HyperPalette.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),

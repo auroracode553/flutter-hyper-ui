@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -17,15 +17,12 @@ class HyperPopover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => buildHyAnchoredSurface(
-    width: (MediaQuery.sizeOf(context).width - 32)
-        .clamp(0.0, 280.0)
-        .toDouble(),
+    width: (MediaQuery.sizeOf(context).width - 32).clamp(0.0, 280.0).toDouble(),
     maxHeight: MediaQuery.sizeOf(context).height * .4,
     padding: const EdgeInsets.all(14),
     triggerBuilder: (_, controller) => HyperPressable(
-      onPressed: () => controller.isOpen
-          ? controller.close()
-          : controller.open(),
+      onPressed: () =>
+          controller.isOpen ? controller.close() : controller.open(),
       child: child,
     ),
     contentBuilder: (_) => content,
@@ -49,17 +46,14 @@ class HyperPopupMenu<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => buildHyAnchoredSurface(
-    width: (MediaQuery.sizeOf(context).width - 32)
-        .clamp(0.0, 240.0)
-        .toDouble(),
+    width: (MediaQuery.sizeOf(context).width - 32).clamp(0.0, 240.0).toDouble(),
     maxHeight: MediaQuery.sizeOf(context).height * .4,
     padding: const EdgeInsets.all(5),
     triggerBuilder: (_, controller) => HyperButton.icon(
       icon: icon,
       tooltip: tooltip,
-      onPressed: () => controller.isOpen
-          ? controller.close()
-          : controller.open(),
+      onPressed: () =>
+          controller.isOpen ? controller.close() : controller.open(),
     ),
     contentBuilder: (menuContext) {
       final tokens = HyperUiThemeTokens.of(menuContext);
@@ -82,7 +76,7 @@ class HyperPopupMenu<T> extends StatelessWidget {
               enabled: action.enabled,
               showChevron: false,
               onTap: () {
-                MenuController.maybeOf(menuContext)?.close();
+                hyperMenuOf(menuContext)?.close();
                 onSelected(action.value);
               },
             ),

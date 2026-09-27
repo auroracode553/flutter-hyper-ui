@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -8,27 +8,28 @@ class NavBarComponentExample extends StatelessWidget {
   const NavBarComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: const HyperNavBar(
-      title: Text('今日灵感'),
-      automaticallyImplyLeading: false,
-    ),
-    body: CustomScrollView(
-      slivers: <Widget>[
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-          sliver: SliverList.builder(
-            itemCount: 13,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: index == 0
-                  ? const _InspirationHeader()
-                  : _InspirationItem(index: index),
+  Widget build(BuildContext context) => Column(
+    children: <Widget>[
+      const HyperNavBar(title: Text('今日灵感'), automaticallyImplyLeading: false),
+      Expanded(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+              sliver: SliverList.builder(
+                itemCount: 13,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: index == 0
+                      ? const _InspirationHeader()
+                      : _InspirationItem(index: index),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
-      ],
-    ),
+      ),
+    ],
   );
 }
 

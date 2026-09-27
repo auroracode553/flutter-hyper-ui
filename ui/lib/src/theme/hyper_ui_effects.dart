@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/physics.dart';
 
 abstract final class HyperUiEffects {
@@ -22,13 +23,17 @@ abstract final class HyperUiEffects {
 
   static List<BoxShadow> surfaceShadows(Brightness brightness) => <BoxShadow>[
     BoxShadow(
-      color: Colors.black.withAlpha(brightness == Brightness.dark ? 82 : 20),
+      color: HyperPalette.black.withAlpha(
+        brightness == Brightness.dark ? 82 : 20,
+      ),
       blurRadius: 28,
       spreadRadius: -6,
       offset: const Offset(0, 12),
     ),
     BoxShadow(
-      color: Colors.black.withAlpha(brightness == Brightness.dark ? 35 : 8),
+      color: HyperPalette.black.withAlpha(
+        brightness == Brightness.dark ? 35 : 8,
+      ),
       blurRadius: 8,
       spreadRadius: -3,
       offset: const Offset(0, 3),

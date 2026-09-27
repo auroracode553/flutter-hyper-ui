@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 /// 展示页使用明确标记的模拟适配器；不请求系统相册权限或真实上传服务。

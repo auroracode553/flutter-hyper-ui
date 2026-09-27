@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_ui_radii.dart';
 import '../theme/hyper_ui_spacing.dart';
@@ -80,7 +81,7 @@ class _HyperSegmentItem<T> extends StatelessWidget {
         : option.enabled
         ? tokens.foreground
         : tokens.mutedForeground;
-    final background = selected ? tokens.muted : Colors.transparent;
+    final background = selected ? tokens.muted : HyperPalette.transparent;
 
     return HyperPressable(
       onPressed: option.enabled ? () => onSelected(option.value) : null,
@@ -94,20 +95,20 @@ class _HyperSegmentItem<T> extends StatelessWidget {
           borderRadius: BorderRadius.circular(HyperUiRadii.sm),
         ),
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (option.icon != null) ...[
-                Icon(option.icon, size: 16, color: foreground),
-                const SizedBox(width: HyperUiSpacing.xs),
-              ],
-              if (constrainLabel)
-                Flexible(child: _buildLabel(foreground))
-              else
-                _buildLabel(foreground),
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (option.icon != null) ...[
+              Icon(option.icon, size: 16, color: foreground),
+              const SizedBox(width: HyperUiSpacing.xs),
             ],
-          ),
+            if (constrainLabel)
+              Flexible(child: _buildLabel(foreground))
+            else
+              _buildLabel(foreground),
+          ],
         ),
+      ),
     );
   }
 

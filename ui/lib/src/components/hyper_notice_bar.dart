@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -114,8 +115,7 @@ class _HyperNoticeBarState extends State<HyperNoticeBar>
                             for (var i = 0; i < (distance > 0 ? 2 : 1); i++)
                               Positioned(
                                 left:
-                                    i * distance -
-                                    _controller.value * distance,
+                                    i * distance - _controller.value * distance,
                                 width: textWidth + 1,
                                 child: Text(
                                   widget.message,
@@ -140,7 +140,7 @@ class _HyperNoticeBarState extends State<HyperNoticeBar>
               tooltip: '关闭公告',
               onPressed: widget.onClose,
               color: tokens.primary,
-              backgroundColor: Colors.transparent,
+              backgroundColor: HyperPalette.transparent,
             ),
         ],
       ),

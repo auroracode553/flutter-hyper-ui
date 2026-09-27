@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -7,7 +7,8 @@ class CarouselComponentExample extends StatefulWidget {
   const CarouselComponentExample({super.key});
 
   @override
-  State<CarouselComponentExample> createState() => _CarouselComponentExampleState();
+  State<CarouselComponentExample> createState() =>
+      _CarouselComponentExampleState();
 }
 
 class _CarouselComponentExampleState extends State<CarouselComponentExample> {

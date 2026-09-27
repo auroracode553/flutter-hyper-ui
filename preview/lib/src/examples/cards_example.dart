@@ -1,5 +1,5 @@
 import 'package:flutter_hyper_ui/hyper_ui.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class CardsExample extends StatelessWidget {
@@ -22,12 +22,16 @@ class CardsExample extends StatelessWidget {
               icon: LucideIcons.folderOpen,
               color: tokens.primary,
             ),
-            actions: const [
-              HyperBadge(label: '同步中', tone: HyperUiTone.info),
-            ],
+            actions: const [HyperBadge(label: '同步中', tone: HyperUiTone.info)],
             footer: const Row(
               children: [
-                Expanded(child: HyperProgress(value: 0.68, strokeWidth: 8, showLabel: false)),
+                Expanded(
+                  child: HyperProgress(
+                    value: 0.68,
+                    strokeWidth: 8,
+                    showLabel: false,
+                  ),
+                ),
                 SizedBox(width: HyperUiSpacing.sm),
                 Text('68%'),
               ],
@@ -72,10 +76,7 @@ class _IconBox extends StatelessWidget {
   final IconData icon;
   final Color color;
 
-  const _IconBox({
-    required this.icon,
-    required this.color,
-  });
+  const _IconBox({required this.icon, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +89,7 @@ class _IconBox extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(HyperUiRadii.sm),
       ),
-      child: Icon(
-        icon,
-        size: 20,
-        color: tokens.primaryForeground,
-      ),
+      child: Icon(icon, size: 20, color: tokens.primaryForeground),
     );
   }
 }

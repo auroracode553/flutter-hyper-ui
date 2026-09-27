@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'hyper_ui_colors.dart';
+import 'hyper_ui_theme.dart';
 
 @immutable
-class HyperUiThemeTokens extends ThemeExtension<HyperUiThemeTokens> {
+class HyperUiThemeTokens {
   final Color background;
   final Color foreground;
   final Color card;
@@ -81,11 +82,9 @@ class HyperUiThemeTokens extends ThemeExtension<HyperUiThemeTokens> {
   }
 
   static HyperUiThemeTokens of(BuildContext context) {
-    return Theme.of(context).extension<HyperUiThemeTokens>() ??
-        HyperUiThemeTokens.light();
+    return HyperUiTheme.of(context).tokens;
   }
 
-  @override
   HyperUiThemeTokens copyWith({
     Color? background,
     Color? foreground,
@@ -122,12 +121,7 @@ class HyperUiThemeTokens extends ThemeExtension<HyperUiThemeTokens> {
     );
   }
 
-  @override
-  HyperUiThemeTokens lerp(ThemeExtension<HyperUiThemeTokens>? other, double t) {
-    if (other is! HyperUiThemeTokens) {
-      return this;
-    }
-
+  HyperUiThemeTokens lerp(HyperUiThemeTokens other, double t) {
     return HyperUiThemeTokens(
       background: Color.lerp(background, other.background, t)!,
       foreground: Color.lerp(foreground, other.foreground, t)!,

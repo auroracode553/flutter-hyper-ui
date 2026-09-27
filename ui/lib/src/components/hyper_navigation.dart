@@ -1,6 +1,8 @@
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'hyper_progress_painters.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -10,8 +12,10 @@ import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_layout.dart';
 import 'hyper_pressable.dart';
+import 'hyper_tab_controller.dart';
 
 export 'hyper_tab_bar.dart';
+export 'hyper_tab_controller.dart';
 
 /// 顶部或内容区使用的玻璃胶囊标签栏。
 class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
@@ -24,7 +28,7 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
   });
 
   final List<Widget> tabs;
-  final TabController? controller;
+  final HyperTabController? controller;
   final bool scrollable;
   final ValueChanged<int>? onTap;
 
@@ -44,7 +48,7 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final tabController = controller ?? DefaultTabController.of(context);
+    final tabController = controller ?? HyperTabHost.of(context);
     assert(tabController.length == tabs.length);
     final tabHeight = _tabHeight;
     if (tabs.isEmpty) {
@@ -62,11 +66,12 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
       child: SizedBox(
         height: tabHeight,
         child: AnimatedBuilder(
-          animation: tabController.animation ?? tabController,
+          animation: tabController,
           builder: (context, _) {
-            final position = (tabController.animation?.value ??
-                    tabController.index.toDouble())
-                .clamp(0.0, (tabs.length - 1).toDouble());
+            final position = tabController.index.toDouble().clamp(
+              0.0,
+              (tabs.length - 1).toDouble(),
+            );
             if (scrollable) {
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -133,7 +138,7 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildItem(
     BuildContext context,
-    TabController tabController,
+    HyperTabController tabController,
     HyperUiThemeTokens tokens,
     int index,
     double position,
@@ -147,7 +152,8 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
       tokens.foreground,
       strength,
     )!;
-    final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final reduceMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     void selectTab() {
       tabController.animateTo(
         index,
@@ -174,60 +180,41 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
         pressedScale: 0.985,
         borderRadius: BorderRadius.circular(tabHeight / 2),
         child: Padding(
-            padding: const EdgeInsets.all(2),
-            child: AnimatedContainer(
-              duration: reduceMotion
-                  ? Duration.zero
-                  : const Duration(milliseconds: 160),
-              curve: Curves.easeOutCubic,
-              height: tabHeight - 4,
-              constraints: showSelection
-                  ? const BoxConstraints(minWidth: 72)
-                  : null,
-              padding: EdgeInsets.symmetric(horizontal: showSelection ? 16 : 4),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: showSelection && selected
-                    ? tokens.muted
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(tabHeight / 2),
+          padding: const EdgeInsets.all(2),
+          child: AnimatedContainer(
+            duration: reduceMotion
+                ? Duration.zero
+                : const Duration(milliseconds: 160),
+            curve: Curves.easeOutCubic,
+            height: tabHeight - 4,
+            constraints: showSelection
+                ? const BoxConstraints(minWidth: 72)
+                : null,
+            padding: EdgeInsets.symmetric(horizontal: showSelection ? 16 : 4),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: showSelection && selected
+                  ? tokens.muted
+                  : HyperPalette.transparent,
+              borderRadius: BorderRadius.circular(tabHeight / 2),
+            ),
+            child: DefaultTextStyle.merge(
+              style: TextStyle(
+                color: foreground,
+                fontWeight: FontWeight.lerp(
+                  FontWeight.w500,
+                  FontWeight.w600,
+                  strength,
+                ),
               ),
-              child: DefaultTextStyle.merge(
-                style: TextStyle(
-                  color: foreground,
-                  fontWeight: FontWeight.lerp(
-                    FontWeight.w500,
-                    FontWeight.w600,
-                    strength,
-                  ),
-                ),
-                child: IconTheme.merge(
-                  data: IconThemeData(color: foreground),
-                  child: _tabContent(tabs[index]),
-                ),
+              child: IconTheme.merge(
+                data: IconThemeData(color: foreground),
+                child: tabs[index],
               ),
             ),
           ),
         ),
-    );
-  }
-
-  Widget _tabContent(Widget tab) {
-    if (tab is! Tab) return tab;
-    final label = tab.child ??
-        (tab.text == null
-            ? null
-            : Text(tab.text!, maxLines: 1, overflow: TextOverflow.ellipsis));
-    if (tab.icon == null) return label ?? const SizedBox.shrink();
-    if (label == null) return tab.icon!;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        tab.icon!,
-        const SizedBox(height: 4),
-        label,
-      ],
+      ),
     );
   }
 }
@@ -323,14 +310,16 @@ class HyperSteps extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: HyperDivider(
-                        color: index == 0 ? Colors.transparent : tokens.border,
+                        color: index == 0
+                            ? HyperPalette.transparent
+                            : tokens.border,
                       ),
                     ),
                     indicator(index),
                     Expanded(
                       child: HyperDivider(
                         color: index == steps.length - 1
-                            ? Colors.transparent
+                            ? HyperPalette.transparent
                             : tokens.border,
                       ),
                     ),
@@ -378,7 +367,7 @@ class HyperProgress extends StatelessWidget {
           alignment: Alignment.center,
           children: <Widget>[
             SizedBox.expand(
-              child: CircularProgressIndicator(
+              child: HyperSpinner(
                 value: amount,
                 strokeWidth: strokeWidth,
                 backgroundColor: backgroundColor ?? glass.controlTrack,
@@ -396,9 +385,9 @@ class HyperProgress extends StatelessWidget {
         Expanded(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(99),
-            child: LinearProgressIndicator(
+            child: HyperProgressTrack(
               value: amount,
-              minHeight: strokeWidth,
+              height: strokeWidth,
               backgroundColor: backgroundColor ?? glass.controlTrack,
               color: color,
             ),

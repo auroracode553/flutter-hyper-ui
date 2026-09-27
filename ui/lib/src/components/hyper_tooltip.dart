@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
@@ -42,9 +42,15 @@ class _HyperTooltipState extends State<HyperTooltip> {
     if (box == null || !box.hasSize) return;
     final origin = box.localToGlobal(Offset.zero);
     final screen = MediaQuery.sizeOf(context);
-    final maximumWidth = math.min(widget.maxWidth, math.max(24.0, screen.width - 24));
+    final maximumWidth = math.min(
+      widget.maxWidth,
+      math.max(24.0, screen.width - 24),
+    );
     final painter = TextPainter(
-      text: TextSpan(text: widget.message, style: const TextStyle(fontSize: 12, height: 1.3)),
+      text: TextSpan(
+        text: widget.message,
+        style: const TextStyle(fontSize: 12, height: 1.3),
+      ),
       textDirection: Directionality.of(context),
       textScaler: MediaQuery.textScalerOf(context),
       textWidthBasis: TextWidthBasis.longestLine,
@@ -107,7 +113,10 @@ class _HyperTooltipState extends State<HyperTooltip> {
                 radius: 12,
                 blur: 18,
                 weight: HyperGlassWeight.prominent,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 7,
+                ),
                 child: Text(
                   widget.message,
                   style: TextStyle(
@@ -130,31 +139,31 @@ class _HyperTooltipState extends State<HyperTooltip> {
             _hideIfInactive();
           }
         },
-          child: MouseRegion(
-            onEnter: (_) {
-              _hovering = true;
-              _cancelHover();
-              _hoverTimer = Timer(widget.hoverDelay, _show);
+        child: MouseRegion(
+          onEnter: (_) {
+            _hovering = true;
+            _cancelHover();
+            _hoverTimer = Timer(widget.hoverDelay, _show);
+          },
+          onExit: (_) {
+            _hovering = false;
+            _cancelHover();
+            _hideIfInactive();
+          },
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onLongPressStart: (_) {
+              _longPressed = true;
+              _show();
             },
-            onExit: (_) {
-              _hovering = false;
-              _cancelHover();
+            onLongPressEnd: (_) {
+              _longPressed = false;
               _hideIfInactive();
             },
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onLongPressStart: (_) {
-                _longPressed = true;
-                _show();
-              },
-              onLongPressEnd: (_) {
-                _longPressed = false;
-                _hideIfInactive();
-              },
-              child: KeyedSubtree(key: _anchorKey, child: widget.child),
-            ),
+            child: KeyedSubtree(key: _anchorKey, child: widget.child),
           ),
         ),
+      ),
     );
   }
 }

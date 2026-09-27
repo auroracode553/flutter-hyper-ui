@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -183,7 +183,7 @@ class _BackButton extends StatelessWidget {
     type: 'ghost',
     height: 44,
     iconSize: 20,
-    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+    tooltip: '返回',
     onPressed: () => Navigator.maybePop(context),
   );
 }

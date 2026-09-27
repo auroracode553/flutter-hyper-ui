@@ -1,5 +1,5 @@
 import 'package:flutter_hyper_ui/hyper_ui.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ButtonsExample extends StatelessWidget {
@@ -16,21 +16,9 @@ class ButtonsExample extends StatelessWidget {
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
           children: [
-            HyperButton.filled(
-              label: '小按钮',
-              height: 32,
-              onPressed: _noop,
-            ),
-            HyperButton.filled(
-              label: '默认按钮',
-              round: true,
-              onPressed: _noop,
-            ),
-            HyperButton.outline(
-              label: '处理中',
-              loading: true,
-              onPressed: _noop,
-            ),
+            HyperButton.filled(label: '小按钮', height: 32, onPressed: _noop),
+            HyperButton.filled(label: '默认按钮', round: true, onPressed: _noop),
+            HyperButton.outline(label: '处理中', loading: true, onPressed: _noop),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.md),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -42,9 +42,7 @@ class CardComponentExample extends StatelessWidget {
           child: const Text('适合在多个卡片中标记当前选项。'),
         ),
         const SizedBox(height: 12),
-        const HyperCard(
-          child: Text('没有标题与副标题时，卡片只作为内容容器使用。'),
-        ),
+        const HyperCard(child: Text('没有标题与副标题时，卡片只作为内容容器使用。')),
       ],
     );
   }

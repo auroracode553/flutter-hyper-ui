@@ -1,18 +1,15 @@
 # 快速开始
 
-Hyper UI 是一个独立的 Flutter 移动端组件包。它只依赖 Flutter SDK，不要求特定路由、状态管理、网络或持久化方案。
+Hyper UI 是独立的 Flutter 组件包。界面颜色、玻璃表面和交互样式由 Hyper 组件提供。
 
 ## 环境要求
 
 - Flutter `>= 3.32.0`
 - Dart `>= 3.8.0 < 4.0.0`
-- Material 3
 
 依赖与 SDK 由使用者自行准备，本项目不会自动安装或修改系统环境。
 
 ## 添加依赖
-
-当前仓库可通过本地路径接入：
 
 ```yaml
 dependencies:
@@ -20,39 +17,35 @@ dependencies:
     path: ../flutter-hyper-ui/ui
 ```
 
-组件库没有运行时第三方依赖。执行依赖解析的时机由你的项目自行决定。
+组件图标使用 `lucide_icons_flutter`，依赖清单见 `ui/pubspec.yaml`。
 
 ## 接入主题
 
-公开 API 全部由一个入口导出：
-
 ```dart
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
-```
 
-在应用根节点使用 Hyper UI 的明暗主题：
+final theme = HyperUiTheme.light();
 
-```dart
-MaterialApp(
-  theme: HyperUiTheme.light(),
-  darkTheme: HyperUiTheme.dark(),
-  themeMode: ThemeMode.system,
-  home: const AppHome(),
+HyperUiTheme(
+  data: theme,
+  child: WidgetsApp(
+    color: theme.tokens.background,
+    textStyle: TextStyle(color: theme.tokens.foreground),
+    pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
+      settings: settings,
+      pageBuilder: (context, animation, secondaryAnimation) => builder(context),
+    ),
+    home: const AppHome(),
+  ),
 );
 ```
 
-`HyperUiTheme` 仍然是标准 `ThemeData`，可以继续使用 Flutter 原生主题机制。品牌色和字体可在构建主题时覆盖：
-
-```dart
-theme: HyperUiTheme.light(
-  primary: const Color(0xFF6750A4),
-  fontFamily: 'YourFont',
-),
-```
+明暗主题分别使用 `HyperUiTheme.light()` 和 `HyperUiTheme.dark()`。应用可以通过 `HyperUiThemeData.copyWith` 替换颜色与玻璃令牌，并在切换后重建根节点。
 
 ## 创建第一个页面
 
-使用 Flutter 的 `Scaffold` 和 `CustomScrollView` 组织页面内容，导航栏可直接放在 `appBar`。
+页面使用 Flutter 布局基底和 Hyper 组件：
 
 ```dart
 class AppHome extends StatefulWidget {
@@ -66,34 +59,34 @@ class _AppHomeState extends State<AppHome> {
   int selectedIndex = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      appBar: const HyperNavBar(title: Text('收藏'), subtitle: Text('12 个项目')),
-      body: CustomScrollView(
-        slivers: const [
-          SliverPadding(
-            padding: EdgeInsets.all(HyperUiSpacing.pagePadding),
-            sliver: SliverToBoxAdapter(
-              child: HyperCard(
-                title: '开始创作',
-                subtitle: '所有组件共享同一套材质与交互规则。',
+  Widget build(BuildContext context) => Column(
+    children: <Widget>[
+      const HyperNavBar(title: Text('收藏'), subtitle: Text('12 个项目')),
+      const Expanded(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverPadding(
+              padding: EdgeInsets.all(HyperUiSpacing.pagePadding),
+              sliver: SliverToBoxAdapter(
+                child: HyperCard(
+                  title: '开始创作',
+                  subtitle: '所有组件共享同一套材质与交互规则。',
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      bottomNavigationBar: HyperTabBar(
-        items: const [
-          HyperTabItem(icon: Icons.home_outlined, label: '首页'),
-          HyperTabItem(icon: Icons.favorite_outline, label: '收藏'),
-          HyperTabItem(icon: Icons.person_outline, label: '我的'),
+      HyperTabBar(
+        items: const <HyperTabItem>[
+          HyperTabItem(icon: HyperIcons.home, label: '首页'),
+          HyperTabItem(icon: HyperIcons.profile, label: '我的'),
         ],
         selectedIndex: selectedIndex,
         onSelected: (value) => setState(() => selectedIndex = value),
       ),
-    );
-  }
+    ],
+  );
 }
 ```
 
@@ -104,15 +97,8 @@ Hyper UI 不持有业务状态。输入和选择组件通过值与回调工作�
 ```dart
 HyperSwitch(
   value: notificationsEnabled,
-  onChanged: (value) {
-    setState(() => notificationsEnabled = value);
-  },
+  onChanged: (value) => setState(() => notificationsEnabled = value),
 )
 ```
 
-同一组件可以配合 `setState`、Provider、Riverpod、Bloc 或任意其他方案，无需适配层。
-
-## 下一步
-
-- 阅读[设计系统](./design-system.md)，理解玻璃层级和交互规则。
-- 前往[组件总览](../components/catalog.md)，体验真实 Flutter Widget。
+继续阅读[主题与令牌](./theming.md)和[组件总览](../components/catalog.md)。

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -102,7 +102,7 @@ class PageContentComponentExample extends StatelessWidget {
           height: 320,
           child: Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              color: HyperUiThemeTokens.of(context).muted,
               borderRadius: BorderRadius.circular(16),
             ),
             child: CustomScrollView(
@@ -114,19 +114,19 @@ class PageContentComponentExample extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: const [
                       HyperListTile(
-                        leadingIcon: Icons.star_rounded,
+                        leadingIcon: LucideIcons.star,
                         leadingColor: Color(0xFFF59E0B),
                         title: '第一项',
                         subtitle: '统一边距',
                       ),
                       HyperListTile(
-                        leadingIcon: Icons.favorite_rounded,
+                        leadingIcon: LucideIcons.heart,
                         leadingColor: Color(0xFFEF4444),
                         title: '第二项',
                         subtitle: '宽屏自动居中限宽',
                       ),
                       HyperListTile(
-                        leadingIcon: Icons.settings_rounded,
+                        leadingIcon: LucideIcons.settings,
                         leadingColor: Color(0xFF6B7280),
                         title: '第三项',
                         subtitle: '手机端占满宽度',

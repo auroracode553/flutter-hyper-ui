@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -600,8 +600,8 @@ class DatePickerComponentExample extends StatefulWidget {
 class _DatePickerComponentExampleState
     extends State<DatePickerComponentExample> {
   DateTime? _date;
-  TimeOfDay? _time;
-  DateTimeRange? _range;
+  HyperTimeOfDay? _time;
+  HyperDateRange? _range;
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),

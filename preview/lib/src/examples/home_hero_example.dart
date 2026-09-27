@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
-/// 首页英雄区真机预览：用真实 Hyper UI 组件拼成一个手机首页，
+/// 首页英雄区真机预览：用真实 Hyper UI 组件拼成一个库介绍首页，
 /// 开关、底部导航均可交互。
 class HomeHeroExample extends StatefulWidget {
   const HomeHeroExample({super.key});
@@ -12,83 +12,98 @@ class HomeHeroExample extends StatefulWidget {
 }
 
 class _HomeHeroExampleState extends State<HomeHeroExample> {
-  bool _notifications = true;
+  bool _followSystemTheme = true;
   int _tab = 0;
 
   @override
   Widget build(BuildContext context) {
+    final muted = HyperUiThemeTokens.of(context).mutedForeground;
     return Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 12,
+      spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const HyperText('下午好', type: 'h5'),
-        const HyperText('保持从容，专注重要的事。', type: 'h1'),
-        const SizedBox(height: 8),
+        // 品牌与定位
+        const HyperText('HYPER UI · FLUTTER', type: 'h6'),
+        const HyperText('柔性玻璃组件库', type: 'h3'),
+        const SizedBox(height: 2),
 
-        // 今日进度
+        // 库数据
         HyperCard(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 12,
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HyperText('今日进度'),
-                  HyperText('72%', type: 'h2'),
-                ],
-              ),
-              const SizedBox(height: 12),
-              const HyperProgress(value: 0.72, showLabel: false),
+              _HeroStat(value: '48', label: '组件文档'),
+              _HeroStat(value: '1', label: '第三方依赖'),
+              _HeroStat(value: '2', label: '明暗主题'),
             ],
           ),
         ),
-        const SizedBox(height: 12),
 
-        // 设置项：外观与显示
+        // 特性：桌面端 · 移动端自适应
         HyperCard(
-          onTap: () => HyperToast.show(context, '打开外观与显示'),
+          onTap: () => HyperToast.show(context, '桌面端 · 移动端自适应'),
           child: Row(
             children: [
-              const HyperIcon(HyperIcons.settings),
-              const SizedBox(width: 12),
-              const Expanded(child: HyperText('外观与显示')),
-              HyperIcon(
-                LucideIcons.chevronRight,
-                color: HyperUiThemeTokens.of(context).mutedForeground,
-              ),
+              const HyperIcon(LucideIcons.monitorSmartphone),
+              const SizedBox(width: 10),
+              const Expanded(child: HyperText('桌面端 · 移动端自适应')),
+              HyperIcon(LucideIcons.chevronRight, color: muted),
             ],
           ),
         ),
-        const SizedBox(height: 12),
 
-        // 设置项：通知开关
+        // 特性：明暗主题（开关可交互）
         HyperCard(
           child: Row(
             children: [
-              const HyperIcon(LucideIcons.bell),
-              const SizedBox(width: 12),
-              const Expanded(child: HyperText('通知')),
+              const HyperIcon(LucideIcons.sunMoon),
+              const SizedBox(width: 10),
+              const Expanded(child: HyperText('跟随系统明暗主题')),
               HyperSwitch(
-                value: _notifications,
-                onChanged: (value) => setState(() => _notifications = value),
+                value: _followSystemTheme,
+                onChanged: (value) => setState(() => _followSystemTheme = value),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 16),
+
+        // 开始使用
+        HyperButton(
+          label: '开始使用',
+          onPressed: () => HyperToast.show(context, '开始使用 Hyper UI'),
+        ),
+        const SizedBox(height: 2),
 
         // 底部导航
         HyperTabBar(
           selectedIndex: _tab,
           onSelected: (index) => setState(() => _tab = index),
           items: const [
-            HyperTabItem(icon: LucideIcons.house, label: '首页'),
-            HyperTabItem(icon: LucideIcons.zap, label: '发现'),
-            HyperTabItem(icon: LucideIcons.user, label: '我的'),
+            HyperTabItem(icon: LucideIcons.layers, label: '组件'),
+            HyperTabItem(icon: LucideIcons.bookOpen, label: '文档'),
+            HyperTabItem(icon: LucideIcons.palette, label: '主题'),
           ],
         ),
+      ],
+    );
+  }
+}
+
+/// 库数据项：数值 + 说明
+class _HeroStat extends StatelessWidget {
+  const _HeroStat({required this.value, required this.label});
+
+  final String value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        HyperText(value, type: 'h4'),
+        HyperText(label, type: 'h6'),
       ],
     );
   }

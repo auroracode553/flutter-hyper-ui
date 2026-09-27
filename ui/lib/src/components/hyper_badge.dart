@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -83,10 +84,9 @@ class HyperBadge extends StatelessWidget {
     final toneColor = tone.color(tokens);
     final isTag = _kind == _HyperBadgeKind.tag;
     final strong = isTag ? selected : !subtle;
-    final onTone = ThemeData.estimateBrightnessForColor(toneColor) ==
-            Brightness.dark
-        ? Colors.white
-        : Colors.black;
+    final onTone = toneColor.computeLuminance() < 0.5
+        ? HyperPalette.white
+        : HyperPalette.black;
     final foreground = strong ? onTone : toneColor;
     final background = strong
         ? toneColor
@@ -105,7 +105,9 @@ class HyperBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: background,
         borderRadius: radius,
-        border: isTag ? Border.all(color: selected ? toneColor : tokens.input) : null,
+        border: isTag
+            ? Border.all(color: selected ? toneColor : tokens.input)
+            : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -135,7 +137,7 @@ class HyperBadge extends StatelessWidget {
               color: foreground,
               tooltip: '移除 $label',
               onPressed: onClose,
-              backgroundColor: Colors.transparent,
+              backgroundColor: HyperPalette.transparent,
             ),
         ],
       ),
@@ -172,7 +174,7 @@ class HyperBadge extends StatelessWidget {
                   : Text(
                       count > max ? '$max+' : '$count',
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: HyperPalette.white,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         height: 1,

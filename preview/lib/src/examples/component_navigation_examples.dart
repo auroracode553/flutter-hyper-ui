@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
@@ -141,8 +141,9 @@ class SlideMenuComponentExample extends StatelessWidget {
         HyperSlideAction(
           label: '删除',
           icon: LucideIcons.trash,
-          color: Theme.of(context).colorScheme.error,
-          onPressed: () => HyperToast.show(context, '已删除', tone: HyperUiTone.error),
+          color: HyperUiThemeTokens.of(context).error,
+          onPressed: () =>
+              HyperToast.show(context, '已删除', tone: HyperUiTone.error),
         ),
       ],
       child: const HyperListTile(
@@ -160,19 +161,23 @@ class TabsComponentExample extends StatelessWidget {
   const TabsComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => DefaultTabController(
+  Widget build(BuildContext context) => HyperTabHost(
     length: 3,
     child: Column(
       children: [
         const HyperTabs(tabs: [Text('概览'), Text('动态'), Text('成员')]),
         SizedBox(
           height: 150,
-          child: TabBarView(
+          child: HyperTabView(
             children: [
               Center(
                 child: Text(
                   '项目概览',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    color: HyperUiThemeTokens.of(context).foreground,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               const Center(child: Text('最近没有新动态')),

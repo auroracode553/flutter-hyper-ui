@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -55,7 +56,7 @@ class HyperListTile extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 46),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: selected ? tokens.muted : Colors.transparent,
+        color: selected ? tokens.muted : HyperPalette.transparent,
         borderRadius: radius,
       ),
       child: Row(

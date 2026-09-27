@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_effects.dart';
@@ -7,6 +7,7 @@ import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_button.dart';
 import 'hyper_glass.dart';
 import 'hyper_list_tile.dart';
+import 'hyper_modal.dart';
 
 class HyperAction<T> {
   const HyperAction({
@@ -38,14 +39,11 @@ abstract final class HyperActionSheet {
       throw ArgumentError('HyperActionSheet.show 需要且只需 builder 或 actions。');
     }
     final glass = HyperGlassTheme.of(context);
-    return showModalBottomSheet<T>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      isDismissible: dismissible,
-      enableDrag: dismissible,
-      backgroundColor: Colors.transparent,
-      barrierColor: glass.scrim,
+    return showHyperModal<T>(
+      context,
+      alignment: Alignment.bottomCenter,
+      dismissible: dismissible,
+      scrim: glass.scrim,
       builder: (sheetContext) {
         final tokens = HyperUiThemeTokens.of(sheetContext);
         return Padding(
@@ -72,7 +70,9 @@ abstract final class HyperActionSheet {
                         child: Container(
                           width: 32,
                           height: 4,
-                          margin: const EdgeInsets.only(bottom: HyperUiSpacing.md),
+                          margin: const EdgeInsets.only(
+                            bottom: HyperUiSpacing.md,
+                          ),
                           decoration: BoxDecoration(
                             color: tokens.border,
                             borderRadius: BorderRadius.circular(4),

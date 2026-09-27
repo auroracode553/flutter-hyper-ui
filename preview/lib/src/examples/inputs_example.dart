@@ -1,5 +1,5 @@
 import 'package:flutter_hyper_ui/hyper_ui.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class InputsExample extends StatefulWidget {
@@ -45,11 +45,7 @@ class _InputsExampleState extends State<InputsExample> {
           prefix: Icon(LucideIcons.search),
         ),
         const SizedBox(height: HyperUiSpacing.md),
-        const HyperTextField(
-          hintText: '补充说明',
-          type: 'textarea',
-          rows: 3,
-        ),
+        const HyperTextField(hintText: '补充说明', type: 'textarea', rows: 3),
       ],
     );
   }
