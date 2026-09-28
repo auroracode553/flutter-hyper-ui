@@ -147,7 +147,6 @@ class HyperListTile extends StatelessWidget {
 
     return HyperGlass(
       radius: 18,
-      blur: 14,
       type: 'regular',
       padding: const EdgeInsets.all(3),
       onTap: enabled ? onTap : null,

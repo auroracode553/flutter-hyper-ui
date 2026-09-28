@@ -3,20 +3,21 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 /// 通用组件总览，不依赖任何业务模型或路由结构。
-class GlassLibraryExample extends StatefulWidget {
-  const GlassLibraryExample({super.key});
+class ComponentLibraryExample extends StatefulWidget {
+  const ComponentLibraryExample({super.key});
 
   @override
-  State<GlassLibraryExample> createState() => _GlassLibraryExampleState();
+  State<ComponentLibraryExample> createState() =>
+      _ComponentLibraryExampleState();
 }
 
-class _GlassLibraryExampleState extends State<GlassLibraryExample> {
+class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
   int _tab = 0;
   int _radio = 0;
   bool _checked = true;
   bool _enabled = true;
   double _slider = 62;
-  String? _dropdown = 'regular';
+  String? _dropdown = 'newest';
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: 18,
       children: <Widget>[
-        const HyperText('柔性玻璃组件库', size: 'large'),
+        const HyperText('Hyper UI 组件库', size: 'large'),
         const HyperText('统一材质、状态与动效，不绑定任何业务。', size: 'small'),
         HyperNavBar(
           title: const Text('Navbar'),
@@ -87,12 +88,12 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
                 prefix: Icon(LucideIcons.search),
               ),
               HyperDropdown<String>(
-                label: '材质厚度',
+                label: '排序方式',
                 value: _dropdown,
                 options: const <HyperOption<String>>[
-                  HyperOption(value: 'subtle', label: '轻薄'),
-                  HyperOption(value: 'regular', label: '标准'),
-                  HyperOption(value: 'prominent', label: '突出'),
+                  HyperOption(value: 'newest', label: '新发布'),
+                  HyperOption(value: 'popular', label: '最热门'),
+                  HyperOption(value: 'updated', label: '最近更新'),
                 ],
                 onChanged: (value) => setState(() => _dropdown = value),
               ),

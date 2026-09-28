@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { withBase } from 'vitepress';
 import { getComponentEntry } from '../../catalog';
 import { dartApiFor } from '../dart-api';
 import { highlightDart } from '../highlight';
@@ -90,9 +89,6 @@ const apiProps = computed<ApiProp[]>(() => {
 <template>
   <article class="component-doc">
     <header class="component-doc__header">
-      <a class="component-doc__category" :href="withBase('/components/catalog')">
-        组件 / {{ entry.groupTitle }}
-      </a>
       <h1>{{ entry.navName }}</h1>
       <p>{{ entry.summary }}</p>
     </header>

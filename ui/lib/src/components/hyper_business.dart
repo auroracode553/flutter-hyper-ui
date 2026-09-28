@@ -28,7 +28,6 @@ class _HyperCollapseState extends State<HyperCollapse> {
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
     return HyperGlass(
-      blur: 0,
       radius: 20,
       child: Column(
         mainAxisSize: MainAxisSize.min,

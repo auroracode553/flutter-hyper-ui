@@ -269,7 +269,6 @@ class _UploadItemTile extends StatelessWidget {
       width: 104,
       child: HyperGlass(
         radius: 16,
-        blur: 12,
         type: 'subtle',
         borderColor: tokens.input,
         padding: const EdgeInsets.all(6),
@@ -359,7 +358,6 @@ class _UploadAddTile extends StatelessWidget {
       height: 136,
       child: HyperGlass(
         radius: 16,
-        blur: 12,
         type: 'subtle',
         borderColor: tokens.input,
         onTap: onTap,

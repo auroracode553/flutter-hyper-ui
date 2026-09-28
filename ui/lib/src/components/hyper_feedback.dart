@@ -65,9 +65,11 @@ abstract final class HyperToast {
               constraints: const BoxConstraints(minWidth: 180, maxWidth: 420),
               child: HyperGlass(
                 radius: 18,
-                blur: 28,
                 type: 'prominent',
-                color: Color.alphaBlend(toneColor.withAlpha(10), tokens.card),
+                color: Color.alphaBlend(
+                  toneColor.withAlpha(10),
+                  theme.glass.surfaceStrong,
+                ),
                 borderColor: toneColor.withAlpha(105),
                 padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
                 child: Row(
@@ -159,7 +161,6 @@ abstract final class HyperDialog {
         constraints: const BoxConstraints(maxWidth: 420),
         child: HyperGlass(
           radius: 26,
-          blur: 30,
           type: 'prominent',
           padding: const EdgeInsets.all(18),
           child: SingleChildScrollView(
@@ -257,7 +258,6 @@ class HyperLoading extends StatelessWidget {
             Center(
               child: HyperGlass(
                 radius: 24,
-                blur: 30,
                 type: 'prominent',
                 padding: const EdgeInsets.all(20),
                 child: HyperLoading(label: label),

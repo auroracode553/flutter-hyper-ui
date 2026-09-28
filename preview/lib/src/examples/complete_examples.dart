@@ -147,9 +147,8 @@ class LayoutExample extends StatelessWidget {
               (LucideIcons.headset, '帮助'),
               (LucideIcons.settings, '设置'),
             ])
-              HyperGlass(
-                blur: 0,
-                radius: 18,
+              HyperCard(
+                padding: EdgeInsets.zero,
                 onTap: () => HyperToast.show(context, entry.$2),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

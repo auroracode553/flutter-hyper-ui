@@ -143,7 +143,6 @@ class HyperDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) => HyperGlass(
     radius: 30,
-    blur: HyperUiEffects.glassBlurStrong,
     type: 'prominent',
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

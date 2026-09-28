@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'hyper_glass_theme.dart';
+import 'hyper_material.dart';
 import 'hyper_ui_theme_tokens.dart';
 
 /// Hyper UI's own visual configuration.
@@ -10,12 +11,14 @@ class HyperUiThemeData {
     required this.brightness,
     required this.tokens,
     required this.glass,
+    required this.material,
     this.fontFamily,
   });
 
   final Brightness brightness;
   final HyperUiThemeTokens tokens;
   final HyperGlassTheme glass;
+  final HyperMaterial material;
   final String? fontFamily;
 
   TextStyle get textStyle => TextStyle(
@@ -30,11 +33,20 @@ class HyperUiThemeData {
     Brightness? brightness,
     HyperUiThemeTokens? tokens,
     HyperGlassTheme? glass,
+    HyperMaterial? material,
     String? fontFamily,
   }) => HyperUiThemeData(
     brightness: brightness ?? this.brightness,
     tokens: tokens ?? this.tokens,
-    glass: glass ?? this.glass,
+    glass:
+        glass ??
+        (material == null && brightness == null
+            ? this.glass
+            : HyperGlassTheme.forMaterial(
+                brightness ?? this.brightness,
+                material ?? this.material,
+              )),
+    material: material ?? this.material,
     fontFamily: fontFamily ?? this.fontFamily,
   );
 }
@@ -52,6 +64,7 @@ class HyperUiTheme extends StatelessWidget {
     String title = 'Hyper UI',
     Brightness? brightness,
     Color? primary,
+    HyperMaterial material = HyperMaterial.solid,
     String? fontFamily,
     TransitionBuilder? builder,
   }) => _HyperApp(
@@ -59,25 +72,34 @@ class HyperUiTheme extends StatelessWidget {
     title: title,
     brightness: brightness,
     primary: primary,
+    material: material,
     fontFamily: fontFamily,
     builder: builder,
   );
 
-  static HyperUiThemeData light({Color? primary, String? fontFamily}) =>
-      HyperUiThemeData(
-        brightness: Brightness.light,
-        tokens: HyperUiThemeTokens.light(primary: primary),
-        glass: HyperGlassTheme.light(),
-        fontFamily: fontFamily,
-      );
+  static HyperUiThemeData light({
+    Color? primary,
+    String? fontFamily,
+    HyperMaterial material = HyperMaterial.solid,
+  }) => HyperUiThemeData(
+    brightness: Brightness.light,
+    tokens: HyperUiThemeTokens.light(primary: primary),
+    glass: HyperGlassTheme.forMaterial(Brightness.light, material),
+    material: material,
+    fontFamily: fontFamily,
+  );
 
-  static HyperUiThemeData dark({Color? primary, String? fontFamily}) =>
-      HyperUiThemeData(
-        brightness: Brightness.dark,
-        tokens: HyperUiThemeTokens.dark(primary: primary),
-        glass: HyperGlassTheme.dark(),
-        fontFamily: fontFamily,
-      );
+  static HyperUiThemeData dark({
+    Color? primary,
+    String? fontFamily,
+    HyperMaterial material = HyperMaterial.solid,
+  }) => HyperUiThemeData(
+    brightness: Brightness.dark,
+    tokens: HyperUiThemeTokens.dark(primary: primary),
+    glass: HyperGlassTheme.forMaterial(Brightness.dark, material),
+    material: material,
+    fontFamily: fontFamily,
+  );
 
   static HyperUiThemeData of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<_HyperUiThemeScope>()?.data ??
@@ -123,6 +145,7 @@ class _HyperApp extends StatefulWidget {
     required this.title,
     this.brightness,
     this.primary,
+    this.material = HyperMaterial.solid,
     this.fontFamily,
     this.builder,
   });
@@ -131,6 +154,7 @@ class _HyperApp extends StatefulWidget {
   final String title;
   final Brightness? brightness;
   final Color? primary;
+  final HyperMaterial material;
   final String? fontFamily;
   final TransitionBuilder? builder;
 
@@ -164,10 +188,12 @@ class _HyperAppState extends State<_HyperApp> with WidgetsBindingObserver {
     final theme = resolvedBrightness == Brightness.dark
         ? HyperUiTheme.dark(
             primary: widget.primary,
+            material: widget.material,
             fontFamily: widget.fontFamily,
           )
         : HyperUiTheme.light(
             primary: widget.primary,
+            material: widget.material,
             fontFamily: widget.fontFamily,
           );
     return HyperUiTheme(

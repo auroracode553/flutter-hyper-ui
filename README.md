@@ -6,11 +6,11 @@
 
 ## 设计系统
 
-Hyper UI 是独立、无业务依赖的通用组件库。视觉语言以克制的半透明材质、细边缘高光、低对比阴影和胶囊选中态为核心；交互遵循按下即响应、拖拽 1:1 跟手、释放速度继承、边界柔性阻尼和减少动画适配。
+Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实色、柔和及清透三档表面材质，并使用细边缘、低对比阴影和胶囊选中态；交互遵循按下即响应、拖拽 1:1 跟手、释放速度继承、边界柔性阻尼和减少动画适配。
 
 - `HyperUiThemeTokens`：背景、文字、品牌色和状态色等语义令牌。
 - `HyperGlassTheme`：玻璃表面、边缘、阴影、控件轨道、选中态和遮罩令牌，可由应用通过 `HyperUiThemeData.copyWith` 覆盖。
-- `HyperGlass`：按 `subtle / regular / prominent / solid` 区分材质厚度；大面积浮层使用更强材质，小控件使用轻量材质。
+- `HyperMaterial`：通过 `HyperUiTheme.app(material: ...)` 在 `solid / soft / clear` 间切换全应用材质，局部子树可用 `copyWith(material: ...)` 覆盖。
 - `HyperPressable`：按钮、卡片和菜单行共享的即时按压反馈，不包含业务行为。
 
 ## 通用组件

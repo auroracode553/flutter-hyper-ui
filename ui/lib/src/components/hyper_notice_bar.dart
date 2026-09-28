@@ -65,7 +65,6 @@ class _HyperNoticeBarState extends State<HyperNoticeBar>
     final style = TextStyle(fontSize: 14, color: tokens.primary);
     return HyperGlass(
       radius: 16,
-      blur: 14,
       color: tokens.selectionBackground,
       borderColor: tokens.primary.withAlpha(70),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),

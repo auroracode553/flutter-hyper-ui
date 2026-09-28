@@ -81,9 +81,9 @@ const demo = (
 ): ComponentDemo => ({ id, title, source, height, description, symbol });
 
 export const featuredDemo = demo(
-  'glass-library',
-  '柔性玻璃组件总览',
-  'glass_library_example.dart',
+  'component-library',
+  'Hyper UI 组件总览',
+  'component_library_example.dart',
   980,
   '导航、输入、菜单、反馈与加载组件的统一状态和交互。',
 );
@@ -211,21 +211,6 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'selected', description: '是否选中，默认 false' },
         ],
         preview: demo('component-card', 'HyperCard 结构', 'component_surface_examples.dart', 560, '完整结构、选中态与无标题纯内容。', 'CardComponentExample'),
-      }),
-      component('HyperGlass', 'hyper_glass.dart', '可配置模糊、背景、边框、阴影和点击行为的玻璃材质。', {
-        propsDocs: [
-          { name: 'child', description: '子组件' },
-          { name: 'padding', description: '内边距，默认 EdgeInsets.zero' },
-          { name: 'radius', description: '圆角大小，默认 24' },
-          { name: 'blur', description: '模糊度' },
-          { name: 'type', description: '材质类型：subtle / regular / prominent / solid，默认 regular' },
-          { name: 'borderColor', description: '边框颜色' },
-          { name: 'shadows', description: '阴影列表' },
-          { name: 'color', description: '背景颜色' },
-          { name: 'onTap', description: '点击回调' },
-          { name: 'clipBehavior', description: '裁剪行为，默认 Clip.antiAlias' },
-        ],
-        preview: demo('component-glass', 'HyperGlass 材质', 'component_surface_examples.dart', 420, '四档材质重量与自定义圆角、模糊。', 'GlassComponentExample'),
       }),
       component('HyperPressable', 'hyper_pressable.dart', '按下即响应、可适配减少动画的通用触控反馈层。', {
         propsDocs: [

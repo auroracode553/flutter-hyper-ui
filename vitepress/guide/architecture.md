@@ -9,9 +9,9 @@ Hyper UI 由四层组成，依赖只允许从上向下：
         ↓
 基础组件（Button、TextField、TabBar、List）
         ↓
-材质与交互基础设施（HyperGlass、HyperPressable）
+内部表面绘制层与交互基础设施（HyperPressable）
         ↓
-主题令牌（HyperUiThemeTokens、HyperGlassTheme、Effects）
+主题令牌（HyperUiThemeTokens、HyperMaterial、HyperGlassTheme、Effects）
 ```
 
 主题层不依赖组件；基础材质不读取业务状态；复合组件通过构造参数注入内容、状态与回调。
@@ -44,7 +44,8 @@ Hyper UI 由四层组成，依赖只允许从上向下：
 
 本次基础设施拆分后的文件关系：
 
-- `theme/hyper_ui_theme.dart` 提供主题容器，`hyper_ui_theme_tokens.dart` 和 `hyper_glass_theme.dart` 提供两组令牌；`hyper_palette.dart` 保存绘制基底使用的中性色。
+- `theme/hyper_ui_theme.dart` 提供主题容器；`hyper_material.dart` 定义应用和局部材质档位；`hyper_ui_theme_tokens.dart` 和 `hyper_glass_theme.dart` 提供两组令牌；`hyper_palette.dart` 保存绘制基底使用的中性色。
+- `components/hyper_glass.dart` 是仅供组件内部复用的表面绘制层，不从公开入口导出。
 - `components/hyper_progress_painters.dart` 提供自绘加载环与进度轨道，供按钮、导航、上传和反馈组件复用。
 - `components/hyper_modal.dart` 提供浮层路由，供操作面板、对话框与图片预览复用；`hyper_anchored_surface.dart` 提供下拉菜单和气泡菜单的锚定浮层。
 - `components/hyper_tab_controller.dart` 连接标签栏与内容区；`hyper_wheel_picker.dart` 提供选择器的通用滚轮。

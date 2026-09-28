@@ -17,7 +17,6 @@ Widget buildHySelectionField(
   final tokens = HyperUiThemeTokens.of(context);
   final field = HyperGlass(
     radius: 16,
-    blur: 14,
     type: 'subtle',
     borderColor: tokens.input,
     onTap: onTap,

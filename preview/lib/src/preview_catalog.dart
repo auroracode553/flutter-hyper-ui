@@ -29,13 +29,15 @@ import 'examples/component_pagination_example.dart'
     deferred as example_component_pagination_example;
 import 'examples/component_surface_examples.dart'
     deferred as example_component_surface_examples;
+import 'examples/material_theme_example.dart'
+    deferred as example_material_theme_example;
 import 'examples/component_tooltip_example.dart'
     deferred as example_component_tooltip_example;
 import 'examples/data_example.dart' deferred as example_data_example;
 import 'examples/drawer_example.dart' deferred as example_drawer_example;
 import 'examples/feedback_example.dart' deferred as example_feedback_example;
-import 'examples/glass_library_example.dart'
-    deferred as example_glass_library_example;
+import 'examples/component_library_example.dart'
+    deferred as example_component_library_example;
 import 'examples/inputs_example.dart' deferred as example_inputs_example;
 import 'examples/navigation_example.dart'
     deferred as example_navigation_example;
@@ -87,15 +89,16 @@ PreviewItem _componentPreview(
 class PreviewCatalog {
   const PreviewCatalog._();
 
-  static const defaultId = 'glass-library';
+  static const defaultId = 'component-library';
 
   static final List<PreviewItem> items = [
     PreviewItem(
-      id: 'glass-library',
-      title: '柔性玻璃组件库',
+      id: 'component-library',
+      title: 'Hyper UI 组件库',
       description: '通用导航、表单、菜单、反馈与加载组件。',
-      loadLibrary: () => example_glass_library_example.loadLibrary(),
-      builder: (_) => example_glass_library_example.GlassLibraryExample(),
+      loadLibrary: () => example_component_library_example.loadLibrary(),
+      builder: (_) =>
+          example_component_library_example.ComponentLibraryExample(),
     ),
     PreviewItem(
       id: 'home-hero',
@@ -232,12 +235,11 @@ class PreviewCatalog {
       builder: (_) => example_component_surface_examples.CardComponentExample(),
     ),
     PreviewItem(
-      id: 'component-glass',
-      title: 'HyperGlass',
-      description: '玻璃材质重量。',
-      loadLibrary: () => example_component_surface_examples.loadLibrary(),
-      builder: (_) =>
-          example_component_surface_examples.GlassComponentExample(),
+      id: 'theme-material',
+      title: '材质主题',
+      description: '实色、柔和与清透材质切换。',
+      loadLibrary: () => example_material_theme_example.loadLibrary(),
+      builder: (_) => example_material_theme_example.MaterialThemeExample(),
     ),
     PreviewItem(
       id: 'component-skeleton',

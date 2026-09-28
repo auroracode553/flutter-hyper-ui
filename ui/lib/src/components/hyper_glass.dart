@@ -1,14 +1,12 @@
-import 'package:flutter_hyper_ui/src/theme/hyper_ui_theme.dart';
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_glass_theme.dart';
-import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
 
-/// Hyper UI 的统一柔性玻璃材质。
+/// 内部表面绘制层。公开材质档位由 HyperUiTheme 配置。
 ///
 /// [HyperGlass] 只负责材质、裁切与触控反馈。业务间距由外部决定，避免基础材质
 /// 与卡片、菜单等高阶组件互相耦合。
@@ -18,7 +16,6 @@ class HyperGlass extends StatelessWidget {
     required this.child,
     this.padding = EdgeInsets.zero,
     this.radius = 24,
-    this.blur = HyperUiEffects.glassBlur,
     this.type = 'regular',
     this.borderColor,
     this.shadows,
@@ -36,7 +33,6 @@ class HyperGlass extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
   final double radius;
-  final double blur;
   final String type;
   final Color? color;
   final Color? borderColor;
@@ -52,13 +48,16 @@ class HyperGlass extends StatelessWidget {
         type != 'solid') {
       throw ArgumentError.value(type, 'type', 'Invalid glass type');
     }
-    final theme = HyperUiTheme.of(context);
     final glass = HyperGlassTheme.of(context);
     final tokens = HyperUiThemeTokens.of(context);
     final highContrast = MediaQuery.maybeOf(context)?.highContrast ?? false;
     final shape = BorderRadius.circular(radius);
     final surfaceColor = color ?? _surfaceColor(glass, tokens, highContrast);
-    final effectiveBlur = highContrast || type == 'solid' ? 0.0 : blur;
+    final effectiveBlur = highContrast || type == 'solid'
+        ? 0.0
+        : type == 'prominent'
+        ? glass.blurStrong
+        : glass.blur;
     final effectiveBorder =
         borderColor ??
         (highContrast
@@ -101,9 +100,7 @@ class HyperGlass extends StatelessWidget {
           borderRadius: shape,
           boxShadow:
               shadows ??
-              (type == 'subtle'
-                  ? const <BoxShadow>[]
-                  : HyperUiEffects.surfaceShadows(theme.brightness)),
+              (type == 'subtle' ? const <BoxShadow>[] : glass.surfaceShadows),
         ),
         child: result,
       ),

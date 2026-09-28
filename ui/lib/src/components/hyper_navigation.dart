@@ -96,7 +96,6 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
     }
     return HyperGlass(
       radius: preferredSize.height / 2,
-      blur: 12,
       type: 'subtle',
       padding: const EdgeInsets.all(3),
       child: SizedBox(

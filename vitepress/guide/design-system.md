@@ -16,25 +16,22 @@ Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一�
 
 组件只表达 UI 语义：值、状态、内容和回调。它们不包含订单、用户、商城等业务概念，也不规定应用如何路由或管理状态。
 
-## 材质厚度
+## 表面材质
 
-`HyperGlass.type` 用面积和层级区分四类材质：
+`HyperUiTheme` 在主题层选择 `solid`、`soft` 或 `clear`。组件内部按用途区分轻量、常规和浮层表面，这些层级在三种材质下保持一致：
 
-| 厚度 | 用途 | 行为 |
-| --- | --- | --- |
-| `subtle` | 输入框、小型选择器、内嵌控件 | 轻量表面，无额外阴影 |
-| `regular` | 卡片、分组菜单、顶部栏 | 标准模糊和柔和环境阴影 |
-| `prominent` | Drawer、Dialog、Toast、BottomSheet | 更实的表面、更强分离度 |
-| `solid` | 高对比或不适合透明的区域 | 使用实色卡片背景，不执行模糊 |
+| 材质 | 行为 |
+| --- | --- |
+| `solid` | 默认值；实色背景，不执行背景模糊 |
+| `soft` | 柔和半透明表面，使用标准模糊 |
+| `clear` | 更清透的表面，使用更强模糊 |
 
-不要在一个轻量玻璃表面上继续叠加另一个轻量玻璃表面。`HyperMenuGroup` 绘制一次外层材质，内部 `HyperListTile` 会自动只绘制状态；在其他自定义玻璃表面内可用 `HyperListTile(type: 'plain', ...)`。
+`HyperMenuGroup` 绘制一次外层表面，内部 `HyperListTile` 自动只绘制状态；其他分组表面内可用 `HyperListTile(type: 'plain', ...)`。
 
 ```dart
-HyperGlass(
-  type: 'prominent',
-  blur: HyperUiEffects.glassBlurStrong,
-  radius: 28,
-  child: content,
+HyperUiTheme.app(
+  material: HyperMaterial.soft,
+  home: const AppHome(),
 )
 ```
 

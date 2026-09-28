@@ -1,6 +1,3 @@
-import 'package:flutter_hyper_ui/src/theme/hyper_ui_theme.dart';
-import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
-import 'package:flutter_hyper_ui/src/theme/hyper_ui_theme_tokens.dart';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -9,6 +6,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
+
+import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_material.dart';
+import '../theme/hyper_ui_theme.dart';
+import '../theme/hyper_ui_theme_tokens.dart';
 
 /// 底栏中的一个导航项；页面与图标含义由调用方决定。
 class HyperTabItem {
@@ -123,7 +125,8 @@ class _HyperTabBarState extends State<HyperTabBar>
 
   @override
   Widget build(BuildContext context) {
-    final dark = HyperUiTheme.of(context).brightness == Brightness.dark;
+    final glass = HyperGlassTheme.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
     final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
     final barHeight = math.max(HyperTabBar.height, textHeight + 36);
     final bar = Padding(
@@ -169,9 +172,7 @@ class _HyperTabBarState extends State<HyperTabBar>
                       .clamp(-12.0, math.max(-12.0, barWidth + 12 - lensWidth))
                       .toDouble();
                   final lensTop = (barHeight - lensHeight) / 2;
-                  final foreground = dark
-                      ? HyperPalette.white
-                      : const Color(0xFF101010);
+                  final foreground = tokens.foreground;
                   final content = _buildTabRow(
                     position: position,
                     foreground: foreground,
@@ -180,7 +181,7 @@ class _HyperTabBarState extends State<HyperTabBar>
                   return Stack(
                     clipBehavior: Clip.none,
                     children: <Widget>[
-                      Positioned.fill(child: _HyperTabSurface(dark: dark)),
+                      const Positioned.fill(child: _HyperTabSurface()),
                       Positioned(
                         left: selectedLeft,
                         top: _inset,
@@ -192,9 +193,7 @@ class _HyperTabBarState extends State<HyperTabBar>
                               .toDouble(),
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: dark
-                                  ? const Color(0x33FFFFFF)
-                                  : const Color(0x20000000),
+                              color: glass.selection,
                               borderRadius: BorderRadius.circular(
                                 barHeight / 2,
                               ),
@@ -219,7 +218,6 @@ class _HyperTabBarState extends State<HyperTabBar>
                               velocity: _dragVelocity == 0
                                   ? _position.velocity
                                   : _dragVelocity,
-                              dark: dark,
                             ),
                           ),
                         ),
@@ -398,40 +396,38 @@ class _HyperTabBarState extends State<HyperTabBar>
 }
 
 class _HyperTabSurface extends StatelessWidget {
-  const _HyperTabSurface({required this.dark});
-
-  final bool dark;
+  const _HyperTabSurface();
 
   @override
   Widget build(BuildContext context) {
+    final glass = HyperGlassTheme.of(context);
     final radius = BorderRadius.circular(28);
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: radius,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: HyperPalette.black.withAlpha(dark ? 80 : 24),
-            blurRadius: 26,
-            spreadRadius: -4,
-            offset: const Offset(0, 9),
-          ),
-        ],
+        boxShadow: glass.surfaceShadows,
       ),
       child: ClipRRect(
         borderRadius: radius,
-        child: BackdropFilter(
-          filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: dark ? const Color(0xE6292A2C) : const Color(0xE6FFFFFF),
-              borderRadius: radius,
-              border: Border.all(
-                color: dark ? const Color(0x45FFFFFF) : const Color(0xD9FFFFFF),
-              ),
-            ),
-          ),
+        child: _buildSurface(glass, radius),
+      ),
+    );
+  }
+
+  Widget _buildSurface(HyperGlassTheme glass, BorderRadius radius) {
+    final surface = DecoratedBox(
+      decoration: BoxDecoration(
+        color: glass.surface,
+        borderRadius: radius,
+        border: Border.all(
+          color: Color.alphaBlend(glass.edgeShade, glass.edgeHighlight),
         ),
       ),
+    );
+    if (glass.blur == 0) return surface;
+    return BackdropFilter(
+      filter: ui.ImageFilter.blur(sigmaX: glass.blur, sigmaY: glass.blur),
+      child: surface,
     );
   }
 }
@@ -478,18 +474,15 @@ class _HyperTabLabel extends StatelessWidget {
 }
 
 class _HyperLiquidLens extends StatelessWidget {
-  const _HyperLiquidLens({
-    required this.expansion,
-    required this.velocity,
-    required this.dark,
-  });
+  const _HyperLiquidLens({required this.expansion, required this.velocity});
 
   final double expansion;
   final double velocity;
-  final bool dark;
 
   @override
   Widget build(BuildContext context) {
+    final theme = HyperUiTheme.of(context);
+    final glass = theme.glass;
     final tilt = (velocity / 8).clamp(-1.0, 1.0).toDouble();
     final clipper = _HyperLensShape(tilt: tilt);
     return LayoutBuilder(
@@ -498,7 +491,13 @@ class _HyperLiquidLens extends StatelessWidget {
         final height = constraints.maxHeight;
         final scaleX = 1 + 0.15 * expansion;
         final scaleY = 1 + 0.09 * expansion;
-        // BackdropFilter 的矩阵直接放大水珠后的真实画面，包括底栏与页面。
+        if (theme.material == HyperMaterial.solid) {
+          return ClipPath(
+            clipper: clipper,
+            child: ColoredBox(color: glass.selection),
+          );
+        }
+        // 透明档位才折射底栏与页面；实色档位直接绘制选中块。
         final matrix = Float64List.fromList(<double>[
           scaleX,
           0,
@@ -527,7 +526,9 @@ class _HyperLiquidLens extends StatelessWidget {
               borderRadius: BorderRadius.circular(height / 2),
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                  color: HyperPalette.black.withAlpha((29 * expansion).round()),
+                  color: glass.shadow.withValues(
+                    alpha: glass.shadow.a * expansion,
+                  ),
                   blurRadius: 22 * expansion,
                   spreadRadius: -3,
                   offset: Offset(0, 5 * expansion),
@@ -538,20 +539,18 @@ class _HyperLiquidLens extends StatelessWidget {
               foregroundPainter: _HyperLensRimPainter(
                 clipper: clipper,
                 opacity: expansion,
+                edgeColor: glass.edgeHighlight,
+                accentColor: theme.tokens.primary,
+                secondaryColor: theme.tokens.info,
               ),
               child: ClipPath(
                 clipper: clipper,
                 child: BackdropFilter(
                   filter: refraction,
                   child: ColoredBox(
-                    color: dark
-                        ? Color.fromARGB((36 * expansion).round(), 85, 89, 94)
-                        : Color.fromARGB(
-                            (44 * expansion).round(),
-                            255,
-                            255,
-                            255,
-                          ),
+                    color: glass.surfaceSubtle.withValues(
+                      alpha: glass.surfaceSubtle.a * 0.2 * expansion,
+                    ),
                   ),
                 ),
               ),
@@ -619,10 +618,19 @@ class _HyperLensShape extends CustomClipper<Path> {
 }
 
 class _HyperLensRimPainter extends CustomPainter {
-  const _HyperLensRimPainter({required this.clipper, required this.opacity});
+  const _HyperLensRimPainter({
+    required this.clipper,
+    required this.opacity,
+    required this.edgeColor,
+    required this.accentColor,
+    required this.secondaryColor,
+  });
 
   final _HyperLensShape clipper;
   final double opacity;
+  final Color edgeColor;
+  final Color accentColor;
+  final Color secondaryColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -632,17 +640,17 @@ class _HyperLensRimPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5
       ..shader = ui.Gradient.sweep(bounds.center, <Color>[
-        HyperPalette.white.withAlpha((205 * opacity).round()),
-        const Color(0xFF9FE7F8).withAlpha((125 * opacity).round()),
-        HyperPalette.white.withAlpha((220 * opacity).round()),
-        const Color(0xFFFFD7EC).withAlpha((110 * opacity).round()),
-        HyperPalette.white.withAlpha((205 * opacity).round()),
+        edgeColor.withValues(alpha: edgeColor.a * opacity),
+        accentColor.withValues(alpha: 0.5 * opacity),
+        edgeColor.withValues(alpha: edgeColor.a * opacity),
+        secondaryColor.withValues(alpha: 0.4 * opacity),
+        edgeColor.withValues(alpha: edgeColor.a * opacity),
       ]);
     canvas.drawPath(path, rim);
     final highlight = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
-      ..color = HyperPalette.white.withAlpha((110 * opacity).round());
+      ..color = edgeColor.withValues(alpha: edgeColor.a * 0.5 * opacity);
     canvas.drawArc(
       Rect.fromLTWH(3, 2, size.width - 6, size.height * 0.8),
       math.pi * 1.07,
@@ -655,5 +663,8 @@ class _HyperLensRimPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _HyperLensRimPainter oldDelegate) =>
       oldDelegate.opacity != opacity ||
-      oldDelegate.clipper.tilt != clipper.tilt;
+      oldDelegate.clipper.tilt != clipper.tilt ||
+      oldDelegate.edgeColor != edgeColor ||
+      oldDelegate.accentColor != accentColor ||
+      oldDelegate.secondaryColor != secondaryColor;
 }

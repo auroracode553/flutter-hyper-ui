@@ -160,7 +160,6 @@ class _HyperSlideMenuState extends State<HyperSlideMenu>
                     child: widget.decorateChild
                         ? HyperGlass(
                             radius: widget.radius,
-                            blur: 14,
                             type: 'regular',
                             child: widget.child,
                           )

@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_glass_theme.dart';
-import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_button.dart';
@@ -83,7 +82,6 @@ abstract final class HyperActionSheet {
             ),
             child: HyperGlass(
               radius: 30,
-              blur: HyperUiEffects.glassBlurStrong,
               type: 'prominent',
               padding: const EdgeInsets.all(HyperUiSpacing.md),
               child: SafeArea(

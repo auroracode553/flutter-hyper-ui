@@ -54,7 +54,6 @@ class HyperPagination extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: HyperGlass(
         radius: 16,
-        blur: 12,
         type: 'subtle',
         padding: const EdgeInsets.all(4),
         child: Row(

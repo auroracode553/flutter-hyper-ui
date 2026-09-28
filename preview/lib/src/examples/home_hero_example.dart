@@ -27,7 +27,7 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
         children: [
           // 品牌与定位
           const HyperText('HYPER UI · FLUTTER', size: 'small'),
-          const HyperText('柔性玻璃组件库', size: 'large'),
+          const HyperText('Hyper UI 组件库', size: 'large'),
           const SizedBox(height: 2),
 
           // 库数据

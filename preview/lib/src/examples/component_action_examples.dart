@@ -18,7 +18,7 @@ class _PressableComponentExampleState extends State<PressableComponentExample> {
   Widget build(BuildContext context) => HyperPressable(
     borderRadius: BorderRadius.circular(22),
     onPressed: () => setState(() => _count++),
-    child: HyperGlass(
+    child: HyperCard(
       padding: const EdgeInsets.all(22),
       child: Row(
         mainAxisSize: MainAxisSize.min,

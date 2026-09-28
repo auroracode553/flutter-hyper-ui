@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'hyper_ui_theme.dart';
+import 'hyper_material.dart';
 
 /// 柔性玻璃视觉令牌。
 ///
@@ -19,6 +20,8 @@ class HyperGlassTheme {
     required this.selection,
     required this.pressed,
     required this.scrim,
+    required this.blur,
+    required this.blurStrong,
   });
 
   /// 标准玻璃表面，用于卡片和常规容器。
@@ -51,17 +54,66 @@ class HyperGlassTheme {
   /// 模态抽屉、对话框和加载层使用的背景遮罩色。
   final Color scrim;
 
+  /// 常规表面和浮层的背景模糊半径。
+  final double blur;
+  final double blurStrong;
+
+  List<BoxShadow> get surfaceShadows => <BoxShadow>[
+    BoxShadow(
+      color: shadow,
+      blurRadius: 28,
+      spreadRadius: -6,
+      offset: const Offset(0, 12),
+    ),
+    BoxShadow(
+      color: shadow.withValues(alpha: shadow.a * 0.42),
+      blurRadius: 8,
+      spreadRadius: -3,
+      offset: const Offset(0, 3),
+    ),
+  ];
+
+  /// 所有组件从同一材质档位生成表面颜色和模糊强度。
+  factory HyperGlassTheme.forMaterial(
+    Brightness brightness,
+    HyperMaterial material,
+  ) {
+    final base = brightness == Brightness.dark
+        ? HyperGlassTheme.dark()
+        : HyperGlassTheme.light();
+    if (material == HyperMaterial.soft) return base;
+    final solid = material == HyperMaterial.solid;
+    final surface = brightness == Brightness.dark
+        ? const Color(0xFF1B1F27)
+        : const Color(0xFFFFFFFF);
+    return base.copyWith(
+      surface: surface.withAlpha(solid ? 255 : 118),
+      surfaceStrong: surface.withAlpha(solid ? 255 : 153),
+      surfaceSubtle: surface.withAlpha(solid ? 255 : 77),
+      edgeHighlight: solid
+          ? (brightness == Brightness.dark
+                ? const Color(0xFF343B47)
+                : const Color(0x18111216))
+          : base.edgeHighlight,
+      edgeShade: solid ? const Color(0x00000000) : base.edgeShade,
+      blur: solid ? 0 : 32,
+      blurStrong: solid ? 0 : 40,
+    );
+  }
+
   factory HyperGlassTheme.light() => const HyperGlassTheme(
     surface: Color(0xD9FFFFFF),
     surfaceStrong: Color(0xF7FFFFFF),
     surfaceSubtle: Color(0xBFFFFFFF),
     edgeHighlight: Color(0xE6FFFFFF),
     edgeShade: Color(0x12111216),
-    shadow: Color(0x18111A28),
+    shadow: Color(0x14111A28),
     controlTrack: Color(0x16000000),
     selection: Color(0x1F000000),
     pressed: Color(0x14000000),
     scrim: Color(0x52080B12),
+    blur: 20,
+    blurStrong: 28,
   );
 
   factory HyperGlassTheme.dark() => const HyperGlassTheme(
@@ -70,11 +122,13 @@ class HyperGlassTheme {
     surfaceSubtle: Color(0xB31E2026),
     edgeHighlight: Color(0x2EFFFFFF),
     edgeShade: Color(0x1FFFFFFF),
-    shadow: Color(0x80000000),
+    shadow: Color(0x52000000),
     controlTrack: Color(0x24FFFFFF),
     selection: Color(0x1FFFFFFF),
     pressed: Color(0x1FFFFFFF),
     scrim: Color(0x99000000),
+    blur: 20,
+    blurStrong: 28,
   );
 
   static HyperGlassTheme of(BuildContext context) {
@@ -92,6 +146,8 @@ class HyperGlassTheme {
     Color? selection,
     Color? pressed,
     Color? scrim,
+    double? blur,
+    double? blurStrong,
   }) {
     return HyperGlassTheme(
       surface: surface ?? this.surface,
@@ -104,6 +160,8 @@ class HyperGlassTheme {
       selection: selection ?? this.selection,
       pressed: pressed ?? this.pressed,
       scrim: scrim ?? this.scrim,
+      blur: blur ?? this.blur,
+      blurStrong: blurStrong ?? this.blurStrong,
     );
   }
 
@@ -119,6 +177,8 @@ class HyperGlassTheme {
       selection: Color.lerp(selection, other.selection, t)!,
       pressed: Color.lerp(pressed, other.pressed, t)!,
       scrim: Color.lerp(scrim, other.scrim, t)!,
+      blur: blur + (other.blur - blur) * t,
+      blurStrong: blurStrong + (other.blurStrong - blurStrong) * t,
     );
   }
 }

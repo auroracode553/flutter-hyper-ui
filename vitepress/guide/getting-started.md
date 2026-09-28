@@ -28,7 +28,9 @@ import 'package:flutter_hyper_ui/hyper_ui.dart';
 HyperUiTheme.app(home: const AppHome());
 ```
 
-默认跟随系统明暗模式。需要固定模式时传 `brightness: Brightness.light` 或 `Brightness.dark`；品牌色用 `primary`。局部精细覆盖仍可使用 `HyperUiTheme(data: ..., child: ...)`。
+默认跟随系统明暗模式，材质默认为 `HyperMaterial.solid`。需要固定模式时传 `brightness: Brightness.light` 或 `Brightness.dark`；品牌色用 `primary`。通过 `material: HyperMaterial.soft` 或 `HyperMaterial.clear` 切换全应用材质。局部覆盖使用 `HyperUiTheme(data: ..., child: ...)`。
+
+完整配置与运行时切换见[主题配置](./theming.md)。
 
 ## 简化后的组件 API
 
@@ -37,7 +39,7 @@ HyperUiTheme.app(home: const AppHome());
 | 默认按钮 | `HyperButton(label: '保存', onPressed: save)` |
 | 其他按钮外观 | `HyperButton(type: 'tonal', ...)`、`type: 'outline'`、`type: 'ghost'`、`type: 'danger'` |
 | 密码或多行输入 | `HyperTextField(type: 'password', ...)`、`HyperTextField(type: 'textarea', rows: 3, ...)` |
-| 玻璃材质 | `HyperGlass(type: 'prominent', child: content)` |
+| 表面材质 | `HyperUiTheme.app(material: HyperMaterial.soft, home: content)` |
 | 图片来源 | `HyperImage(type: 'network', source: url)`、`HyperImage(type: 'asset', source: path)` |
 | 徽标与提示 | `HyperBadge(type: 'tag', label: '完成')`、`HyperToast.show(context, '完成', type: 'success')` |
 | 单选与多选 | `HyperSelect(value: ..., onChanged: ...)`、`HyperSelect<T>(type: 'multiple', values: ..., onMultipleChanged: ...)` |
@@ -50,7 +52,7 @@ HyperUiTheme.app(home: const AppHome());
 | 操作列表弹层 | `HyperActionSheet.choose(context, actions: [...])` |
 
 文字、按钮、输入框、图标、头像、加载提示与进度统一使用 `small`、`default`、`large` 三档尺寸，并从主题读取默认颜色。`color` 接受 Flutter `Color`，覆盖组件的主要颜色；`backgroundColor` 等带限定词的参数只覆盖对应部位。按钮的 `child`、输入框的 `prefix` / `suffix`、卡片与导航栏的内容插槽仍接受自定义 Widget。
-`HyperGlass` 是材质基础层，因此继续开放模糊、边框和颜色等样式参数；`HyperUploader` 的文件选择与上传回调继续由应用注入。
+表面材质由主题统一配置；`HyperUploader` 的文件选择与上传回调继续由应用注入。
 
 `type` 只用于同一组件内的形态或视觉层级。日期、时间和区间选择返回不同的 Dart 类型，继续使用 `HyperDatePicker.date/time/range`；自定义弹层和操作列表需要不同的必填参数，继续使用 `HyperActionSheet.show/choose`。独立开关选项保持布尔参数。
 

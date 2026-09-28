@@ -111,7 +111,6 @@ class _HyperTooltipState extends State<HyperTooltip> {
               constraints: BoxConstraints(maxWidth: _availableWidth),
               child: HyperGlass(
                 radius: 12,
-                blur: 18,
                 type: 'prominent',
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,

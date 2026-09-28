@@ -1,6 +1,6 @@
 library hyper_ui;
 
-export 'src/components/hyper_glass.dart';
+export 'src/theme/hyper_material.dart';
 export 'src/components/hyper_pressable.dart';
 export 'src/components/hyper_typography.dart';
 export 'src/components/hyper_image.dart';

@@ -34,7 +34,6 @@ class HyperNumberStepper extends StatelessWidget {
 
     return HyperGlass(
       radius: 16,
-      blur: 14,
       type: 'subtle',
       borderColor: tokens.input,
       padding: const EdgeInsets.all(3),
