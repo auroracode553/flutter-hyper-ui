@@ -570,16 +570,18 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: { ...demo('component-nav-bar', '透明导航栏', 'component_nav_bar_example.dart', 680, '在手机屏幕内滚动正文，观察导航栏保持固定。', 'NavBarComponentExample'), fullScreen: true },
       }),
-      component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '透明水珠按压与拖动放大、绿色选中态、释放吸附的悬浮底栏。', {
+      component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '多项液态悬浮底栏与带数量角标的单项圆形入口。', {
         propsDocs: [
-          { name: 'items', description: '导航项列表' },
-          { name: 'selectedIndex', description: '当前选中索引' },
-          { name: 'onSelected', description: '选中回调' },
+          { name: 'type', description: "'multiple' 多项导航（默认）或 'single' 独立圆形入口" },
+          { name: 'items', description: '多项模式至少 2 项；单项模式恰好 1 项，仅显示图标' },
+          { name: 'selectedIndex', description: '当前选中索引；单项模式固定为 0' },
+          { name: 'onSelected', description: '点击回调；单项模式传入索引 0' },
+          { name: 'badgeCount', description: '单项模式的数量角标，默认 0 不显示，超过 99 显示 99+' },
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
-          { name: 'margin', description: '外边距' },
+          { name: 'margin', description: '外边距；单项默认 0，多项默认水平 20、顶部 8' },
         ],
-        preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 320, '长按并拖动，观察水珠放大、跟手和收回。', 'TabBarComponentExample'),
+        preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '体验多项导航、独立圆形入口和左侧通知入口组合示例。', 'TabBarComponentExample'),
       }),
       component('HyperTabs', 'hyper_navigation.dart', '与 HyperTabView 共享控制器的玻璃标签栏。', {
         propsDocs: [

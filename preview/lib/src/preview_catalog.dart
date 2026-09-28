@@ -352,7 +352,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-tab-bar',
       title: 'HyperTabBar',
-      description: '长按展开透明水珠，拖动放大并在释放后吸附。',
+      description: '多项导航、独立通知入口与左侧通知入口组合示例。',
       loadLibrary: () => example_component_navigation_examples.loadLibrary(),
       builder: (_) =>
           example_component_navigation_examples.TabBarComponentExample(),

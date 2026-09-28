@@ -12,6 +12,7 @@ class TabBarComponentExample extends StatefulWidget {
 
 class _TabBarComponentExampleState extends State<TabBarComponentExample> {
   int _index = 0;
+  int _dockIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,59 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
             HyperTabItem(icon: LucideIcons.compass, label: '发现'),
             HyperTabItem(icon: LucideIcons.user, label: '我的'),
           ],
+        ),
+        const SizedBox(height: 20),
+        const Text('单项入口：通知角标与独立点击'),
+        const SizedBox(height: 12),
+        Center(
+          child: HyperTabBar(
+            type: 'single',
+            safeArea: false,
+            margin: EdgeInsets.zero,
+            selectedIndex: 0,
+            badgeCount: 8,
+            onSelected: (_) => HyperToast.show(context, '打开通知'),
+            items: const [HyperTabItem(icon: LucideIcons.bell, label: '通知')],
+          ),
+        ),
+        const SizedBox(height: 24),
+        const Text('组合示例：左侧通知入口 + 底部导航'),
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            children: [
+              HyperTabBar(
+                type: 'single',
+                safeArea: false,
+                selectedIndex: 0,
+                badgeCount: 27,
+                onSelected: (_) => HyperToast.show(context, '打开通知'),
+                items: const [
+                  HyperTabItem(icon: LucideIcons.bell, label: '通知'),
+                ],
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: HyperTabBar(
+                  safeArea: false,
+                  margin: EdgeInsets.zero,
+                  selectedIndex: _dockIndex,
+                  onSelected: (index) => setState(() => _dockIndex = index),
+                  items: const [
+                    HyperTabItem(icon: LucideIcons.house, label: '首页'),
+                    HyperTabItem(icon: LucideIcons.trendingUp, label: '选股'),
+                    HyperTabItem(
+                      icon: LucideIcons.slidersHorizontal,
+                      label: '行情',
+                    ),
+                    HyperTabItem(icon: LucideIcons.star, label: '自选'),
+                    HyperTabItem(icon: LucideIcons.settings, label: '设置'),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

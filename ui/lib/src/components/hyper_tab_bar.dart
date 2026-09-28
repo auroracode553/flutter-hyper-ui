@@ -11,6 +11,8 @@ import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_material.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import 'hyper_badge.dart';
+import 'hyper_pressable.dart';
 
 /// 底栏中的一个导航项；页面与图标含义由调用方决定。
 class HyperTabItem {
@@ -20,30 +22,46 @@ class HyperTabItem {
   final String label;
 }
 
-/// 带液态放大镜的悬浮底部导航。
+/// 悬浮底部导航与独立圆形操作入口。
 ///
-/// 按下时选中块膨胀成透明水珠，拖动时水珠跟手移动并放大其下方的图文；
-/// 松手后收缩为灰色选中块，并通过 [onSelected] 提交最终索引。
+/// 多项模式按下时选中块膨胀成透明水珠，拖动时水珠跟手移动；
+/// 松手后收缩并通过 [onSelected] 提交最终索引。
+/// 单项模式显示圆形图标按钮，可叠加数量角标。
 class HyperTabBar extends StatefulWidget {
   const HyperTabBar({
     super.key,
     required this.items,
     required this.selectedIndex,
     required this.onSelected,
+    this.type = 'multiple',
+    this.badgeCount = 0,
     this.safeArea = true,
-    this.margin = const EdgeInsets.fromLTRB(20, 8, 20, 0),
+    EdgeInsetsGeometry? margin,
     this.color,
-  }) : assert(items.length >= 2),
-       assert(selectedIndex >= 0 && selectedIndex < items.length);
+  }) : assert(type == 'multiple' || type == 'single'),
+       assert(type == 'single' ? items.length == 1 : items.length >= 2),
+       assert(selectedIndex >= 0 && selectedIndex < items.length),
+       margin =
+           margin ??
+           (type == 'single'
+               ? EdgeInsets.zero
+               : const EdgeInsets.fromLTRB(20, 8, 20, 0));
 
   static const double height = 56;
 
   final List<HyperTabItem> items;
   final int selectedIndex;
   final ValueChanged<int> onSelected;
+
+  /// 单项模式绘制独立圆形入口；多项模式保留液态导航交互。
+  final String type;
+
+  /// 单项模式的数量角标；零或负数时不显示。
+  final int badgeCount;
   final bool safeArea;
   final Color? color;
 
+  /// 单项模式默认无外边距；多项模式保留悬浮底栏的默认外边距。
   /// 外部已控制位置时可设为零，避免悬浮底栏再次收窄。
   final EdgeInsetsGeometry margin;
 
@@ -125,6 +143,7 @@ class _HyperTabBarState extends State<HyperTabBar>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.type == 'single') return _buildSingle(context);
     final glass = HyperGlassTheme.of(context);
     final tokens = HyperUiThemeTokens.of(context);
     final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
@@ -227,6 +246,45 @@ class _HyperTabBarState extends State<HyperTabBar>
               ),
             );
           },
+        ),
+      ),
+    );
+    return widget.safeArea
+        ? SafeArea(top: false, minimum: EdgeInsets.zero, child: bar)
+        : bar;
+  }
+
+  Widget _buildSingle(BuildContext context) {
+    final glass = HyperGlassTheme.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
+    final shape = BorderRadius.circular(HyperTabBar.height / 2);
+    final bar = Padding(
+      padding: widget.margin,
+      child: HyperBadge(
+        type: 'count',
+        count: widget.badgeCount,
+        child: HyperPressable(
+          onPressed: () => widget.onSelected(0),
+          borderRadius: shape,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: glass.surfaceSubtle,
+              borderRadius: shape,
+              border: Border.all(
+                color: Color.alphaBlend(glass.edgeShade, glass.edgeHighlight),
+              ),
+            ),
+            child: SizedBox.square(
+              dimension: HyperTabBar.height,
+              child: Center(
+                child: Icon(
+                  widget.items.single.icon,
+                  size: 22,
+                  color: widget.color ?? tokens.primary,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
