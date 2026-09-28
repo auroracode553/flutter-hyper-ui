@@ -364,38 +364,50 @@
 }
 
 .component-doc__props {
-  margin-top: 32px;
+  margin-top: 20px;
 
   h3 {
-    margin: 0 0 14px;
+    margin: 0 0 8px;
     font-size: 15px;
     font-weight: 600;
     color: var(--vp-c-text-1);
   }
 }
 
-.component-doc__props-table {
+.vp-doc .component-doc__props-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
   overflow: hidden;
   font-size: 13px;
-  @include mixins.glass(20px, 140%, var(--hyper-glass-subtle), var(--hyper-edge), 0 8px 32px rgba(28, 40, 72, 0.06));
+  line-height: 1.45;
+  color: #111;
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(28, 40, 72, 0.05);
 
   th,
   td {
-    padding: 13px 20px;
+    padding: 8px 12px;
     text-align: left;
+    color: #111;
+    border-bottom: 1px solid #e5e7eb;
+    overflow-wrap: anywhere;
   }
 
   th {
-    background: rgba(255, 255, 255, 0.45);
+    background: #f7f8fa;
     font-weight: 600;
-    font-size: 12px;
-    color: var(--vp-c-text-1);
-    letter-spacing: 0.02em;
-    border-bottom: 1px solid var(--hyper-edge);
+    font-size: 13px;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fbfcfd;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
   }
 
   tbody tr td {
@@ -403,21 +415,20 @@
   }
 
   tbody tr:hover td {
-    background: rgba(255, 255, 255, 0.35);
+    background: #f3f6fa;
   }
 
   td:last-child {
     font-family: var(--vp-font-family-mono);
-    font-size: 12px;
-    color: var(--vp-c-text-2);
+    font-size: 12.5px;
   }
 }
 
 .component-doc__prop-name {
   font-family: var(--vp-font-family-mono);
   font-size: 12.5px;
-  font-weight: 500;
-  color: var(--vp-c-brand-1);
+  font-weight: 600;
+  color: #111;
 }
 
 .component-doc__required {
@@ -426,12 +437,8 @@
   border-radius: 4px;
   font-size: 10.5px;
   font-weight: 500;
-  color: #e5534b;
-  background: rgba(229, 83, 75, 0.08);
-}
-
-.dark .component-doc__props-table th {
-  background: var(--vp-c-bg-alt);
+  color: #111;
+  background: #eef0f3;
 }
 
 .component-doc__rules {

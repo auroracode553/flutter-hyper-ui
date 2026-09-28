@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_button.dart';
+import 'hyper_typography.dart';
 
 /// 透明导航容器，默认从起始侧排列，不绘制背景、模糊、边框或阴影。
 ///
@@ -21,7 +21,8 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.height = 44,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     this.safeArea = true,
-    this.automaticallyImplyLeading = true,
+    this.showBackButton,
+    this.onBackPressed,
     this.centerTitle = false,
   }) : assert(height > 0 && height < double.infinity),
        assert(
@@ -50,7 +51,13 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   final EdgeInsetsGeometry padding;
 
   final bool safeArea;
-  final bool automaticallyImplyLeading;
+
+  /// null 按当前路由自动判断；true 始终显示；false 始终隐藏。
+  /// 显式传入 [leading] 时，以自定义前导内容为准。
+  final bool? showBackButton;
+
+  /// 返回按钮的点击回调，默认调用 Navigator.maybePop。
+  final VoidCallback? onBackPressed;
 
   /// 仅对默认插槽布局有效。默认 false，沿文字方向从起始侧排列。
   final bool centerTitle;
@@ -83,12 +90,11 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildSlots(BuildContext context) {
+    final shouldShowBackButton =
+        showBackButton ?? (Navigator.maybeOf(context)?.canPop() ?? false);
     final effectiveLeading =
         leading ??
-        (automaticallyImplyLeading &&
-                (Navigator.maybeOf(context)?.canPop() ?? false)
-            ? const _BackButton()
-            : null);
+        (shouldShowBackButton ? _BackButton(onPressed: onBackPressed) : null);
     final effectiveTrailing = trailing ?? _buildActions();
     final middle = _buildTitle(context);
     if (centerTitle) {
@@ -174,14 +180,16 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _BackButton extends StatelessWidget {
-  const _BackButton();
+  const _BackButton({this.onPressed});
+
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) => HyperButton(
-    type: 'ghost',
-    icon: LucideIcons.chevronLeft,
-    size: 'large',
+    type: 'outline',
+    icon: HyperIcons.back,
+    size: 'small',
     tooltip: '返回',
-    onPressed: () => Navigator.maybePop(context),
+    onPressed: onPressed ?? () => Navigator.maybePop(context),
   );
 }

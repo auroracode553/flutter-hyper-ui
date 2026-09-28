@@ -10,7 +10,7 @@ class NavBarComponentExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     children: <Widget>[
-      const HyperNavBar(title: Text('今日灵感'), automaticallyImplyLeading: false),
+      const HyperNavBar(title: Text('今日灵感'), showBackButton: false),
       Expanded(
         child: CustomScrollView(
           slivers: <Widget>[

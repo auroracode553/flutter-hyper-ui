@@ -40,17 +40,18 @@ Column(
 
 - 移除 `opaque` 和 `floating`，导航栏始终透明；需要玻璃面板时由页面单独组合 `HyperGlass`。
 - 原先 56px / 带副标题 68px 的高度统一改为 44px；可通过 `height` 显式增加。
-- 默认返回按钮使用 `HyperButton(type: 'ghost', ...)`，保持 44px 点击区域。
+- 默认返回按钮使用 `HyperButton(type: 'outline', icon: HyperIcons.back, size: 'small', ...)`，显示带轮廓的 32px 圆形图标按钮。
+- `automaticallyImplyLeading` 改为 `showBackButton`：省略时根据路由自动判断，`true` 强制显示，`false` 隐藏；`onBackPressed` 可覆盖默认的 `Navigator.maybePop` 行为。
 - `title` / `subtitle` 从字符串改为可选的 `Widget`，原先 `title: '标题'` 改为 `title: Text('标题')`。
 
 ## 自定义插槽
 
-`leading`、`title`、`subtitle`、`trailing` 全部接受任意 `Widget`。主内容可以是搜索框、品牌标识、分段控件或多个元素的组合，不必提供文字标题。`actions` 是尾部横排列表的便捷写法，与 `trailing` 二选一；不需要自动返回按钮时设置 `automaticallyImplyLeading: false`。
+`leading`、`title`、`subtitle`、`trailing` 全部接受任意 `Widget`。主内容可以是搜索框、品牌标识、分段控件或多个元素的组合，不必提供文字标题。`actions` 是尾部横排列表的便捷写法，与 `trailing` 二选一。默认按路由自动显示返回按钮；使用 `showBackButton` 显式控制，或用 `leading` 完全替换前导内容。
 
 ```dart
 HyperNavBar(
   height: 56,
-  automaticallyImplyLeading: false,
+  showBackButton: false,
   leading: const HyperAvatar(text: '林', size: 'small'),
   title: const Row(
     mainAxisSize: MainAxisSize.min,

@@ -53,7 +53,7 @@ class ButtonsExample extends StatelessWidget {
           ],
         ),
         const SizedBox(height: HyperUiSpacing.md),
-        // 图标按钮：仅图标，方形（省略 label 自动呈现）。
+        // 图标按钮：仅图标时自动呈现圆形（省略 label）。
         Wrap(
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
