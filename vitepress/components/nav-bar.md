@@ -74,6 +74,7 @@ HyperNavBar(
   height: 52,
   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
   child: HyperTextField(
+    type: 'search',
     hintText: '搜索灵感',
     onChanged: (value) {},
   ),

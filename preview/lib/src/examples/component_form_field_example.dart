@@ -28,6 +28,7 @@ class _FormFieldComponentExampleState extends State<FormFieldComponentExample> {
           child: HyperTextField(
             hintText: '例如：组件设计',
             maxLength: 30,
+            showWordLimit: true,
             onChanged: (value) => setState(() => _name = value),
           ),
         ),

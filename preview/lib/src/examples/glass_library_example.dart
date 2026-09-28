@@ -81,6 +81,7 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const HyperTextField(
+                type: 'search',
                 hintText: '输入关键词',
                 prefix: Icon(LucideIcons.search),
               ),

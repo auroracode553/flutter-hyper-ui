@@ -25,7 +25,7 @@ class OverviewExample extends StatelessWidget {
           subtitle: '输入控件',
           icon: LucideIcons.squarePen,
           color: tokens.warning,
-          child: const HyperTextField(hintText: '搜索文件'),
+          child: const HyperTextField(type: 'search', hintText: '搜索文件'),
         ),
         _OverviewTile(
           title: 'Data',

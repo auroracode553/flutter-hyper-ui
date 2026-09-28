@@ -23,14 +23,20 @@ class TextFieldComponentExample extends StatelessWidget {
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('可清空'),
-        const HyperTextField.search(
+        const HyperTextField(
+          type: 'search',
+          clearable: true,
           initialValue: '示例内容',
           hintText: '输入后右侧显示清空按钮',
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('密码显隐'),
-        const HyperTextField.password(hintText: '请输入密码'),
+        const HyperTextField(
+          type: 'password',
+          showPasswordToggle: true,
+          hintText: '请输入密码',
+        ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('前缀与后缀插槽'),
@@ -42,11 +48,15 @@ class TextFieldComponentExample extends StatelessWidget {
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('多行输入'),
-        const HyperTextField.multiline(rows: 3, hintText: '请输入多行内容'),
+        const HyperTextField(type: 'textarea', rows: 3, hintText: '请输入多行内容'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('字数统计'),
-        const HyperTextField(maxLength: 50, hintText: '最多输入 50 个字符'),
+        const HyperTextField(
+          maxLength: 50,
+          showWordLimit: true,
+          hintText: '最多输入 50 个字符',
+        ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('禁用与只读'),

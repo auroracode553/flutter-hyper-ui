@@ -41,11 +41,12 @@ class _InputsExampleState extends State<InputsExample> {
         ),
         const SizedBox(height: HyperUiSpacing.md),
         const HyperTextField(
+          type: 'search',
           hintText: '输入文件名或关键词',
           prefix: Icon(LucideIcons.search),
         ),
         const SizedBox(height: HyperUiSpacing.md),
-        const HyperTextField.multiline(hintText: '补充说明', rows: 3),
+        const HyperTextField(type: 'textarea', hintText: '补充说明', rows: 3),
       ],
     );
   }

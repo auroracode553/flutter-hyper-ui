@@ -164,6 +164,7 @@ class _BusinessExampleState extends State<BusinessExample> {
     children: [
       const HyperText('日常，由细节组成', size: 'large'),
       HyperTextField(
+        type: 'search',
         prefix: const Icon(LucideIcons.search),
         hintText: '搜索',
         onChanged: (value) => setState(() => _query = value),

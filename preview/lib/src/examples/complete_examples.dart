@@ -225,11 +225,21 @@ class _FormsExampleState extends State<FormsExample> {
               HyperTextField(
                 hintText: '请输入称呼',
                 maxLength: 20,
+                showWordLimit: true,
                 validator: (value) =>
                     value == null || value.trim().isEmpty ? '请输入称呼' : null,
               ),
-              const HyperTextField.password(hintText: '可切换显示与隐藏'),
-              const HyperTextField.multiline(rows: 3, maxLength: 120),
+              const HyperTextField(
+                type: 'password',
+                showPasswordToggle: true,
+                hintText: '可切换显示与隐藏',
+              ),
+              const HyperTextField(
+                type: 'textarea',
+                rows: 3,
+                maxLength: 120,
+                showWordLimit: true,
+              ),
               const HyperTextField(initialValue: '不可编辑', enabled: false),
               HyperButton(
                 label: '保存',

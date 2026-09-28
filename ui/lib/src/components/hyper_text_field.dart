@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
 import 'hyper_tooltip.dart';
@@ -11,70 +12,11 @@ import 'hyper_tooltip.dart';
 class HyperTextField extends StatefulWidget {
   const HyperTextField({
     super.key,
-    this.controller,
-    this.focusNode,
-    this.hintText,
-    this.errorText,
-    this.prefix,
-    this.suffix,
-    this.enabled = true,
-    this.readOnly = false,
-    this.maxLength,
-    this.autofocus = false,
-    this.keyboardType,
-    this.textInputAction,
-    this.onChanged,
-    this.onSubmitted,
-    this.validator,
-    this.initialValue,
-  }) : rows = 1,
-       _kind = _FieldKind.text;
-
-  const HyperTextField.password({
-    super.key,
-    this.controller,
-    this.focusNode,
-    this.hintText,
-    this.errorText,
-    this.prefix,
-    this.suffix,
-    this.enabled = true,
-    this.readOnly = false,
-    this.maxLength,
-    this.autofocus = false,
-    this.keyboardType,
-    this.textInputAction,
-    this.onChanged,
-    this.onSubmitted,
-    this.validator,
-    this.initialValue,
-  }) : rows = 1,
-       _kind = _FieldKind.password;
-
-  const HyperTextField.search({
-    super.key,
-    this.controller,
-    this.focusNode,
-    this.hintText,
-    this.errorText,
-    this.prefix,
-    this.suffix,
-    this.enabled = true,
-    this.readOnly = false,
-    this.maxLength,
-    this.autofocus = false,
-    this.keyboardType,
-    this.textInputAction,
-    this.onChanged,
-    this.onSubmitted,
-    this.validator,
-    this.initialValue,
-  }) : rows = 1,
-       _kind = _FieldKind.search;
-
-  const HyperTextField.multiline({
-    super.key,
+    this.type = 'text',
     this.rows = 3,
+    this.clearable = false,
+    this.showPasswordToggle = false,
+    this.showWordLimit = false,
     this.controller,
     this.focusNode,
     this.hintText,
@@ -91,10 +33,26 @@ class HyperTextField extends StatefulWidget {
     this.onSubmitted,
     this.validator,
     this.initialValue,
-  }) : _kind = _FieldKind.multiline;
+  }) : assert(
+         type == 'text' ||
+             type == 'search' ||
+             type == 'password' ||
+             type == 'textarea' ||
+             type == 'email' ||
+             type == 'url' ||
+             type == 'number' ||
+             type == 'tel',
+         'type must be text, search, password, textarea, email, url, number, or tel.',
+       ),
+       assert(rows > 0),
+       assert(maxLength == null || maxLength > 0);
 
-  final _FieldKind _kind;
+  /// 输入形态；textarea 使用多行编辑，其余值使用单行编辑。
+  final String type;
   final int rows;
+  final bool clearable;
+  final bool showPasswordToggle;
+  final bool showWordLimit;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final String? hintText;
@@ -111,6 +69,9 @@ class HyperTextField extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
   final FormFieldValidator<String>? validator;
   final String? initialValue;
+
+  bool get _isTextarea => type == 'textarea';
+  bool get _isPassword => type == 'password';
 
   @override
   State<HyperTextField> createState() => _HyperTextFieldState();
@@ -143,6 +104,7 @@ class _HyperTextFieldState extends State<HyperTextField> {
   @override
   void didUpdateWidget(HyperTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.type != widget.type) _obscured = true;
     if (oldWidget.controller != widget.controller) {
       final previous = oldWidget.controller ?? _ownedController!;
       final value = previous.value;
@@ -173,7 +135,6 @@ class _HyperTextFieldState extends State<HyperTextField> {
 
   @override
   Widget build(BuildContext context) {
-    assert(widget.rows > 0);
     return FormField<String>(
       initialValue: _controller.text,
       validator: widget.validator,
@@ -186,8 +147,8 @@ class _HyperTextFieldState extends State<HyperTextField> {
     final glass = HyperGlassTheme.of(context);
     final error = widget.errorText ?? field.errorText;
     final active = widget.enabled && !widget.readOnly;
-    final multiline = widget._kind == _FieldKind.multiline;
-    final password = widget._kind == _FieldKind.password;
+    final multiline = widget._isTextarea;
+    final password = widget._isPassword;
     final borderColor = error != null
         ? tokens.error
         : _focusNode.hasFocus
@@ -197,18 +158,24 @@ class _HyperTextFieldState extends State<HyperTextField> {
     final editor = EditableText(
       controller: _controller,
       focusNode: _focusNode,
-      style: TextStyle(color: tokens.foreground, fontSize: 16, height: 1.3),
+      style: TextStyle(
+        color: tokens.foreground,
+        fontFamily: HyperUiTheme.of(context).fontFamily,
+        fontSize: 16,
+        height: 1.3,
+      ),
       cursorColor: tokens.primary,
       backgroundCursorColor: tokens.mutedForeground,
-      keyboardType:
-          widget.keyboardType ??
-          (multiline ? TextInputType.multiline : TextInputType.text),
-      textInputAction: widget.textInputAction,
+      keyboardType: widget.keyboardType ?? _keyboardTypeFor(widget.type),
+      textInputAction:
+          widget.textInputAction ?? _textInputActionFor(widget.type),
       autofocus: widget.autofocus,
       readOnly: !active,
       obscureText: password && _obscured,
-      maxLines: password ? 1 : (multiline ? widget.rows : 1),
-      minLines: password ? 1 : (multiline ? widget.rows : 1),
+      autocorrect: !password,
+      enableSuggestions: !password,
+      maxLines: multiline ? widget.rows : 1,
+      minLines: multiline ? widget.rows : 1,
       inputFormatters: widget.maxLength == null
           ? null
           : <TextInputFormatter>[
@@ -235,9 +202,14 @@ class _HyperTextFieldState extends State<HyperTextField> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
+            padding: EdgeInsets.symmetric(
+              horizontal: 18,
+              vertical: multiline ? 12 : 9,
+            ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: multiline
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center,
               children: <Widget>[
                 if (widget.prefix != null) ...<Widget>[
                   IconTheme.merge(
@@ -270,7 +242,7 @@ class _HyperTextFieldState extends State<HyperTextField> {
                   const SizedBox(width: 8),
                   widget.suffix!,
                 ],
-                if (password)
+                if (password && widget.showPasswordToggle)
                   _AffixButton(
                     icon: _obscured ? LucideIcons.eye : LucideIcons.eyeOff,
                     tooltip: _obscured ? '显示密码' : '隐藏密码',
@@ -279,7 +251,7 @@ class _HyperTextFieldState extends State<HyperTextField> {
                         ? () => setState(() => _obscured = !_obscured)
                         : null,
                   ),
-                if (widget._kind == _FieldKind.search)
+                if (widget.clearable)
                   Opacity(
                     opacity: active && _controller.text.isNotEmpty ? 1 : 0,
                     child: IgnorePointer(
@@ -308,11 +280,11 @@ class _HyperTextFieldState extends State<HyperTextField> {
               style: TextStyle(color: tokens.error, fontSize: 12),
             ),
           ),
-        if (widget.maxLength != null)
+        if (widget.showWordLimit && widget.maxLength != null)
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              '${_controller.text.length}/${widget.maxLength}',
+              '${_controller.text.characters.length}/${widget.maxLength}',
               style: TextStyle(color: tokens.mutedForeground, fontSize: 12),
             ),
           ),
@@ -321,7 +293,20 @@ class _HyperTextFieldState extends State<HyperTextField> {
   }
 }
 
-enum _FieldKind { text, search, password, multiline }
+TextInputType _keyboardTypeFor(String type) => switch (type) {
+  'textarea' => TextInputType.multiline,
+  'email' => TextInputType.emailAddress,
+  'url' => TextInputType.url,
+  'number' => TextInputType.number,
+  'tel' => TextInputType.phone,
+  _ => TextInputType.text,
+};
+
+TextInputAction _textInputActionFor(String type) => switch (type) {
+  'textarea' => TextInputAction.newline,
+  'search' => TextInputAction.search,
+  _ => TextInputAction.done,
+};
 
 class _AffixButton extends StatelessWidget {
   const _AffixButton({

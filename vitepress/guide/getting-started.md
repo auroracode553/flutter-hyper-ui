@@ -36,7 +36,7 @@ HyperUiTheme.app(home: const AppHome());
 | --- | --- |
 | 默认按钮 | `HyperButton(label: '保存', onPressed: save)` |
 | 其他按钮外观 | `HyperButton.tonal(...)`、`.outline(...)`、`.ghost(...)`、`.danger(...)` |
-| 密码或多行输入 | `HyperTextField.password(...)`、`HyperTextField.multiline(...)` |
+| 密码或多行输入 | `HyperTextField(type: 'password', ...)`、`HyperTextField(type: 'textarea', rows: 3, ...)` |
 | 单选与多选 | `HyperSelect(value: ..., onChanged: ...)`、`HyperSelect<T>.multiple(values: ..., onMultipleChanged: ...)` |
 | 标签与页面 | `HyperTabs(tabs: [...], pages: [...])` |
 | 文字尺寸与颜色 | `HyperText('标题', size: 'large', color: brandColor)` |
