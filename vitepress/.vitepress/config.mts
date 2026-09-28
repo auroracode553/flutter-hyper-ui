@@ -29,6 +29,9 @@ export default defineConfig({
   ],
   markdown: {
     lineNumbers: true,
+    // 代码块背景随亮/暗模式切换（见 _tokens.scss 的 --vp-code-block-bg），
+    // shiki 配色也跟随：浅色模式用 vitesse-light，暗色模式用 vitesse-dark。
+    theme: { light: 'vitesse-light', dark: 'vitesse-dark' },
   },
   vite: {
     css: {
