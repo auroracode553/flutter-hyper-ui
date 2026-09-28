@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed } from 'vue';
 import { getComponentEntry } from '../../catalog';
-import { dartApiFor } from '../dart-api';
-import { highlightDart } from '../highlight';
 import { exampleSourceFor } from '../example-source';
 import DemoBlock from './DemoBlock.vue';
 
@@ -11,79 +9,6 @@ const resolved = computed(() => getComponentEntry(props.componentId));
 const entry = computed(() => resolved.value.entry);
 // 组件页只接受目录显式绑定的专属预览，禁止回退到分类组合 Demo。
 const demo = computed(() => entry.value.preview);
-
-const apiCode = computed(() => dartApiFor(entry.value.name, entry.value.source));
-const highlightedApi = ref('');
-const apiExpanded = ref(false);
-
-watch([apiCode, apiExpanded], async ([code, expanded]) => {
-  if (expanded) highlightedApi.value = await highlightDart(code);
-});
-
-interface ApiProp {
-  name: string;
-  required: boolean;
-  defaultValue: string;
-}
-
-// 从构造函数签名中解析参数列表，生成属性表格
-const propDescription = (name: string) => {
-  return entry.value.propsDocs?.find((p) => p.name === name)?.description ?? '-';
-};
-
-const apiProps = computed<ApiProp[]>(() => {
-  const code = apiCode.value;
-  if (!code) return [];
-
-  const props: ApiProp[] = [];
-  // 先移除 enum 定义，避免枚举值（如 filled/tonal）被误解析为构造函数参数
-  const codeWithoutEnums = code.replace(/enum\s+\w+\s*\{[^}]*\}/g, '');
-  // 匹配每个构造函数的参数块 { ... }
-  const blocks = codeWithoutEnums.match(/\{([^}]+)\}/g) ?? [];
-
-  for (const block of blocks) {
-    const inner = block.slice(1, -1).trim();
-    const lines = inner.split(',').map((l) => l.trim()).filter(Boolean);
-
-    for (const line of lines) {
-      // 跳过 super.key 这种
-      if (line.startsWith('super.')) continue;
-
-      let required = false;
-      let name = '';
-      let defaultValue = '-';
-
-      let cleaned = line;
-      if (cleaned.startsWith('required ')) {
-        required = true;
-        cleaned = cleaned.slice(9).trim();
-      }
-
-      // this.xxx = defaultValue 或 this.xxx
-      const match = cleaned.match(/^this\.(\w+)(?:\s*=\s*(.+))?$/);
-      if (match) {
-        name = match[1];
-        if (match[2]) defaultValue = match[2].trim();
-      } else {
-        // 命名参数直接写的形式，如 String url, double width
-        const namedMatch = cleaned.match(/^(?:\w+\s+)?(\w+)(?:\s*=\s*(.+))?$/);
-        if (namedMatch) {
-          name = namedMatch[1];
-          if (namedMatch[2]) defaultValue = namedMatch[2].trim();
-          required = !cleaned.includes('=') && !cleaned.startsWith('this.');
-        }
-      }
-
-      if (name) {
-        if (!props.find((p) => p.name === name)) {
-          props.push({ name, required, defaultValue });
-        }
-      }
-    }
-  }
-
-  return props;
-});
 </script>
 
 <template>
@@ -105,45 +30,5 @@ const apiProps = computed<ApiProp[]>(() => {
         :full-screen="demo.fullScreen"
       />
     </section>
-
-    <section class="component-doc__section" aria-labelledby="component-api-title">
-      <div class="component-doc__section-heading">
-        <h2 id="component-api-title">公开 API</h2>
-      </div>
-      <div class="component-doc__api">
-        <div class="component-doc__api-header">
-          <div class="component-doc__api-title">
-            <code>{{ entry.name }}</code>
-            <span>{{ entry.source }}</span>
-          </div>
-          <button type="button" class="component-doc__api-toggle" @click="apiExpanded = !apiExpanded">
-            {{ apiExpanded ? '收起签名' : '展开签名' }}
-          </button>
-        </div>
-        <div v-show="apiExpanded" class="component-doc__code-block" v-html="highlightedApi" />
-      </div>
-
-      <!-- 属性表格 -->
-      <div v-if="apiProps.length" class="component-doc__props">
-        <h3>Props</h3>
-        <table class="component-doc__props-table">
-          <thead>
-            <tr>
-              <th>属性名</th>
-              <th>说明</th>
-              <th>默认值</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="prop in apiProps" :key="prop.name">
-              <td><span class="component-doc__prop-name">{{ prop.name }}</span><span v-if="prop.required" class="component-doc__required">必选</span></td>
-              <td>{{ propDescription(prop.name) }}</td>
-              <td>{{ prop.defaultValue }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
   </article>
 </template>
