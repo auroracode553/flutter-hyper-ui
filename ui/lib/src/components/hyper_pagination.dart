@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_glass_theme.dart';
 import 'hyper_glass.dart';
 import 'hyper_button.dart';
 import 'hyper_pressable.dart';
@@ -48,6 +49,7 @@ class HyperPagination extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
+    final glass = HyperGlassTheme.of(context);
     final rtl = Directionality.of(context) == TextDirection.rtl;
 
     return SingleChildScrollView(
@@ -100,7 +102,7 @@ class HyperPagination extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 6),
                           decoration: BoxDecoration(
                             color: number == page
-                                ? tokens.muted
+                                ? glass.selection
                                 : HyperPalette.transparent,
                             borderRadius: BorderRadius.circular(11),
                           ),

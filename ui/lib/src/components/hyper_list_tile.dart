@@ -65,7 +65,7 @@ class HyperListTile extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 46),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: selected ? tokens.muted : HyperPalette.transparent,
+        color: selected ? glass.selection : HyperPalette.transparent,
         borderRadius: radius,
       ),
       child: Row(

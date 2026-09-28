@@ -401,6 +401,8 @@ class _HyperTabSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final glass = HyperGlassTheme.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
+    final highContrast = MediaQuery.maybeOf(context)?.highContrast ?? false;
     final radius = BorderRadius.circular(28);
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -409,22 +411,29 @@ class _HyperTabSurface extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: radius,
-        child: _buildSurface(glass, radius),
+        child: _buildSurface(glass, tokens, radius, highContrast),
       ),
     );
   }
 
-  Widget _buildSurface(HyperGlassTheme glass, BorderRadius radius) {
+  Widget _buildSurface(
+    HyperGlassTheme glass,
+    HyperUiThemeTokens tokens,
+    BorderRadius radius,
+    bool highContrast,
+  ) {
     final surface = DecoratedBox(
       decoration: BoxDecoration(
-        color: glass.surface,
+        color: highContrast ? tokens.card : glass.surface,
         borderRadius: radius,
         border: Border.all(
-          color: Color.alphaBlend(glass.edgeShade, glass.edgeHighlight),
+          color: highContrast
+              ? tokens.foreground.withAlpha(150)
+              : Color.alphaBlend(glass.edgeShade, glass.edgeHighlight),
         ),
       ),
     );
-    if (glass.blur == 0) return surface;
+    if (highContrast || glass.blur == 0) return surface;
     return BackdropFilter(
       filter: ui.ImageFilter.blur(sigmaX: glass.blur, sigmaY: glass.blur),
       child: surface,
@@ -491,7 +500,8 @@ class _HyperLiquidLens extends StatelessWidget {
         final height = constraints.maxHeight;
         final scaleX = 1 + 0.15 * expansion;
         final scaleY = 1 + 0.09 * expansion;
-        if (theme.material == HyperMaterial.solid) {
+        if (theme.material == HyperMaterial.solid ||
+            (MediaQuery.maybeOf(context)?.highContrast ?? false)) {
           return ClipPath(
             clipper: clipper,
             child: ColoredBox(color: glass.selection),

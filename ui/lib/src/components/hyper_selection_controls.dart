@@ -208,7 +208,9 @@ class _HyperSwitchControl extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-                    color: HyperPalette.black.withAlpha(enabled ? 24 : 12),
+                    color: glass.shadow.withValues(
+                      alpha: glass.shadow.a * (enabled ? 1 : 0.5),
+                    ),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   ),
@@ -318,10 +320,7 @@ class HyperSlider extends StatelessWidget {
                           color: onChanged == null ? tokens.muted : tokens.card,
                           border: Border.all(color: tokens.primary, width: 2),
                           boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: HyperPalette.black.withAlpha(30),
-                              blurRadius: 5,
-                            ),
+                            BoxShadow(color: glass.shadow, blurRadius: 5),
                           ],
                         ),
                       ),

@@ -80,7 +80,7 @@ class HyperBadge extends StatelessWidget {
         ? toneColor
         : isTag
         ? glass.surfaceSubtle
-        : Color.alphaBlend(toneColor.withAlpha(31), tokens.card);
+        : Color.alphaBlend(toneColor.withAlpha(31), glass.surfaceSubtle);
     final radius = BorderRadius.circular(
       isTag ? HyperUiRadii.sm : HyperUiRadii.full,
     );

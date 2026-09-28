@@ -292,11 +292,14 @@ class _HyperButtonVisual {
       return _HyperButtonVisual(
         background: base,
         foreground: tokens.primaryForeground,
-        border: HyperPalette.white.withAlpha(45),
+        border: tokens.primaryForeground.withAlpha(45),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: <Color>[Color.lerp(base, HyperPalette.white, 0.10)!, base],
+          colors: <Color>[
+            Color.lerp(base, tokens.primaryForeground, 0.10)!,
+            base,
+          ],
         ),
         shadows: <BoxShadow>[
           BoxShadow(

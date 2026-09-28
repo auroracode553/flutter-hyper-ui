@@ -4,6 +4,7 @@ import 'hyper_modal.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_size.dart';
 import 'hyper_button.dart';
 
@@ -63,7 +64,7 @@ class HyperImage extends StatelessWidget {
       onTap: preview
           ? () => showHyperModal<void>(
               context,
-              scrim: HyperPalette.black,
+              scrim: HyperGlassTheme.of(context).scrim,
               builder: (dialogContext) => SizedBox.expand(
                 child: Stack(
                   children: [
@@ -85,8 +86,10 @@ class HyperImage extends StatelessWidget {
                           type: 'tonal',
                           icon: LucideIcons.x,
                           tooltip: '关闭预览',
-                          color: HyperPalette.white,
-                          backgroundColor: HyperPalette.black38,
+                          color: HyperUiThemeTokens.of(context).foreground,
+                          backgroundColor: HyperGlassTheme.of(
+                            context,
+                          ).surfaceStrong,
                           onPressed: () => Navigator.pop(dialogContext),
                         ),
                       ),
@@ -134,7 +137,12 @@ class HyperAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final dimension = hyperUiSizeValue(size, small: 32, normal: 40, large: 56);
     final tokens = HyperUiThemeTokens.of(context);
-    final surface = backgroundColor ?? tokens.selectionBackground;
+    final surface =
+        backgroundColor ??
+        Color.alphaBlend(
+          tokens.primary.withAlpha(25),
+          HyperGlassTheme.of(context).surfaceSubtle,
+        );
     final foreground =
         color ??
         (backgroundColor == null

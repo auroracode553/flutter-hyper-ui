@@ -84,6 +84,7 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
       );
     }
     final tokens = HyperUiThemeTokens.of(context);
+    final glass = HyperGlassTheme.of(context);
     final tabController = HyperTabHost.of(context);
     assert(tabController.length == tabs.length);
     final tabHeight = _tabHeight;
@@ -140,7 +141,7 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
                       height: tabHeight - 4,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: tokens.muted,
+                          color: glass.selection,
                           borderRadius: BorderRadius.circular(tabHeight / 2),
                         ),
                       ),
@@ -228,7 +229,7 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: showSelection && selected
-                  ? tokens.muted
+                  ? HyperGlassTheme.of(context).selection
                   : HyperPalette.transparent,
               borderRadius: BorderRadius.circular(tabHeight / 2),
             ),

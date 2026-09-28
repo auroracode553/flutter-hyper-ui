@@ -112,13 +112,12 @@ class _HyperSkeletonState extends State<HyperSkeleton>
     if (widget.type != 'text' && widget.type != 'card') {
       throw ArgumentError.value(widget.type, 'type', 'Invalid skeleton type');
     }
-    final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     Widget block(double height, {double? width}) => _SkeletonBlock(
       animation: _shimmer,
       height: height,
       width: width,
-      color: Color.alphaBlend(glass.controlTrack, tokens.muted),
+      color: Color.alphaBlend(glass.controlTrack, glass.surfaceSubtle),
       highlight: glass.surfaceStrong,
     );
     return Column(

@@ -157,55 +157,61 @@ abstract final class HyperDialog {
     }
     return showHyperModal<bool>(
       context,
-      builder: (dialogContext) => ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 420),
-        child: HyperGlass(
-          radius: 26,
-          type: 'prominent',
-          padding: const EdgeInsets.all(18),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: HyperUiThemeTokens.of(context).foreground,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+      builder: (dialogContext) => Padding(
+        // 弹窗与屏幕边缘保持间距，宽屏时仍限制内容宽度。
+        padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: HyperGlass(
+            radius: 26,
+            type: 'prominent',
+            padding: const EdgeInsets.all(18),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: HyperUiThemeTokens.of(context).foreground,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                if (content != null ||
-                    (message?.isNotEmpty ?? false)) ...<Widget>[
-                  const SizedBox(height: 10),
-                  content ?? Text(message!),
-                ],
-                const SizedBox(height: 18),
-                Wrap(
-                  alignment: WrapAlignment.end,
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: <Widget>[
-                    if (showCancel)
-                      HyperButton(
-                        type: 'ghost',
-                        label: cancelLabel,
-                        onPressed: () => Navigator.pop(dialogContext, false),
-                      ),
-                    type == 'danger'
-                        ? HyperButton(
-                            type: 'danger',
-                            label: confirmLabel,
-                            onPressed: () => Navigator.pop(dialogContext, true),
-                          )
-                        : HyperButton(
-                            label: confirmLabel,
-                            onPressed: () => Navigator.pop(dialogContext, true),
-                          ),
+                  if (content != null ||
+                      (message?.isNotEmpty ?? false)) ...<Widget>[
+                    const SizedBox(height: 10),
+                    content ?? Text(message!),
                   ],
-                ),
-              ],
+                  const SizedBox(height: 18),
+                  Wrap(
+                    alignment: WrapAlignment.end,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: <Widget>[
+                      if (showCancel)
+                        HyperButton(
+                          type: 'ghost',
+                          label: cancelLabel,
+                          onPressed: () => Navigator.pop(dialogContext, false),
+                        ),
+                      type == 'danger'
+                          ? HyperButton(
+                              type: 'danger',
+                              label: confirmLabel,
+                              onPressed: () =>
+                                  Navigator.pop(dialogContext, true),
+                            )
+                          : HyperButton(
+                              label: confirmLabel,
+                              onPressed: () =>
+                                  Navigator.pop(dialogContext, true),
+                            ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

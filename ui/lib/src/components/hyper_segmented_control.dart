@@ -2,6 +2,7 @@ import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_ui_radii.dart';
+import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
@@ -80,7 +81,9 @@ class _HyperSegmentItem<T> extends StatelessWidget {
         : option.enabled
         ? tokens.foreground
         : tokens.mutedForeground;
-    final background = selected ? tokens.muted : HyperPalette.transparent;
+    final background = selected
+        ? HyperGlassTheme.of(context).selection
+        : HyperPalette.transparent;
 
     return HyperPressable(
       onPressed: option.enabled ? () => onSelected(option.value) : null,
