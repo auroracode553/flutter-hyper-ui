@@ -33,7 +33,6 @@ export interface ComponentGroup {
   page: string;
   demos: ComponentDemo[];
   components: ComponentEntry[];
-  conventions?: string[];
 }
 
 interface ComponentOptions {
@@ -239,11 +238,6 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-pressable', 'HyperPressable 按压反馈', 'component_action_examples.dart', 280, '按住表面感受即时缩放与透明度反馈。', 'PressableComponentExample'),
       }),
-    ],
-    conventions: [
-      '按表面面积选择 `HyperGlass.type`：小控件用 `subtle`，普通卡片用 `regular`，模态浮层用 `prominent`。',
-      '密集列表中可设置 `HyperGlass.blur: 0`，保留材质外观并降低模糊绘制成本。',
-      '不要在轻量玻璃表面上继续叠加轻量玻璃；选中态优先使用颜色状态而不是新增一层材质。',
     ],
   },
   {
@@ -462,10 +456,6 @@ export const componentGroups: ComponentGroup[] = [
         preview: demo('component-file-picker', '文件能力注入', 'component_form_examples.dart', 280, '说明选择器与上传器的职责边界。', 'FilePickerComponentExample'),
       }),
     ],
-    conventions: [
-      '`HyperSelect.values` 是已提交值；多选仅在确认后触发 `onMultipleChanged`。',
-      '上传组件不直接依赖相册、文件系统或 HTTP 插件，平台能力通过 `HyperFilePicker` 与 `HyperFileUpload` 注入。',
-    ],
   },
   {
     id: 'feedback',
@@ -565,7 +555,6 @@ export const componentGroups: ComponentGroup[] = [
         preview: demo('component-notice-bar', 'HyperNoticeBar 公告栏', 'component_feedback_examples.dart', 400, '短公告静止、长公告滚动与关闭。', 'NoticeBarComponentExample'),
       }),
     ],
-    conventions: ['`HyperLoading.during` 会在 `finally` 中仅移除自己的遮罩，任务异常继续交给调用方。'],
   },
   {
     id: 'navigation',
@@ -704,9 +693,6 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-pagination', 'HyperPagination 分页导航', 'component_pagination_example.dart', 260, '跳页、首末页与空数据状态。', 'PaginationComponentExample'),
       }),
-    ],
-    conventions: [
-      '`HyperTabs` 与 `HyperTabView` 应位于同一个 `HyperTabHost` 中。',
     ],
   },
   {

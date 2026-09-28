@@ -7,12 +7,6 @@ description: 44px 透明导航栏
 
 ## 页面导航
 
-`HyperNavBar` 默认高度为 **44px**（不含状态栏），默认左对齐，与正文共享 16px 起始边距。导航容器不绘制背景、模糊、边框或阴影；自定义插槽可以自行渲染所需内容。副内容不自动增加高度，需要较大字号或更高的插槽时，显式设置 `height`。
-
-交互示例使用 Flutter 布局基底。手机安全区由预览宿主提供。
-
-实际页面可以用 `Column` 固定导航栏，并让滚动内容占据剩余空间：
-
 ```dart
 Column(
   children: <Widget>[
@@ -34,19 +28,7 @@ Column(
 )
 ```
 
-`Expanded` 为导航栏下方的滚动内容提供剩余空间。
-
-## 破坏性变更
-
-- 移除 `opaque` 和 `floating`，导航栏始终透明；需要玻璃面板时由页面单独组合 `HyperGlass`。
-- 原先 56px / 带副标题 68px 的高度统一改为 44px；可通过 `height` 显式增加。
-- 默认返回按钮使用 `HyperButton(type: 'outline', icon: HyperIcons.back, size: 'small', ...)`，显示带轮廓的 32px 圆形图标按钮。
-- `automaticallyImplyLeading` 改为 `showBackButton`：省略时根据路由自动判断，`true` 强制显示，`false` 隐藏；`onBackPressed` 可覆盖默认的 `Navigator.maybePop` 行为。
-- `title` / `subtitle` 从字符串改为可选的 `Widget`，原先 `title: '标题'` 改为 `title: Text('标题')`。
-
 ## 自定义插槽
-
-`leading`、`title`、`subtitle`、`trailing` 全部接受任意 `Widget`。主内容可以是搜索框、品牌标识、分段控件或多个元素的组合，不必提供文字标题。`actions` 是尾部横排列表的便捷写法，与 `trailing` 二选一。默认按路由自动显示返回按钮；使用 `showBackButton` 显式控制，或用 `leading` 完全替换前导内容。
 
 ```dart
 HyperNavBar(
@@ -66,10 +48,6 @@ HyperNavBar(
 )
 ```
 
-组件仅为主副内容提供可覆盖的默认文字样式，不强制行数、字号、文字截断或内容类型。标题默认从起始侧排列，缺失前导插槽时不会额外预留空间；按需使用 `centerTitle: true` 开启整栏居中。
-
-需要完全自主布局时使用 `child`，它接管导航栏内部的整行区域，不再生成标题布局和返回按钮。`child` 与其他内容插槽互斥；仍可配置 `height`、`padding` 和 `safeArea`。例如让搜索输入框占满导航栏：
-
 ```dart
 HyperNavBar(
   height: 52,
@@ -81,5 +59,3 @@ HyperNavBar(
   ),
 )
 ```
-
-超过默认高度的内容由页面设置合适的 `height`；完全自定义布局中的文字换行、截断与触控区域由调用方决定。

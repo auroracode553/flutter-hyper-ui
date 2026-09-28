@@ -24,7 +24,6 @@ const previewCount = computed(() => (
 
     <div class="component-reference__section-heading">
       <h2>选择组件</h2>
-      <p>每个组件进入独立文档、独立预览与独立源码片段；分类页不再承载组合 Demo。</p>
     </div>
     <nav class="component-reference__grid" aria-label="分类组件">
       <a
@@ -39,13 +38,5 @@ const previewCount = computed(() => (
       </a>
     </nav>
 
-    <template v-if="group.conventions?.length">
-      <h2>使用约定</h2>
-      <ul>
-        <li v-for="convention in group.conventions" :key="convention">
-          <span v-html="convention.replace(/`([^`]+)`/g, '<code>$1</code>')" />
-        </li>
-      </ul>
-    </template>
   </article>
 </template>
