@@ -9,11 +9,16 @@ class HyperTabController extends ChangeNotifier {
 
   final int length;
   int _index;
+  Duration? _transitionDuration;
 
   int get index => _index;
 
   void animateTo(int index, {Duration? duration}) {
+    if (duration?.isNegative ?? false) {
+      throw ArgumentError.value(duration, 'duration', 'Must not be negative');
+    }
     if (index < 0 || index >= length || index == _index) return;
+    _transitionDuration = duration;
     _index = index;
     notifyListeners();
   }
@@ -141,9 +146,15 @@ class _HyperTabViewState extends State<HyperTabView> {
     if (MediaQuery.maybeOf(context)?.disableAnimations ?? false) {
       pages.jumpToPage(target);
     } else {
+      final duration =
+          _tabs!._transitionDuration ?? const Duration(milliseconds: 220);
+      if (duration == Duration.zero) {
+        pages.jumpToPage(target);
+        return;
+      }
       pages.animateToPage(
         target,
-        duration: const Duration(milliseconds: 220),
+        duration: duration,
         curve: Curves.easeOutCubic,
       );
     }

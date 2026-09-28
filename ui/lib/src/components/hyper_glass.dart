@@ -8,9 +8,6 @@ import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
 
-/// 玻璃的视觉厚度。面积越大的浮层应使用越重的材质。
-enum HyperGlassWeight { subtle, regular, prominent, solid }
-
 /// Hyper UI 的统一柔性玻璃材质。
 ///
 /// [HyperGlass] 只负责材质、裁切与触控反馈。业务间距由外部决定，避免基础材质
@@ -22,19 +19,25 @@ class HyperGlass extends StatelessWidget {
     this.padding = EdgeInsets.zero,
     this.radius = 24,
     this.blur = HyperUiEffects.glassBlur,
-    this.weight = HyperGlassWeight.regular,
+    this.type = 'regular',
     this.borderColor,
     this.shadows,
     this.color,
     this.onTap,
     this.clipBehavior = Clip.antiAlias,
-  });
+  }) : assert(
+         type == 'subtle' ||
+             type == 'regular' ||
+             type == 'prominent' ||
+             type == 'solid',
+         'HyperGlass.type must be subtle, regular, prominent, or solid.',
+       );
 
   final Widget child;
   final EdgeInsetsGeometry padding;
   final double radius;
   final double blur;
-  final HyperGlassWeight weight;
+  final String type;
   final Color? color;
   final Color? borderColor;
   final List<BoxShadow>? shadows;
@@ -43,15 +46,19 @@ class HyperGlass extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (type != 'subtle' &&
+        type != 'regular' &&
+        type != 'prominent' &&
+        type != 'solid') {
+      throw ArgumentError.value(type, 'type', 'Invalid glass type');
+    }
     final theme = HyperUiTheme.of(context);
     final glass = HyperGlassTheme.of(context);
     final tokens = HyperUiThemeTokens.of(context);
     final highContrast = MediaQuery.maybeOf(context)?.highContrast ?? false;
     final shape = BorderRadius.circular(radius);
     final surfaceColor = color ?? _surfaceColor(glass, tokens, highContrast);
-    final effectiveBlur = highContrast || weight == HyperGlassWeight.solid
-        ? 0.0
-        : blur;
+    final effectiveBlur = highContrast || type == 'solid' ? 0.0 : blur;
     final effectiveBorder =
         borderColor ??
         (highContrast
@@ -94,7 +101,7 @@ class HyperGlass extends StatelessWidget {
           borderRadius: shape,
           boxShadow:
               shadows ??
-              (weight == HyperGlassWeight.subtle
+              (type == 'subtle'
                   ? const <BoxShadow>[]
                   : HyperUiEffects.surfaceShadows(theme.brightness)),
         ),
@@ -109,11 +116,12 @@ class HyperGlass extends StatelessWidget {
     bool highContrast,
   ) {
     if (highContrast) return tokens.card;
-    return switch (weight) {
-      HyperGlassWeight.subtle => glass.surfaceSubtle,
-      HyperGlassWeight.regular => glass.surface,
-      HyperGlassWeight.prominent => glass.surfaceStrong,
-      HyperGlassWeight.solid => tokens.card,
+    return switch (type) {
+      'subtle' => glass.surfaceSubtle,
+      'prominent' => glass.surfaceStrong,
+      'solid' => tokens.card,
+      'regular' => glass.surface,
+      _ => throw ArgumentError.value(type, 'type', 'Invalid glass type'),
     };
   }
 }

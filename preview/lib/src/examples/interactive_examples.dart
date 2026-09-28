@@ -27,7 +27,8 @@ class _OverlayExampleState extends State<OverlayExample> {
               HyperUiTone.success,
               HyperUiTone.error,
             ])
-              HyperButton.tonal(
+              HyperButton(
+                type: 'tonal',
                 label: tone == HyperUiTone.success
                     ? '成功'
                     : tone == HyperUiTone.error
@@ -40,7 +41,7 @@ class _OverlayExampleState extends State<OverlayExample> {
                       : tone == HyperUiTone.error
                       ? '失败'
                       : '普通'}提示',
-                  tone: tone,
+                  type: tone.name,
                 ),
               ),
           ],
@@ -52,7 +53,8 @@ class _OverlayExampleState extends State<OverlayExample> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '确认弹窗',
               onPressed: () async {
                 final result = await HyperDialog.confirm(
@@ -65,7 +67,8 @@ class _OverlayExampleState extends State<OverlayExample> {
                 }
               },
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '提示弹窗',
               onPressed: () => HyperDialog.confirm(
                 context,
@@ -74,7 +77,8 @@ class _OverlayExampleState extends State<OverlayExample> {
                 showCancel: false,
               ),
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '自定义底部弹窗',
               onPressed: () => HyperActionSheet.show<void>(
                 context,
@@ -90,7 +94,8 @@ class _OverlayExampleState extends State<OverlayExample> {
                 ),
               ),
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '操作菜单',
               onPressed: () async {
                 final result = await HyperActionSheet.choose(
@@ -106,7 +111,7 @@ class _OverlayExampleState extends State<OverlayExample> {
                       value: '删除',
                       label: '删除',
                       icon: LucideIcons.trash,
-                      destructive: true,
+                      type: 'danger',
                     ),
                   ],
                 );
@@ -115,7 +120,8 @@ class _OverlayExampleState extends State<OverlayExample> {
                 }
               },
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '全局加载',
               onPressed: () async {
                 await HyperLoading.during(

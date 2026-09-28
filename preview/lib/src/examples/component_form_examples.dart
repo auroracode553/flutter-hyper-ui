@@ -488,7 +488,8 @@ class _SelectComponentExampleState extends State<SelectComponentExample> {
         ),
         const SizedBox(height: HyperUiSpacing.xl),
 
-        HyperSelect<String>.multiple(
+        HyperSelect<String>(
+          type: 'multiple',
           label: '协作角色',
           values: _multi,
           onMultipleChanged: (values) => setState(() => _multi = values),
@@ -567,7 +568,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
         _label('基础滚轮选择'),
         Row(
           children: [
-            HyperButton.tonal(label: '选择交付周期', onPressed: _pick),
+            HyperButton(type: 'tonal', label: '选择交付周期', onPressed: _pick),
             const SizedBox(width: 14),
             HyperBadge(label: _value),
           ],
@@ -577,7 +578,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
         _label('指定初始项（initialIndex: 2）'),
         Row(
           children: [
-            HyperButton.tonal(label: '选择城市', onPressed: _pickCity),
+            HyperButton(type: 'tonal', label: '选择城市', onPressed: _pickCity),
             const SizedBox(width: 14),
             HyperBadge(label: _city),
           ],
@@ -635,7 +636,8 @@ class _DatePickerComponentExampleState
         _label('月历选择日期'),
         Row(
           children: [
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '选择日期',
               icon: LucideIcons.calendar,
               onPressed: _pickDate,
@@ -649,7 +651,8 @@ class _DatePickerComponentExampleState
         _label('时间选择'),
         Row(
           children: [
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '选择时间',
               icon: LucideIcons.clock,
               onPressed: _pickTime,
@@ -663,7 +666,8 @@ class _DatePickerComponentExampleState
         _label('月历选择日期区间'),
         Row(
           children: [
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '选择区间',
               icon: LucideIcons.calendarDays,
               onPressed: _pickRange,

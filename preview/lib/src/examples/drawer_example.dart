@@ -92,8 +92,8 @@ class _DrawerExampleState extends State<DrawerExample> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            HyperButton.tonal(label: '左侧导航', onPressed: _openMenu),
-            HyperButton.tonal(label: '右侧筛选', onPressed: _openFilters),
+            HyperButton(type: 'tonal', label: '左侧导航', onPressed: _openMenu),
+            HyperButton(type: 'tonal', label: '右侧筛选', onPressed: _openFilters),
           ],
         ),
         Text('返回结果：$_result'),

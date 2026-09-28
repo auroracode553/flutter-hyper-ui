@@ -49,7 +49,8 @@ class HyperPopupMenu<T> extends StatelessWidget {
     width: (MediaQuery.sizeOf(context).width - 32).clamp(0.0, 240.0).toDouble(),
     maxHeight: MediaQuery.sizeOf(context).height * .4,
     padding: const EdgeInsets.all(5),
-    triggerBuilder: (_, controller) => HyperButton.icon(
+    triggerBuilder: (_, controller) => HyperButton(
+      type: 'tonal',
       icon: icon,
       tooltip: tooltip,
       onPressed: () =>
@@ -67,11 +68,12 @@ class HyperPopupMenu<T> extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final action in actions)
-            HyperListTile.plain(
+            HyperListTile(
+              type: 'plain',
               title: action.label,
               leadingIcon: action.icon,
-              leadingColor: action.destructive ? tokens.error : tokens.primary,
-              titleColor: action.destructive ? tokens.error : null,
+              leadingColor: action.isDanger ? tokens.error : tokens.primary,
+              titleColor: action.isDanger ? tokens.error : null,
               enabled: action.enabled,
               showChevron: false,
               onTap: () {

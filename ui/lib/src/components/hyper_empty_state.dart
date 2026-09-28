@@ -32,7 +32,7 @@ class HyperEmptyState extends StatelessWidget {
             HyperGlass(
               radius: HyperUiRadii.md,
               blur: 14,
-              weight: HyperGlassWeight.subtle,
+              type: 'subtle',
               borderColor: tokens.input,
               child: SizedBox.square(
                 dimension: 56,

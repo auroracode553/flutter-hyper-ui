@@ -130,7 +130,8 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
               ),
               safeArea: false,
               actions: [
-                HyperButton.icon(
+                HyperButton(
+                  type: 'tonal',
                   icon: LucideIcons.sun,
                   tooltip: '切换明暗主题',
                   onPressed: widget.onToggleTheme,
@@ -150,7 +151,8 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
                     const SizedBox(width: HyperUiSpacing.xs),
                 itemBuilder: (context, index) {
                   final item = PreviewCatalog.items[index];
-                  return HyperBadge.tag(
+                  return HyperBadge(
+                    type: 'tag',
                     label: item.title,
                     selected: item.id == selected.id,
                     onTap: () => setState(() => _selectedId = item.id),

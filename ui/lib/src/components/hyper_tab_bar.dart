@@ -30,6 +30,7 @@ class HyperTabBar extends StatefulWidget {
     required this.onSelected,
     this.safeArea = true,
     this.margin = const EdgeInsets.fromLTRB(20, 8, 20, 0),
+    this.color,
   }) : assert(items.length >= 2),
        assert(selectedIndex >= 0 && selectedIndex < items.length);
 
@@ -39,6 +40,7 @@ class HyperTabBar extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onSelected;
   final bool safeArea;
+  final Color? color;
 
   /// 外部已控制位置时可设为零，避免悬浮底栏再次收窄。
   final EdgeInsetsGeometry margin;
@@ -246,7 +248,8 @@ class _HyperTabBarState extends State<HyperTabBar>
               strength: (1 - (position - visual).abs() * 1.6)
                   .clamp(0.0, 1.0)
                   .toDouble(),
-              activeColor: HyperUiThemeTokens.of(context).primary,
+              activeColor:
+                  widget.color ?? HyperUiThemeTokens.of(context).primary,
               inactiveColor: foreground,
             ),
           ),

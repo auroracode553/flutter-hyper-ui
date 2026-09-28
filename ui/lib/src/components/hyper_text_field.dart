@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme.dart';
+import '../theme/hyper_ui_size.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
 import 'hyper_tooltip.dart';
@@ -13,6 +14,8 @@ class HyperTextField extends StatefulWidget {
   const HyperTextField({
     super.key,
     this.type = 'text',
+    this.size = 'default',
+    this.color,
     this.rows = 3,
     this.clearable = false,
     this.showPasswordToggle = false,
@@ -44,11 +47,14 @@ class HyperTextField extends StatefulWidget {
              type == 'tel',
          'type must be text, search, password, textarea, email, url, number, or tel.',
        ),
+       assert(size == 'small' || size == 'default' || size == 'large'),
        assert(rows > 0),
        assert(maxLength == null || maxLength > 0);
 
   /// 输入形态；textarea 使用多行编辑，其余值使用单行编辑。
   final String type;
+  final String size;
+  final Color? color;
   final int rows;
   final bool clearable;
   final bool showPasswordToggle;
@@ -149,6 +155,24 @@ class _HyperTextFieldState extends State<HyperTextField> {
     final active = widget.enabled && !widget.readOnly;
     final multiline = widget._isTextarea;
     final password = widget._isPassword;
+    final fontSize = hyperUiSizeValue(
+      widget.size,
+      small: 14,
+      normal: 16,
+      large: 18,
+    );
+    final horizontalPadding = hyperUiSizeValue(
+      widget.size,
+      small: 14,
+      normal: 18,
+      large: 20,
+    );
+    final verticalPadding = hyperUiSizeValue(
+      widget.size,
+      small: 7,
+      normal: 9,
+      large: 11,
+    );
     final borderColor = error != null
         ? tokens.error
         : _focusNode.hasFocus
@@ -159,9 +183,9 @@ class _HyperTextFieldState extends State<HyperTextField> {
       controller: _controller,
       focusNode: _focusNode,
       style: TextStyle(
-        color: tokens.foreground,
+        color: widget.color ?? tokens.foreground,
         fontFamily: HyperUiTheme.of(context).fontFamily,
-        fontSize: 16,
+        fontSize: fontSize,
         height: 1.3,
       ),
       cursorColor: tokens.primary,
@@ -203,8 +227,8 @@ class _HyperTextFieldState extends State<HyperTextField> {
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: 18,
-              vertical: multiline ? 12 : 9,
+              horizontal: horizontalPadding,
+              vertical: multiline ? verticalPadding + 3 : verticalPadding,
             ),
             child: Row(
               crossAxisAlignment: multiline
@@ -215,7 +239,7 @@ class _HyperTextFieldState extends State<HyperTextField> {
                   IconTheme.merge(
                     data: IconThemeData(
                       color: tokens.mutedForeground,
-                      size: 18,
+                      size: fontSize + 2,
                     ),
                     child: widget.prefix!,
                   ),
@@ -230,7 +254,7 @@ class _HyperTextFieldState extends State<HyperTextField> {
                             widget.hintText!,
                             style: TextStyle(
                               color: tokens.mutedForeground,
-                              fontSize: 16,
+                              fontSize: fontSize,
                             ),
                           ),
                         ),

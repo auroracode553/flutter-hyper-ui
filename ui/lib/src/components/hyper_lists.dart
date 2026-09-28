@@ -44,7 +44,7 @@ class HyperMenuGroup extends StatelessWidget {
         HyperGlass(
           radius: 18,
           blur: 18,
-          weight: HyperGlassWeight.regular,
+          type: 'regular',
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
           child: _HyperMenuGroupScope(
             child: Column(

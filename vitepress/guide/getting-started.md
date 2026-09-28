@@ -35,16 +35,24 @@ HyperUiTheme.app(home: const AppHome());
 | 场景 | 现在的写法 |
 | --- | --- |
 | 默认按钮 | `HyperButton(label: '保存', onPressed: save)` |
-| 其他按钮外观 | `HyperButton.tonal(...)`、`.outline(...)`、`.ghost(...)`、`.danger(...)` |
+| 其他按钮外观 | `HyperButton(type: 'tonal', ...)`、`type: 'outline'`、`type: 'ghost'`、`type: 'danger'` |
 | 密码或多行输入 | `HyperTextField(type: 'password', ...)`、`HyperTextField(type: 'textarea', rows: 3, ...)` |
-| 单选与多选 | `HyperSelect(value: ..., onChanged: ...)`、`HyperSelect<T>.multiple(values: ..., onMultipleChanged: ...)` |
+| 玻璃材质 | `HyperGlass(type: 'prominent', child: content)` |
+| 图片来源 | `HyperImage(type: 'network', source: url)`、`HyperImage(type: 'asset', source: path)` |
+| 徽标与提示 | `HyperBadge(type: 'tag', label: '完成')`、`HyperToast.show(context, '完成', type: 'success')` |
+| 单选与多选 | `HyperSelect(value: ..., onChanged: ...)`、`HyperSelect<T>(type: 'multiple', values: ..., onMultipleChanged: ...)` |
+| 进度与步骤 | `HyperProgress(type: 'circular')`、`HyperSteps(type: 'vertical', steps: steps, current: 1)` |
+| 分隔与骨架 | `HyperDivider(type: 'dashed')`、`HyperSkeleton(type: 'card')` |
+| 列表表面 | `HyperListTile(type: 'plain', title: '设置')` |
 | 标签与页面 | `HyperTabs(tabs: [...], pages: [...])` |
 | 文字尺寸与颜色 | `HyperText('标题', size: 'large', color: brandColor)` |
-| 常用尺寸 | `HyperButton(label: '保存', size: 'small', onPressed: save)`、`HyperAvatar(size: 'large')`、`HyperProgress.circular(size: 'large')` |
+| 常用尺寸 | `HyperButton(label: '保存', size: 'small', onPressed: save)`、`HyperAvatar(size: 'large')`、`HyperProgress(type: 'circular', size: 'large')` |
 | 操作列表弹层 | `HyperActionSheet.choose(context, actions: [...])` |
 
-文字、按钮、图标、头像、加载提示与进度统一使用 `small`、`default`、`large` 三档尺寸，并从主题读取默认颜色。按钮的 `child`、输入框的 `prefix` / `suffix`、卡片与导航栏的内容插槽仍接受自定义 Widget。
+文字、按钮、输入框、图标、头像、加载提示与进度统一使用 `small`、`default`、`large` 三档尺寸，并从主题读取默认颜色。`color` 接受 Flutter `Color`，覆盖组件的主要颜色；`backgroundColor` 等带限定词的参数只覆盖对应部位。按钮的 `child`、输入框的 `prefix` / `suffix`、卡片与导航栏的内容插槽仍接受自定义 Widget。
 `HyperGlass` 是材质基础层，因此继续开放模糊、边框和颜色等样式参数；`HyperUploader` 的文件选择与上传回调继续由应用注入。
+
+`type` 只用于同一组件内的形态或视觉层级。日期、时间和区间选择返回不同的 Dart 类型，继续使用 `HyperDatePicker.date/time/range`；自定义弹层和操作列表需要不同的必填参数，继续使用 `HyperActionSheet.show/choose`。独立开关选项保持布尔参数。
 
 ## 创建第一个页面
 

@@ -22,43 +22,44 @@ class ToastComponentExample extends StatelessWidget {
           spacing: HyperUiSpacing.sm,
           runSpacing: HyperUiSpacing.sm,
           children: [
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '默认',
               onPressed: () => HyperToast.show(context, '已复制到剪贴板'),
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '成功',
               onPressed: () =>
-                  HyperToast.show(context, '保存成功', tone: HyperUiTone.success),
+                  HyperToast.show(context, '保存成功', type: 'success'),
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '警告',
-              onPressed: () => HyperToast.show(
-                context,
-                '请检查输入内容',
-                tone: HyperUiTone.warning,
-              ),
+              onPressed: () =>
+                  HyperToast.show(context, '请检查输入内容', type: 'warning'),
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '错误',
               onPressed: () =>
-                  HyperToast.show(context, '网络连接失败', tone: HyperUiTone.error),
+                  HyperToast.show(context, '网络连接失败', type: 'error'),
             ),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('操作按钮与时长'),
-        HyperButton.tonal(
+        HyperButton(
+          type: 'tonal',
           label: '可撤销（4 秒）',
           onPressed: () => HyperToast.show(
             context,
             '已删除 3 个文件',
-            tone: HyperUiTone.warning,
+            type: 'warning',
             duration: const Duration(seconds: 4),
             actionLabel: '撤销',
-            onAction: () =>
-                HyperToast.show(context, '已恢复删除', tone: HyperUiTone.success),
+            onAction: () => HyperToast.show(context, '已恢复删除', type: 'success'),
           ),
         ),
       ],
@@ -153,7 +154,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('左侧抽屉与底部操作区'),
-        HyperButton.tonal(label: '打开筛选抽屉', onPressed: _openStart),
+        HyperButton(type: 'tonal', label: '打开筛选抽屉', onPressed: _openStart),
       ],
     );
   }
@@ -176,7 +177,7 @@ class SkeletonComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('卡片骨架（card: true）'),
-        const HyperSkeleton(card: true, rows: 3),
+        const HyperSkeleton(type: 'card', rows: 3),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('列表骨架（rows: 2）'),
@@ -215,20 +216,22 @@ class DialogComponentExample extends StatelessWidget {
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('危险操作与自定义按钮'),
-        HyperButton.tonal(
-          label: '删除确认（dangerous）',
+        HyperButton(
+          type: 'tonal',
+          label: '删除确认（danger）',
           onPressed: () => HyperDialog.confirm(
             context,
             title: '删除这个项目？',
             message: '删除后无法恢复，所有成员将失去访问权限。',
             confirmLabel: '删除',
-            dangerous: true,
+            type: 'danger',
           ),
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('仅确认按钮与自定义正文'),
-        HyperButton.tonal(
+        HyperButton(
+          type: 'tonal',
           label: '公告（showCancel: false）',
           onPressed: () => HyperDialog.confirm(
             context,
@@ -283,7 +286,8 @@ class LoadingComponentExample extends StatelessWidget {
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('全局任务遮罩'),
-        HyperButton.tonal(
+        HyperButton(
+          type: 'tonal',
           label: '预览全局加载',
           onPressed: () => HyperLoading.during<void>(
             context,
@@ -313,7 +317,8 @@ class ActionSheetComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('自定义内容'),
-        HyperButton.tonal(
+        HyperButton(
+          type: 'tonal',
           label: '打开底部弹层',
           onPressed: () => HyperActionSheet.show<void>(
             context,
@@ -329,7 +334,8 @@ class ActionSheetComponentExample extends StatelessWidget {
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('操作列表'),
-        HyperButton.tonal(
+        HyperButton(
+          type: 'tonal',
           label: '打开操作菜单',
           onPressed: () => HyperActionSheet.choose<String>(
             context,
@@ -355,7 +361,7 @@ class ActionSheetComponentExample extends StatelessWidget {
                 value: 'delete',
                 label: '删除',
                 icon: LucideIcons.trash,
-                destructive: true,
+                type: 'danger',
               ),
             ],
           ),
@@ -363,7 +369,8 @@ class ActionSheetComponentExample extends StatelessWidget {
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('强制操作（dismissible: false）'),
-        HyperButton.tonal(
+        HyperButton(
+          type: 'tonal',
           label: '打开强制阅读弹层',
           onPressed: () => HyperActionSheet.show<void>(
             context,
@@ -424,7 +431,7 @@ class _PopupMenuComponentExampleState extends State<PopupMenuComponentExample> {
             value: '删除',
             label: '删除',
             icon: LucideIcons.trash,
-            destructive: true,
+            type: 'danger',
           ),
         ],
       ),
@@ -454,7 +461,8 @@ class _NoticeBarComponentExampleState extends State<NoticeBarComponentExample> {
   @override
   Widget build(BuildContext context) {
     if (!_visible) {
-      return HyperButton.ghost(
+      return HyperButton(
+        type: 'ghost',
         label: '重新显示公告',
         onPressed: () => setState(() => _visible = true),
       );

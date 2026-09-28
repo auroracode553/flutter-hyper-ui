@@ -6,35 +6,40 @@ import '../theme/hyper_ui_theme_tokens.dart';
 class HyperDivider extends StatelessWidget {
   const HyperDivider({
     super.key,
+    this.type = 'solid',
     this.axis = Axis.horizontal,
     this.indent = 0,
     this.endIndent = 0,
-    this.dashed = false,
     this.length,
     this.color,
-  });
+  }) : assert(type == 'solid' || type == 'dashed');
+  final String type;
   final Axis axis;
   final double indent, endIndent;
   final double? length;
-  final bool dashed;
   final Color? color;
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: axis == Axis.horizontal
-        ? EdgeInsetsDirectional.only(start: indent, end: endIndent)
-        : EdgeInsets.only(top: indent, bottom: endIndent),
-    child: SizedBox(
-      width: axis == Axis.vertical ? 1 : length,
-      height: axis == Axis.horizontal ? 1 : (length ?? 24),
-      child: CustomPaint(
-        painter: _DividerPainter(
-          axis,
-          dashed,
-          color ?? HyperUiThemeTokens.of(context).border,
+  Widget build(BuildContext context) {
+    if (type != 'solid' && type != 'dashed') {
+      throw ArgumentError.value(type, 'type', 'Invalid divider type');
+    }
+    return Padding(
+      padding: axis == Axis.horizontal
+          ? EdgeInsetsDirectional.only(start: indent, end: endIndent)
+          : EdgeInsets.only(top: indent, bottom: endIndent),
+      child: SizedBox(
+        width: axis == Axis.vertical ? 1 : length,
+        height: axis == Axis.horizontal ? 1 : (length ?? 24),
+        child: CustomPaint(
+          painter: _DividerPainter(
+            axis,
+            type == 'dashed',
+            color ?? HyperUiThemeTokens.of(context).border,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _DividerPainter extends CustomPainter {
@@ -65,9 +70,10 @@ class _DividerPainter extends CustomPainter {
 }
 
 class HyperSkeleton extends StatefulWidget {
-  const HyperSkeleton({super.key, this.rows = 3, this.card = false});
+  const HyperSkeleton({super.key, this.rows = 3, this.type = 'text'})
+    : assert(type == 'text' || type == 'card');
   final int rows;
-  final bool card;
+  final String type;
 
   @override
   State<HyperSkeleton> createState() => _HyperSkeletonState();
@@ -103,6 +109,9 @@ class _HyperSkeletonState extends State<HyperSkeleton>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.type != 'text' && widget.type != 'card') {
+      throw ArgumentError.value(widget.type, 'type', 'Invalid skeleton type');
+    }
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     Widget block(double height, {double? width}) => _SkeletonBlock(
@@ -116,7 +125,7 @@ class _HyperSkeletonState extends State<HyperSkeleton>
       mainAxisSize: MainAxisSize.min,
       spacing: 12,
       children: [
-        if (widget.card) block(140),
+        if (widget.type == 'card') block(140),
         for (var i = 0; i < widget.rows; i++)
           Row(
             children: [

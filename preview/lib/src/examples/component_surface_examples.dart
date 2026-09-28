@@ -23,7 +23,8 @@ class CardComponentExample extends StatelessWidget {
           subtitle: '保持轻量、清晰的内容层级',
           leading: const Icon(LucideIcons.sparkles),
           actions: [
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () {},
@@ -66,19 +67,19 @@ class GlassComponentExample extends StatelessWidget {
       children: [
         _label('四档重量（weight 控制表面层级）'),
         const HyperGlass(
-          weight: HyperGlassWeight.subtle,
+          type: 'subtle',
           padding: EdgeInsets.all(18),
           child: Text('Subtle · 小面积辅助表面'),
         ),
         const SizedBox(height: 12),
         const HyperGlass(
-          weight: HyperGlassWeight.regular,
+          type: 'regular',
           padding: EdgeInsets.all(18),
           child: Text('Regular · 常规内容表面'),
         ),
         const SizedBox(height: 12),
         const HyperGlass(
-          weight: HyperGlassWeight.prominent,
+          type: 'prominent',
           padding: EdgeInsets.all(18),
           child: Text('Prominent · 浮层和模态表面'),
         ),

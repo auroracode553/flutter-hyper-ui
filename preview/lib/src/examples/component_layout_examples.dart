@@ -21,11 +21,11 @@ class DividerComponentExample extends StatelessWidget {
         const Text('实线分隔'),
         const HyperDivider(),
         const Text('虚线分隔'),
-        const HyperDivider(dashed: true),
+        const HyperDivider(type: 'dashed'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('缩进（indent: 24）'),
-        const HyperDivider(indent: 24, dashed: true),
+        const HyperDivider(indent: 24, type: 'dashed'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('纵向分隔'),
@@ -66,7 +66,7 @@ class EmptyStateComponentExample extends StatelessWidget {
           icon: LucideIcons.searchX,
           title: '没有找到结果',
           message: '换一个关键词，或者清除筛选条件后重试。',
-          action: HyperButton.tonal(label: '清除筛选', onPressed: () {}),
+          action: HyperButton(type: 'tonal', label: '清除筛选', onPressed: () {}),
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 

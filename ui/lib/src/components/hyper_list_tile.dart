@@ -15,6 +15,7 @@ import 'hyper_pressable.dart';
 class HyperListTile extends StatelessWidget {
   const HyperListTile({
     super.key,
+    this.type = 'auto',
     required this.title,
     this.subtitle,
     this.meta,
@@ -27,25 +28,12 @@ class HyperListTile extends StatelessWidget {
     this.selected = false,
     this.enabled = true,
     this.showChevron = true,
-  }) : _plain = false;
+  }) : assert(
+         type == 'auto' || type == 'plain' || type == 'glass',
+         'HyperListTile.type must be auto, plain, or glass.',
+       );
 
-  /// A row for an existing custom glass surface outside [HyperMenuGroup].
-  const HyperListTile.plain({
-    super.key,
-    required this.title,
-    this.subtitle,
-    this.meta,
-    this.leading,
-    this.leadingIcon,
-    this.leadingColor,
-    this.titleColor,
-    this.trailing,
-    this.onTap,
-    this.selected = false,
-    this.enabled = true,
-    this.showChevron = true,
-  }) : _plain = true;
-
+  final String type;
   final String title;
   final String? subtitle;
   final String? meta;
@@ -56,7 +44,6 @@ class HyperListTile extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
   final bool selected;
-  final bool _plain;
   final bool enabled;
   final bool showChevron;
 
@@ -64,7 +51,11 @@ class HyperListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final plain = _plain || HyperMenuGroup.contains(context);
+    if (type != 'auto' && type != 'plain' && type != 'glass') {
+      throw ArgumentError.value(type, 'type', 'Invalid list tile type');
+    }
+    final plain =
+        type == 'plain' || (type == 'auto' && HyperMenuGroup.contains(context));
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final radius = BorderRadius.circular(plain ? 12 : 15);
@@ -157,7 +148,7 @@ class HyperListTile extends StatelessWidget {
     return HyperGlass(
       radius: 18,
       blur: 14,
-      weight: HyperGlassWeight.regular,
+      type: 'regular',
       padding: const EdgeInsets.all(3),
       onTap: enabled ? onTap : null,
       color: selected ? glass.surfaceStrong : null,

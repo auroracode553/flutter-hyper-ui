@@ -16,6 +16,7 @@ import 'hyper_tooltip.dart';
 class HyperButton extends StatelessWidget {
   const HyperButton({
     super.key,
+    this.type = 'filled',
     this.label,
     this.child,
     this.onPressed,
@@ -27,88 +28,23 @@ class HyperButton extends StatelessWidget {
     this.tooltip,
     this.color,
     this.backgroundColor,
-  }) : _variant = _ButtonVariant.filled;
-
-  /// Compact icon button.
-  const HyperButton.icon({
-    super.key,
-    required this.icon,
-    this.onPressed,
-    this.size = 'default',
-    this.loading = false,
-    this.tooltip,
-    this.color,
-    this.backgroundColor,
-  }) : label = null,
-       child = null,
-       trailingIcon = null,
-       expanded = false,
-       _variant = _ButtonVariant.tonal;
-
-  const HyperButton.tonal({
-    super.key,
-    this.label,
-    this.child,
-    this.onPressed,
-    this.size = 'default',
-    this.icon,
-    this.trailingIcon,
-    this.loading = false,
-    this.expanded = false,
-    this.tooltip,
-    this.color,
-    this.backgroundColor,
-  }) : _variant = _ButtonVariant.tonal;
-
-  const HyperButton.outline({
-    super.key,
-    this.label,
-    this.child,
-    this.onPressed,
-    this.size = 'default',
-    this.icon,
-    this.trailingIcon,
-    this.loading = false,
-    this.expanded = false,
-    this.tooltip,
-    this.color,
-    this.backgroundColor,
-  }) : _variant = _ButtonVariant.outline;
-
-  const HyperButton.ghost({
-    super.key,
-    this.label,
-    this.child,
-    this.onPressed,
-    this.size = 'default',
-    this.icon,
-    this.trailingIcon,
-    this.loading = false,
-    this.expanded = false,
-    this.tooltip,
-    this.color,
-    this.backgroundColor,
-  }) : _variant = _ButtonVariant.ghost;
-
-  const HyperButton.danger({
-    super.key,
-    this.label,
-    this.child,
-    this.onPressed,
-    this.size = 'default',
-    this.icon,
-    this.trailingIcon,
-    this.loading = false,
-    this.expanded = false,
-    this.tooltip,
-    this.color,
-    this.backgroundColor,
-  }) : _variant = _ButtonVariant.danger;
+  }) : assert(
+         type == 'filled' ||
+             type == 'tonal' ||
+             type == 'outline' ||
+             type == 'ghost' ||
+             type == 'danger',
+         'HyperButton.type must be filled, tonal, outline, ghost, or danger.',
+       ),
+       assert(
+         label == null || child == null,
+         'HyperButton.label and child cannot be used together.',
+       );
 
   final String? label;
   final Widget? child;
   final VoidCallback? onPressed;
-  final _ButtonVariant _variant;
+  final String type;
   final String size;
   final IconData? icon;
   final IconData? trailingIcon;
@@ -120,6 +56,19 @@ class HyperButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (label != null && this.child != null) {
+      throw ArgumentError(
+        'HyperButton.label and child cannot be used together.',
+      );
+    }
+    final variant = switch (type) {
+      'tonal' => _ButtonVariant.tonal,
+      'outline' => _ButtonVariant.outline,
+      'ghost' => _ButtonVariant.ghost,
+      'danger' => _ButtonVariant.danger,
+      'filled' => _ButtonVariant.filled,
+      _ => throw ArgumentError.value(type, 'type', 'Invalid button type'),
+    };
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final disabled = onPressed == null;
@@ -140,13 +89,13 @@ class HyperButton extends StatelessWidget {
     final visual = _HyperButtonVisual.resolve(
       tokens: tokens,
       glass: glass,
-      variant: _variant,
+      variant: variant,
       disabled: disabled,
     );
     final foreground = color ?? visual.foreground;
     final background =
         backgroundColor ??
-        (isIconOnly && _variant == _ButtonVariant.tonal
+        (isIconOnly && variant == _ButtonVariant.tonal
             ? glass.surface
             : visual.background);
     final isSquare = isIconOnly;
@@ -163,13 +112,13 @@ class HyperButton extends StatelessWidget {
       decoration: BoxDecoration(
         color:
             backgroundColor != null ||
-                (isIconOnly && _variant == _ButtonVariant.tonal) ||
+                (isIconOnly && variant == _ButtonVariant.tonal) ||
                 visual.gradient == null
             ? background
             : null,
         gradient:
             backgroundColor != null ||
-                (isIconOnly && _variant == _ButtonVariant.tonal)
+                (isIconOnly && variant == _ButtonVariant.tonal)
             ? null
             : visual.gradient,
         borderRadius: borderRadius,

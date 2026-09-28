@@ -35,13 +35,14 @@ class HyperNumberStepper extends StatelessWidget {
     return HyperGlass(
       radius: 16,
       blur: 14,
-      weight: HyperGlassWeight.subtle,
+      type: 'subtle',
       borderColor: tokens.input,
       padding: const EdgeInsets.all(3),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          HyperButton.icon(
+          HyperButton(
+            type: 'tonal',
             icon: LucideIcons.minus,
             size: 'small',
             color: canDecrease ? tokens.foreground : tokens.mutedForeground,
@@ -68,7 +69,8 @@ class HyperNumberStepper extends StatelessWidget {
               ),
             ),
           ),
-          HyperButton.icon(
+          HyperButton(
+            type: 'tonal',
             icon: LucideIcons.plus,
             size: 'small',
             color: canIncrease ? tokens.foreground : tokens.mutedForeground,

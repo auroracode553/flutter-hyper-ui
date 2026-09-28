@@ -55,12 +55,13 @@ class HyperPagination extends StatelessWidget {
       child: HyperGlass(
         radius: 16,
         blur: 12,
-        weight: HyperGlassWeight.subtle,
+        type: 'subtle',
         padding: const EdgeInsets.all(4),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: rtl ? LucideIcons.chevronRight : LucideIcons.chevronLeft,
               size: 'small',
               color: page > 1 ? tokens.foreground : tokens.mutedForeground,
@@ -118,7 +119,8 @@ class HyperPagination extends StatelessWidget {
                           ),
                         ),
                       ),
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: rtl ? LucideIcons.chevronLeft : LucideIcons.chevronRight,
               size: 'small',
               color: page < pageCount

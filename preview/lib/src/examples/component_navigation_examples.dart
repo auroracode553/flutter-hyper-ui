@@ -80,7 +80,7 @@ class ListTileComponentExample extends StatelessWidget {
           title: '项目成员',
           subtitle: '头部与尾部都是任意 Widget',
           leading: HyperAvatar(size: 'small'),
-          trailing: HyperBadge.tag(label: '管理员'),
+          trailing: HyperBadge(type: 'tag', label: '管理员'),
           showChevron: false,
         ),
       ],
@@ -138,9 +138,8 @@ class SlideMenuComponentExample extends StatelessWidget {
         HyperSlideAction(
           label: '删除',
           icon: LucideIcons.trash,
-          color: HyperUiThemeTokens.of(context).error,
-          onPressed: () =>
-              HyperToast.show(context, '已删除', tone: HyperUiTone.error),
+          type: 'danger',
+          onPressed: () => HyperToast.show(context, '已删除', type: 'error'),
         ),
       ],
       child: const HyperListTile(
@@ -205,7 +204,8 @@ class _StepsComponentExampleState extends State<StepsComponentExample> {
         steps: const [HyperStep('创建'), HyperStep('配置'), HyperStep('完成')],
       ),
       const SizedBox(height: 16),
-      HyperButton.tonal(
+      HyperButton(
+        type: 'tonal',
         label: '下一步',
         onPressed: () => setState(() => _current = (_current + 1) % 3),
       ),
@@ -214,7 +214,7 @@ class _StepsComponentExampleState extends State<StepsComponentExample> {
       _label('纵向步骤（vertical，可带副标题）'),
       HyperSteps(
         current: _current,
-        vertical: true,
+        type: 'vertical',
         steps: const [
           HyperStep('创建项目', subtitle: '填写基本信息'),
           HyperStep('配置成员', subtitle: '邀请协作者加入'),
@@ -241,8 +241,8 @@ class ProgressComponentExample extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          HyperProgress.circular(value: .42, size: 'small'),
-          HyperProgress.circular(showLabel: false),
+          HyperProgress(type: 'circular', value: .42, size: 'small'),
+          HyperProgress(type: 'circular', showLabel: false),
         ],
       ),
     ],

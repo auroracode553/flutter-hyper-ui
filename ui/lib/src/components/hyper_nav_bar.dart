@@ -60,12 +60,21 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 集合校验放在构建阶段，保证自定义插槽仍可使用 const 构造。
-    assert(
-      trailing == null || actions.isEmpty,
-      'trailing 与 actions 二选一，避免插槽内容被静默覆盖。',
-    );
-    assert(child == null || actions.isEmpty, 'child 接管整行布局，不能同时设置 actions。');
+    if (child != null &&
+        (title != null ||
+            subtitle != null ||
+            leading != null ||
+            trailing != null ||
+            actions.isNotEmpty)) {
+      throw ArgumentError(
+        'HyperNavBar.child cannot be combined with content slots.',
+      );
+    }
+    if (trailing != null && actions.isNotEmpty) {
+      throw ArgumentError(
+        'HyperNavBar.trailing and actions are mutually exclusive.',
+      );
+    }
     final content = SizedBox(
       height: height,
       child: Padding(padding: padding, child: child ?? _buildSlots(context)),
@@ -168,7 +177,8 @@ class _BackButton extends StatelessWidget {
   const _BackButton();
 
   @override
-  Widget build(BuildContext context) => HyperButton.ghost(
+  Widget build(BuildContext context) => HyperButton(
+    type: 'ghost',
     icon: LucideIcons.chevronLeft,
     size: 'large',
     tooltip: '返回',

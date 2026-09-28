@@ -90,14 +90,14 @@ class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
     if (tabs.isEmpty) {
       return HyperGlass(
         radius: preferredSize.height / 2,
-        weight: HyperGlassWeight.subtle,
+        type: 'subtle',
         child: SizedBox(height: tabHeight),
       );
     }
     return HyperGlass(
       radius: preferredSize.height / 2,
       blur: 12,
-      weight: HyperGlassWeight.subtle,
+      type: 'subtle',
       padding: const EdgeInsets.all(3),
       child: SizedBox(
         height: tabHeight,
@@ -266,15 +266,19 @@ class HyperSteps extends StatelessWidget {
     super.key,
     required this.steps,
     required this.current,
-    this.vertical = false,
-  });
+    this.type = 'horizontal',
+  }) : assert(type == 'horizontal' || type == 'vertical');
 
   final List<HyperStep> steps;
   final int current;
-  final bool vertical;
+  final String type;
+  bool get vertical => type == 'vertical';
 
   @override
   Widget build(BuildContext context) {
+    if (type != 'horizontal' && type != 'vertical') {
+      throw ArgumentError.value(type, 'type', 'Invalid steps type');
+    }
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
 
@@ -373,24 +377,19 @@ class HyperSteps extends StatelessWidget {
 class HyperProgress extends StatelessWidget {
   const HyperProgress({
     super.key,
+    this.type = 'linear',
     this.value,
     this.showLabel = true,
     this.size = 'default',
     this.color,
     this.backgroundColor,
-  }) : _circular = false;
+  }) : assert(
+         type == 'linear' || type == 'circular',
+         'HyperProgress.type must be linear or circular.',
+       );
 
-  const HyperProgress.circular({
-    super.key,
-    this.value,
-    this.size = 'default',
-    this.showLabel = true,
-    this.color,
-    this.backgroundColor,
-  }) : _circular = true;
-
+  final String type;
   final double? value;
-  final bool _circular;
   final bool showLabel;
   final String size;
   final Color? color;
@@ -398,10 +397,13 @@ class HyperProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (type != 'linear' && type != 'circular') {
+      throw ArgumentError.value(type, 'type', 'Invalid progress type');
+    }
     final amount = value?.clamp(0.0, 1.0).toDouble();
     final label = amount == null ? null : '${(amount * 100).round()}%';
     final glass = HyperGlassTheme.of(context);
-    if (_circular) {
+    if (type == 'circular') {
       return SizedBox.square(
         dimension: hyperUiSizeValue(size, small: 48, normal: 64, large: 80),
         child: Stack(

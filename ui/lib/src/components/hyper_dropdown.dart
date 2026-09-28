@@ -65,7 +65,8 @@ class HyperDropdown<T> extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       for (final option in options)
-                        HyperListTile.plain(
+                        HyperListTile(
+                          type: 'plain',
                           title: option.label,
                           selected: option.value == value,
                           enabled: option.enabled,

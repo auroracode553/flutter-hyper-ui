@@ -60,9 +60,9 @@ class CardsExample extends StatelessWidget {
               spacing: HyperUiSpacing.xs,
               runSpacing: HyperUiSpacing.xs,
               children: [
-                HyperBadge.tag(label: '旅行', selected: true),
-                HyperBadge.tag(label: '精选'),
-                HyperBadge.tag(label: '日常'),
+                HyperBadge(type: 'tag', label: '旅行', selected: true),
+                HyperBadge(type: 'tag', label: '精选'),
+                HyperBadge(type: 'tag', label: '日常'),
               ],
             ),
           ),

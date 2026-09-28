@@ -18,7 +18,7 @@ Widget buildHySelectionField(
   final field = HyperGlass(
     radius: 16,
     blur: 14,
-    weight: HyperGlassWeight.subtle,
+    type: 'subtle',
     borderColor: tokens.input,
     onTap: onTap,
     child: ConstrainedBox(

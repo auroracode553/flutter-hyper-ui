@@ -115,8 +115,10 @@ class ImageComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('网络图片与点击预览'),
-        HyperImage.network(
-          'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900',
+        HyperImage(
+          type: 'network',
+          source:
+              'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900',
           height: 180,
           width: double.infinity,
           radius: 22,
@@ -251,14 +253,20 @@ class _CountBadgeExample extends StatelessWidget {
           spacing: 26,
           runSpacing: 26,
           children: [
-            HyperBadge.count(count: 8, child: HyperAvatar(text: '消息')),
+            HyperBadge(
+              type: 'count',
+              count: 8,
+              child: HyperAvatar(text: '消息'),
+            ),
             // 超过 max（默认 99）显示 99+。
-            HyperBadge.count(
+            HyperBadge(
+              type: 'count',
               count: 128,
               child: HyperIcon(LucideIcons.mail, size: 'large'),
             ),
             // showZero: 数字为 0 也显示。
-            HyperBadge.count(
+            HyperBadge(
+              type: 'count',
               count: 0,
               showZero: true,
               child: HyperIcon(LucideIcons.inbox, size: 'large'),
@@ -272,7 +280,8 @@ class _CountBadgeExample extends StatelessWidget {
           spacing: 26,
           runSpacing: 8,
           children: [
-            HyperBadge.count(
+            HyperBadge(
+              type: 'count',
               dot: true,
               child: HyperIcon(LucideIcons.bell, size: 'large'),
             ),
@@ -361,13 +370,15 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
           spacing: 10,
           runSpacing: 10,
           children: [
-            HyperBadge.tag(
+            HyperBadge(
+              type: 'tag',
               label: '可选标签',
               selected: _selected,
               icon: LucideIcons.sparkles,
               onTap: () => setState(() => _selected = !_selected),
             ),
-            HyperBadge.tag(
+            HyperBadge(
+              type: 'tag',
               label: '设计',
               selected: !_selected,
               onTap: () => setState(() => _selected = !_selected),
@@ -381,9 +392,10 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
           spacing: 10,
           runSpacing: 10,
           children: [
-            HyperBadge.tag(label: '成功', tone: HyperUiTone.success),
-            HyperBadge.tag(label: '警告', tone: HyperUiTone.warning),
-            HyperBadge.tag(
+            HyperBadge(type: 'tag', label: '成功', tone: HyperUiTone.success),
+            HyperBadge(type: 'tag', label: '警告', tone: HyperUiTone.warning),
+            HyperBadge(
+              type: 'tag',
               label: '错误',
               tone: HyperUiTone.error,
               icon: LucideIcons.circleAlert,
@@ -398,12 +410,14 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
           runSpacing: 8,
           children: [
             if (_visible)
-              HyperBadge.tag(
+              HyperBadge(
+                type: 'tag',
                 label: '可移除',
                 onClose: () => setState(() => _visible = false),
               )
             else
-              HyperBadge.tag(
+              HyperBadge(
+                type: 'tag',
                 label: '恢复',
                 icon: LucideIcons.rotateCcw,
                 onTap: () => setState(() => _visible = true),

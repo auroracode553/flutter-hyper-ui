@@ -106,7 +106,7 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface> {
               child: HyperGlass(
                 radius: 18,
                 blur: 28,
-                weight: HyperGlassWeight.prominent,
+                type: 'prominent',
                 padding: widget.padding,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: widget.maxHeight),

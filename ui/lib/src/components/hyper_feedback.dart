@@ -16,13 +16,32 @@ abstract final class HyperToast {
   static void show(
     BuildContext context,
     String message, {
-    HyperUiTone tone = HyperUiTone.neutral,
+    String type = 'neutral',
+    Color? color,
     Duration duration = const Duration(seconds: 2),
     String? actionLabel,
     VoidCallback? onAction,
   }) {
+    assert(
+      type == 'neutral' ||
+          type == 'primary' ||
+          type == 'success' ||
+          type == 'warning' ||
+          type == 'error' ||
+          type == 'info',
+      'HyperToast.type must be neutral, primary, success, warning, error, or info.',
+    );
     final tokens = HyperUiThemeTokens.of(context);
-    final toneColor = tone.color(tokens);
+    final tone = switch (type) {
+      'primary' => HyperUiTone.primary,
+      'success' => HyperUiTone.success,
+      'warning' => HyperUiTone.warning,
+      'error' => HyperUiTone.error,
+      'info' => HyperUiTone.info,
+      'neutral' => HyperUiTone.neutral,
+      _ => throw ArgumentError.value(type, 'type', 'Invalid toast type'),
+    };
+    final toneColor = color ?? tone.color(tokens);
     final theme = HyperUiTheme.of(context);
     late final OverlayEntry entry;
     var visible = true;
@@ -47,7 +66,7 @@ abstract final class HyperToast {
               child: HyperGlass(
                 radius: 18,
                 blur: 28,
-                weight: HyperGlassWeight.prominent,
+                type: 'prominent',
                 color: Color.alphaBlend(toneColor.withAlpha(10), tokens.card),
                 borderColor: toneColor.withAlpha(105),
                 padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
@@ -128,9 +147,12 @@ abstract final class HyperDialog {
     Widget? content,
     String confirmLabel = '确定',
     String cancelLabel = '取消',
-    bool dangerous = false,
+    String type = 'default',
     bool showCancel = true,
   }) {
+    if (type != 'default' && type != 'danger') {
+      throw ArgumentError.value(type, 'type', 'Invalid dialog type');
+    }
     return showHyperModal<bool>(
       context,
       builder: (dialogContext) => ConstrainedBox(
@@ -138,7 +160,7 @@ abstract final class HyperDialog {
         child: HyperGlass(
           radius: 26,
           blur: 30,
-          weight: HyperGlassWeight.prominent,
+          type: 'prominent',
           padding: const EdgeInsets.all(18),
           child: SingleChildScrollView(
             child: Column(
@@ -165,12 +187,14 @@ abstract final class HyperDialog {
                   runSpacing: 8,
                   children: <Widget>[
                     if (showCancel)
-                      HyperButton.ghost(
+                      HyperButton(
+                        type: 'ghost',
                         label: cancelLabel,
                         onPressed: () => Navigator.pop(dialogContext, false),
                       ),
-                    dangerous
-                        ? HyperButton.danger(
+                    type == 'danger'
+                        ? HyperButton(
+                            type: 'danger',
                             label: confirmLabel,
                             onPressed: () => Navigator.pop(dialogContext, true),
                           )
@@ -229,15 +253,12 @@ class HyperLoading extends StatelessWidget {
         data: theme,
         child: Stack(
           children: <Widget>[
-            ModalBarrier(
-              dismissible: false,
-              color: theme.glass.scrim,
-            ),
+            ModalBarrier(dismissible: false, color: theme.glass.scrim),
             Center(
               child: HyperGlass(
                 radius: 24,
                 blur: 30,
-                weight: HyperGlassWeight.prominent,
+                type: 'prominent',
                 padding: const EdgeInsets.all(20),
                 child: HyperLoading(label: label),
               ),

@@ -33,7 +33,8 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
           safeArea: false,
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () => HyperToast.show(context, 'Navbar action'),
@@ -65,10 +66,10 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
                 icon: LucideIcons.sparkles,
                 onPressed: () => HyperToast.show(context, '主要操作'),
               ),
-              HyperButton.tonal(label: '柔和', onPressed: () {}),
-              HyperButton.outline(label: '描边', onPressed: () {}),
-              HyperButton.ghost(label: '幽灵', onPressed: () {}),
-              HyperButton.danger(label: '危险', onPressed: () {}),
+              HyperButton(type: 'tonal', label: '柔和', onPressed: () {}),
+              HyperButton(type: 'outline', label: '描边', onPressed: () {}),
+              HyperButton(type: 'ghost', label: '幽灵', onPressed: () {}),
+              HyperButton(type: 'danger', label: '危险', onPressed: () {}),
               const HyperButton(label: '加载中', loading: true),
             ],
           ),
@@ -179,8 +180,8 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
               HyperSlideAction(
                 label: '删除',
                 icon: LucideIcons.trash,
-                onPressed: () =>
-                    HyperToast.show(context, '已删除', tone: HyperUiTone.error),
+                type: 'danger',
+                onPressed: () => HyperToast.show(context, '已删除', type: 'error'),
               ),
             ],
             child: const Padding(
@@ -214,7 +215,8 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
                 spacing: 8,
                 runSpacing: 8,
                 children: <Widget>[
-                  HyperButton.tonal(
+                  HyperButton(
+                    type: 'tonal',
                     label: '打开抽屉',
                     onPressed: () => HyperDrawer.show<void>(
                       context,
@@ -228,19 +230,20 @@ class _GlassLibraryExampleState extends State<GlassLibraryExample> {
                       ),
                     ),
                   ),
-                  HyperButton.tonal(
+                  HyperButton(
+                    type: 'tonal',
                     label: '显示 Toast',
                     onPressed: () => HyperToast.show(
                       context,
                       '操作已完成',
-                      tone: HyperUiTone.success,
+                      type: 'success',
                       actionLabel: '撤销',
                       onAction: () {},
                     ),
                   ),
                 ],
               ),
-              const HyperSkeleton(card: true, rows: 2),
+              const HyperSkeleton(type: 'card', rows: 2),
             ],
           ),
         ),

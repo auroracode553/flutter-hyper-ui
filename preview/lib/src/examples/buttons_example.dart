@@ -18,7 +18,12 @@ class ButtonsExample extends StatelessWidget {
           children: [
             HyperButton(label: '小按钮', size: 'small', onPressed: _noop),
             HyperButton(label: '默认按钮', onPressed: _noop),
-            HyperButton.outline(label: '处理中', loading: true, onPressed: _noop),
+            HyperButton(
+              type: 'outline',
+              label: '处理中',
+              loading: true,
+              onPressed: _noop,
+            ),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.md),
@@ -27,17 +32,20 @@ class ButtonsExample extends StatelessWidget {
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
           children: [
-            HyperButton.outline(
+            HyperButton(
+              type: 'outline',
               label: '导出',
               icon: LucideIcons.share2,
               onPressed: _noop,
             ),
-            HyperButton.danger(
+            HyperButton(
+              type: 'danger',
               label: '删除',
               icon: LucideIcons.trash,
               onPressed: _noop,
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '带图标胶囊',
               icon: LucideIcons.settings,
               onPressed: _noop,
@@ -50,27 +58,32 @@ class ButtonsExample extends StatelessWidget {
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
           children: [
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.plus,
               onPressed: _noop,
               tooltip: '新建',
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.refreshCw,
               onPressed: _noop,
               tooltip: '刷新',
             ),
-            HyperButton.outline(
+            HyperButton(
+              type: 'outline',
               icon: LucideIcons.share2,
               onPressed: _noop,
               tooltip: '分享',
             ),
-            HyperButton.danger(
+            HyperButton(
+              type: 'danger',
               icon: LucideIcons.trash,
               onPressed: _noop,
               tooltip: '删除',
             ),
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.refreshCw,
               loading: true,
               onPressed: _noop,

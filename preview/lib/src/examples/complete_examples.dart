@@ -53,8 +53,16 @@ class _AtomsExampleState extends State<AtomsExample> {
             HyperAvatar(text: '林', size: 'large'),
             HyperAvatar(text: 'UI', size: 'large', radius: 18),
             HyperAvatar(size: 'large'),
-            HyperBadge.count(count: 128, child: HyperAvatar(text: '讯')),
-            HyperBadge.count(dot: true, child: HyperIcon(LucideIcons.bell)),
+            HyperBadge(
+              type: 'count',
+              count: 128,
+              child: HyperAvatar(text: '讯'),
+            ),
+            HyperBadge(
+              type: 'count',
+              dot: true,
+              child: HyperIcon(LucideIcons.bell),
+            ),
           ],
         ),
       ),
@@ -64,16 +72,30 @@ class _AtomsExampleState extends State<AtomsExample> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            const HyperBadge.tag(label: '已完成', tone: HyperUiTone.success),
-            const HyperBadge.tag(label: '待处理', tone: HyperUiTone.warning),
-            const HyperBadge.tag(label: '已失败', tone: HyperUiTone.error),
+            const HyperBadge(
+              type: 'tag',
+              label: '已完成',
+              tone: HyperUiTone.success,
+            ),
+            const HyperBadge(
+              type: 'tag',
+              label: '待处理',
+              tone: HyperUiTone.warning,
+            ),
+            const HyperBadge(
+              type: 'tag',
+              label: '已失败',
+              tone: HyperUiTone.error,
+            ),
             if (_tagVisible)
-              HyperBadge.tag(
+              HyperBadge(
+                type: 'tag',
                 label: '可移除',
                 onClose: () => setState(() => _tagVisible = false),
               ),
             if (!_tagVisible)
-              HyperButton.ghost(
+              HyperButton(
+                type: 'ghost',
                 label: '恢复标签',
                 onPressed: () => setState(() => _tagVisible = true),
               ),
@@ -83,8 +105,10 @@ class _AtomsExampleState extends State<AtomsExample> {
       HyperCard(
         title: '图片 · 点击缩放预览',
         subtitle: '网络加载、内存缓存、失败占位',
-        child: HyperImage.network(
-          'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=900',
+        child: HyperImage(
+          type: 'network',
+          source:
+              'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=900',
           width: double.infinity,
           height: 200,
           preview: true,
@@ -150,13 +174,13 @@ class LayoutExample extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                HyperBadge.tag(label: '柔光'),
-                HyperBadge.tag(label: '轻盈'),
-                HyperBadge.tag(label: '自然'),
-                HyperBadge.tag(label: '自适应换行'),
+                HyperBadge(type: 'tag', label: '柔光'),
+                HyperBadge(type: 'tag', label: '轻盈'),
+                HyperBadge(type: 'tag', label: '自然'),
+                HyperBadge(type: 'tag', label: '自适应换行'),
               ],
             ),
-            HyperDivider(dashed: true),
+            HyperDivider(type: 'dashed'),
             Row(
               mainAxisSize: MainAxisSize.min,
               spacing: 12,
@@ -169,13 +193,17 @@ class LayoutExample extends StatelessWidget {
           ],
         ),
       ),
-      const HyperCard(title: '骨架占位', child: HyperSkeleton(card: true, rows: 2)),
+      const HyperCard(
+        title: '骨架占位',
+        child: HyperSkeleton(type: 'card', rows: 2),
+      ),
       HyperCard(
         child: HyperEmptyState(
           icon: LucideIcons.searchX,
           title: '没有找到结果',
           message: '试试其他关键词',
-          action: HyperButton.tonal(
+          action: HyperButton(
+            type: 'tonal',
             label: '重新搜索',
             onPressed: () => HyperToast.show(context, '已重置搜索条件'),
           ),
@@ -245,7 +273,7 @@ class _FormsExampleState extends State<FormsExample> {
                 label: '保存',
                 onPressed: () {
                   if (_form.currentState!.validate()) {
-                    HyperToast.show(context, '已保存', tone: HyperUiTone.success);
+                    HyperToast.show(context, '已保存', type: 'success');
                   }
                 },
               ),
@@ -269,7 +297,8 @@ class _FormsExampleState extends State<FormsExample> {
               value: _single,
               onChanged: (value) => setState(() => _single = value),
             ),
-            HyperSelect<String>.multiple(
+            HyperSelect<String>(
+              type: 'multiple',
               label: '多选',
               options: const [
                 HyperOption(value: '柔光', label: '柔光'),
@@ -321,7 +350,8 @@ class _FormsExampleState extends State<FormsExample> {
               spacing: 8,
               runSpacing: 8,
               children: [
-                HyperButton.tonal(
+                HyperButton(
+                  type: 'tonal',
                   label: '选项',
                   onPressed: () async {
                     final result = await HyperPicker.show(
@@ -336,7 +366,8 @@ class _FormsExampleState extends State<FormsExample> {
                       setState(() => _date = result);
                   },
                 ),
-                HyperButton.tonal(
+                HyperButton(
+                  type: 'tonal',
                   label: '日期',
                   onPressed: () async {
                     final result = await HyperDatePicker.date(context);
@@ -346,7 +377,8 @@ class _FormsExampleState extends State<FormsExample> {
                       );
                   },
                 ),
-                HyperButton.tonal(
+                HyperButton(
+                  type: 'tonal',
                   label: '时间',
                   onPressed: () async {
                     final result = await HyperDatePicker.time(context);
@@ -354,7 +386,8 @@ class _FormsExampleState extends State<FormsExample> {
                       setState(() => _date = result.format());
                   },
                 ),
-                HyperButton.tonal(
+                HyperButton(
+                  type: 'tonal',
                   label: '区间',
                   onPressed: () async {
                     final result = await HyperDatePicker.range(context);
@@ -445,12 +478,13 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
               current: _step,
               steps: const [HyperStep('提交'), HyperStep('处理中'), HyperStep('完成')],
             ),
-            HyperButton.tonal(
+            HyperButton(
+              type: 'tonal',
               label: '下一步',
               onPressed: () => setState(() => _step = (_step + 1) % 3),
             ),
             const HyperProgress(value: .64),
-            const Center(child: HyperProgress.circular(value: .72)),
+            const Center(child: HyperProgress(type: 'circular', value: .72)),
           ],
         ),
       ),

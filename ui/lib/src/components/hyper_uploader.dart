@@ -270,7 +270,7 @@ class _UploadItemTile extends StatelessWidget {
       child: HyperGlass(
         radius: 16,
         blur: 12,
-        weight: HyperGlassWeight.subtle,
+        type: 'subtle',
         borderColor: tokens.input,
         padding: const EdgeInsets.all(6),
         child: Column(
@@ -299,7 +299,8 @@ class _UploadItemTile extends StatelessWidget {
                   Positioned(
                     top: 2,
                     right: 2,
-                    child: HyperButton.icon(
+                    child: HyperButton(
+                      type: 'tonal',
                       icon: LucideIcons.x,
                       size: 'small',
                       tooltip: '删除 ${item.file.name}',
@@ -330,7 +331,8 @@ class _UploadItemTile extends StatelessWidget {
             else if (item.status == HyperUploadStatus.success)
               const HyperBadge(label: '已上传', tone: HyperUiTone.success)
             else
-              HyperButton.tonal(
+              HyperButton(
+                type: 'tonal',
                 label: item.status == HyperUploadStatus.error ? '重试' : '上传',
                 size: 'small',
                 expanded: true,
@@ -358,7 +360,7 @@ class _UploadAddTile extends StatelessWidget {
       child: HyperGlass(
         radius: 16,
         blur: 12,
-        weight: HyperGlassWeight.subtle,
+        type: 'subtle',
         borderColor: tokens.input,
         onTap: onTap,
         child: Center(

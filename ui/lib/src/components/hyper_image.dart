@@ -11,7 +11,9 @@ import 'hyper_button.dart';
 class HyperImage extends StatelessWidget {
   const HyperImage({
     super.key,
-    required this.provider,
+    this.type = 'provider',
+    this.provider,
+    this.source,
     this.width,
     this.height,
     this.radius = 16,
@@ -19,42 +21,13 @@ class HyperImage extends StatelessWidget {
     this.placeholder,
     this.errorPlaceholder,
     this.preview = false,
-  });
-  HyperImage.network(
-    String url, {
-    Key? key,
-    double? width,
-    double? height,
-    double radius = 16,
-    BoxFit fit = BoxFit.cover,
-    bool preview = false,
-  }) : this(
-         key: key,
-         provider: NetworkImage(url),
-         width: width,
-         height: height,
-         radius: radius,
-         fit: fit,
-         preview: preview,
-       );
-  HyperImage.asset(
-    String path, {
-    Key? key,
-    double? width,
-    double? height,
-    double radius = 16,
-    BoxFit fit = BoxFit.cover,
-    bool preview = false,
-  }) : this(
-         key: key,
-         provider: AssetImage(path),
-         width: width,
-         height: height,
-         radius: radius,
-         fit: fit,
-         preview: preview,
-       );
-  final ImageProvider provider;
+  }) : assert(type == 'provider' || type == 'network' || type == 'asset'),
+       assert(type == 'provider' ? provider != null : source != null),
+       assert(type != 'provider' || source == null),
+       assert(type == 'provider' || provider == null);
+  final String type;
+  final ImageProvider? provider;
+  final String? source;
   final double? width, height;
   final double radius;
   final BoxFit fit;
@@ -62,6 +35,22 @@ class HyperImage extends StatelessWidget {
   final bool preview;
   @override
   Widget build(BuildContext context) {
+    if (type == 'provider'
+        ? provider == null
+        : source == null || source!.isEmpty) {
+      throw ArgumentError(
+        'HyperImage requires provider or nonempty source for its type.',
+      );
+    }
+    if (type == 'provider' ? source != null : provider != null) {
+      throw ArgumentError('HyperImage accepts one image source for its type.');
+    }
+    final ImageProvider imageProvider = switch (type) {
+      'network' => NetworkImage(source!),
+      'asset' => AssetImage(source!),
+      'provider' => provider!,
+      _ => throw ArgumentError.value(type, 'type', 'Invalid image type'),
+    };
     Widget fallback(bool error) => ColoredBox(
       color: HyperUiThemeTokens.of(context).muted,
       child: Center(
@@ -83,7 +72,7 @@ class HyperImage extends StatelessWidget {
                         minScale: .5,
                         maxScale: 5,
                         child: Image(
-                          image: provider,
+                          image: imageProvider,
                           fit: BoxFit.contain,
                           errorBuilder: (_, __, ___) => fallback(true),
                         ),
@@ -92,7 +81,8 @@ class HyperImage extends StatelessWidget {
                     SafeArea(
                       child: Align(
                         alignment: Alignment.topRight,
-                        child: HyperButton.icon(
+                        child: HyperButton(
+                          type: 'tonal',
                           icon: LucideIcons.x,
                           tooltip: '关闭预览',
                           color: HyperPalette.white,
@@ -112,7 +102,7 @@ class HyperImage extends StatelessWidget {
           width: width,
           height: height,
           child: Image(
-            image: provider,
+            image: imageProvider,
             fit: fit,
             frameBuilder: (_, child, frame, sync) =>
                 sync || frame != null ? child : fallback(false),
@@ -131,23 +121,27 @@ class HyperAvatar extends StatelessWidget {
     this.text,
     this.size = 'default',
     this.radius,
+    this.color,
     this.backgroundColor,
   });
   final ImageProvider? image;
   final String? text;
   final String size;
   final double? radius;
+  final Color? color;
   final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
     final dimension = hyperUiSizeValue(size, small: 32, normal: 40, large: 56);
     final tokens = HyperUiThemeTokens.of(context);
     final surface = backgroundColor ?? tokens.selectionBackground;
-    final foreground = backgroundColor == null
-        ? tokens.primary
-        : surface.computeLuminance() < 0.5
-        ? HyperPalette.white
-        : tokens.foreground;
+    final foreground =
+        color ??
+        (backgroundColor == null
+            ? tokens.primary
+            : surface.computeLuminance() < 0.5
+            ? HyperPalette.white
+            : tokens.foreground);
     final fallback = Center(
       child: text == null || text!.isEmpty
           ? Icon(LucideIcons.user, size: dimension * .5, color: foreground)

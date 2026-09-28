@@ -24,37 +24,33 @@ class HyperOption<T> {
 class HyperSelect<T> extends StatelessWidget {
   const HyperSelect({
     super.key,
+    this.type = 'single',
     required this.options,
     this.value,
+    this.values,
     this.onChanged,
-    this.placeholder = '请选择',
-    this.label,
-  }) : values = null,
-       onMultipleChanged = null,
-       _multiple = false;
-
-  const HyperSelect.multiple({
-    super.key,
-    required this.options,
-    required this.values,
     this.onMultipleChanged,
     this.placeholder = '请选择',
     this.label,
-  }) : value = null,
-       onChanged = null,
-       _multiple = true;
+  }) : assert(type == 'single' || type == 'multiple'),
+       assert(type != 'single' || values == null),
+       assert(type != 'multiple' || values != null),
+       assert(type != 'multiple' || value == null),
+       assert(type != 'single' || onMultipleChanged == null),
+       assert(type != 'multiple' || onChanged == null);
 
+  final String type;
   final List<HyperOption<T>> options;
   final T? value;
   final List<T>? values;
   final ValueChanged<T?>? onChanged;
   final ValueChanged<List<T>>? onMultipleChanged;
-  final bool _multiple;
+  bool get _multiple => type == 'multiple';
   final String placeholder;
   final String? label;
 
   List<T> get _selectedValues =>
-      _multiple ? values! : (value == null ? <T>[] : <T>[value as T]);
+      _multiple ? (values ?? <T>[]) : (value == null ? <T>[] : <T>[value as T]);
 
   Future<void> _open(BuildContext context) async {
     final result = await HyperActionSheet.show<List<T>>(
@@ -76,6 +72,22 @@ class HyperSelect<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (type != 'single' && type != 'multiple') {
+      throw ArgumentError.value(type, 'type', 'Invalid select type');
+    }
+    if (type == 'multiple' && values == null) {
+      throw ArgumentError('HyperSelect requires values for type multiple.');
+    }
+    if (type == 'single' && (values != null || onMultipleChanged != null)) {
+      throw ArgumentError(
+        'HyperSelect single mode cannot use multiple fields.',
+      );
+    }
+    if (type == 'multiple' && (value != null || onChanged != null)) {
+      throw ArgumentError(
+        'HyperSelect multiple mode cannot use single fields.',
+      );
+    }
     final selectedLabels = options
         .where((option) => _selectedValues.contains(option.value))
         .map((option) => option.label)

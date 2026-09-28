@@ -17,12 +17,14 @@ class NavigationExample extends StatelessWidget {
           subtitle: const Text('共 24 个项目'),
           safeArea: false,
           actions: [
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.search,
               tooltip: '搜索',
               onPressed: () {},
             ),
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.listChecks,
               tooltip: '选择',
               onPressed: () {},

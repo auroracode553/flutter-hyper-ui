@@ -50,7 +50,7 @@ class HyperSegmentedControl<T> extends StatelessWidget {
     return HyperGlass(
       radius: 18,
       blur: 14,
-      weight: HyperGlassWeight.subtle,
+      type: 'subtle',
       padding: const EdgeInsets.all(4),
       child: Row(
         mainAxisSize: equalWidth ? MainAxisSize.max : MainAxisSize.min,

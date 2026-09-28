@@ -144,7 +144,7 @@ class HyperDrawer extends StatelessWidget {
   Widget build(BuildContext context) => HyperGlass(
     radius: 30,
     blur: HyperUiEffects.glassBlurStrong,
-    weight: HyperGlassWeight.prominent,
+    type: 'prominent',
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -166,7 +166,8 @@ class HyperDrawer extends StatelessWidget {
                         ),
                 ),
                 if (onClose != null)
-                  HyperButton.icon(
+                  HyperButton(
+                    type: 'tonal',
                     tooltip: '关闭',
                     onPressed: onClose,
                     icon: LucideIcons.x,

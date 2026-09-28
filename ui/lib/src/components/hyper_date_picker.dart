@@ -351,7 +351,8 @@ class _CalendarMonthState extends State<_CalendarMonth> {
       children: [
         Row(
           children: [
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.chevronLeft,
               tooltip: '上个月',
               size: 'small',
@@ -363,7 +364,8 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                   : null,
             ),
             Expanded(
-              child: HyperButton.ghost(
+              child: HyperButton(
+                type: 'ghost',
                 label: '${_visibleMonth.year} 年 ${_visibleMonth.month} 月',
                 trailingIcon: LucideIcons.chevronDown,
                 expanded: true,
@@ -371,7 +373,8 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                     setState(() => _choosingMonth = !_choosingMonth),
               ),
             ),
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.chevronRight,
               tooltip: '下个月',
               size: 'small',
@@ -397,14 +400,16 @@ class _CalendarMonthState extends State<_CalendarMonth> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            HyperButton.ghost(
+            HyperButton(
+              type: 'ghost',
               label: '−10 年',
               size: 'small',
               onPressed: year - 10 >= widget.first.year
                   ? () => _changeYear(-10)
                   : null,
             ),
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.chevronLeft,
               tooltip: '上一年',
               size: 'small',
@@ -419,13 +424,15 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            HyperButton.icon(
+            HyperButton(
+              type: 'tonal',
               icon: LucideIcons.chevronRight,
               tooltip: '下一年',
               size: 'small',
               onPressed: year < widget.last.year ? () => _changeYear(1) : null,
             ),
-            HyperButton.ghost(
+            HyperButton(
+              type: 'ghost',
               label: '+10 年',
               size: 'small',
               onPressed: year + 10 <= widget.last.year
@@ -459,7 +466,8 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                               expanded: true,
                               onPressed: onPressed,
                             )
-                          : HyperButton.tonal(
+                          : HyperButton(
+                              type: 'tonal',
                               label: '$month 月',
                               size: 'large',
                               expanded: true,

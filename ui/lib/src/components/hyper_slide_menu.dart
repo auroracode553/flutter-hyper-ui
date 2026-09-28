@@ -15,15 +15,23 @@ class HyperSlideAction {
     required this.label,
     required this.onPressed,
     this.icon,
+    this.type = 'default',
     this.color,
     this.foregroundColor,
-  });
+  }) : assert(type == 'default' || type == 'danger');
 
   final String label;
   final VoidCallback onPressed;
   final IconData? icon;
+  final String type;
   final Color? color;
   final Color? foregroundColor;
+
+  bool get isDanger => switch (type) {
+    'default' => false,
+    'danger' => true,
+    _ => throw ArgumentError.value(type, 'type', 'Invalid slide action type'),
+  };
 }
 
 /// 可跟手拖拽的列表侧滑菜单。
@@ -122,7 +130,7 @@ class _HyperSlideMenuState extends State<HyperSlideMenu>
                           child: _ActionStrip(
                             actions: widget.endActions,
                             extent: widget.actionExtent,
-                            fallbackColor: tokens.error,
+                            fallbackColor: tokens.primary,
                             onSelected: _runAction,
                           ),
                         ),
@@ -153,7 +161,7 @@ class _HyperSlideMenuState extends State<HyperSlideMenu>
                         ? HyperGlass(
                             radius: widget.radius,
                             blur: 14,
-                            weight: HyperGlassWeight.regular,
+                            type: 'regular',
                             child: widget.child,
                           )
                         : widget.child,
@@ -235,6 +243,12 @@ class _ActionStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color actionBackground(HyperSlideAction action) {
+      final danger = action.isDanger;
+      return action.color ??
+          (danger ? HyperUiThemeTokens.of(context).error : fallbackColor);
+    }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -243,7 +257,7 @@ class _ActionStrip extends StatelessWidget {
             width: extent,
             height: double.infinity,
             child: Container(
-              color: action.color ?? fallbackColor,
+              color: actionBackground(action),
               child: GestureDetector(
                 onTap: () => onSelected(action),
                 behavior: HitTestBehavior.opaque,

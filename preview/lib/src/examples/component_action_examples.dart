@@ -2,40 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
-// doc-region GlassWeightComponentExample
-class GlassWeightComponentExample extends StatelessWidget {
-  const GlassWeightComponentExample({super.key});
-
-  @override
-  Widget build(BuildContext context) => const Wrap(
-    spacing: 8,
-    runSpacing: 8,
-    children: [
-      HyperGlass(
-        weight: HyperGlassWeight.subtle,
-        padding: EdgeInsets.all(16),
-        child: Text('Subtle'),
-      ),
-      HyperGlass(
-        weight: HyperGlassWeight.regular,
-        padding: EdgeInsets.all(16),
-        child: Text('Regular'),
-      ),
-      HyperGlass(
-        weight: HyperGlassWeight.prominent,
-        padding: EdgeInsets.all(16),
-        child: Text('Prominent'),
-      ),
-      HyperGlass(
-        weight: HyperGlassWeight.solid,
-        padding: EdgeInsets.all(16),
-        child: Text('Solid'),
-      ),
-    ],
-  );
-}
-// end-doc-region GlassWeightComponentExample
-
 // doc-region PressableComponentExample
 class PressableComponentExample extends StatefulWidget {
   const PressableComponentExample({super.key});

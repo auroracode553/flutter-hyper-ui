@@ -14,15 +14,21 @@ class HyperAction<T> {
     required this.value,
     required this.label,
     this.icon,
-    this.destructive = false,
+    this.type = 'default',
     this.enabled = true,
-  });
+  }) : assert(type == 'default' || type == 'danger');
 
   final T value;
   final String label;
   final IconData? icon;
-  final bool destructive;
+  final String type;
   final bool enabled;
+
+  bool get isDanger => switch (type) {
+    'default' => false,
+    'danger' => true,
+    _ => throw ArgumentError.value(type, 'type', 'Invalid action type'),
+  };
 }
 
 /// Bottom sheet with separate entry points for custom content and action lists.
@@ -78,7 +84,7 @@ abstract final class HyperActionSheet {
             child: HyperGlass(
               radius: 30,
               blur: HyperUiEffects.glassBlurStrong,
-              weight: HyperGlassWeight.prominent,
+              type: 'prominent',
               padding: const EdgeInsets.all(HyperUiSpacing.md),
               child: SafeArea(
                 top: false,
@@ -141,17 +147,19 @@ class _HyperActionList<T> extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (final action in actions)
-          HyperListTile.plain(
+          HyperListTile(
+            type: 'plain',
             title: action.label,
             leadingIcon: action.icon,
-            leadingColor: action.destructive ? tokens.error : tokens.primary,
-            titleColor: action.destructive ? tokens.error : null,
+            leadingColor: action.isDanger ? tokens.error : tokens.primary,
+            titleColor: action.isDanger ? tokens.error : null,
             enabled: action.enabled,
             showChevron: false,
             onTap: () => Navigator.pop(context, action.value),
           ),
         const SizedBox(height: HyperUiSpacing.sm),
-        HyperButton.ghost(
+        HyperButton(
+          type: 'ghost',
           label: cancelLabel,
           expanded: true,
           onPressed: () => Navigator.pop(context),

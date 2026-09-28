@@ -422,13 +422,6 @@ class PreviewCatalog {
       (_) => example_component_foundation_examples.ToneComponentExample(),
     ),
     _componentPreview(
-      'component-glass-weight',
-      'HyperGlassWeight',
-      '四种玻璃材质重量。',
-      () => example_component_action_examples.loadLibrary(),
-      (_) => example_component_action_examples.GlassWeightComponentExample(),
-    ),
-    _componentPreview(
       'component-pressable',
       'HyperPressable',
       '即时按压反馈。',
