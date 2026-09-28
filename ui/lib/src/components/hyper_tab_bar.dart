@@ -29,6 +29,7 @@ class HyperTabBar extends StatefulWidget {
     required this.selectedIndex,
     required this.onSelected,
     this.safeArea = true,
+    this.margin = const EdgeInsets.fromLTRB(20, 8, 20, 0),
   }) : assert(items.length >= 2),
        assert(selectedIndex >= 0 && selectedIndex < items.length);
 
@@ -38,6 +39,9 @@ class HyperTabBar extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onSelected;
   final bool safeArea;
+
+  /// 外部已控制位置时可设为零，避免悬浮底栏再次收窄。
+  final EdgeInsetsGeometry margin;
 
   @override
   State<HyperTabBar> createState() => _HyperTabBarState();
@@ -121,7 +125,7 @@ class _HyperTabBarState extends State<HyperTabBar>
     final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
     final barHeight = math.max(HyperTabBar.height, textHeight + 36);
     final bar = Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+      padding: widget.margin,
       child: SizedBox(
         height: barHeight,
         child: LayoutBuilder(

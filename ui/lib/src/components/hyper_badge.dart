@@ -6,9 +6,9 @@ import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_radii.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_button.dart';
 import 'hyper_pressable.dart';
 import 'hyper_tone.dart';
+import 'hyper_tooltip.dart';
 
 enum _HyperBadgeKind { status, tag, count }
 
@@ -130,14 +130,16 @@ class HyperBadge extends StatelessWidget {
             ),
           ),
           if (onClose != null)
-            HyperButton.icon(
-              icon: LucideIcons.x,
-              height: 24,
-              iconSize: 14,
-              color: foreground,
-              tooltip: '移除 $label',
-              onPressed: onClose,
-              backgroundColor: HyperPalette.transparent,
+            HyperTooltip(
+              message: '移除 $label',
+              child: HyperPressable(
+                onPressed: onClose,
+                borderRadius: BorderRadius.circular(HyperUiRadii.full),
+                child: SizedBox.square(
+                  dimension: 20,
+                  child: Icon(LucideIcons.x, size: 14, color: foreground),
+                ),
+              ),
             ),
         ],
       ),

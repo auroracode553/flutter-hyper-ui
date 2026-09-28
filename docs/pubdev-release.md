@@ -36,7 +36,6 @@
 cd ui
 flutter pub get
 flutter analyze
-flutter test
 flutter pub publish --dry-run
 ```
 

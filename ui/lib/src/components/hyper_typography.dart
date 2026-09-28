@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_ui_size.dart';
 
 class HyperText extends StatelessWidget {
   const HyperText(
@@ -25,16 +26,7 @@ class HyperText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final fontSize = switch (size) {
-      'large' => 18.0,
-      'default' => 14.0,
-      'small' => 12.0,
-      _ => throw ArgumentError.value(
-        size,
-        'size',
-        'Unsupported HyperText size',
-      ),
-    };
+    final fontSize = hyperUiSizeValue(size, small: 12, normal: 14, large: 18);
     return Text(
       data,
       maxLines: maxLines,
@@ -67,14 +59,14 @@ abstract final class HyperIcons {
 }
 
 class HyperIcon extends StatelessWidget {
-  const HyperIcon(this.icon, {super.key, this.size = 24, this.color});
+  const HyperIcon(this.icon, {super.key, this.size = 'default', this.color});
   final IconData icon;
-  final double size;
+  final String size;
   final Color? color;
   @override
   Widget build(BuildContext context) => Icon(
     icon,
-    size: size,
+    size: hyperUiSizeValue(size, small: 18, normal: 24, large: 32),
     color: color ?? HyperUiThemeTokens.of(context).foreground,
   );
 }

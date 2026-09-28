@@ -51,7 +51,7 @@ Column(
 HyperNavBar(
   height: 56,
   automaticallyImplyLeading: false,
-  leading: const HyperAvatar(text: '林', size: 32),
+  leading: const HyperAvatar(text: '林', size: 'small'),
   title: const Row(
     mainAxisSize: MainAxisSize.min,
     children: [

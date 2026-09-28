@@ -35,7 +35,7 @@ abstract final class HyperPicker {
             const SizedBox(height: HyperUiSpacing.sm),
             HyperButton(
               label: '确定',
-              height: 44,
+              size: 'large',
               expanded: true,
               onPressed: () =>
                   Navigator.pop(sheetContext, enabled[index].value),

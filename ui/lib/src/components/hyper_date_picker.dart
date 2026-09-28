@@ -135,7 +135,7 @@ class _DatePanelState extends State<_DatePanel> {
       const SizedBox(height: HyperUiSpacing.sm),
       HyperButton(
         label: '确定',
-        height: 44,
+        size: 'large',
         expanded: true,
         onPressed: () => Navigator.pop(context, _selected),
       ),
@@ -202,7 +202,7 @@ class _TimePanelState extends State<_TimePanel> {
       const SizedBox(height: HyperUiSpacing.sm),
       HyperButton(
         label: '确定',
-        height: 44,
+        size: 'large',
         expanded: true,
         onPressed: () => Navigator.pop(
           context,
@@ -280,7 +280,7 @@ class _DateRangePanelState extends State<_DateRangePanel> {
       const SizedBox(height: HyperUiSpacing.sm),
       HyperButton(
         label: '确定',
-        height: 44,
+        size: 'large',
         expanded: true,
         onPressed: () =>
             Navigator.pop(context, HyperDateRange(start: _start, end: _end)),
@@ -354,7 +354,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
             HyperButton.icon(
               icon: LucideIcons.chevronLeft,
               tooltip: '上个月',
-              height: 34,
+              size: 'small',
               onPressed:
                   _monthAvailable(
                     DateTime(_visibleMonth.year, _visibleMonth.month - 1),
@@ -366,7 +366,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               child: HyperButton.ghost(
                 label: '${_visibleMonth.year} 年 ${_visibleMonth.month} 月',
                 trailingIcon: LucideIcons.chevronDown,
-                height: 38,
                 expanded: true,
                 onPressed: () =>
                     setState(() => _choosingMonth = !_choosingMonth),
@@ -375,7 +374,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
             HyperButton.icon(
               icon: LucideIcons.chevronRight,
               tooltip: '下个月',
-              height: 34,
+              size: 'small',
               onPressed:
                   _monthAvailable(
                     DateTime(_visibleMonth.year, _visibleMonth.month + 1),
@@ -400,7 +399,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
           children: [
             HyperButton.ghost(
               label: '−10 年',
-              height: 34,
+              size: 'small',
               onPressed: year - 10 >= widget.first.year
                   ? () => _changeYear(-10)
                   : null,
@@ -408,7 +407,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
             HyperButton.icon(
               icon: LucideIcons.chevronLeft,
               tooltip: '上一年',
-              height: 34,
+              size: 'small',
               onPressed: year > widget.first.year
                   ? () => _changeYear(-1)
                   : null,
@@ -423,12 +422,12 @@ class _CalendarMonthState extends State<_CalendarMonth> {
             HyperButton.icon(
               icon: LucideIcons.chevronRight,
               tooltip: '下一年',
-              height: 34,
+              size: 'small',
               onPressed: year < widget.last.year ? () => _changeYear(1) : null,
             ),
             HyperButton.ghost(
               label: '+10 年',
-              height: 34,
+              size: 'small',
               onPressed: year + 10 <= widget.last.year
                   ? () => _changeYear(10)
                   : null,
@@ -456,13 +455,13 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                       return month == _visibleMonth.month
                           ? HyperButton(
                               label: '$month 月',
-                              height: 42,
+                              size: 'large',
                               expanded: true,
                               onPressed: onPressed,
                             )
                           : HyperButton.tonal(
                               label: '$month 月',
-                              height: 42,
+                              size: 'large',
                               expanded: true,
                               onPressed: onPressed,
                             );

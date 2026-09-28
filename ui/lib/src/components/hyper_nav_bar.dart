@@ -170,8 +170,7 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => HyperButton.ghost(
     icon: LucideIcons.chevronLeft,
-    height: 44,
-    iconSize: 20,
+    size: 'large',
     tooltip: '返回',
     onPressed: () => Navigator.maybePop(context),
   );

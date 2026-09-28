@@ -40,9 +40,10 @@ HyperUiTheme.app(home: const AppHome());
 | 单选与多选 | `HyperSelect(value: ..., onChanged: ...)`、`HyperSelect<T>.multiple(values: ..., onMultipleChanged: ...)` |
 | 标签与页面 | `HyperTabs(tabs: [...], pages: [...])` |
 | 文字尺寸与颜色 | `HyperText('标题', size: 'large', color: brandColor)` |
+| 常用尺寸 | `HyperButton(label: '保存', size: 'small', onPressed: save)`、`HyperAvatar(size: 'large')`、`HyperProgress.circular(size: 'large')` |
 | 操作列表弹层 | `HyperActionSheet.choose(context, actions: [...])` |
 
-组件的颜色、圆角和间距由主题提供默认值。按钮的 `child`、输入框的 `prefix` / `suffix`、卡片与导航栏的内容插槽仍接受自定义 Widget。
+文字、按钮、图标、头像、加载提示与进度统一使用 `small`、`default`、`large` 三档尺寸，并从主题读取默认颜色。按钮的 `child`、输入框的 `prefix` / `suffix`、卡片与导航栏的内容插槽仍接受自定义 Widget。
 `HyperGlass` 是材质基础层，因此继续开放模糊、边框和颜色等样式参数；`HyperUploader` 的文件选择与上传回调继续由应用注入。
 
 ## 创建第一个页面

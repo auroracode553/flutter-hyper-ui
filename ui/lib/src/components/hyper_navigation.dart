@@ -8,6 +8,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_effects.dart';
+import '../theme/hyper_ui_size.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_layout.dart';
@@ -374,18 +375,16 @@ class HyperProgress extends StatelessWidget {
     super.key,
     this.value,
     this.showLabel = true,
-    this.strokeWidth = 6,
+    this.size = 'default',
     this.color,
     this.backgroundColor,
-  }) : size = 64,
-       _circular = false;
+  }) : _circular = false;
 
   const HyperProgress.circular({
     super.key,
     this.value,
-    this.size = 64,
+    this.size = 'default',
     this.showLabel = true,
-    this.strokeWidth = 6,
     this.color,
     this.backgroundColor,
   }) : _circular = true;
@@ -393,8 +392,7 @@ class HyperProgress extends StatelessWidget {
   final double? value;
   final bool _circular;
   final bool showLabel;
-  final double size;
-  final double strokeWidth;
+  final String size;
   final Color? color;
   final Color? backgroundColor;
 
@@ -405,14 +403,19 @@ class HyperProgress extends StatelessWidget {
     final glass = HyperGlassTheme.of(context);
     if (_circular) {
       return SizedBox.square(
-        dimension: size,
+        dimension: hyperUiSizeValue(size, small: 48, normal: 64, large: 80),
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             SizedBox.expand(
               child: HyperSpinner(
                 value: amount,
-                strokeWidth: strokeWidth,
+                strokeWidth: hyperUiSizeValue(
+                  size,
+                  small: 4,
+                  normal: 6,
+                  large: 8,
+                ),
                 backgroundColor: backgroundColor ?? glass.controlTrack,
                 color: color,
               ),
@@ -430,7 +433,7 @@ class HyperProgress extends StatelessWidget {
             borderRadius: BorderRadius.circular(99),
             child: HyperProgressTrack(
               value: amount,
-              height: strokeWidth,
+              height: hyperUiSizeValue(size, small: 4, normal: 6, large: 12),
               backgroundColor: backgroundColor ?? glass.controlTrack,
               color: color,
             ),

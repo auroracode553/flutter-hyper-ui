@@ -277,7 +277,7 @@ class LoadingComponentExample extends StatelessWidget {
             SizedBox(width: HyperUiSpacing.md),
             HyperLoading(label: '同步中'),
             SizedBox(width: HyperUiSpacing.md),
-            HyperLoading(label: '上传', size: 32),
+            HyperLoading(label: '上传', size: 'large'),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.lg),

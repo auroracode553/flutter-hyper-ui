@@ -50,9 +50,9 @@ class _AtomsExampleState extends State<AtomsExample> {
           runSpacing: 8,
           spacing: 24,
           children: [
-            HyperAvatar(text: '林', size: 56),
-            HyperAvatar(text: 'UI', size: 56, radius: 18),
-            HyperAvatar(size: 56),
+            HyperAvatar(text: '林', size: 'large'),
+            HyperAvatar(text: 'UI', size: 'large', radius: 18),
+            HyperAvatar(size: 'large'),
             HyperBadge.count(count: 128, child: HyperAvatar(text: '讯')),
             HyperBadge.count(dot: true, child: HyperIcon(LucideIcons.bell)),
           ],

@@ -16,7 +16,7 @@ class ButtonsExample extends StatelessWidget {
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
           children: [
-            HyperButton(label: '小按钮', height: 32, onPressed: _noop),
+            HyperButton(label: '小按钮', size: 'small', onPressed: _noop),
             HyperButton(label: '默认按钮', onPressed: _noop),
             HyperButton.outline(label: '处理中', loading: true, onPressed: _noop),
           ],

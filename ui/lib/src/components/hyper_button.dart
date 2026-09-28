@@ -6,6 +6,8 @@ import 'hyper_progress_painters.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
+import '../theme/hyper_ui_size.dart';
+import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
 import 'hyper_tooltip.dart';
@@ -17,12 +19,11 @@ class HyperButton extends StatelessWidget {
     this.label,
     this.child,
     this.onPressed,
-    this.height = 38,
+    this.size = 'default',
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.iconSize,
     this.tooltip,
     this.color,
     this.backgroundColor,
@@ -33,9 +34,8 @@ class HyperButton extends StatelessWidget {
     super.key,
     required this.icon,
     this.onPressed,
-    this.height = 36,
+    this.size = 'default',
     this.loading = false,
-    this.iconSize = 18,
     this.tooltip,
     this.color,
     this.backgroundColor,
@@ -50,12 +50,11 @@ class HyperButton extends StatelessWidget {
     this.label,
     this.child,
     this.onPressed,
-    this.height = 38,
+    this.size = 'default',
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.iconSize,
     this.tooltip,
     this.color,
     this.backgroundColor,
@@ -66,12 +65,11 @@ class HyperButton extends StatelessWidget {
     this.label,
     this.child,
     this.onPressed,
-    this.height = 38,
+    this.size = 'default',
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.iconSize,
     this.tooltip,
     this.color,
     this.backgroundColor,
@@ -82,12 +80,11 @@ class HyperButton extends StatelessWidget {
     this.label,
     this.child,
     this.onPressed,
-    this.height = 38,
+    this.size = 'default',
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.iconSize,
     this.tooltip,
     this.color,
     this.backgroundColor,
@@ -98,12 +95,11 @@ class HyperButton extends StatelessWidget {
     this.label,
     this.child,
     this.onPressed,
-    this.height = 38,
+    this.size = 'default',
     this.icon,
     this.trailingIcon,
     this.loading = false,
     this.expanded = false,
-    this.iconSize,
     this.tooltip,
     this.color,
     this.backgroundColor,
@@ -113,12 +109,11 @@ class HyperButton extends StatelessWidget {
   final Widget? child;
   final VoidCallback? onPressed;
   final _ButtonVariant _variant;
-  final double height;
+  final String size;
   final IconData? icon;
   final IconData? trailingIcon;
   final bool loading;
   final bool expanded;
-  final double? iconSize;
   final String? tooltip;
   final Color? color;
   final Color? backgroundColor;
@@ -129,7 +124,7 @@ class HyperButton extends StatelessWidget {
     final glass = HyperGlassTheme.of(context);
     final disabled = onPressed == null;
     final blocked = disabled || loading;
-    final metrics = _HyperButtonMetrics.fromHeight(height);
+    final metrics = _HyperButtonMetrics.fromSize(size);
     final hasLabel = label != null && label!.isNotEmpty;
     final isIconOnly =
         !hasLabel && this.child == null && (icon != null || loading);
@@ -156,10 +151,9 @@ class HyperButton extends StatelessWidget {
             : visual.background);
     final isSquare = isIconOnly;
     final borderRadius = BorderRadius.circular(metrics.height / 2);
-    // 图标按钮的图标随尺寸放大，带文字时按档位取 labelIconSize。
-    final effectiveIconSize =
-        iconSize ??
-        (isIconOnly ? metrics.iconOnlyIconSize : metrics.labelIconSize);
+    final effectiveIconSize = isIconOnly
+        ? metrics.iconOnlyIconSize
+        : metrics.labelIconSize;
 
     final content = Container(
       height: metrics.height,
@@ -194,10 +188,12 @@ class HyperButton extends StatelessWidget {
               : DefaultTextStyle(
                   style: TextStyle(
                     color: foreground,
+                    fontFamily: HyperUiTheme.of(context).fontFamily,
                     fontSize: metrics.fontSize,
                     fontWeight: FontWeight.w600,
                     height: 1.2,
                     letterSpacing: 0.05,
+                    decoration: TextDecoration.none,
                   ),
                   // 圆形（宽高相等）按钮内空间有限，文字按比例缩小而非溢出。
                   child: isSquare
@@ -291,10 +287,9 @@ class _HyperButtonMetrics {
   /// 带文字时前置/后置图标的默认尺寸，随字号联动。
   final double labelIconSize;
 
-  /// 由数值高度推导整套尺寸指标（以 38px 为基准档）：
-  /// 字号与带文字图标每 6px 高度步进 1，图标按钮图标每 6px 步进 2，
-  /// 水平内边距每 6px 步进 4，最小宽度每 6px 步进 15。
-  static _HyperButtonMetrics fromHeight(double height) {
+  /// A single size choice controls height, text, icon, and padding together.
+  static _HyperButtonMetrics fromSize(String size) {
+    final height = hyperUiSizeValue(size, small: 32, normal: 38, large: 44);
     final d = height - 38;
     return _HyperButtonMetrics(
       height: height,

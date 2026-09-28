@@ -1,6 +1,5 @@
 import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/physics.dart';
 
 abstract final class HyperUiEffects {
   static const double glassBlur = 20;

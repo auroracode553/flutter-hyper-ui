@@ -14,7 +14,3 @@ dependencies:
     path: ../ui
   lucide_icons_flutter: ^3.1.20
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0

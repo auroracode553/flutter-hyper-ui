@@ -78,17 +78,17 @@ class IconComponentExample extends StatelessWidget {
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyperIcon(HyperIcons.image, size: 18),
-            HyperIcon(HyperIcons.image, size: 24),
-            HyperIcon(HyperIcons.image, size: 32),
+            HyperIcon(HyperIcons.image, size: 'small'),
+            HyperIcon(HyperIcons.image, size: 'default'),
+            HyperIcon(HyperIcons.image, size: 'large'),
             HyperIcon(
               HyperIcons.warning,
-              size: 28,
+              size: 'large',
               color: HyperUiColors.warning,
             ),
             HyperIcon(
               HyperIcons.success,
-              size: 28,
+              size: 'large',
               color: HyperUiColors.success,
             ),
           ],
@@ -182,9 +182,9 @@ class AvatarComponentExample extends StatelessWidget {
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyperAvatar(text: '林', size: 44),
-            HyperAvatar(text: 'UI', size: 56),
-            HyperAvatar(size: 56),
+            HyperAvatar(text: '林', size: 'default'),
+            HyperAvatar(text: 'UI', size: 'large'),
+            HyperAvatar(size: 'large'),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.lg),
@@ -194,16 +194,16 @@ class AvatarComponentExample extends StatelessWidget {
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyperAvatar(text: '设计', size: 64, radius: 20),
-            HyperAvatar(text: '品', size: 56, radius: 16),
+            HyperAvatar(text: '设计', size: 'large', radius: 20),
+            HyperAvatar(text: '品', size: 'large', radius: 16),
             HyperAvatar(
               text: 'A',
-              size: 56,
+              size: 'large',
               backgroundColor: HyperUiColors.primary,
             ),
             HyperAvatar(
               text: 'B',
-              size: 56,
+              size: 'large',
               backgroundColor: HyperUiColors.success,
             ),
           ],
@@ -255,13 +255,13 @@ class _CountBadgeExample extends StatelessWidget {
             // 超过 max（默认 99）显示 99+。
             HyperBadge.count(
               count: 128,
-              child: HyperIcon(LucideIcons.mail, size: 32),
+              child: HyperIcon(LucideIcons.mail, size: 'large'),
             ),
             // showZero: 数字为 0 也显示。
             HyperBadge.count(
               count: 0,
               showZero: true,
-              child: HyperIcon(LucideIcons.inbox, size: 32),
+              child: HyperIcon(LucideIcons.inbox, size: 'large'),
             ),
           ],
         ),
@@ -274,7 +274,7 @@ class _CountBadgeExample extends StatelessWidget {
           children: [
             HyperBadge.count(
               dot: true,
-              child: HyperIcon(LucideIcons.bell, size: 32),
+              child: HyperIcon(LucideIcons.bell, size: 'large'),
             ),
           ],
         ),

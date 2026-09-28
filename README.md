@@ -108,7 +108,6 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 ## 依赖清单
 
 - 核心与预览：Flutter >= 3.32、Dart >= 3.8，预览通过本地路径依赖 `ui/`。
-- 已有开发依赖：`flutter_test`、`flutter_lints`。
 - 文档：Node.js 与已有 `vitepress`、`vue`，准确版本见 `vitepress/package.json`。
 - watcher 与构建编排仅使用 Node.js 内置模块，未新增第三方依赖。
 

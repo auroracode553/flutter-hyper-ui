@@ -4,6 +4,7 @@ import 'hyper_modal.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_ui_size.dart';
 import 'hyper_button.dart';
 
 /// 使用 Flutter ImageCache 的内存缓存；持久缓存可通过 ImageProvider 注入。
@@ -128,17 +129,18 @@ class HyperAvatar extends StatelessWidget {
     super.key,
     this.image,
     this.text,
-    this.size = 40,
+    this.size = 'default',
     this.radius,
     this.backgroundColor,
   });
   final ImageProvider? image;
   final String? text;
-  final double size;
+  final String size;
   final double? radius;
   final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
+    final dimension = hyperUiSizeValue(size, small: 32, normal: 40, large: 56);
     final tokens = HyperUiThemeTokens.of(context);
     final surface = backgroundColor ?? tokens.selectionBackground;
     final foreground = backgroundColor == null
@@ -148,29 +150,29 @@ class HyperAvatar extends StatelessWidget {
         : tokens.foreground;
     final fallback = Center(
       child: text == null || text!.isEmpty
-          ? Icon(LucideIcons.user, size: size * .5, color: foreground)
+          ? Icon(LucideIcons.user, size: dimension * .5, color: foreground)
           : Text(
               text!.characters.take(2).toString(),
               style: TextStyle(
-                fontSize: size * .34,
+                fontSize: dimension * .34,
                 fontWeight: FontWeight.w600,
                 color: foreground,
               ),
             ),
     );
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? size / 2),
+      borderRadius: BorderRadius.circular(radius ?? dimension / 2),
       child: Container(
-        width: size,
-        height: size,
+        width: dimension,
+        height: dimension,
         color: surface,
         child: image == null
             ? fallback
             : HyperImage(
                 provider: image!,
-                width: size,
-                height: size,
-                radius: radius ?? size / 2,
+                width: dimension,
+                height: dimension,
+                radius: radius ?? dimension / 2,
                 errorPlaceholder: fallback,
               ),
       ),

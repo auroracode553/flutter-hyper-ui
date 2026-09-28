@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region CollapseComponentExample

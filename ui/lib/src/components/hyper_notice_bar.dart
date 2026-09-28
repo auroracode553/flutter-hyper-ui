@@ -135,8 +135,7 @@ class _HyperNoticeBarState extends State<HyperNoticeBar>
           if (widget.onClose != null)
             HyperButton.icon(
               icon: LucideIcons.x,
-              height: 28,
-              iconSize: 18,
+              size: 'small',
               tooltip: '关闭公告',
               onPressed: widget.onClose,
               color: tokens.primary,

@@ -99,6 +99,7 @@ class PreviewCatalog {
     ),
     PreviewItem(
       id: 'home-hero',
+      fullScreen: true,
       title: '首页真机',
       description: '首页英雄区的真实组件拼合。',
       loadLibrary: () => example_home_hero_example.loadLibrary(),

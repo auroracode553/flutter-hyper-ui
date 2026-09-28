@@ -1,5 +1,3 @@
-import 'dart:ui' show FontFeature;
-
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -45,8 +43,7 @@ class HyperNumberStepper extends StatelessWidget {
         children: <Widget>[
           HyperButton.icon(
             icon: LucideIcons.minus,
-            height: 32,
-            iconSize: 17,
+            size: 'small',
             color: canDecrease ? tokens.foreground : tokens.mutedForeground,
             backgroundColor: glass.selection,
             onPressed: canDecrease
@@ -73,8 +70,7 @@ class HyperNumberStepper extends StatelessWidget {
           ),
           HyperButton.icon(
             icon: LucideIcons.plus,
-            height: 32,
-            iconSize: 17,
+            size: 'small',
             color: canIncrease ? tokens.foreground : tokens.mutedForeground,
             backgroundColor: glass.selection,
             onPressed: canIncrease

@@ -34,7 +34,7 @@ class OverviewExample extends StatelessWidget {
           color: tokens.success,
           child: const HyperProgress(
             value: 0.72,
-            strokeWidth: 8,
+            size: 'large',
             showLabel: false,
           ),
         ),

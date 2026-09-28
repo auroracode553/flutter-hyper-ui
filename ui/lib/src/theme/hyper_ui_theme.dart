@@ -18,6 +18,14 @@ class HyperUiThemeData {
   final HyperGlassTheme glass;
   final String? fontFamily;
 
+  TextStyle get textStyle => TextStyle(
+    color: tokens.foreground,
+    fontFamily: fontFamily,
+    fontSize: 14,
+    height: 1.4,
+    decoration: TextDecoration.none,
+  );
+
   HyperUiThemeData copyWith({
     Brightness? brightness,
     HyperUiThemeTokens? tokens,
@@ -31,11 +39,12 @@ class HyperUiThemeData {
   );
 }
 
-/// Provides Hyper colors and glass surfaces to descendant widgets.
-class HyperUiTheme extends InheritedWidget {
-  const HyperUiTheme({super.key, required this.data, required super.child});
+/// Provides Hyper colors, typography, and glass surfaces to descendants.
+class HyperUiTheme extends StatelessWidget {
+  const HyperUiTheme({super.key, required this.data, required this.child});
 
   final HyperUiThemeData data;
+  final Widget child;
 
   /// A ready-to-use app host. Supply [brightness] only when overriding the system.
   static Widget app({
@@ -71,11 +80,41 @@ class HyperUiTheme extends InheritedWidget {
       );
 
   static HyperUiThemeData of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<HyperUiTheme>()?.data ??
+      context.dependOnInheritedWidgetOfExactType<_HyperUiThemeScope>()?.data ??
       light();
 
   @override
-  bool updateShouldNotify(HyperUiTheme oldWidget) => data != oldWidget.data;
+  Widget build(BuildContext context) => _HyperUiThemeScope(
+    data: data,
+    child: _HyperTextDefaults(data: data, child: child),
+  );
+}
+
+class _HyperUiThemeScope extends InheritedWidget {
+  const _HyperUiThemeScope({required this.data, required super.child});
+
+  final HyperUiThemeData data;
+
+  @override
+  bool updateShouldNotify(_HyperUiThemeScope oldWidget) =>
+      data != oldWidget.data;
+}
+
+/// 给独立路由和浮层提供明确的文字与图标基线，避免 Flutter 调试回退样式。
+class _HyperTextDefaults extends StatelessWidget {
+  const _HyperTextDefaults({required this.data, required this.child});
+
+  final HyperUiThemeData data;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => DefaultTextStyle(
+    style: data.textStyle,
+    child: IconTheme(
+      data: IconThemeData(color: data.tokens.foreground, size: 24),
+      child: child,
+    ),
+  );
 }
 
 class _HyperApp extends StatefulWidget {
@@ -137,10 +176,7 @@ class _HyperAppState extends State<_HyperApp> with WidgetsBindingObserver {
         title: widget.title,
         debugShowCheckedModeBanner: false,
         color: theme.tokens.background,
-        textStyle: TextStyle(
-          color: theme.tokens.foreground,
-          fontFamily: theme.fontFamily,
-        ),
+        textStyle: theme.textStyle,
         pageRouteBuilder: <T>(settings, page) => PageRouteBuilder<T>(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>

@@ -28,7 +28,7 @@ class CardsExample extends StatelessWidget {
                 Expanded(
                   child: HyperProgress(
                     value: 0.68,
-                    strokeWidth: 8,
+                    size: 'large',
                     showLabel: false,
                   ),
                 ),

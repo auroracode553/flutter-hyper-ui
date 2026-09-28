@@ -79,7 +79,7 @@ class ListTileComponentExample extends StatelessWidget {
         const HyperListTile(
           title: '项目成员',
           subtitle: '头部与尾部都是任意 Widget',
-          leading: HyperAvatar(size: 34),
+          leading: HyperAvatar(size: 'small'),
           trailing: HyperBadge.tag(label: '管理员'),
           showChevron: false,
         ),
@@ -236,12 +236,12 @@ class ProgressComponentExample extends StatelessWidget {
     spacing: 12,
     children: [
       HyperProgress(value: .68),
-      HyperProgress(value: .72, strokeWidth: 8, showLabel: false),
-      HyperProgress(value: .45, strokeWidth: 12, showLabel: false),
+      HyperProgress(value: .72, size: 'small', showLabel: false),
+      HyperProgress(value: .45, size: 'large', showLabel: false),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          HyperProgress.circular(value: .42),
+          HyperProgress.circular(value: .42, size: 'small'),
           HyperProgress.circular(showLabel: false),
         ],
       ),

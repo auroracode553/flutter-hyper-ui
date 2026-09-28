@@ -9,6 +9,8 @@ description: HyperIcon 组件、图标体系与 Lucide 图标集合
 
 <ComponentDoc component-id="icon" />
 
+`HyperIcon` 使用 `size: 'small' | 'default' | 'large'`，分别对应 18、24、32。省略 `color` 时跟随主题前景色。
+
 ## 在 Hyper 组件中使用
 
 接受图标参数的 Hyper 组件统一接收 `IconData`，传入 `LucideIcons` 常量即可：

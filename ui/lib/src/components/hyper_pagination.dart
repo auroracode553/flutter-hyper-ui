@@ -62,8 +62,7 @@ class HyperPagination extends StatelessWidget {
           children: <Widget>[
             HyperButton.icon(
               icon: rtl ? LucideIcons.chevronRight : LucideIcons.chevronLeft,
-              height: 32,
-              iconSize: 18,
+              size: 'small',
               color: page > 1 ? tokens.foreground : tokens.mutedForeground,
               onPressed: page > 1 && onChanged != null
                   ? () => onChanged!(page - 1)
@@ -121,8 +120,7 @@ class HyperPagination extends StatelessWidget {
                       ),
             HyperButton.icon(
               icon: rtl ? LucideIcons.chevronLeft : LucideIcons.chevronRight,
-              height: 32,
-              iconSize: 18,
+              size: 'small',
               color: page < pageCount
                   ? tokens.foreground
                   : tokens.mutedForeground,

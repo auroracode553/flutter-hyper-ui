@@ -2,9 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'hyper_progress_painters.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../theme/hyper_ui_theme.dart';
+import '../theme/hyper_ui_size.dart';
 import 'hyper_button.dart';
 import 'hyper_glass.dart';
 import 'hyper_modal.dart';
@@ -34,7 +34,7 @@ abstract final class HyperToast {
     }
 
     entry = OverlayEntry(
-      builder: (overlayContext) => HyperUiTheme(
+      builder: (_) => HyperUiTheme(
         data: theme,
         child: Positioned(
           left: 16,
@@ -190,10 +190,16 @@ abstract final class HyperDialog {
 }
 
 class HyperLoading extends StatelessWidget {
-  const HyperLoading({super.key, this.label, this.size = 24});
+  const HyperLoading({
+    super.key,
+    this.label,
+    this.size = 'default',
+    this.color,
+  });
 
   final String? label;
-  final double size;
+  final String size;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -201,8 +207,8 @@ class HyperLoading extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SizedBox.square(
-          dimension: size,
-          child: const HyperSpinner(strokeWidth: 2.5),
+          dimension: hyperUiSizeValue(size, small: 18, normal: 24, large: 32),
+          child: HyperSpinner(strokeWidth: 2.5, color: color),
         ),
         if (label != null)
           Padding(padding: const EdgeInsets.only(top: 12), child: Text(label!)),
@@ -216,24 +222,28 @@ class HyperLoading extends StatelessWidget {
     Future<T> Function() task, {
     String label = '请稍候',
   }) async {
+    final theme = HyperUiTheme.of(context);
     late final OverlayEntry entry;
     entry = OverlayEntry(
-      builder: (overlayContext) => Stack(
-        children: <Widget>[
-          ModalBarrier(
-            dismissible: false,
-            color: HyperGlassTheme.of(overlayContext).scrim,
-          ),
-          Center(
-            child: HyperGlass(
-              radius: 24,
-              blur: 30,
-              weight: HyperGlassWeight.prominent,
-              padding: const EdgeInsets.all(20),
-              child: HyperLoading(label: label),
+      builder: (_) => HyperUiTheme(
+        data: theme,
+        child: Stack(
+          children: <Widget>[
+            ModalBarrier(
+              dismissible: false,
+              color: theme.glass.scrim,
             ),
-          ),
-        ],
+            Center(
+              child: HyperGlass(
+                radius: 24,
+                blur: 30,
+                weight: HyperGlassWeight.prominent,
+                padding: const EdgeInsets.all(20),
+                child: HyperLoading(label: label),
+              ),
+            ),
+          ],
+        ),
       ),
     );
     Overlay.of(context, rootOverlay: true).insert(entry);
