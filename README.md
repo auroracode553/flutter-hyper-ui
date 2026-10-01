@@ -15,7 +15,7 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 
 ## 通用组件
 
-- 导航：`HyperTabBar`、`HyperTabs`、`HyperNavBar`、`HyperDrawer`、`HyperActionSheet`。
+- 导航：`HyperTabBar`、`HyperTabs`、`HyperNavBar`（type 支持 custom、backOnly、titleOnly、backWithTitle、more、edit）、`HyperDrawer`、`HyperActionSheet`。
 - 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperSegmentedControl`。
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
 - 数据与菜单：`HyperBadge`（含 `.tag` / `.count`）、`HyperProgress`、`HyperListTile`、`HyperMenuGroup`、`HyperCard`。

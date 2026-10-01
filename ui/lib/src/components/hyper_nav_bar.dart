@@ -1,10 +1,31 @@
 import 'package:flutter/widgets.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_button.dart';
 import 'hyper_typography.dart';
 
-/// 透明导航容器，默认从起始侧排列，不绘制背景、模糊、边框或阴影。
+/// 固定布局类型；custom 保留完整 Widget 插槽。
+abstract final class HyperNavBarTypes {
+  static const custom = 'custom';
+  static const backOnly = 'backOnly';
+  static const titleOnly = 'titleOnly';
+  static const backWithTitle = 'backWithTitle';
+  static const more = 'more';
+  static const edit = 'edit';
+
+  static const values = <String>{
+    custom,
+    backOnly,
+    titleOnly,
+    backWithTitle,
+    more,
+    edit,
+  };
+}
+
+/// 透明导航容器；固定 type 生成常见布局，custom 使用完整插槽。
 ///
 /// [leading]、[title]、[subtitle]、[trailing] 都接受任意 Widget。
 /// [child] 可完全接管内部布局；此时不生成自动返回按钮或默认标题布局。
@@ -12,6 +33,7 @@ import 'hyper_typography.dart';
 class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   const HyperNavBar({
     super.key,
+    this.type = HyperNavBarTypes.custom,
     this.title,
     this.subtitle,
     this.leading,
@@ -21,18 +43,13 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.height = 44,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     this.safeArea = true,
-    this.showBackButton,
     this.onBackPressed,
+    this.onMorePressed,
+    this.onSavePressed,
     this.centerTitle = false,
-  }) : assert(height > 0 && height < double.infinity),
-       assert(
-         child == null ||
-             (title == null &&
-                 subtitle == null &&
-                 leading == null &&
-                 trailing == null),
-         'child 接管整行布局，不能同时设置其他内容插槽。',
-       );
+  }) : assert(height > 0 && height < double.infinity);
+
+  final String type;
 
   /// 主内容插槽：文字、图标、搜索框、分段控件或任意组合。
   final Widget? title;
@@ -52,12 +69,10 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   final bool safeArea;
 
-  /// null 按当前路由自动判断；true 始终显示；false 始终隐藏。
-  /// 显式传入 [leading] 时，以自定义前导内容为准。
-  final bool? showBackButton;
-
-  /// 返回按钮的点击回调，默认调用 Navigator.maybePop。
+  /// 固定返回类型的回调；未传入时调用 Navigator.maybePop。
   final VoidCallback? onBackPressed;
+  final VoidCallback? onMorePressed;
+  final VoidCallback? onSavePressed;
 
   /// 仅对默认插槽布局有效。默认 false，沿文字方向从起始侧排列。
   final bool centerTitle;
@@ -67,6 +82,28 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!HyperNavBarTypes.values.contains(type)) {
+      throw ArgumentError.value(type, 'type', 'Unsupported HyperNavBar type');
+    }
+    if (type != HyperNavBarTypes.custom &&
+        (leading != null ||
+            trailing != null ||
+            actions.isNotEmpty ||
+            child != null ||
+            subtitle != null ||
+            centerTitle)) {
+      throw ArgumentError(
+        'Fixed HyperNavBar types accept title and callbacks only; use custom for slots.',
+      );
+    }
+    if (type == HyperNavBarTypes.backOnly && title != null) {
+      throw ArgumentError('backOnly does not accept title.');
+    }
+    if (type != HyperNavBarTypes.custom &&
+        type != HyperNavBarTypes.backOnly &&
+        title == null) {
+      throw ArgumentError('This HyperNavBar type requires title.');
+    }
     if (child != null &&
         (title != null ||
             subtitle != null ||
@@ -90,13 +127,33 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildSlots(BuildContext context) {
-    final shouldShowBackButton =
-        showBackButton ?? (Navigator.maybeOf(context)?.canPop() ?? false);
-    final effectiveLeading =
-        leading ??
-        (shouldShowBackButton ? _BackButton(onPressed: onBackPressed) : null);
-    final effectiveTrailing = trailing ?? _buildActions();
-    final middle = _buildTitle(context);
+    final fixed = type != HyperNavBarTypes.custom;
+    final effectiveLeading = fixed
+        ? type == HyperNavBarTypes.titleOnly
+              ? null
+              : _BackButton(onPressed: onBackPressed)
+        : leading;
+    final effectiveTrailing = fixed
+        ? switch (type) {
+            HyperNavBarTypes.more => HyperButton(
+              type: 'ghost',
+              icon: LucideIcons.ellipsis,
+              tooltip: '更多',
+              backgroundColor: HyperGlassTheme.of(context).surfaceStrong,
+              onPressed: onMorePressed ?? () {},
+            ),
+            HyperNavBarTypes.edit => HyperButton(
+              type: 'ghost',
+              label: '保存',
+              size: 'small',
+              onPressed: onSavePressed ?? () {},
+            ),
+            _ => null,
+          }
+        : trailing ?? _buildActions();
+    final middle = type == HyperNavBarTypes.backOnly
+        ? null
+        : _buildTitle(context);
     if (centerTitle) {
       // 居中按整个栏宽计算，并在左右插槽较宽时避让。
       return NavigationToolbar(
@@ -186,10 +243,11 @@ class _BackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => HyperButton(
-    type: 'outline',
+    // 固定类型使用连续玻璃表面，保持与 Compose 预览相同的白色浮层效果。
+    type: 'ghost',
     icon: HyperIcons.back,
-    size: 'small',
     tooltip: '返回',
+    backgroundColor: HyperGlassTheme.of(context).surfaceStrong,
     onPressed: onPressed ?? () => Navigator.maybePop(context),
   );
 }

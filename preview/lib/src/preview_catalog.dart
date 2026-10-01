@@ -344,7 +344,7 @@ class PreviewCatalog {
       id: 'component-nav-bar',
       fullScreen: true,
       title: 'HyperNavBar',
-      description: '44px 透明导航栏与滚动页面。',
+      description: '固定 type 覆盖仅返回、仅标题、返回与标题、更多操作和编辑返回；正文可滚动到透明导航栏与状态栏后方。',
       loadLibrary: () => example_component_nav_bar_example.loadLibrary(),
       builder: (_) =>
           example_component_nav_bar_example.NavBarComponentExample(),
