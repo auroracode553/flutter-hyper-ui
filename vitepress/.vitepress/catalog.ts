@@ -167,7 +167,11 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperUiTone / HyperUiToneResolver', 'hyper_tone.dart', '跨组件共用的语义状态及其主题颜色解析扩展。', {
         sidebar: false,
-        preview: demo('component-ui-tone', 'HyperUiTone 语义色', 'component_foundation_examples.dart', 300, '五种跨组件语义状态与说明。', 'ToneComponentExample'),
+        propsDocs: [
+          { name: 'neutral / primary / success / warning / error / info', description: '公开的六种语义状态值' },
+          { name: 'color(tokens)', description: '根据传入的 HyperUiThemeTokens 解析对应的主题颜色' },
+        ],
+        preview: demo('component-ui-tone', 'HyperUiTone 语义色', 'component_foundation_examples.dart', 300, '六种跨组件语义状态与说明。', 'ToneComponentExample'),
       }),
     ],
   },
@@ -438,6 +442,12 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperFilePicker / HyperFileUpload', 'hyper_uploader.dart', '由业务层实现的文件选择与上传函数类型。', {
         sidebar: false,
+        propsDocs: [
+          { name: 'source', description: 'HyperFilePicker 接收的文件来源，返回选中的文件列表' },
+          { name: 'file', description: 'HyperFileUpload 要上传的文件' },
+          { name: 'onProgress', description: '上传进度回调，进度值为 double' },
+          { name: 'cancellation', description: '上传取消信号' },
+        ],
         preview: demo('component-file-picker', '文件能力注入', 'component_form_examples.dart', 280, '说明选择器与上传器的职责边界。', 'FilePickerComponentExample'),
       }),
     ],

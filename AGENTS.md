@@ -24,6 +24,12 @@
 - 输出代码时分文件分段标注文件名，不乱合并多文件代码至同一文本块。
 - 不要默认扫描 `dist` 和 `node_modules` 目录。
 
+## 组件文档表格（强制）
+
+- 每个 VitePress 组件页必须展示公开 API 签名和 Props/参数表格；不得在重构、精简文档或调整预览时删除表格。
+- 表格应覆盖该组件当前公开参数，列出名称、作用、必填状态和默认值，并与 `ui/lib/src/` 源码同步；无构造参数的枚举、扩展或函数类型应列出公开值或调用参数。
+- 表格内容不加反引号包裹；长内容在单元格中换行。修改组件 API 时同步维护 `vitepress/.vitepress/catalog.ts` 的属性说明和组件页展示。
+
 ## 五、禁用 Material 视觉组件（强制）
 
 本组件库为 Flutter 自绘玻璃拟态风格（Hyper* 组件），与 Material Design 视觉语言不一致，**禁止在 ui 库与 preview 示例中使用 Material 视觉组件**：
@@ -40,4 +46,3 @@
 - 禁止使用：`Semantics` / `ExcludeSemantics` / `MergeSemantics` 组件包装、`semanticLabel` 属性、`Icon.semanticLabel` / `Image.semanticLabel`、`barrierLabel` 等无障碍语义参数。
 - 组件不得暴露 `semanticLabel` 类入参；文档、示例与注释中不得出现“无障碍标签”“无障碍语义”等表述。
 - 允许保留与标签无关的自适应行为：`MediaQuery.disableAnimations`、`MediaQuery.highContrast`、`textScaler`、RTL 逻辑方向，以及键盘焦点/快捷键基础设施（`Focus`、`FocusableActionDetector`）。
-
