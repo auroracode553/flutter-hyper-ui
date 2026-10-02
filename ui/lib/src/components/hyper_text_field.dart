@@ -30,6 +30,8 @@ class HyperTextField extends StatefulWidget {
     this.readOnly = false,
     this.maxLength,
     this.autofocus = false,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
     this.keyboardType,
     this.textInputAction,
     this.onChanged,
@@ -69,6 +71,12 @@ class HyperTextField extends StatefulWidget {
   final bool readOnly;
   final int? maxLength;
   final bool autofocus;
+
+  /// 是否启用系统自动纠错。地址、编号等字段通常应关闭，减少输入法初始化开销。
+  final bool autocorrect;
+
+  /// 是否向系统输入法提供联想候选。
+  final bool enableSuggestions;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;
@@ -196,8 +204,8 @@ class _HyperTextFieldState extends State<HyperTextField> {
       autofocus: widget.autofocus,
       readOnly: !active,
       obscureText: password && _obscured,
-      autocorrect: !password,
-      enableSuggestions: !password,
+      autocorrect: !password && widget.autocorrect,
+      enableSuggestions: !password && widget.enableSuggestions,
       maxLines: multiline ? widget.rows : 1,
       minLines: multiline ? widget.rows : 1,
       inputFormatters: widget.maxLength == null
