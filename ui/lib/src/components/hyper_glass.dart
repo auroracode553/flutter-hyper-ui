@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
+import 'hyper_surface_scope.dart';
 
 /// 内部表面绘制层。公开材质档位由 HyperUiTheme 配置。
 ///
@@ -70,7 +71,9 @@ class HyperGlass extends StatelessWidget {
         borderRadius: shape,
         border: Border.all(color: effectiveBorder),
       ),
-      child: Padding(padding: padding, child: child),
+      child: HyperSurfaceScope(
+        child: Padding(padding: padding, child: child),
+      ),
     );
 
     if (effectiveBlur > 0) {

@@ -155,6 +155,11 @@ class _HyperTabBarState extends State<HyperTabBar>
         child: LayoutBuilder(
           builder: (context, constraints) {
             final barWidth = constraints.maxWidth;
+            // 过渡或隐藏布局可能给出零宽；此时不能计算滑块和 clamp 区间。
+            if (!barWidth.isFinite ||
+                barWidth <= _inset * 2 + widget.items.length * 2) {
+              return const SizedBox.shrink();
+            }
             final contentWidth = math.max(1.0, barWidth - _inset * 2);
             final cellWidth = contentWidth / widget.items.length;
             final pillWidth = math

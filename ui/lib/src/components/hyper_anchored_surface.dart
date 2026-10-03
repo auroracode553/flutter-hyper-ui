@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'hyper_glass.dart';
+import 'hyper_anchored_layout.dart';
 
 /// Controls a Hyper anchored surface without a platform menu widget.
 class HyperMenuController {
@@ -65,7 +66,7 @@ class _HyperAnchoredSurface extends StatefulWidget {
 }
 
 class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface> {
-  final LayerLink _layerLink = LayerLink();
+  final GlobalKey _anchorKey = GlobalKey();
   final OverlayPortalController _portal = OverlayPortalController();
   late final HyperMenuController _controller = HyperMenuController(
     _setOpen,
@@ -73,6 +74,7 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface> {
   );
 
   void _setOpen(bool open) {
+    if (!mounted) return;
     if (open == _portal.isShowing) return;
     if (open) {
       _portal.show();
@@ -80,6 +82,15 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface> {
       _portal.hide();
     }
     setState(() {});
+  }
+
+  Rect _anchorRect(BuildContext overlayContext) {
+    final anchor = _anchorKey.currentContext?.findRenderObject();
+    final overlay = Overlay.of(overlayContext).context.findRenderObject();
+    if (anchor is! RenderBox || overlay is! RenderBox || !anchor.hasSize) {
+      return Rect.zero;
+    }
+    return anchor.localToGlobal(Offset.zero, ancestor: overlay) & anchor.size;
   }
 
   @override
@@ -93,24 +104,34 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface> {
             onTap: _controller.close,
           ),
         ),
-        CompositedTransformFollower(
-          link: _layerLink,
-          showWhenUnlinked: false,
-          targetAnchor: Alignment.bottomLeft,
-          followerAnchor: Alignment.topLeft,
-          offset: const Offset(0, 6),
-          child: _HyperMenuScope(
-            controller: _controller,
-            child: SizedBox(
+        Positioned.fill(
+          child: CustomSingleChildLayout(
+            delegate: HyperAnchoredLayout(
+              anchor: _anchorRect(overlayContext),
+              insets: EdgeInsets.fromLTRB(
+                MediaQuery.paddingOf(overlayContext).left + 12,
+                MediaQuery.paddingOf(overlayContext).top + 12,
+                MediaQuery.paddingOf(overlayContext).right + 12,
+                MediaQuery.paddingOf(overlayContext).bottom +
+                    MediaQuery.viewInsetsOf(overlayContext).bottom +
+                    12,
+              ),
               width: widget.width,
-              child: HyperGlass(
-                radius: 18,
-                type: 'prominent',
-                padding: widget.padding,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: widget.maxHeight),
-                  child: SingleChildScrollView(
-                    child: Builder(builder: widget.contentBuilder),
+              maxHeight: widget.maxHeight,
+            ),
+            child: _HyperMenuScope(
+              controller: _controller,
+              child: SizedBox(
+                width: widget.width,
+                child: HyperGlass(
+                  radius: 18,
+                  type: 'prominent',
+                  padding: widget.padding,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: widget.maxHeight),
+                    child: SingleChildScrollView(
+                      child: Builder(builder: widget.contentBuilder),
+                    ),
                   ),
                 ),
               ),
@@ -119,8 +140,8 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface> {
         ),
       ],
     ),
-    child: CompositedTransformTarget(
-      link: _layerLink,
+    child: SizedBox(
+      key: _anchorKey,
       child: Builder(
         builder: (anchorContext) =>
             widget.triggerBuilder(anchorContext, _controller),

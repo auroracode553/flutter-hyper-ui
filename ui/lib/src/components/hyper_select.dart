@@ -62,7 +62,7 @@ class HyperSelect<T> extends StatelessWidget {
         multiple: _multiple,
       ),
     );
-    if (result == null) return;
+    if (result == null || !context.mounted) return;
     if (_multiple) {
       onMultipleChanged?.call(result);
     } else {

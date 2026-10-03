@@ -8,6 +8,7 @@ import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_lists.dart';
 import 'hyper_pressable.dart';
+import 'hyper_surface_scope.dart';
 
 /// 通用列表/设置菜单行。
 ///
@@ -55,7 +56,10 @@ class HyperListTile extends StatelessWidget {
       throw ArgumentError.value(type, 'type', 'Invalid list tile type');
     }
     final plain =
-        type == 'plain' || (type == 'auto' && HyperMenuGroup.contains(context));
+        type == 'plain' ||
+        (type == 'auto' &&
+            (HyperMenuGroup.contains(context) ||
+                HyperSurfaceScope.contains(context)));
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final radius = BorderRadius.circular(plain ? 12 : 15);
@@ -89,7 +93,7 @@ class HyperListTile extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     height: 1.25,
                   ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (subtitle != null) ...<Widget>[
