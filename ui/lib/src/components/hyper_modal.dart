@@ -9,11 +9,10 @@ Future<T?> showHyperModal<T>(
   Alignment alignment = Alignment.center,
   bool dismissible = true,
   Color? scrim,
-}) {
+}) async {
   final theme = HyperUiTheme.of(context);
   final barrier = scrim ?? theme.glass.scrim;
-  return showGeneralDialog<T>(
-    context: context,
+  final route = RawDialogRoute<T>(
     barrierDismissible: false,
     barrierColor: const Color(0x00000000),
     transitionDuration: const Duration(milliseconds: 220),
@@ -36,6 +35,19 @@ Future<T?> showHyperModal<T>(
       ),
     ),
     transitionBuilder: (context, animation, secondaryAnimation, child) =>
-        FadeTransition(opacity: animation, child: child),
+        AnimatedBuilder(
+          animation: animation,
+          builder: (context, _) => IgnorePointer(
+            // 退出中的路由仍参与绘制，但不再接受点击或操作底下的路由。
+            ignoring:
+                animation.status == AnimationStatus.reverse ||
+                animation.status == AnimationStatus.dismissed,
+            child: FadeTransition(opacity: animation, child: child),
+          ),
+        ),
   );
+  final result = await Navigator.of(context, rootNavigator: true).push(route);
+  // 返回结果与退出动画是两个阶段；调用方继续导航前，先释放旧弹层。
+  await route.completed;
+  return result;
 }

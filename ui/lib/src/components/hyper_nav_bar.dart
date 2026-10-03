@@ -159,7 +159,14 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
       return NavigationToolbar(
         centerMiddle: true,
         middleSpacing: 8,
-        leading: effectiveLeading,
+        // NavigationToolbar 会收紧 leading 的高度；先居中，避免圆形按钮被拉伸。
+        leading: effectiveLeading == null
+            ? null
+            : Align(
+                alignment: AlignmentDirectional.centerStart,
+                widthFactor: 1,
+                child: effectiveLeading,
+              ),
         middle: middle,
         trailing: effectiveTrailing,
       );

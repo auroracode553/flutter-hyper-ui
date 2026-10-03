@@ -1,20 +1,15 @@
 import 'dart:math' as math;
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 
 import '../theme/hyper_glass_theme.dart';
-import '../theme/hyper_material.dart';
-import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_badge.dart';
+import 'hyper_glass.dart';
 import 'hyper_pressable.dart';
 
-/// 底栏中的一个导航项；页面与图标含义由调用方决定。
+/// 底栏中的导航项；页面与图标含义由调用方决定。
 class HyperTabItem {
   const HyperTabItem({required this.icon, required this.label});
 
@@ -22,11 +17,7 @@ class HyperTabItem {
   final String label;
 }
 
-/// 悬浮底部导航与独立圆形操作入口。
-///
-/// 多项模式按下时选中块膨胀成透明水珠，拖动时水珠跟手移动；
-/// 松手后收缩并通过 [onSelected] 提交最终索引。
-/// 单项模式显示圆形图标按钮，可叠加数量角标。
+/// 内容收缩的悬浮导航。点击和横向拖动共用一个选择出口。
 class HyperTabBar extends StatefulWidget {
   const HyperTabBar({
     super.key,
@@ -48,696 +39,210 @@ class HyperTabBar extends StatefulWidget {
                : const EdgeInsets.fromLTRB(20, 8, 20, 0));
 
   static const double height = 56;
-
   final List<HyperTabItem> items;
   final int selectedIndex;
   final ValueChanged<int> onSelected;
-
-  /// 单项模式绘制独立圆形入口；多项模式保留液态导航交互。
   final String type;
-
-  /// 单项模式的数量角标；零或负数时不显示。
   final int badgeCount;
   final bool safeArea;
   final Color? color;
-
-  /// 单项模式默认无外边距；多项模式保留悬浮底栏的默认外边距。
-  /// 外部已控制位置时可设为零，避免悬浮底栏再次收窄。
   final EdgeInsetsGeometry margin;
 
   @override
   State<HyperTabBar> createState() => _HyperTabBarState();
 }
 
-class _HyperTabBarState extends State<HyperTabBar>
-    with TickerProviderStateMixin {
+class _HyperTabBarState extends State<HyperTabBar> {
   static const double _inset = 4;
-  static const double _projectionSeconds = 0.09;
-  static const SpringDescription _snapSpring = SpringDescription(
-    mass: 1,
-    stiffness: 520,
-    damping: 38,
-  );
+  int? _dragIndex;
 
-  late final AnimationController _position;
-  late final AnimationController _lensExpansion;
-  late final Listenable _animations;
-  VelocityTracker? _velocityTracker;
-  int? _activePointer;
-  int? _pressedVisualIndex;
-  int? _pendingSelection;
-  int? _lastHapticVisualIndex;
-  double _pointerDownX = 0;
-  double _grabOffsetX = 0;
-  double _dragVelocity = 0;
-  bool _dragging = false;
-  bool _rtl = false;
+  bool get _rtl => Directionality.of(context) == TextDirection.rtl;
+  int _visual(int logical) =>
+      _rtl ? widget.items.length - logical - 1 : logical;
+  int _logical(int visual) => _rtl ? widget.items.length - visual - 1 : visual;
 
-  @override
-  void initState() {
-    super.initState();
-    _position = AnimationController.unbounded(
-      value: widget.selectedIndex.toDouble(),
-      vsync: this,
-    );
-    _lensExpansion = AnimationController(
-      duration: const Duration(milliseconds: 180),
-      reverseDuration: const Duration(milliseconds: 230),
-      vsync: this,
-    );
-    _animations = Listenable.merge(<Listenable>[_position, _lensExpansion]);
+  void _select(int index) {
+    if (index == widget.selectedIndex) return;
+    HapticFeedback.selectionClick();
+    widget.onSelected(index);
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final nextRtl = Directionality.of(context) == TextDirection.rtl;
-    if (_rtl != nextRtl && _activePointer == null) {
-      _rtl = nextRtl;
-      _position.value = _visualIndex(widget.selectedIndex).toDouble();
-    } else {
-      _rtl = nextRtl;
-    }
+  void _drag(double x, double width) {
+    final index = ((x - _inset) / (width - 2 * _inset) * widget.items.length)
+        .floor()
+        .clamp(0, widget.items.length - 1);
+    if (_dragIndex != index) setState(() => _dragIndex = index);
   }
 
   @override
   void didUpdateWidget(covariant HyperTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedIndex == widget.selectedIndex &&
-        oldWidget.items.length == widget.items.length) {
-      return;
-    }
-    final alreadySettlingThere = _pendingSelection == widget.selectedIndex;
-    _pendingSelection = null;
-    if (_activePointer == null && !alreadySettlingThere) {
-      _settleAt(_visualIndex(widget.selectedIndex));
-    }
-  }
-
-  @override
-  void dispose() {
-    _position.dispose();
-    _lensExpansion.dispose();
-    super.dispose();
+    if (oldWidget.items.length != widget.items.length) _dragIndex = null;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.type == 'single') return _buildSingle(context);
-    final glass = HyperGlassTheme.of(context);
     final tokens = HyperUiThemeTokens.of(context);
-    final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
-    final barHeight = math.max(HyperTabBar.height, textHeight + 36);
-    final bar = Padding(
-      padding: widget.margin,
-      child: SizedBox(
+    final glass = HyperGlassTheme.of(context);
+    final activeColor = widget.color ?? tokens.primary;
+    Widget bar;
+    if (widget.type == 'single') {
+      bar = HyperBadge(
+        type: 'count',
+        count: widget.badgeCount,
+        child: HyperPressable(
+          borderRadius: BorderRadius.circular(height / 2),
+          onPressed: () => widget.onSelected(0),
+          child: HyperGlass(
+            radius: height / 2,
+            child: SizedBox.square(
+              dimension: height,
+              child: Icon(
+                widget.items.single.icon,
+                size: 22,
+                color: activeColor,
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      var itemWidth = 76.0;
+      for (final item in widget.items) {
+        final label = TextPainter(
+          text: TextSpan(
+            text: item.label,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+          ),
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+        )..layout();
+        itemWidth = math.max(itemWidth, label.width + 32);
+        label.dispose();
+      }
+      final barHeight = math.max(
+        height,
+        MediaQuery.textScalerOf(context).scale(12) * 1.08 + 36,
+      );
+      bar = SizedBox(
+        width: itemWidth * widget.items.length + 2 * _inset,
         height: barHeight,
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final barWidth = constraints.maxWidth;
-            // 过渡或隐藏布局可能给出零宽；此时不能计算滑块和 clamp 区间。
-            if (!barWidth.isFinite ||
-                barWidth <= _inset * 2 + widget.items.length * 2) {
+            final width = constraints.maxWidth;
+            if (!width.isFinite ||
+                width <= 2 * _inset + widget.items.length * 2) {
               return const SizedBox.shrink();
             }
-            final contentWidth = math.max(1.0, barWidth - _inset * 2);
-            final cellWidth = contentWidth / widget.items.length;
-            final pillWidth = math
-                .min(112.0, cellWidth - 2)
-                .clamp(1.0, cellWidth)
-                .toDouble();
-            return Listener(
-              behavior: HitTestBehavior.opaque,
-              onPointerDown: (event) => _handlePointerDown(event, contentWidth),
-              onPointerMove: (event) => _handlePointerMove(event, contentWidth),
-              onPointerUp: (event) => _handlePointerUp(event, contentWidth),
-              onPointerCancel: _handlePointerCancel,
-              child: AnimatedBuilder(
-                animation: _animations,
-                builder: (context, _) {
-                  final position = _position.value;
-                  final expansion = Curves.easeOutCubic.transform(
-                    _lensExpansion.value,
-                  );
-                  final velocity = math.max(
-                    _position.velocity.abs(),
-                    _dragVelocity.abs(),
-                  );
-                  final centerX = _inset + (position + 0.5) * cellWidth;
-                  final selectedLeft = (centerX - pillWidth / 2)
-                      .clamp(_inset, barWidth - _inset - pillWidth)
-                      .toDouble();
-                  final lensWidth =
-                      pillWidth +
-                      38 * expansion +
-                      math.min(14.0, velocity * 1.1) * expansion;
-                  final lensHeight = barHeight - 8 + 18 * expansion;
-                  final lensLeft = (centerX - lensWidth / 2)
-                      .clamp(-12.0, math.max(-12.0, barWidth + 12 - lensWidth))
-                      .toDouble();
-                  final lensTop = (barHeight - lensHeight) / 2;
-                  final foreground = tokens.foreground;
-                  final content = _buildTabRow(
-                    position: position,
-                    foreground: foreground,
-                  );
-
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      const Positioned.fill(child: _HyperTabSurface()),
-                      Positioned(
-                        left: selectedLeft,
+            final cellWidth = (width - 2 * _inset) / widget.items.length;
+            final selected = _dragIndex ?? _visual(widget.selectedIndex);
+            return RepaintBoundary(
+              child: GestureDetector(
+                onHorizontalDragStart: (details) =>
+                    _drag(details.localPosition.dx, width),
+                onHorizontalDragUpdate: (details) =>
+                    _drag(details.localPosition.dx, width),
+                onHorizontalDragCancel: () => setState(() => _dragIndex = null),
+                onHorizontalDragEnd: (_) {
+                  final index = _dragIndex;
+                  setState(() => _dragIndex = null);
+                  if (index != null) _select(_logical(index));
+                },
+                child: HyperGlass(
+                  radius: barHeight / 2,
+                  type: 'prominent',
+                  child: Stack(
+                    children: [
+                      // 只移动一个选中块，不再逐帧重建文字或执行矩阵折射滤镜。
+                      AnimatedPositioned(
+                        duration: MediaQuery.disableAnimationsOf(context)
+                            ? Duration.zero
+                            : const Duration(milliseconds: 160),
+                        curve: Curves.easeOutCubic,
+                        left: _inset + selected * cellWidth + 1,
                         top: _inset,
-                        width: pillWidth,
-                        height: barHeight - _inset * 2,
-                        child: Opacity(
-                          opacity: (1 - expansion * 1.5)
-                              .clamp(0.0, 1.0)
-                              .toDouble(),
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: glass.selection,
-                              borderRadius: BorderRadius.circular(
-                                barHeight / 2,
-                              ),
-                            ),
+                        width: cellWidth - 2,
+                        height: barHeight - 2 * _inset,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: glass.selection,
+                            borderRadius: BorderRadius.circular(barHeight / 2),
                           ),
                         ),
                       ),
                       Positioned.fill(
                         left: _inset,
                         right: _inset,
-                        child: content,
-                      ),
-                      if (expansion > 0.001)
-                        Positioned(
-                          left: lensLeft,
-                          top: lensTop,
-                          width: lensWidth,
-                          height: lensHeight,
-                          child: IgnorePointer(
-                            child: _HyperLiquidLens(
-                              expansion: expansion,
-                              velocity: _dragVelocity == 0
-                                  ? _position.velocity
-                                  : _dragVelocity,
-                            ),
-                          ),
+                        child: Row(
+                          textDirection: TextDirection.ltr,
+                          children: [
+                            for (
+                              var index = 0;
+                              index < widget.items.length;
+                              index++
+                            )
+                              Expanded(
+                                child: HyperPressable(
+                                  pressedScale: 1,
+                                  borderRadius: BorderRadius.circular(
+                                    barHeight / 2,
+                                  ),
+                                  onPressed: () => _select(_logical(index)),
+                                  child: _TabLabel(
+                                    item: widget.items[_logical(index)],
+                                    selected: index == selected,
+                                    color: index == selected
+                                        ? activeColor
+                                        : tokens.foreground,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
+                      ),
                     ],
-                  );
-                },
+                  ),
+                ),
               ),
             );
           },
         ),
-      ),
-    );
-    return widget.safeArea
-        ? SafeArea(top: false, minimum: EdgeInsets.zero, child: bar)
-        : bar;
-  }
-
-  Widget _buildSingle(BuildContext context) {
-    final glass = HyperGlassTheme.of(context);
-    final tokens = HyperUiThemeTokens.of(context);
-    final shape = BorderRadius.circular(HyperTabBar.height / 2);
-    final bar = Padding(
-      padding: widget.margin,
-      child: HyperBadge(
-        type: 'count',
-        count: widget.badgeCount,
-        child: HyperPressable(
-          onPressed: () => widget.onSelected(0),
-          borderRadius: shape,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: glass.surfaceSubtle,
-              borderRadius: shape,
-              border: Border.all(
-                color: Color.alphaBlend(glass.edgeShade, glass.edgeHighlight),
-              ),
-            ),
-            child: SizedBox.square(
-              dimension: HyperTabBar.height,
-              child: Center(
-                child: Icon(
-                  widget.items.single.icon,
-                  size: 22,
-                  color: widget.color ?? tokens.primary,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-    return widget.safeArea
-        ? SafeArea(top: false, minimum: EdgeInsets.zero, child: bar)
-        : bar;
-  }
-
-  Widget _buildTabRow({required double position, required Color foreground}) {
-    return Row(
-      textDirection: TextDirection.ltr,
-      children: <Widget>[
-        for (var visual = 0; visual < widget.items.length; visual++)
-          Expanded(
-            child: _HyperTabLabel(
-              item: widget.items[_logicalIndex(visual)],
-              strength: (1 - (position - visual).abs() * 1.6)
-                  .clamp(0.0, 1.0)
-                  .toDouble(),
-              activeColor:
-                  widget.color ?? HyperUiThemeTokens.of(context).primary,
-              inactiveColor: foreground,
-            ),
-          ),
-      ],
-    );
-  }
-
-  int _visualIndex(int logicalIndex) =>
-      _rtl ? widget.items.length - logicalIndex - 1 : logicalIndex;
-
-  int _logicalIndex(int visualIndex) =>
-      _rtl ? widget.items.length - visualIndex - 1 : visualIndex;
-
-  double _step(double contentWidth) => contentWidth / widget.items.length;
-
-  double _firstCenter(double contentWidth) => _step(contentWidth) / 2;
-
-  int _nearestIndex(double x, double contentWidth) {
-    final index =
-        ((x - _inset - _firstCenter(contentWidth)) / _step(contentWidth))
-            .round();
-    return index.clamp(0, widget.items.length - 1).toInt();
-  }
-
-  void _handlePointerDown(PointerDownEvent event, double contentWidth) {
-    if (_activePointer != null || !contentWidth.isFinite || contentWidth <= 0) {
-      return;
+      );
     }
-    final visual = _nearestIndex(event.localPosition.dx, contentWidth);
-    final center =
-        _inset + _firstCenter(contentWidth) + _step(contentWidth) * visual;
-    _activePointer = event.pointer;
-    _pressedVisualIndex = visual;
-    _lastHapticVisualIndex = visual;
-    _pointerDownX = event.localPosition.dx;
-    _grabOffsetX = event.localPosition.dx - center;
-    _dragging = false;
-    _dragVelocity = 0;
-    _velocityTracker = VelocityTracker.withKind(event.kind)
-      ..addPosition(event.timeStamp, event.localPosition);
-    _settleAt(visual);
-    _lensExpansion.forward();
+    bar = Padding(padding: widget.margin, child: bar);
+    return widget.safeArea ? SafeArea(top: false, child: bar) : bar;
   }
 
-  void _handlePointerMove(PointerMoveEvent event, double contentWidth) {
-    if (_activePointer != event.pointer) return;
-    _velocityTracker?.addPosition(event.timeStamp, event.localPosition);
-    if (!_dragging && (event.localPosition.dx - _pointerDownX).abs() < 6) {
-      return;
-    }
-    _dragging = true;
-    final step = _step(contentWidth);
-    _dragVelocity =
-        (_velocityTracker?.getVelocity().pixelsPerSecond.dx ?? 0) / step;
-    final first = _firstCenter(contentWidth);
-    final desired = event.localPosition.dx - _inset - _grabOffsetX;
-    final resisted = _resist(
-      desired,
-      first,
-      first + step * (widget.items.length - 1),
-      step,
-    );
-    _position.value = (resisted - first) / step;
-    final nearest = _position.value
-        .round()
-        .clamp(0, widget.items.length - 1)
-        .toInt();
-    if (nearest != _lastHapticVisualIndex) {
-      HapticFeedback.selectionClick();
-    }
-    _lastHapticVisualIndex = nearest;
-  }
-
-  void _handlePointerUp(PointerUpEvent event, double contentWidth) {
-    if (_activePointer != event.pointer) return;
-    _velocityTracker?.addPosition(event.timeStamp, event.localPosition);
-    final velocity =
-        (_velocityTracker?.getVelocity().pixelsPerSecond.dx ?? 0) /
-        _step(contentWidth);
-    final projected = _position.value + velocity * _projectionSeconds;
-    final visual = _dragging
-        ? projected.round().clamp(0, widget.items.length - 1).toInt()
-        : _pressedVisualIndex!;
-    final logical = _logicalIndex(visual);
-    final alreadyHapticallySelected =
-        _dragging && _lastHapticVisualIndex == visual;
-    _clearPointer();
-    _lensExpansion.reverse();
-    _settleAt(visual, initialVelocity: velocity);
-    if (logical != widget.selectedIndex) {
-      _pendingSelection = logical;
-      if (!alreadyHapticallySelected) {
-        HapticFeedback.selectionClick();
-      }
-    }
-    widget.onSelected(logical);
-  }
-
-  void _handlePointerCancel(PointerCancelEvent event) {
-    if (_activePointer != event.pointer) return;
-    _clearPointer();
-    _lensExpansion.reverse();
-    _settleAt(_visualIndex(widget.selectedIndex));
-  }
-
-  void _clearPointer() {
-    _activePointer = null;
-    _pressedVisualIndex = null;
-    _lastHapticVisualIndex = null;
-    _velocityTracker = null;
-    _pointerDownX = 0;
-    _grabOffsetX = 0;
-    _dragVelocity = 0;
-    _dragging = false;
-  }
-
-  void _settleAt(int visualIndex, {double initialVelocity = 0}) {
-    _position.animateWith(
-      SpringSimulation(
-        _snapSpring,
-        _position.value,
-        visualIndex.toDouble(),
-        initialVelocity,
-      ),
-    );
-  }
-
-  static double _resist(
-    double value,
-    double minimum,
-    double maximum,
-    double dimension,
-  ) {
-    if (value < minimum) {
-      final overshoot = minimum - value;
-      return minimum -
-          overshoot * dimension * 0.32 / (dimension + overshoot * 0.32);
-    }
-    if (value > maximum) {
-      final overshoot = value - maximum;
-      return maximum +
-          overshoot * dimension * 0.32 / (dimension + overshoot * 0.32);
-    }
-    return value;
-  }
+  static const double height = HyperTabBar.height;
 }
 
-class _HyperTabSurface extends StatelessWidget {
-  const _HyperTabSurface();
-
-  @override
-  Widget build(BuildContext context) {
-    final glass = HyperGlassTheme.of(context);
-    final tokens = HyperUiThemeTokens.of(context);
-    final highContrast = MediaQuery.maybeOf(context)?.highContrast ?? false;
-    final radius = BorderRadius.circular(28);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: radius,
-        boxShadow: glass.surfaceShadows,
-      ),
-      child: ClipRRect(
-        borderRadius: radius,
-        child: _buildSurface(glass, tokens, radius, highContrast),
-      ),
-    );
-  }
-
-  Widget _buildSurface(
-    HyperGlassTheme glass,
-    HyperUiThemeTokens tokens,
-    BorderRadius radius,
-    bool highContrast,
-  ) {
-    final surface = DecoratedBox(
-      decoration: BoxDecoration(
-        color: highContrast ? tokens.card : glass.surface,
-        borderRadius: radius,
-        border: Border.all(
-          color: highContrast
-              ? tokens.foreground.withAlpha(150)
-              : Color.alphaBlend(glass.edgeShade, glass.edgeHighlight),
-        ),
-      ),
-    );
-    if (highContrast || glass.blur == 0) return surface;
-    return BackdropFilter(
-      filter: ui.ImageFilter.blur(sigmaX: glass.blur, sigmaY: glass.blur),
-      child: surface,
-    );
-  }
-}
-
-class _HyperTabLabel extends StatelessWidget {
-  const _HyperTabLabel({
+class _TabLabel extends StatelessWidget {
+  const _TabLabel({
     required this.item,
-    required this.strength,
-    required this.activeColor,
-    required this.inactiveColor,
+    required this.selected,
+    required this.color,
   });
-
   final HyperTabItem item;
-  final double strength;
-  final Color activeColor;
-  final Color inactiveColor;
+  final bool selected;
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    final foreground = Color.lerp(inactiveColor, activeColor, strength)!;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(item.icon, color: foreground, size: 23),
-        const SizedBox(height: 1),
-        Text(
-          item.label,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: foreground,
-            fontSize: 12,
-            height: 1.08,
-            fontWeight: FontWeight.lerp(
-              FontWeight.w500,
-              FontWeight.w700,
-              strength,
-            ),
-          ),
+  Widget build(BuildContext context) => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(item.icon, color: color, size: 23),
+      const SizedBox(height: 1),
+      Text(
+        item.label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          height: 1.08,
+          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
         ),
-      ],
-    );
-  }
-}
-
-class _HyperLiquidLens extends StatelessWidget {
-  const _HyperLiquidLens({required this.expansion, required this.velocity});
-
-  final double expansion;
-  final double velocity;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = HyperUiTheme.of(context);
-    final glass = theme.glass;
-    final tilt = (velocity / 8).clamp(-1.0, 1.0).toDouble();
-    final clipper = _HyperLensShape(tilt: tilt);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final height = constraints.maxHeight;
-        final scaleX = 1 + 0.15 * expansion;
-        final scaleY = 1 + 0.09 * expansion;
-        if (theme.material == HyperMaterial.solid ||
-            (MediaQuery.maybeOf(context)?.highContrast ?? false)) {
-          return ClipPath(
-            clipper: clipper,
-            child: ColoredBox(color: glass.selection),
-          );
-        }
-        // 透明档位才折射底栏与页面；实色档位直接绘制选中块。
-        final matrix = Float64List.fromList(<double>[
-          scaleX,
-          0,
-          0,
-          0,
-          0,
-          scaleY,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          (1 - scaleX) * width / 2,
-          (1 - scaleY) * height / 2,
-          0,
-          1,
-        ]);
-        final refraction = ui.ImageFilter.compose(
-          inner: ui.ImageFilter.matrix(matrix),
-          outer: ui.ImageFilter.blur(sigmaX: 0.7, sigmaY: 0.7),
-        );
-        return RepaintBoundary(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(height / 2),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: glass.shadow.withValues(
-                    alpha: glass.shadow.a * expansion,
-                  ),
-                  blurRadius: 22 * expansion,
-                  spreadRadius: -3,
-                  offset: Offset(0, 5 * expansion),
-                ),
-              ],
-            ),
-            child: CustomPaint(
-              foregroundPainter: _HyperLensRimPainter(
-                clipper: clipper,
-                opacity: expansion,
-                edgeColor: glass.edgeHighlight,
-                accentColor: theme.tokens.primary,
-                secondaryColor: theme.tokens.info,
-              ),
-              child: ClipPath(
-                clipper: clipper,
-                child: BackdropFilter(
-                  filter: refraction,
-                  child: ColoredBox(
-                    color: glass.surfaceSubtle.withValues(
-                      alpha: glass.surfaceSubtle.a * 0.2 * expansion,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _HyperLensShape extends CustomClipper<Path> {
-  const _HyperLensShape({required this.tilt});
-
-  final double tilt;
-
-  @override
-  Path getClip(Size size) {
-    final width = size.width;
-    final height = size.height;
-    final radius = height / 2;
-    final pull = tilt * 5;
-    return Path()
-      ..moveTo(radius, 0)
-      ..cubicTo(
-        width * 0.42,
-        -pull.abs() * 0.12,
-        width * 0.72,
-        0,
-        width - radius,
-        0,
-      )
-      ..cubicTo(
-        width - radius * 0.25 + pull,
-        0,
-        width,
-        radius * 0.36,
-        width,
-        radius,
-      )
-      ..cubicTo(
-        width,
-        height - radius * 0.36,
-        width - radius * 0.25 - pull,
-        height,
-        width - radius,
-        height,
-      )
-      ..lineTo(radius, height)
-      ..cubicTo(
-        radius * 0.25 + pull,
-        height,
-        0,
-        height - radius * 0.36,
-        0,
-        radius,
-      )
-      ..cubicTo(0, radius * 0.36, radius * 0.25 - pull, 0, radius, 0)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(covariant _HyperLensShape oldClipper) =>
-      oldClipper.tilt != tilt;
-}
-
-class _HyperLensRimPainter extends CustomPainter {
-  const _HyperLensRimPainter({
-    required this.clipper,
-    required this.opacity,
-    required this.edgeColor,
-    required this.accentColor,
-    required this.secondaryColor,
-  });
-
-  final _HyperLensShape clipper;
-  final double opacity;
-  final Color edgeColor;
-  final Color accentColor;
-  final Color secondaryColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final bounds = Offset.zero & size;
-    final path = clipper.getClip(size);
-    final rim = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5
-      ..shader = ui.Gradient.sweep(bounds.center, <Color>[
-        edgeColor.withValues(alpha: edgeColor.a * opacity),
-        accentColor.withValues(alpha: 0.5 * opacity),
-        edgeColor.withValues(alpha: edgeColor.a * opacity),
-        secondaryColor.withValues(alpha: 0.4 * opacity),
-        edgeColor.withValues(alpha: edgeColor.a * opacity),
-      ]);
-    canvas.drawPath(path, rim);
-    final highlight = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1
-      ..color = edgeColor.withValues(alpha: edgeColor.a * 0.5 * opacity);
-    canvas.drawArc(
-      Rect.fromLTWH(3, 2, size.width - 6, size.height * 0.8),
-      math.pi * 1.07,
-      math.pi * 0.84,
-      false,
-      highlight,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _HyperLensRimPainter oldDelegate) =>
-      oldDelegate.opacity != opacity ||
-      oldDelegate.clipper.tilt != clipper.tilt ||
-      oldDelegate.edgeColor != edgeColor ||
-      oldDelegate.accentColor != accentColor ||
-      oldDelegate.secondaryColor != secondaryColor;
+      ),
+    ],
+  );
 }

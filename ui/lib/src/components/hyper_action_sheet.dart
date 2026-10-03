@@ -72,59 +72,62 @@ abstract final class HyperActionSheet {
       scrim: glass.scrim,
       builder: (sheetContext) {
         final tokens = HyperUiThemeTokens.of(sheetContext);
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
-          ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.sizeOf(sheetContext).height * .85,
-            ),
-            child: HyperGlass(
-              radius: 30,
-              type: 'prominent',
-              padding: const EdgeInsets.all(HyperUiSpacing.md),
-              child: SafeArea(
-                top: false,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Center(
-                        child: Container(
-                          width: 32,
-                          height: 4,
-                          margin: const EdgeInsets.only(
-                            bottom: HyperUiSpacing.md,
-                          ),
-                          decoration: BoxDecoration(
-                            color: tokens.border,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                      ),
-                      if (title != null)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: HyperUiSpacing.md,
-                          ),
-                          child: Text(
-                            title,
-                            style: TextStyle(
-                              color: tokens.foreground,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
+            final availableHeight = (constraints.maxHeight - keyboardInset)
+                .clamp(0.0, constraints.maxHeight);
+            return Padding(
+              padding: EdgeInsets.only(bottom: keyboardInset),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: availableHeight * .85),
+                child: HyperGlass(
+                  radius: 30,
+                  type: 'prominent',
+                  padding: const EdgeInsets.all(HyperUiSpacing.md),
+                  child: SafeArea(
+                    top: false,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(
+                            child: Container(
+                              width: 32,
+                              height: 4,
+                              margin: const EdgeInsets.only(
+                                bottom: HyperUiSpacing.md,
+                              ),
+                              decoration: BoxDecoration(
+                                color: tokens.border,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
                             ),
                           ),
-                        ),
-                      builder(sheetContext),
-                    ],
+                          if (title != null)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: HyperUiSpacing.md,
+                              ),
+                              child: Text(
+                                title,
+                                style: TextStyle(
+                                  color: tokens.foreground,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          builder(sheetContext),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
