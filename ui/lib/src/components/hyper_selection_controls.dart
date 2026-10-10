@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_list_tile.dart';
 import 'hyper_pressable.dart';
@@ -26,10 +27,15 @@ class HyperCheckbox extends StatelessWidget {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final selected = value == true || (tristate && value == null);
+    final duration = HyperUiEffects.durationOf(
+      context,
+      HyperUiEffects.stateDuration,
+    );
+    final reduceMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final box = AnimatedContainer(
-      duration: MediaQuery.disableAnimationsOf(context)
-          ? Duration.zero
-          : const Duration(milliseconds: 160),
+      duration: duration,
+      curve: HyperUiEffects.selectionCurve,
       width: 21,
       height: 21,
       decoration: BoxDecoration(
@@ -40,13 +46,21 @@ class HyperCheckbox extends StatelessWidget {
           width: 1.5,
         ),
       ),
-      child: selected
-          ? Icon(
-              value == null ? LucideIcons.minus : LucideIcons.check,
-              size: 15,
-              color: tokens.primaryForeground,
-            )
-          : null,
+      child: AnimatedOpacity(
+        opacity: selected ? 1 : 0,
+        duration: duration,
+        curve: HyperUiEffects.pressCurve,
+        child: AnimatedScale(
+          scale: !selected && !reduceMotion ? 0.8 : 1,
+          duration: reduceMotion ? Duration.zero : duration,
+          curve: HyperUiEffects.pressCurve,
+          child: Icon(
+            tristate && value == null ? LucideIcons.minus : LucideIcons.check,
+            size: 15,
+            color: tokens.primaryForeground,
+          ),
+        ),
+      ),
     );
     void toggle() {
       if (tristate) {
@@ -103,7 +117,12 @@ class HyperRadio<T> extends StatelessWidget {
       child: SizedBox.square(
         dimension: 44,
         child: Center(
-          child: Container(
+          child: AnimatedContainer(
+            duration: HyperUiEffects.durationOf(
+              context,
+              HyperUiEffects.stateDuration,
+            ),
+            curve: HyperUiEffects.selectionCurve,
             width: 21,
             height: 21,
             decoration: BoxDecoration(
@@ -186,10 +205,11 @@ class _HyperSwitchControl extends StatelessWidget {
         width: 52,
         height: 32,
         child: AnimatedContainer(
-          duration: MediaQuery.disableAnimationsOf(context)
-              ? Duration.zero
-              : const Duration(milliseconds: 180),
-          curve: Curves.easeOutCubic,
+          duration: HyperUiEffects.durationOf(
+            context,
+            HyperUiEffects.stateDuration,
+          ),
+          curve: HyperUiEffects.selectionCurve,
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
             color: trackColor,
@@ -197,11 +217,13 @@ class _HyperSwitchControl extends StatelessWidget {
             border: Border.all(color: outlineColor),
           ),
           child: AnimatedAlign(
-            duration: MediaQuery.disableAnimationsOf(context)
+            duration: MediaQuery.maybeOf(context)?.disableAnimations == true
                 ? Duration.zero
-                : const Duration(milliseconds: 180),
-            curve: Curves.easeOutCubic,
-            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+                : HyperUiEffects.stateDuration,
+            curve: HyperUiEffects.selectionCurve,
+            alignment: value
+                ? AlignmentDirectional.centerEnd
+                : AlignmentDirectional.centerStart,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: value ? tokens.primaryForeground : tokens.card,

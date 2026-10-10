@@ -22,7 +22,7 @@ class _CollapseComponentExampleState extends State<CollapseComponentExample> {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      _label('基础用法与回调（onChanged 同步展开状态）'),
+      _label('连续点击标题，观察展开与收起的平滑反向'),
       Column(
         mainAxisSize: MainAxisSize.min,
         spacing: 12,

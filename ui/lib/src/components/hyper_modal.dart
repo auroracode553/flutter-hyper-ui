@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_ui_theme.dart';
+import '../theme/hyper_ui_effects.dart';
+import '../utils/hyper_overlay_motion.dart';
 
 /// Hosts a Hyper surface in a route and keeps the caller's theme available.
 Future<T?> showHyperModal<T>(
@@ -17,8 +19,8 @@ Future<T?> showHyperModal<T>(
     barrierDismissible: false,
     barrierColor: const Color(0x00000000),
     transitionDuration: reduceMotion
-        ? Duration.zero
-        : const Duration(milliseconds: 220),
+        ? HyperUiEffects.reducedDuration
+        : HyperUiEffects.modalDuration,
     pageBuilder: (routeContext, animation, secondaryAnimation) => HyperUiTheme(
       data: theme,
       child: Stack(
@@ -27,12 +29,22 @@ Future<T?> showHyperModal<T>(
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: dismissible ? () => Navigator.pop(routeContext) : null,
-              child: ColoredBox(color: barrier),
+              child: FadeTransition(
+                opacity: animation,
+                child: ColoredBox(color: barrier),
+              ),
             ),
           ),
           Align(
             alignment: alignment,
-            child: Builder(builder: builder),
+            child: buildHySurfaceTransition(
+              animation: animation,
+              curve: HyperUiEffects.overlayCurve,
+              // 底部选择器沿竖直方向进退，对话框保持居中轻缩放。
+              beginScale: alignment.y == 0 ? 0.96 : 1,
+              offset: Offset(0, alignment.y * 24),
+              child: Builder(builder: builder),
+            ),
           ),
         ],
       ),
@@ -45,7 +57,7 @@ Future<T?> showHyperModal<T>(
             ignoring:
                 animation.status == AnimationStatus.reverse ||
                 animation.status == AnimationStatus.dismissed,
-            child: FadeTransition(opacity: animation, child: child),
+            child: child,
           ),
         ),
   );

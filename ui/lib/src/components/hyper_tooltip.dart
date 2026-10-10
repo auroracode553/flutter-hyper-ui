@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 
+import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../utils/hyper_overlay_motion.dart';
 import 'hyper_glass.dart';
 
 /// 自绘玻璃提示：悬停、长按或键盘聚焦时显示。
@@ -25,8 +28,15 @@ class HyperTooltip extends StatefulWidget {
   State<HyperTooltip> createState() => _HyperTooltipState();
 }
 
-class _HyperTooltipState extends State<HyperTooltip> {
+class _HyperTooltipState extends State<HyperTooltip>
+    with SingleTickerProviderStateMixin {
   final OverlayPortalController _overlay = OverlayPortalController();
+  late final HyperOverlayMotion _motion = HyperOverlayMotion(
+    vsync: this,
+    onShow: _overlay.show,
+    onHide: _overlay.hide,
+    duration: HyperUiEffects.tooltipDuration,
+  );
   final GlobalKey _anchorKey = GlobalKey();
   Timer? _hoverTimer;
   Offset _position = Offset.zero;
@@ -35,8 +45,9 @@ class _HyperTooltipState extends State<HyperTooltip> {
   bool _hovering = false;
   bool _focused = false;
   bool _longPressed = false;
+  double _originX = 0;
 
-  void _show() {
+  void _show({bool instant = false}) {
     if (!mounted || widget.message.isEmpty) return;
     final box = _anchorKey.currentContext?.findRenderObject() as RenderBox?;
     if (box == null || !box.hasSize) return;
@@ -67,12 +78,15 @@ class _HyperTooltipState extends State<HyperTooltip> {
       _position = Offset(left, top);
       _availableWidth = width;
       _showBelow = below;
+      _originX = ((origin.dx + box.size.width / 2 - left) / width * 2 - 1)
+          .clamp(-1.0, 1.0)
+          .toDouble();
     });
-    _overlay.show();
+    _motion.setOpen(true, instant: instant);
   }
 
   void _hideIfInactive() {
-    if (!_hovering && !_focused && !_longPressed) _overlay.hide();
+    if (!_hovering && !_focused && !_longPressed) _motion.close();
   }
 
   void _cancelHover() {
@@ -81,8 +95,17 @@ class _HyperTooltipState extends State<HyperTooltip> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _motion.setReducedMotion(
+      MediaQuery.maybeOf(context)?.disableAnimations ?? false,
+    );
+  }
+
+  @override
   void dispose() {
     _cancelHover();
+    _motion.dispose();
     super.dispose();
   }
 
@@ -91,7 +114,7 @@ class _HyperTooltipState extends State<HyperTooltip> {
     super.didUpdateWidget(oldWidget);
     if (widget.message.isEmpty && oldWidget.message.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _overlay.hide();
+        if (mounted) _motion.close();
       });
     }
   }
@@ -107,21 +130,26 @@ class _HyperTooltipState extends State<HyperTooltip> {
         child: IgnorePointer(
           child: FractionalTranslation(
             translation: Offset(0, _showBelow ? 0 : -1),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: _availableWidth),
-              child: HyperGlass(
-                radius: 12,
-                type: 'prominent',
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 7,
-                ),
-                child: Text(
-                  widget.message,
-                  style: TextStyle(
-                    color: tokens.foreground,
-                    fontSize: 12,
-                    height: 1.3,
+            child: buildHySurfaceTransition(
+              animation: _motion.animation,
+              beginScale: 0.97,
+              origin: () => Alignment(_originX, _showBelow ? -1 : 1),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: _availableWidth),
+                child: HyperGlass(
+                  radius: 12,
+                  type: 'prominent',
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 7,
+                  ),
+                  child: Text(
+                    widget.message,
+                    style: TextStyle(
+                      color: tokens.foreground,
+                      fontSize: 12,
+                      height: 1.3,
+                    ),
                   ),
                 ),
               ),
@@ -133,13 +161,17 @@ class _HyperTooltipState extends State<HyperTooltip> {
         onFocusChange: (focused) {
           _focused = focused;
           if (focused) {
-            _show();
+            _show(instant: true);
           } else {
             _hideIfInactive();
           }
         },
         child: MouseRegion(
-          onEnter: (_) {
+          onEnter: (event) {
+            if (event.kind != PointerDeviceKind.mouse &&
+                event.kind != PointerDeviceKind.stylus) {
+              return;
+            }
             _hovering = true;
             _cancelHover();
             _hoverTimer = Timer(widget.hoverDelay, _show);

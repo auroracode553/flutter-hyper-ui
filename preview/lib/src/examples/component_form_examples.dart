@@ -99,7 +99,7 @@ class _SegmentedControlComponentExampleState
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('受控切换'),
+        _label('受控切换 · 连续点击观察选中底板移动'),
         HyperSegmentedControl<String>(
           selectedValue: _value,
           onChanged: (value) => setState(() => _value = value),
@@ -177,7 +177,7 @@ class _DropdownComponentExampleState extends State<DropdownComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         HyperDropdown<String>(
-          label: '排序方式',
+          label: '排序方式 · 展开与收起动画',
           value: _value,
           onChanged: (value) => setState(() => _value = value),
           options: const [

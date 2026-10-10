@@ -91,9 +91,7 @@ class HyperDropdown<T> extends StatelessWidget {
                   value: _selected?.label ?? placeholder,
                   isPlaceholder: _selected == null,
                   label: label,
-                  trailingIcon: controller.isOpen
-                      ? LucideIcons.chevronUp
-                      : LucideIcons.chevronDown,
+                  expanded: controller.isOpen,
                   onTap: onChanged == null
                       ? null
                       : () => controller.isOpen

@@ -50,7 +50,7 @@ class _HyperPressableState extends State<HyperPressable> {
     final reduceMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final duration = reduceMotion
-        ? Duration.zero
+        ? HyperUiEffects.reducedDuration
         : (_pressed
               ? HyperUiEffects.pressInDuration
               : HyperUiEffects.pressOutDuration);
@@ -66,13 +66,13 @@ class _HyperPressableState extends State<HyperPressable> {
         onTapCancel: _interactive ? () => _setPressed(false) : null,
         onTap: _interactive ? widget.onPressed : null,
         child: AnimatedScale(
-          scale: _pressed ? widget.pressedScale : 1,
-          duration: duration,
-          curve: Curves.easeOutCubic,
+          scale: _pressed && !reduceMotion ? widget.pressedScale : 1,
+          duration: reduceMotion ? Duration.zero : duration,
+          curve: HyperUiEffects.pressCurve,
           child: AnimatedOpacity(
             opacity: _pressed ? widget.pressedOpacity : 1,
             duration: duration,
-            curve: Curves.easeOutCubic,
+            curve: HyperUiEffects.pressCurve,
             child: ClipRRect(
               borderRadius: widget.borderRadius ?? BorderRadius.zero,
               child: widget.child,

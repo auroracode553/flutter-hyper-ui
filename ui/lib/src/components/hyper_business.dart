@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_ui_effects.dart';
 import 'hyper_glass.dart';
 import 'hyper_pressable.dart';
 
@@ -21,8 +22,44 @@ class HyperCollapse extends StatefulWidget {
   State<HyperCollapse> createState() => _HyperCollapseState();
 }
 
-class _HyperCollapseState extends State<HyperCollapse> {
+class _HyperCollapseState extends State<HyperCollapse>
+    with SingleTickerProviderStateMixin {
   late bool _expanded = widget.initiallyExpanded;
+  late bool _hasExpanded = widget.initiallyExpanded;
+  late final AnimationController _expansion = AnimationController(
+    vsync: this,
+    value: _expanded ? 1 : 0,
+    duration: HyperUiEffects.collapseDuration,
+  );
+
+  void _toggle() {
+    setState(() {
+      _expanded = !_expanded;
+      if (_expanded) _hasExpanded = true;
+    });
+    if (MediaQuery.maybeOf(context)?.disableAnimations == true) {
+      _expansion.value = _expanded ? 1 : 0;
+    } else if (_expanded) {
+      _expansion.animateTo(1, curve: HyperUiEffects.overlayCurve);
+    } else {
+      _expansion.animateBack(0, curve: HyperUiEffects.overlayCurve);
+    }
+    widget.onChanged?.call(_expanded);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.maybeOf(context)?.disableAnimations == true) {
+      _expansion.value = _expanded ? 1 : 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _expansion.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +70,7 @@ class _HyperCollapseState extends State<HyperCollapse> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           HyperPressable(
-            onPressed: () {
-              setState(() => _expanded = !_expanded);
-              widget.onChanged?.call(_expanded);
-            },
+            onPressed: _toggle,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
@@ -49,17 +83,41 @@ class _HyperCollapseState extends State<HyperCollapse> {
                   ),
                   AnimatedRotation(
                     turns: _expanded ? .5 : 0,
-                    duration: const Duration(milliseconds: 180),
+                    duration:
+                        MediaQuery.maybeOf(context)?.disableAnimations == true
+                        ? Duration.zero
+                        : HyperUiEffects.collapseDuration,
+                    curve: HyperUiEffects.overlayCurve,
                     child: const Icon(LucideIcons.chevronDown, size: 18),
                   ),
                 ],
               ),
             ),
           ),
-          if (_expanded)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-              child: widget.child,
+          if (_hasExpanded)
+            AnimatedBuilder(
+              animation: _expansion,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                child: widget.child,
+              ),
+              builder: (context, child) => ClipRect(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  heightFactor: _expansion.value,
+                  child: IgnorePointer(
+                    ignoring: !_expanded,
+                    child: ExcludeFocus(
+                      excluding: !_expanded,
+                      child: TickerMode(
+                        // 收起后保留内容状态，暂停其内部持续动画。
+                        enabled: _expansion.value > 0,
+                        child: FadeTransition(opacity: _expansion, child: child),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
         ],
       ),

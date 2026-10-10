@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../theme/hyper_ui_effects.dart';
+import '../utils/hyper_overlay_motion.dart';
 import 'hyper_glass.dart';
 import 'hyper_anchored_layout.dart';
 
@@ -65,23 +67,41 @@ class _HyperAnchoredSurface extends StatefulWidget {
   State<_HyperAnchoredSurface> createState() => _HyperAnchoredSurfaceState();
 }
 
-class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface> {
+class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
+    with SingleTickerProviderStateMixin {
   final GlobalKey _anchorKey = GlobalKey();
   final OverlayPortalController _portal = OverlayPortalController();
+  late final HyperOverlayMotion _motion = HyperOverlayMotion(
+    vsync: this,
+    onShow: _portal.show,
+    onHide: _portal.hide,
+    duration: HyperUiEffects.menuDuration,
+  );
+  Alignment _origin = Alignment.topCenter;
   late final HyperMenuController _controller = HyperMenuController(
     _setOpen,
-    () => _portal.isShowing,
+    () => _motion.isOpen,
   );
 
   void _setOpen(bool open) {
     if (!mounted) return;
-    if (open == _portal.isShowing) return;
-    if (open) {
-      _portal.show();
-    } else {
-      _portal.hide();
-    }
+    if (open == _motion.isOpen) return;
+    _motion.setOpen(open);
     setState(() {});
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _motion.setReducedMotion(
+      MediaQuery.maybeOf(context)?.disableAnimations ?? false,
+    );
+  }
+
+  @override
+  void dispose() {
+    _motion.dispose();
+    super.dispose();
   }
 
   Rect _anchorRect(BuildContext overlayContext) {
@@ -118,19 +138,32 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface> {
               ),
               width: widget.width,
               maxHeight: widget.maxHeight,
+              onPositioned: (origin) => _origin = origin,
             ),
-            child: _HyperMenuScope(
-              controller: _controller,
-              child: SizedBox(
-                width: widget.width,
-                child: HyperGlass(
-                  radius: 18,
-                  type: 'prominent',
-                  padding: widget.padding,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: widget.maxHeight),
-                    child: SingleChildScrollView(
-                      child: Builder(builder: widget.contentBuilder),
+            child: IgnorePointer(
+              ignoring: !_motion.isOpen,
+              child: buildHySurfaceTransition(
+                animation: _motion.animation,
+                origin: () => _origin,
+                child: ExcludeFocus(
+                  excluding: !_motion.isOpen,
+                  child: _HyperMenuScope(
+                    controller: _controller,
+                    child: SizedBox(
+                      width: widget.width,
+                      child: HyperGlass(
+                        radius: 18,
+                        type: 'prominent',
+                        padding: widget.padding,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: widget.maxHeight,
+                          ),
+                          child: SingleChildScrollView(
+                            child: Builder(builder: widget.contentBuilder),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

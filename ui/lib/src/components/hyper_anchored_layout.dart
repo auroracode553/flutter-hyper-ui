@@ -8,12 +8,14 @@ class HyperAnchoredLayout extends SingleChildLayoutDelegate {
     required this.insets,
     required this.width,
     required this.maxHeight,
+    this.onPositioned,
   });
 
   final Rect anchor;
   final EdgeInsets insets;
   final double width;
   final double maxHeight;
+  final void Function(Alignment)? onPositioned;
   static const gap = 6.0;
 
   @override
@@ -45,10 +47,18 @@ class HyperAnchoredLayout extends SingleChildLayoutDelegate {
     final top = below + childSize.height <= size.height - insets.bottom
         ? below
         : anchor.top - gap - childSize.height;
-    return Offset(
+    final position = Offset(
       anchor.left.clamp(insets.left, right),
       top.clamp(insets.top, bottom),
     );
+    // 实际尺寸决定上下翻转；缩放原点始终落在靠近触发器的一侧。
+    final originX = childSize.width > 0
+        ? ((anchor.center.dx - position.dx) / childSize.width * 2 - 1)
+              .clamp(-1.0, 1.0)
+              .toDouble()
+        : 0.0;
+    onPositioned?.call(Alignment(originX, top == below ? -1 : 1));
+    return position;
   }
 
   @override

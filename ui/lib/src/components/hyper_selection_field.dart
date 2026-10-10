@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_ui_effects.dart';
 import 'hyper_form_field.dart';
 import 'hyper_glass.dart';
 
@@ -13,6 +14,7 @@ Widget buildHySelectionField(
   String? label,
   VoidCallback? onTap,
   IconData trailingIcon = LucideIcons.chevronDown,
+  bool expanded = false,
 }) {
   final tokens = HyperUiThemeTokens.of(context);
   final field = HyperGlass(
@@ -42,7 +44,18 @@ Widget buildHySelectionField(
               ),
             ),
             const SizedBox(width: 10),
-            Icon(trailingIcon, size: 18, color: tokens.mutedForeground),
+            AnimatedRotation(
+              turns: expanded ? 0.5 : 0,
+              duration: MediaQuery.maybeOf(context)?.disableAnimations == true
+                  ? Duration.zero
+                  : HyperUiEffects.menuDuration,
+              curve: HyperUiEffects.overlayCurve,
+              child: Icon(
+                trailingIcon,
+                size: 18,
+                color: tokens.mutedForeground,
+              ),
+            ),
           ],
         ),
       ),

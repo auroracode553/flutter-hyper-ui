@@ -327,7 +327,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-form-field', 'HyperFormField 字段容器', 'component_form_field_example.dart', 360, '文本输入与数值控件共享标题、说明和错误层级。', 'FormFieldComponentExample'),
       }),
-      component('HyperSegmentedControl / HyperSegmentOption', 'hyper_segmented_control.dart', '适用于少量互斥选项的受控分段选择。', {
+      component('HyperSegmentedControl / HyperSegmentOption', 'hyper_segmented_control.dart', '受控分段选择，等宽选中底板平滑移动，非等宽选项使用背景色过渡。', {
         propsDocs: [
           { name: 'options', description: '选项列表' },
           { name: 'selectedValue', description: '当前选中值' },
@@ -347,7 +347,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-select', 'HyperSelect 底部选择', 'component_form_examples.dart', 480, '单选、多选、禁用项与占位文案。', 'SelectComponentExample'),
       }),
-      component('HyperDropdown', 'hyper_dropdown.dart', '锚定触发器展开、适合在选择时保持页面上下文的泛型下拉。', {
+      component('HyperDropdown', 'hyper_dropdown.dart', '锚定触发器缩放淡入淡出的泛型下拉，箭头同步旋转，支持快速反向操作。', {
         propsDocs: [
           { name: 'options', description: '选项列表' },
           { name: 'value', description: '当前选中值' },
@@ -359,7 +359,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-dropdown', 'HyperDropdown 下拉菜单', 'component_form_examples.dart', 420, '带标签单选、占位与禁用项、固定宽度与菜单高度。', 'DropdownComponentExample'),
       }),
-      component('HyperCheckbox', 'hyper_selection_controls.dart', '支持三态、禁用和标签的受控复选。', {
+      component('HyperCheckbox', 'hyper_selection_controls.dart', '支持三态、禁用和标签的受控复选，勾选标记轻缩放淡入淡出。', {
         propsDocs: [
           { name: 'value', description: '是否选中' },
           { name: 'onChanged', description: '状态变化回调' },
@@ -368,7 +368,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-checkbox', 'HyperCheckbox 复选框', 'component_form_examples.dart', 520, '受控复选、三态、禁用与无标签纯控件。', 'CheckboxComponentExample'),
       }),
-      component('HyperRadio', 'hyper_selection_controls.dart', '泛型值受控单选。', {
+      component('HyperRadio', 'hyper_selection_controls.dart', '泛型值受控单选，选中圆环平滑过渡。', {
         propsDocs: [
           { name: 'value', description: '当前选项值' },
           { name: 'groupValue', description: '组选中值' },
@@ -377,7 +377,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-radio', 'HyperRadio 单选框', 'component_form_examples.dart', 420, '互斥单选组与禁用项。', 'RadioComponentExample'),
       }),
-      component('HyperSwitch', 'hyper_selection_controls.dart', '布尔值受控开关。', {
+      component('HyperSwitch', 'hyper_selection_controls.dart', '布尔值受控开关，滑块与轨道颜色同步过渡，支持 RTL。', {
         propsDocs: [
           { name: 'value', description: '是否开启' },
           { name: 'onChanged', description: '状态变化回调' },
@@ -474,7 +474,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-toast', 'HyperToast 轻提示', 'component_feedback_examples.dart', 380, '四种语义色调、操作按钮与显示时长。', 'ToastComponentExample'),
       }),
-      component('HyperDialog', 'hyper_feedback.dart', '确认、提示或自定义正文对话框。', {
+      component('HyperDialog', 'hyper_feedback.dart', '居中轻缩放淡入淡出的确认、提示或自定义正文对话框。', {
         propsDocs: [
           { name: 'title', description: '标题' },
           { name: 'message', description: '提示文字' },
@@ -555,7 +555,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-drawer', 'HyperDrawer 抽屉', 'component_feedback_examples.dart', 460, '右侧抽屉返回值、左侧抽屉与底部操作区。', 'DrawerComponentExample'),
       }),
-      component('HyperActionSheet / HyperAction', 'hyper_action_sheet.dart', '统一的自定义底部弹层与操作菜单，支持危险项和禁用项。', {
+      component('HyperActionSheet / HyperAction', 'hyper_action_sheet.dart', '竖直滑入滑出的自定义底部弹层与操作菜单，支持危险项和禁用项。', {
         propsDocs: [
           { name: 'builder', description: '自定义内容构建器，与 actions 二选一' },
           { name: 'actions', description: '操作项列表' },
@@ -566,14 +566,14 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-action-sheet', 'HyperActionSheet 底部弹层', 'component_feedback_examples.dart', 420, '自定义内容、操作列表与不可点外关闭的弹层。', 'ActionSheetComponentExample'),
       }),
-      component('HyperPopover', 'hyper_popover.dart', '锚定子组件的补充说明气泡。', {
+      component('HyperPopover', 'hyper_popover.dart', '从锚点一侧缩放淡入淡出的补充说明气泡。', {
         propsDocs: [
           { name: 'child', description: '锚点子组件' },
           { name: 'content', description: '气泡内容组件' },
         ],
         preview: demo('component-popover', 'HyperPopover 气泡', 'component_feedback_examples.dart', 260, '点击锚点查看补充说明。', 'PopoverComponentExample'),
       }),
-      component('HyperTooltip', 'hyper_tooltip.dart', '悬停、长按或键盘聚焦时出现的轻量玻璃提示。', {
+      component('HyperTooltip', 'hyper_tooltip.dart', '悬停与长按时轻缩放淡入淡出的玻璃提示，键盘聚焦即时显示。', {
         propsDocs: [
           { name: 'message', description: '提示文字' },
           { name: 'child', description: '锚点组件' },
@@ -582,7 +582,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-tooltip', 'HyperTooltip 轻提示', 'component_tooltip_example.dart', 260, '悬停、长按与键盘聚焦。', 'TooltipComponentExample'),
       }),
-      component('HyperPopupMenu', 'hyper_popover.dart', '基于 HyperAction 的泛型弹出菜单。', {
+      component('HyperPopupMenu', 'hyper_popover.dart', '基于 HyperAction 的泛型弹出菜单，沿触发器一侧展开与收起。', {
         propsDocs: [
           { name: 'actions', description: '菜单项列表' },
           { name: 'onSelected', description: '选中回调' },
@@ -757,7 +757,7 @@ export const componentGroups: ComponentGroup[] = [
       demo('business', '业务组件组合', 'interactive_examples.dart', 850, '搜索、通知、设置菜单、折叠面板与时间轴。'),
     ],
     components: [
-            component('HyperCollapse', 'hyper_business.dart', '标题与正文组成的折叠内容。', {
+            component('HyperCollapse', 'hyper_business.dart', '高度与透明度同步过渡的折叠内容，支持快速反向与内容状态保留。', {
         propsDocs: [
           { name: 'title', description: '标题' },
           { name: 'child', description: '内容组件' },

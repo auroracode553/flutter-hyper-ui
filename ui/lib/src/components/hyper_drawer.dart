@@ -7,6 +7,7 @@ import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../utils/hyper_overlay_motion.dart';
 import 'hyper_glass.dart';
 import 'hyper_button.dart';
 import 'hyper_layout.dart';
@@ -107,16 +108,11 @@ class HyperDrawer extends StatelessWidget {
             ),
           ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        final curved = CurvedAnimation(
-          parent: animation,
-          curve: HyperUiEffects.overlayCurve,
-          reverseCurve: Curves.easeInCubic,
-        );
         return Stack(
           children: <Widget>[
             Positioned.fill(
               child: FadeTransition(
-                opacity: curved,
+                opacity: animation,
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: dismissible ? () => Navigator.pop(context) : null,
@@ -124,15 +120,15 @@ class HyperDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            FadeTransition(
-              opacity: curved,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: Offset(isLeft ? -0.12 : 0.12, 0),
-                  end: Offset.zero,
-                ).animate(curved),
-                child: child,
+            buildHySurfaceTransition(
+              animation: animation,
+              curve: HyperUiEffects.overlayCurve,
+              beginScale: 1,
+              offset: Offset(
+                MediaQuery.sizeOf(context).width * (isLeft ? -0.12 : 0.12),
+                0,
               ),
+              child: child,
             ),
           ],
         );
