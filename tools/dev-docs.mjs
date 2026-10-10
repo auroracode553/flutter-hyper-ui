@@ -2,6 +2,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, watch } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { assertFlutterDependencies } from './flutter-dependency-check.mjs';
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(scriptDirectory, '..');
@@ -36,6 +37,20 @@ function stopProcessTree(child) {
 
 for (const directory of [previewDirectory, vitepressDirectory]) {
   if (!existsSync(directory)) throw new Error(`缺少目录：${directory}`);
+}
+
+// --no-pub 保持依赖由使用者准备；缺包时在启动服务前给出明确提示。
+try {
+  assertFlutterDependencies({
+    projectDirectory: previewDirectory,
+    sourceDirectories: [
+      resolve(repositoryRoot, 'ui', 'lib'),
+      resolve(previewDirectory, 'lib'),
+    ],
+  });
+} catch (error) {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
 }
 
 console.log(`启动 Flutter Web 调试服务（${useAmdModules ? 'AMD 热重启' : 'DDC 热重载'}）…`);

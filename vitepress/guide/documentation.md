@@ -13,6 +13,8 @@ tools/       本地开发与构建编排脚本
 
 ## 本地开发
 
+首次开发或修改 `ui/pubspec.yaml`、`preview/pubspec.yaml` 的依赖后，先在 `preview/` 目录手动执行 `flutter pub get`。该操作会解析预览及本地 UI 包的依赖，包括 `lucide_icons_flutter: ^3.1.20`。开发脚本使用 `--no-pub`，不会自动获取依赖，并会在启动服务前只读检查源码的包导入是否可解析。
+
 在 `vitepress/` 目录手动启动：
 
 ```powershell
@@ -72,6 +74,7 @@ DOM host  ←──────────── addView / first frame ──�
 | --- | --- |
 | 端口被占用 | 关闭旧开发进程，再手动重新启动 watcher |
 | Dart 保存后没有变化 | 查看终端是否发出热重启；结构性修改仍可手动重启 |
+| LucideIcons 未定义，或启动提示 Flutter 依赖解析缺失 | 在 preview/ 目录手动执行 flutter pub get，再重新启动 npm run dev；旧 package_config.json 可能尚未包含图标包 |
 | 演示提示资源不完整 | 最终静态预览需重新执行 `npm run build:all` |
 | 预览提示未找到完整包，或旧页面提示启动脚本缺少宿主接口 | 交互开发应停止旧文档服务，再手动运行 `npm run dev`；仅启动 `dev:docs` 时需已有完整 release 预览包 |
 | Shader 无法写入 | 不要自行指定项目外输出目录，沿用已有构建脚本 |

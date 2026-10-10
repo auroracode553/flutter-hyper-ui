@@ -89,11 +89,14 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 - `vitepress/.vitepress/theme/components/ComponentDoc.vue`：单组件文档页的示例、API、约定和同类组件结构。
 - `vitepress/.vitepress/theme/example-source.ts`：从 `preview/lib/src/examples/` 读取 Demo 的真实 Dart 源码。
 - `tools/dev-docs.mjs`：启动两个开发服务、监听 Dart 并触发热重启或热重载。
+- `tools/flutter-dependency-check.mjs`：由开发脚本调用，只读检查 UI 与预览源码的包导入是否可解析，缺包时提示手动准备依赖。
 - `tools/build-docs.mjs`：构建 release、自动同步产物并构建 VitePress，不部署。
 
 依赖方向：文档 Demo → 视图管理 → Debug 代理或 release 静态包 → Flutter 多视图 → 按需加载的预览示例 → UI 组件。组件挂载时预热共享引擎；Flutter 外壳和真实组件各有独立首帧回调。加载界面显示当前阶段，不以固定秒数判定失败。
 
 ## 本地开发与构建
+
+首次开发或修改 Flutter 依赖后，请先在 `preview/` 目录手动执行 `flutter pub get`，它会同时解析本地 `ui/` 包的依赖，包括 `lucide_icons_flutter`。开发脚本保留 `--no-pub`，不会自行获取依赖；若包配置缺失或源码导入无法解析，会在启动服务前停止并提示处理方式。
 
 依赖由使用者自主准备。进入 `vitepress/` 后手动运行 `npm run dev`，即可同时启动 Flutter Debug 服务与 VitePress。保存 Dart 文件会自动热重启，不生成或复制 release 产物。需要保留 DDC 热重载时，可在 Windows PowerShell 中设置 `$env:HYPER_UI_PREVIEW_AMD='0'` 后再运行。
 
@@ -110,6 +113,7 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 ## 依赖清单
 
 - 核心与预览：Flutter >= 3.32、Dart >= 3.8，预览通过本地路径依赖 `ui/`。
+- 图标：`lucide_icons_flutter: ^3.1.20`，由使用者手动获取，声明见 `ui/pubspec.yaml` 与 `preview/pubspec.yaml`。
 - 文档：Node.js 与已有 `vitepress`、`vue`，准确版本见 `vitepress/package.json`。
 - watcher 与构建编排仅使用 Node.js 内置模块，未新增第三方依赖。
 
