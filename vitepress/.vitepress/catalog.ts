@@ -486,6 +486,57 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-dialog', 'HyperDialog 对话框', 'component_feedback_examples.dart', 420, '标准确认、危险操作、仅确认按钮与自定义正文。', 'DialogComponentExample'),
       }),
+      component('HyperUpdateDialog', 'hyper_update_dialog.dart', '沿用 Hyper 柔光玻璃风格的完整更新对话框，覆盖检查、版本日志、下载、安装、完成与失败重试。', {
+        propsDocs: [
+          { name: 'status', description: '受控更新状态，默认 HyperUpdateStatus.idle；状态由业务层切换' },
+          { name: 'currentVersion', description: '当前安装版本；未提供时隐藏当前版本' },
+          { name: 'release', description: '新版本信息，HyperUpdateRelease 类型；可为空' },
+          { name: 'progress', description: '下载或安装进度 0–1；null 或非有限值显示不定进度，有限越界值收敛到 0–1' },
+          { name: 'downloadProgress', description: '下载字节快照，HyperUpdateDownloadProgress 类型；下载阶段优先于 progress。总大小未知时显示下载量与不定进度' },
+          { name: 'progressText', description: '额外的下载状态或安装阶段文字；字节快照自动展示下载量、速度和预计剩余时间' },
+          { name: 'title', description: '覆盖当前状态标题；默认按状态提供中文标题' },
+          { name: 'message', description: '覆盖当前状态说明，可用于展示业务错误原因' },
+          { name: 'mandatory', description: '必要更新，默认 false；隐藏关闭、稍后与取消入口并阻止返回，completed / upToDate 状态恢复关闭' },
+          { name: 'primaryLabel', description: '覆盖当前状态主按钮文字' },
+          { name: 'secondaryLabel', description: '覆盖当前状态次按钮文字' },
+          { name: 'onCheck', description: 'idle / upToDate 状态的检查回调；为空时主按钮禁用' },
+          { name: 'onUpdate', description: 'available 状态的开始下载回调；为空时主按钮禁用' },
+          { name: 'onInstall', description: 'readyToInstall 状态的安装回调；为空时主按钮禁用' },
+          { name: 'onRetry', description: 'error 状态的重试回调；业务层决定重试检查、下载或安装' },
+          { name: 'onCancel', description: '非必要更新时 checking / downloading 的取消回调；为空时隐藏取消入口' },
+          { name: 'onLater', description: '非必要更新时 available / readyToInstall 的稍后回调；为空时隐藏入口' },
+          { name: 'onClose', description: '关闭按钮、error 关闭与 completed 主按钮回调；关闭视图与取消下载分开处理，业务通过 Navigator.pop 关闭路由' },
+          { name: 'maxWidth', description: '对话框最大宽度，默认 420；窄屏跟随父级约束，正文滚动、底部操作区固定' },
+          { name: 'show(context, builder)', description: '打开带安全区域的更新弹层；两个参数必填。builder 可返回状态组件，背景点击不关闭；返回 Future<T?>' },
+        ],
+        preview: demo('component-update-dialog', 'HyperUpdateDialog 更新流程', 'component_update_dialog_example.dart', 1100, '字节进度、未知总量、关闭后继续下载、重试和强制更新。', 'UpdateDialogComponentExample'),
+      }),
+      component('HyperUpdateStatus / HyperUpdateRelease', 'hyper_update_models.dart', '更新对话框的九种展示状态和版本信息模型；业务流程与 UI 保持分离。', {
+        id: 'update-status',
+        sidebar: false,
+        propsDocs: [
+          { name: 'idle / checking / available / upToDate', description: '待检查、检查中、发现新版本、已是最新四种状态' },
+          { name: 'downloading / readyToInstall / installing / completed / error', description: '下载中、待安装、安装中、已完成、失败五种状态' },
+          { name: 'version', description: '新版本号，必填，不能为空字符串' },
+          { name: 'releaseDate', description: '展示用发布日期，由业务格式化；默认不显示' },
+          { name: 'sizeLabel', description: '展示用更新包大小，例如 48.6 MB；默认不显示' },
+          { name: 'highlights', description: '更新日志条目，默认空列表；只在 available 状态展示' },
+        ],
+        preview: demo('component-update-status', '更新状态与版本信息', 'component_update_dialog_example.dart', 960, '选择状态查看同一版本信息在不同阶段的表现。', 'UpdateDialogComponentExample'),
+      }),
+      component('HyperUpdateDownloadProgress', 'hyper_update_models.dart', '从已下载字节、总大小和下载速度生成进度与展示文字，支持未知总量和异常数据。', {
+        sidebar: false,
+        propsDocs: [
+          { name: 'downloadedBytes', description: '已下载字节数，必填；负数按 0 展示' },
+          { name: 'totalBytes', description: '总字节数；null、0 或负数视为未知，不展示百分比和剩余时间' },
+          { name: 'bytesPerSecond', description: '业务提供的字节每秒速度；未提供、非有限值或非正值隐藏速度与剩余时间' },
+          { name: 'fraction', description: '只读计算值：总量已知时为 0–1，未知时为 null' },
+          { name: 'sizeLabel', description: '只读下载量文字：已下载 / 总大小，或未知总量时的已下载量；采用 B / KB / MB / GB / TB 十进制单位' },
+          { name: 'speedLabel', description: '只读速度文字；速度不可用时为 null' },
+          { name: 'remainingLabel', description: '只读预计剩余时间；缺少总量或速度、已下载完成时为 null' },
+        ],
+        preview: demo('component-update-download-progress', '更新字节进度', 'component_update_dialog_example.dart', 1100, '选择下载中，切换总大小未知以查看确定与不定进度。', 'UpdateDialogComponentExample'),
+      }),
       component('HyperLoading', 'hyper_feedback.dart', '局部加载状态与自动清理的全局任务遮罩。', {
         propsDocs: [
           { name: 'label', description: '加载提示文字' },
@@ -562,13 +613,14 @@ export const componentGroups: ComponentGroup[] = [
       demo('full-navigation', '导航、步骤与列表联动', 'complete_examples.dart', 860),
     ],
     components: [
-      component('HyperNavBar', 'hyper_nav_bar.dart', '默认 44px 透明导航容器；type 提供五种固定布局，custom 保留完整插槽，页面正文可滚动到导航栏与状态栏后方。', {
+      component('HyperNavBar / HyperNavBarTypes', 'hyper_nav_bar.dart', '默认 44px 透明导航容器；type 提供五种固定布局，custom 保留完整插槽，页面正文可滚动到导航栏与状态栏后方。', {
         id: 'nav-bar',
         navName: 'HyperNavBar',
         propsDocs: [
           { name: 'title', description: '可选主内容 Widget 插槽，不限于文字；默认提供可覆盖的标题文字样式' },
           { name: 'subtitle', description: '可选副内容 Widget 插槽，不强制行数或溢出处理' },
           { name: 'type', description: '固定布局类型：custom、backOnly、titleOnly、backWithTitle、more、edit' },
+          { name: 'HyperNavBarTypes.custom / backOnly / titleOnly / backWithTitle / more / edit / values', description: '公开布局常量与全部合法值的集合；常量值与名称一致' },
           { name: 'leading', description: 'custom 类型的前导 Widget 插槽' },
           { name: 'trailing', description: 'custom 类型的尾部 Widget 插槽，与 actions 二选一' },
           { name: 'actions', description: '操作区组件列表，默认空数组' },
@@ -637,10 +689,10 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperProgress', 'hyper_navigation.dart', '线性、环形、确定或不定进度。', {
         propsDocs: [
-          { name: 'value', description: '进度值（0-1），为空时为不定进度' },
+          { name: 'value', description: '进度值 0–1；有限越界值收敛，null 或非有限值显示不定进度。线性进度平滑过渡，支持 RTL 和减少动画' },
           { name: 'type', description: '进度形态：linear / circular，默认 linear' },
           { name: 'size', description: '尺寸：small / default / large，默认 default' },
-          { name: 'showLabel', description: '是否显示百分比文字，默认 true' },
+          { name: 'showLabel', description: '是否显示百分比文字，默认 true；向下取整，避免四舍五入导致提前显示 100%' },
           { name: 'color', description: '进度颜色' },
           { name: 'backgroundColor', description: '轨道颜色' },
         ],

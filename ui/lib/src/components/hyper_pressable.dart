@@ -39,6 +39,13 @@ class _HyperPressableState extends State<HyperPressable> {
   }
 
   @override
+  void didUpdateWidget(HyperPressable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 业务可能在按住期间禁用按钮，及时恢复视觉状态。
+    if (!_interactive) _pressed = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final reduceMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;

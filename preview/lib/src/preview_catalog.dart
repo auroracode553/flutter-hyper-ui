@@ -11,6 +11,8 @@ import 'examples/component_composite_examples.dart'
     deferred as example_component_composite_examples;
 import 'examples/component_feedback_examples.dart'
     deferred as example_component_feedback_examples;
+import 'examples/component_update_dialog_example.dart'
+    deferred as example_component_update_dialog_example;
 import 'examples/component_foundation_examples.dart'
     deferred as example_component_foundation_examples;
 import 'examples/component_form_field_example.dart'
@@ -492,6 +494,30 @@ class PreviewCatalog {
       '局部与全局加载状态。',
       () => example_component_feedback_examples.loadLibrary(),
       (_) => example_component_feedback_examples.LoadingComponentExample(),
+    ),
+    _componentPreview(
+      'component-update-dialog',
+      'HyperUpdateDialog',
+      '检查更新、版本日志、下载、安装与失败重试。',
+      () => example_component_update_dialog_example.loadLibrary(),
+      (_) =>
+          example_component_update_dialog_example.UpdateDialogComponentExample(),
+    ),
+    _componentPreview(
+      'component-update-status',
+      'HyperUpdateStatus / HyperUpdateRelease',
+      '更新状态与版本信息模型。',
+      () => example_component_update_dialog_example.loadLibrary(),
+      (_) =>
+          example_component_update_dialog_example.UpdateDialogComponentExample(),
+    ),
+    _componentPreview(
+      'component-update-download-progress',
+      'HyperUpdateDownloadProgress',
+      '字节下载量、百分比、速度和未知总大小。',
+      () => example_component_update_dialog_example.loadLibrary(),
+      (_) =>
+          example_component_update_dialog_example.UpdateDialogComponentExample(),
     ),
     _componentPreview(
       'component-action-sheet',

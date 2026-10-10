@@ -12,10 +12,13 @@ Future<T?> showHyperModal<T>(
 }) async {
   final theme = HyperUiTheme.of(context);
   final barrier = scrim ?? theme.glass.scrim;
+  final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
   final route = RawDialogRoute<T>(
     barrierDismissible: false,
     barrierColor: const Color(0x00000000),
-    transitionDuration: const Duration(milliseconds: 220),
+    transitionDuration: reduceMotion
+        ? Duration.zero
+        : const Duration(milliseconds: 220),
     pageBuilder: (routeContext, animation, secondaryAnimation) => HyperUiTheme(
       data: theme,
       child: Stack(

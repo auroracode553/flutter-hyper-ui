@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../utils/hyper_progress_value.dart';
 
 /// Draws a Hyper progress arc without a platform visual control.
 class HyperSpinner extends StatefulWidget {
@@ -45,7 +46,7 @@ class _HyperSpinnerState extends State<HyperSpinner>
 
   void _syncAnimation() {
     final animate =
-        widget.value == null &&
+        normalizeHyperProgress(widget.value) == null &&
         !(MediaQuery.maybeOf(context)?.disableAnimations ?? false);
     if (animate && !_rotation.isAnimating) {
       _rotation.repeat();
@@ -64,12 +65,13 @@ class _HyperSpinnerState extends State<HyperSpinner>
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
+    final amount = normalizeHyperProgress(widget.value);
     return AnimatedBuilder(
       animation: _rotation,
       builder: (context, child) => CustomPaint(
         painter: _ArcPainter(
-          amount: widget.value?.clamp(0, 1).toDouble() ?? .72,
-          rotation: widget.value == null ? _rotation.value : 0,
+          amount: amount ?? .72,
+          rotation: amount == null ? _rotation.value : 0,
           strokeWidth: widget.strokeWidth,
           foreground: widget.color ?? tokens.primary,
           background: widget.backgroundColor ?? glass.controlTrack,
@@ -168,7 +170,7 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
 
   void _syncAnimation() {
     final animate =
-        widget.value == null &&
+        normalizeHyperProgress(widget.value) == null &&
         !(MediaQuery.maybeOf(context)?.disableAnimations ?? false);
     if (animate && !_motion.isAnimating) {
       _motion.repeat();
@@ -187,21 +189,22 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
+    final amount = normalizeHyperProgress(widget.value);
+    final reduceMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     return SizedBox(
       height: widget.height,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(widget.height / 2),
         child: LayoutBuilder(
-          builder: (context, constraints) => AnimatedBuilder(
-            animation: _motion,
-            builder: (context, child) {
-              final progress = widget.value?.clamp(0, 1).toDouble();
-              final trackWidth = constraints.maxWidth;
-              final segmentWidth = progress == null
+          builder: (context, constraints) {
+            final trackWidth = constraints.maxWidth;
+            Widget segments(double? value, double phase) {
+              final segmentWidth = value == null
                   ? trackWidth * .32
-                  : trackWidth * progress;
-              final segmentLeft = progress == null
-                  ? (trackWidth + segmentWidth) * _motion.value - segmentWidth
+                  : trackWidth * value;
+              final segmentStart = value == null
+                  ? (trackWidth + segmentWidth) * phase - segmentWidth
                   : 0.0;
               return Stack(
                 children: <Widget>[
@@ -209,8 +212,8 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
                     color: widget.backgroundColor ?? glass.controlTrack,
                     child: const SizedBox.expand(),
                   ),
-                  Positioned(
-                    left: segmentLeft,
+                  PositionedDirectional(
+                    start: segmentStart,
                     width: segmentWidth,
                     top: 0,
                     bottom: 0,
@@ -218,8 +221,26 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
                   ),
                 ],
               );
-            },
-          ),
+            }
+
+            if (amount == null) {
+              return AnimatedBuilder(
+                animation: _motion,
+                // 减少动画时保留可见的静止片段，避免未知进度看起来为空。
+                builder: (_, _) =>
+                    segments(null, reduceMotion ? .5 : _motion.value),
+              );
+            }
+            // 下载快照通常间隔数百毫秒到达，使用短过渡避免进度条跳变。
+            return TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: amount, end: amount),
+              duration: reduceMotion
+                  ? Duration.zero
+                  : const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              builder: (_, value, _) => segments(value, 0),
+            );
+          },
         ),
       ),
     );

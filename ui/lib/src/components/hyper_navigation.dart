@@ -10,6 +10,7 @@ import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_size.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../utils/hyper_progress_value.dart';
 import 'hyper_glass.dart';
 import 'hyper_layout.dart';
 import 'hyper_pressable.dart';
@@ -400,8 +401,8 @@ class HyperProgress extends StatelessWidget {
     if (type != 'linear' && type != 'circular') {
       throw ArgumentError.value(type, 'type', 'Invalid progress type');
     }
-    final amount = value?.clamp(0.0, 1.0).toDouble();
-    final label = amount == null ? null : '${(amount * 100).round()}%';
+    final amount = normalizeHyperProgress(value);
+    final label = amount == null ? null : '${hyperProgressPercentage(amount)}%';
     final glass = HyperGlassTheme.of(context);
     if (type == 'circular') {
       return SizedBox.square(
@@ -442,7 +443,10 @@ class HyperProgress extends StatelessWidget {
           ),
         ),
         if (showLabel && label != null)
-          Padding(padding: const EdgeInsets.only(left: 12), child: Text(label)),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 12),
+            child: Text(label),
+          ),
       ],
     );
   }
