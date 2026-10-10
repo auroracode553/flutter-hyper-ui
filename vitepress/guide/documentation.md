@@ -16,10 +16,12 @@ tools/       本地开发与构建编排脚本
 在 `vitepress/` 目录手动启动：
 
 ```powershell
-npm run dev:watch
+npm run dev
 ```
 
 该脚本启动 Flutter Web Debug 服务与 VitePress，默认使用 AMD 调试模块，监听 Dart 文件并请求 Flutter 热重启。这样可以避开 DDC 在 Dart 入口前加载整套模块的等待。Markdown、Vue 和 CSS 由 Vite HMR 更新。按 `Ctrl+C` 只停止本次启动的本地子进程。
+
+`npm run dev:docs` 仅启动 VitePress，适用于编辑文档文字或使用已有的完整 release 预览包；它不会启动 Flutter 服务。未提供静态预览包时，启动脚本地址可能返回 HTML，宿主会显示缺少预览资源的提示。
 
 如果需要 DDC 热重载，可在 Windows PowerShell 中先设置 `$env:HYPER_UI_PREVIEW_AMD='0'`，再运行脚本。还可以用 `HYPER_UI_FLUTTER_PORT` 和 `HYPER_UI_VITE_PORT` 覆盖本地端口。
 
@@ -71,4 +73,5 @@ DOM host  ←──────────── addView / first frame ──�
 | 端口被占用 | 关闭旧开发进程，再手动重新启动 watcher |
 | Dart 保存后没有变化 | 查看终端是否发出热重启；结构性修改仍可手动重启 |
 | 演示提示资源不完整 | 最终静态预览需重新执行 `npm run build:all` |
+| 预览提示未找到完整包，或旧页面提示启动脚本缺少宿主接口 | 交互开发应停止旧文档服务，再手动运行 `npm run dev`；仅启动 `dev:docs` 时需已有完整 release 预览包 |
 | Shader 无法写入 | 不要自行指定项目外输出目录，沿用已有构建脚本 |

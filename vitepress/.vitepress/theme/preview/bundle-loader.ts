@@ -107,8 +107,26 @@ export class PreviewBundleLoader {
     document.head.appendChild(link);
   }
 
-  private loadScript(url: string): Promise<void> {
-    if (window.hyperUiPreviewBundle) return Promise.resolve();
+  private async loadScript(url: string): Promise<void> {
+    if (window.hyperUiPreviewBundle) return;
+    // Vite 的 HTML 回退也会返回 200；先校验资源，避免把文档页当启动脚本。
+    let response: Response;
+    try {
+      response = await fetch(url);
+    } catch {
+      throw new PreviewFailure(this.unavailableMessage());
+    }
+    if (!response.ok) {
+      throw new PreviewFailure(this.unavailableMessage());
+    }
+    const contentType = response.headers.get('content-type')?.toLowerCase() ?? '';
+    const source = await response.text();
+    if (contentType.includes('text/html') || /^\s*(?:<!doctype\s+html|<html\b)/i.test(source)) {
+      throw new PreviewFailure(this.unavailableMessage());
+    }
+    if (source.includes('{{flutter_js}}') || source.includes('{{flutter_build_config}}')) {
+      throw new PreviewFailure('预览启动脚本仍是未编译的模板，请使用 Flutter 生成的完整预览包。');
+    }
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = url;
@@ -117,9 +135,15 @@ export class PreviewBundleLoader {
       ));
       script.onerror = () => {
         script.remove();
-        reject(new PreviewFailure(`无法读取预览启动脚本：${url}`));
+        reject(new PreviewFailure(this.unavailableMessage()));
       };
       document.head.appendChild(script);
     });
+  }
+
+  private unavailableMessage(): string {
+    return this.options.developmentServer
+      ? 'Flutter 预览服务暂不可用，请等待服务就绪后重试；若持续失败，请重新启动文档开发服务。'
+      : '未找到完整的 Flutter 预览包。交互开发请启动文档开发服务；静态预览请先生成完整预览构建。';
   }
 }

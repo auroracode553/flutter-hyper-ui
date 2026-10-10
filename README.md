@@ -95,7 +95,9 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 
 ## 本地开发与构建
 
-依赖由使用者自主准备。进入 `vitepress/` 后运行 `npm run dev:watch`，即可同时启动 Flutter Debug 服务与 VitePress；保存 Dart 文件会自动热重启，不生成或复制 release 产物。需要保留 DDC 热重载时，可在 Windows PowerShell 中设置 `$env:HYPER_UI_PREVIEW_AMD='0'` 后再运行。
+依赖由使用者自主准备。进入 `vitepress/` 后手动运行 `npm run dev`，即可同时启动 Flutter Debug 服务与 VitePress。保存 Dart 文件会自动热重启，不生成或复制 release 产物。需要保留 DDC 热重载时，可在 Windows PowerShell 中设置 `$env:HYPER_UI_PREVIEW_AMD='0'` 后再运行。
+
+仅编辑文档文字时可手动运行 `npm run dev:docs`，该命令只启动 VitePress，交互预览依赖已有的 `vitepress/public/preview/` 完整 release 包。缺少预览包时，Vite 可能将启动脚本请求回退为 HTML；宿主会识别该情况并提示缺少预览资源，不再误报接口缺失。
 
 最终验收时运行 `npm run build:all`。脚本自动构建 Flutter release、同步到 `vitepress/public/preview` 并构建 VitePress，不执行部署。
 
