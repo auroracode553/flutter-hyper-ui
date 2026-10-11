@@ -22,7 +22,7 @@ class _CarouselComponentExampleState extends State<CarouselComponentExample> {
       children: <Widget>[
         HyperCarousel(
           height: 150,
-          onPageChanged: (page) => setState(() => _page = page),
+          onChanged: (page) => setState(() => _page = page),
           items: <Widget>[
             _CarouselPanel(
               title: '柔性玻璃',
@@ -101,12 +101,12 @@ class _PageIndicatorComponentExampleState
         const SizedBox(height: HyperUiSpacing.xs),
         HyperPageIndicator(
           count: 5,
-          index: _index,
-          onSelected: (index) => setState(() => _index = index),
+          selectedIndex: _index,
+          onChanged: (index) => setState(() => _index = index),
         ),
         const SizedBox(height: HyperUiSpacing.sm),
         const HyperText('只读指示器', size: 'small'),
-        const HyperPageIndicator(count: 3, index: 1),
+        const HyperPageIndicator(count: 3, selectedIndex: 1),
       ],
     );
   }

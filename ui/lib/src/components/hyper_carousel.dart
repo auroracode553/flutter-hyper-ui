@@ -11,14 +11,14 @@ class HyperPageIndicator extends StatelessWidget {
   const HyperPageIndicator({
     super.key,
     required this.count,
-    required this.index,
-    this.onSelected,
+    required this.selectedIndex,
+    this.onChanged,
   }) : assert(count > 0),
-       assert(index >= 0 && index < count);
+       assert(selectedIndex >= 0 && selectedIndex < count);
 
   final int count;
-  final int index;
-  final ValueChanged<int>? onSelected;
+  final int selectedIndex;
+  final ValueChanged<int>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class HyperPageIndicator extends StatelessWidget {
       children: <Widget>[
         for (var page = 0; page < count; page++)
           HyperPressable(
-            onPressed: onSelected == null ? null : () => onSelected!(page),
+            onPressed: onChanged == null ? null : () => onChanged!(page),
             child: SizedBox(
               width: 24,
               height: 24,
@@ -39,10 +39,10 @@ class HyperPageIndicator extends StatelessWidget {
                       MediaQuery.maybeOf(context)?.disableAnimations == true
                       ? Duration.zero
                       : const Duration(milliseconds: 180),
-                  width: page == index ? 18 : 7,
+                  width: page == selectedIndex ? 18 : 7,
                   height: 7,
                   decoration: BoxDecoration(
-                    color: page == index ? tokens.primary : glass.controlTrack,
+                    color: page == selectedIndex ? tokens.primary : glass.controlTrack,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -54,14 +54,14 @@ class HyperPageIndicator extends StatelessWidget {
   }
 }
 
-/// 紧凑轮播；页面状态由组件维护，切换通过 [onPageChanged] 通知业务层。
+/// 紧凑轮播；页面状态由组件维护，切换通过 [onChanged] 通知业务层。
 class HyperCarousel extends StatefulWidget {
   const HyperCarousel({
     super.key,
     required this.items,
     this.height = 180,
     this.initialIndex = 0,
-    this.onPageChanged,
+    this.onChanged,
     this.showIndicator = true,
     this.autoPlayInterval,
   }) : assert(items.length > 0),
@@ -75,7 +75,7 @@ class HyperCarousel extends StatefulWidget {
   final List<Widget> items;
   final double height;
   final int initialIndex;
-  final ValueChanged<int>? onPageChanged;
+  final ValueChanged<int>? onChanged;
   final bool showIndicator;
   final Duration? autoPlayInterval;
 
@@ -156,7 +156,7 @@ class _HyperCarouselState extends State<HyperCarousel> {
                 itemCount: widget.items.length,
                 onPageChanged: (index) {
                   setState(() => _index = index);
-                  widget.onPageChanged?.call(index);
+                  widget.onChanged?.call(index);
                 },
                 itemBuilder: (context, index) => widget.items[index],
               ),
@@ -167,8 +167,8 @@ class _HyperCarouselState extends State<HyperCarousel> {
           const SizedBox(height: 6),
           HyperPageIndicator(
             count: widget.items.length,
-            index: _index,
-            onSelected: (index) {
+            selectedIndex: _index,
+            onChanged: (index) {
               if (MediaQuery.maybeOf(context)?.disableAnimations == true) {
                 _controller.jumpToPage(index);
               } else {

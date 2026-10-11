@@ -434,7 +434,7 @@ class _PopupMenuComponentExampleState extends State<PopupMenuComponentExample> {
   Widget build(BuildContext context) => Row(
     children: [
       HyperPopupMenu<String>(
-        onSelected: (value) => setState(() => _selected = value),
+        onChanged: (value) => setState(() => _selected = value),
         actions: const [
           HyperAction(value: '编辑', label: '编辑', icon: LucideIcons.pencil),
           HyperAction(value: '复制', label: '复制', icon: LucideIcons.copy),

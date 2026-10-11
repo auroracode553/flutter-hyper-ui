@@ -362,7 +362,7 @@ class _UploadAddTile extends StatelessWidget {
         radius: 16,
         type: 'subtle',
         borderColor: tokens.input,
-        onTap: onTap,
+        onPressed: onTap,
         child: Center(
           child: picking
               ? const HyperSpinner(strokeWidth: 2)

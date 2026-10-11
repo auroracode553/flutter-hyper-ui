@@ -160,7 +160,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'icon', description: '前置图标' },
           { name: 'subtle', description: '状态徽标是否使用弱化样式，默认 true' },
           { name: 'selected', description: 'tag 类型的选中态' },
-          { name: 'onTap / onClose', description: 'tag 类型的点击与移除回调' },
+          { name: 'onPressed / onClose', description: 'tag 类型的点击与移除回调' },
           { name: 'child / count / max / dot / showZero', description: 'count 类型的角标内容与显示规则' },
         ],
         preview: demo('component-badge', 'HyperBadge 徽标', 'component_foundation_examples.dart', 700, '状态、数字角标、可选择与可移除标签。', 'BadgeComponentExample'),
@@ -595,7 +595,7 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperPopupMenu', 'hyper_popover.dart', '基于 HyperAction 的泛型弹出菜单，沿触发器一侧展开与收起。', {
         propsDocs: [
           { name: 'actions', description: '菜单项列表' },
-          { name: 'onSelected', description: '选中回调' },
+          { name: 'onChanged', description: '选中回调' },
           { name: 'icon', description: '触发图标，默认 LucideIcons.ellipsis' },
           { name: 'tooltip', description: '长按提示文字，默认 更多操作' },
         ],
@@ -604,7 +604,7 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperNoticeBar', 'hyper_notice_bar.dart', '短公告静止、长公告滚动的可关闭通知条。', {
         propsDocs: [
           { name: 'message', description: '公告内容' },
-          { name: 'onTap', description: '点击回调' },
+          { name: 'onPressed', description: '点击回调' },
           { name: 'onClose', description: '关闭回调' },
           { name: 'speed', description: '滚动速度，默认 28' },
         ],
@@ -650,7 +650,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'type', description: "'multiple' 多项导航（默认）或 'single' 独立圆形入口" },
           { name: 'items', description: '多项模式至少 2 项；单项模式恰好 1 项，仅显示图标' },
           { name: 'selectedIndex', description: '当前选中索引；单项模式固定为 0' },
-          { name: 'onSelected', description: '点击回调；单项模式传入索引 0' },
+          { name: 'onChanged', description: '点击回调；单项模式传入索引 0' },
           { name: 'badgeCount', description: '单项模式的数量角标，默认 0 不显示，超过 99 显示 99+' },
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
@@ -675,7 +675,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'items', description: '轮播页面，至少一个' },
           { name: 'height', description: '页面高度，默认 180' },
           { name: 'initialIndex', description: '初始页索引，默认 0' },
-          { name: 'onPageChanged', description: '页面变化回调' },
+          { name: 'onChanged', description: '页面变化回调' },
           { name: 'showIndicator', description: '是否显示页码指示器，默认 true' },
           { name: 'autoPlayInterval', description: '自动播放间隔，需大于 350 毫秒；为空时不自动播放' },
         ],
@@ -684,8 +684,8 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperPageIndicator', 'hyper_carousel.dart', '可独立使用的受控页码指示器。', {
         propsDocs: [
           { name: 'count', description: '总页数，必须大于 0' },
-          { name: 'index', description: '当前页索引，从 0 开始' },
-          { name: 'onSelected', description: '点击页码回调；为空时只读' },
+          { name: 'selectedIndex', description: '当前页索引，从 0 开始' },
+          { name: 'onChanged', description: '点击页码回调；为空时只读' },
         ],
         preview: demo('component-page-indicator', 'HyperPageIndicator 页码指示', 'component_carousel_example.dart', 200, '可点击与只读状态。', 'PageIndicatorComponentExample'),
       }),

@@ -21,7 +21,7 @@ class HyperGlass extends StatelessWidget {
     this.borderColor,
     this.shadows,
     this.color,
-    this.onTap,
+    this.onPressed,
     this.clipBehavior = Clip.antiAlias,
   }) : assert(
          type == 'subtle' ||
@@ -38,7 +38,7 @@ class HyperGlass extends StatelessWidget {
   final Color? color;
   final Color? borderColor;
   final List<BoxShadow>? shadows;
-  final VoidCallback? onTap;
+  final VoidCallback? onPressed;
   final Clip clipBehavior;
 
   @override
@@ -89,9 +89,9 @@ class HyperGlass extends StatelessWidget {
       child: surface,
     );
 
-    if (onTap != null) {
+    if (onPressed != null) {
       result = HyperPressable(
-        onPressed: onTap,
+        onPressed: onPressed,
         borderRadius: shape,
         child: result,
       );

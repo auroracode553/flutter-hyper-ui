@@ -140,7 +140,7 @@ class _OverlayExampleState extends State<OverlayExample> {
                 HyperAction(value: '编辑', label: '编辑'),
                 HyperAction(value: '分享', label: '分享'),
               ],
-              onSelected: (value) => HyperToast.show(context, value),
+              onChanged: (value) => HyperToast.show(context, value),
             ),
           ],
         ),

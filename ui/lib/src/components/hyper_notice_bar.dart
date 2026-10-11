@@ -12,12 +12,12 @@ class HyperNoticeBar extends StatefulWidget {
   const HyperNoticeBar({
     super.key,
     required this.message,
-    this.onTap,
+    this.onPressed,
     this.onClose,
     this.speed = 28,
   }) : assert(speed > 0);
   final String message;
-  final VoidCallback? onTap, onClose;
+  final VoidCallback? onPressed, onClose;
   final double speed;
   @override
   State<HyperNoticeBar> createState() => _HyperNoticeBarState();
@@ -96,7 +96,7 @@ class _HyperNoticeBarState extends State<HyperNoticeBar>
                 });
                 if (reduce) return Text(widget.message, style: style);
                 return GestureDetector(
-                  onTap: widget.onTap,
+                  onTap: widget.onPressed,
                   onTapDown: (_) {
                     _paused = true;
                     _controller.stop();

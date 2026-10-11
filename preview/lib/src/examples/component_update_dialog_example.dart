@@ -127,7 +127,7 @@ class _UpdateDialogComponentExampleState
                 type: 'tag',
                 label: _label(status),
                 selected: _controller.status == status,
-                onTap: () => _controller.preview(status),
+                onPressed: () => _controller.preview(status),
               ),
           ],
         ),

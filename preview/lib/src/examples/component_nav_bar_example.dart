@@ -76,7 +76,7 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
                             ? _NavBarControls(
                                 selected: _selected,
                                 feedback: _feedback,
-                                onSelected: (value) => setState(() {
+                                onChanged: (value) => setState(() {
                                   _selected = value;
                                   _feedback = '已切换为「${value.label}」';
                                 }),
@@ -124,12 +124,12 @@ class _NavBarControls extends StatelessWidget {
   const _NavBarControls({
     required this.selected,
     required this.feedback,
-    required this.onSelected,
+    required this.onChanged,
   });
 
   final _NavBarExample selected;
   final String feedback;
-  final ValueChanged<_NavBarExample> onSelected;
+  final ValueChanged<_NavBarExample> onChanged;
 
   @override
   Widget build(BuildContext context) => HyperCard(
@@ -147,7 +147,7 @@ class _NavBarControls extends StatelessWidget {
                   type: value == selected ? null : null,
                   size: 'small',
                   label: value.label,
-                  onPressed: () => onSelected(value),
+                  onPressed: () => onChanged(value),
                 ),
               )
               .toList(),

@@ -62,7 +62,7 @@ class HyperCard extends StatelessWidget {
     );
 
     return HyperGlass(
-      onTap: onPressed,
+      onPressed: onPressed,
       color: selected ? HyperGlassTheme.of(context).surfaceStrong : null,
       borderColor: selected ? tokens.primary : null,
       child: content,

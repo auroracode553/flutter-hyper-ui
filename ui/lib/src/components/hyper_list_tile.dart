@@ -153,7 +153,7 @@ class HyperListTile extends StatelessWidget {
       radius: 18,
       type: 'regular',
       padding: const EdgeInsets.all(3),
-      onTap: enabled ? onPressed : null,
+      onPressed: enabled ? onPressed : null,
       color: selected ? glass.surfaceStrong : null,
       borderColor: selected ? tokens.primary.withAlpha(90) : null,
       child: row,

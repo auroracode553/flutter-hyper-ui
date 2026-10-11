@@ -21,7 +21,7 @@ class HyperBadge extends StatelessWidget {
     this.icon,
     this.subtle = true,
     this.selected = false,
-    this.onTap,
+    this.onPressed,
     this.onClose,
     this.child,
     this.count = 0,
@@ -32,7 +32,7 @@ class HyperBadge extends StatelessWidget {
        assert(type == 'count' ? child != null : label != null),
        assert(type != 'count' || label == null),
        assert(type == 'count' || child == null),
-       assert(type == 'tag' || (onTap == null && onClose == null && !selected)),
+       assert(type == 'tag' || (onPressed == null && onClose == null && !selected)),
        assert(max > 0);
 
   final String type;
@@ -42,7 +42,7 @@ class HyperBadge extends StatelessWidget {
   final IconData? icon;
   final bool subtle;
   final bool selected;
-  final VoidCallback? onTap;
+  final VoidCallback? onPressed;
   final VoidCallback? onClose;
   final Widget? child;
   final int count;
@@ -63,7 +63,7 @@ class HyperBadge extends StatelessWidget {
     if (type != 'count' && child != null) {
       throw ArgumentError('HyperBadge.child only applies to count.');
     }
-    if (type != 'tag' && (onTap != null || onClose != null || selected)) {
+    if (type != 'tag' && (onPressed != null || onClose != null || selected)) {
       throw ArgumentError('HyperBadge interactions only apply to tag.');
     }
     if (type == 'count') return _buildCount(context);
@@ -133,7 +133,7 @@ class HyperBadge extends StatelessWidget {
       ),
     );
     if (!isTag) return pill;
-    return HyperPressable(onPressed: onTap, borderRadius: radius, child: pill);
+    return HyperPressable(onPressed: onPressed, borderRadius: radius, child: pill);
   }
 
   Widget _buildCount(BuildContext context) {

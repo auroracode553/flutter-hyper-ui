@@ -102,12 +102,6 @@ return HyperUiTheme(data: custom, child: const ProfilePanel());
 
 `copyWith(material: ...)` 会生成该档位对应的表面令牌。若同次调用也传入 `glass`，以传入的完整令牌为准。
 
-## 从旧 API 迁移
+## 内容容器
 
-| 旧写法 | 新写法 |
-| --- | --- |
-| `HyperGlass(...)` | 用 `HyperCard`、`HyperMenuGroup` 等语义组件承载内容；材质由主题设置 |
-| `HyperGlass(type: 'solid', ...)` | 在应用或局部主题设置 `HyperMaterial.solid` |
-| `HyperGlass(blur: ...)` | 选择 `solid / soft / clear`，或精细覆盖 `glass.blur` 与 `glass.blurStrong` |
-
-`HyperGlass` 不再从包入口导出，也不再作为独立组件登记。`HyperGlassTheme` 仍可用于精细主题配置。
+使用 `HyperCard`、`HyperMenuGroup` 等组件承载内容，表面材质由所在子树的 `HyperUiTheme` 配置。组件从主题读取表面、边缘、阴影与模糊令牌；精细配置通过 `HyperGlassTheme.copyWith` 提供。

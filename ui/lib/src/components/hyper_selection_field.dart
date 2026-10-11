@@ -21,7 +21,7 @@ Widget buildHySelectionField(
     radius: 16,
     type: 'subtle',
     borderColor: tokens.input,
-    onTap: onTap,
+    onPressed: onTap,
     child: ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 48),
       child: Padding(

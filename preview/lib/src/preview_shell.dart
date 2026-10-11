@@ -155,7 +155,7 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
                     type: 'tag',
                     label: item.title,
                     selected: item.id == selected.id,
-                    onTap: () => setState(() => _selectedId = item.id),
+                    onPressed: () => setState(() => _selectedId = item.id),
                   );
                 },
               ),

@@ -34,13 +34,13 @@ class HyperPopupMenu<T> extends StatelessWidget {
   const HyperPopupMenu({
     super.key,
     required this.actions,
-    required this.onSelected,
+    required this.onChanged,
     this.icon = LucideIcons.ellipsis,
     this.tooltip = '更多操作',
   });
 
   final List<HyperAction<T>> actions;
-  final ValueChanged<T> onSelected;
+  final ValueChanged<T> onChanged;
   final IconData icon;
   final String tooltip;
 
@@ -78,7 +78,7 @@ class HyperPopupMenu<T> extends StatelessWidget {
               showChevron: false,
               onPressed: () {
                 hyperMenuOf(menuContext)?.close();
-                onSelected(action.value);
+                onChanged(action.value);
               },
             ),
         ],

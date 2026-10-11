@@ -22,7 +22,7 @@ Compose 与 Flutter 对应组件使用相同的业务参数名称和默认语义
 
 业务参数和回调保持同名。框架布局与宿主参数使用原生类型：Compose 的 Modifier、Composable、Dp、Float，与 Flutter 的 key、Widget、double、Duration；Flutter 的 controller 和 Navigator 弹层宿主、Compose 的受控 visible/open 与内容 DSL 按框架保留。组件特有参数以源码签名和完整参数表为准。
 
-旧名称直接删除，调用点、预览和文档同步迁移，不增加旧 API 别名。默认按钮省略 type 和 colorStyle，显示白色描边；显式 type 仅 filled、tonal、icon，colorStyle 为 primary、success、info、warning、danger。
+默认按钮省略 type 和 colorStyle，显示白色描边；显式 type 仅 filled、tonal、icon，colorStyle 为 primary、success、info、warning、danger。
 
 ## 设计系统
 
@@ -38,14 +38,14 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 - 导航：`HyperTabBar`、`HyperTabs`、`HyperNavBar`（type 支持 custom、backOnly、titleOnly、backWithTitle、more、edit）、`HyperDrawer`、`HyperActionSheet`。
 - 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperSegmentedControl`。
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
-- 数据与菜单：`HyperBadge`（含 `.tag` / `.count`）、`HyperProgress`、`HyperListTile`、`HyperMenuGroup`、`HyperCard`。
+- 数据与菜单：`HyperBadge`（type 为 status/tag/count）、`HyperProgress`、`HyperListTile`、`HyperMenuGroup`、`HyperCard`。
 - 反馈：`HyperToast`、`HyperDialog`、`HyperLoading`、`HyperSkeleton`。
 
 所有组件均为受控或回调驱动，不读取业务状态、不内置路由名称、不依赖第三方状态管理方案。
 
 ## 与 Compose 的样式同步
 
-按钮配色与显示形态独立：`type` 仅支持 `filled`、`tonal`、`icon`，省略时默认白色描边；`colorStyle` 支持 `primary`、`success`、`info`、`warning`、`danger`，自定义 `color` 优先于预设配色。按钮预览保留单个禁用文字示例，移除重复的禁用配色组。
+按钮配色与显示形态独立：`type` 仅支持 `filled`、`tonal`、`icon`，省略时默认白色描边；`colorStyle` 支持 `primary`、`success`、`info`、`warning`、`danger`，自定义 `color` 优先于预设配色。按钮预览展示尺寸、配色、图标、加载、禁用和通栏形态。
 
 本项目与 `D:/my_project/Android-project/hyper-ui` 维护相同的默认视觉规则。按钮默认描边，省略 `type` 即可；显式类型仅有 `filled`、`tonal`、`icon`，主操作显式使用 `type = "filled"` 和 `colorStyle = "primary"`。
 
@@ -136,7 +136,7 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 
 产物应包含 `version.json`、`flutter_bootstrap.js`、`main.dart.js`、`assets/` 和 `canvaskit/`。不要把 `preview/web/` 源码直接复制成构建产物，其中 Flutter 模板尚未展开。
 
-部署到子路径时，Flutter 的 `--base-href` 应对应 `<文档路径>/preview/`，文档 `VITEPRESS_BASE` 应对应 `<文档路径>/`。静态资源由同一站点提供，不再使用 `VITE_PREVIEW_BASE` 或 `FLUTTER_PREVIEW_TARGET`。
+部署到子路径时，Flutter 的 `--base-href` 应对应 `<文档路径>/preview/`，文档 `VITEPRESS_BASE` 应对应 `<文档路径>/`。静态资源由同一站点提供。
 
 开发模式下，修改 Dart 由 watcher 触发 Flutter 热重启（或通过环境变量切换为 DDC 热重载），修改 Markdown/Vue/CSS 由 Vite HMR 更新。release 静态包仅在执行 `npm run build:all` 时生成。
 
