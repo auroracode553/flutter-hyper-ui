@@ -55,7 +55,10 @@ class _UpdateDialogComponentExampleState
     onDownload: _controller.download,
     onInstall: _controller.install,
     onRetry: _controller.retry,
-    onCancel: _controller.cancel,
+    onCancel: () {
+      _controller.cancel();
+      if (_controller.status == HyperUpdateStatus.idle) onClose?.call();
+    },
     onLater: onClose,
     onClose: onClose,
   );

@@ -516,7 +516,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'onCancel', description: '非必要更新时 checking / downloading 的取消回调；为空时隐藏取消入口' },
           { name: 'onLater', description: '非必要更新时 available / readyToInstall 的稍后回调；为空时隐藏入口' },
           { name: 'onClose', description: '关闭按钮、error 关闭与 completed 主按钮回调；关闭视图与取消下载分开处理，业务通过 Navigator.pop 关闭路由' },
-          { name: 'maxWidth', description: '对话框最大宽度，默认 420；窄屏跟随父级约束，正文滚动、底部操作区固定' },
+          { name: 'maxWidth', description: '面板最大宽度，默认 420；show 在系统安全区内保留两侧各 20 外间距，内嵌面板跟随父级；圆角 28、内容边距 24，正文滚动、底部操作区固定' },
           { name: 'show(context, builder)', description: '打开带安全区域的更新弹层；两个参数必填。builder 可返回状态组件，背景点击不关闭；返回 Future<T?>' },
         ],
         preview: demo('component-update-dialog', 'HyperUpdateDialog 更新流程', 'component_update_dialog_example.dart', 1100, '字节进度、未知总量、关闭后继续下载、重试和强制更新。', 'UpdateDialogComponentExample'),
