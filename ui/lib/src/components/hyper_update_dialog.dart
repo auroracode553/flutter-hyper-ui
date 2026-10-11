@@ -139,7 +139,7 @@ class HyperUpdateDialog extends StatelessWidget {
     HyperUpdateStatus.readyToInstall => '更新已准备就绪',
     HyperUpdateStatus.installing => '正在安装更新',
     HyperUpdateStatus.completed => '更新完成',
-    HyperUpdateStatus.error => '更新遇到了一点问题',
+    HyperUpdateStatus.error => '',
   };
 
   String get _message => switch (status) {
@@ -183,7 +183,9 @@ class HyperUpdateDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (status == HyperUpdateStatus.idle) return const SizedBox.shrink();
     final tokens = context.hyperUi;
+    final isError = status == HyperUpdateStatus.error;
     final color = _tone.color(tokens);
     final (actionLabel, action, actionIcon) = _primary;
     final (alternativeLabel, alternative) = _secondary;
@@ -227,7 +229,7 @@ class HyperUpdateDialog extends StatelessWidget {
                           ),
                           if (!_locked && onClose != null)
                             HyperButton(
-                              type: 'ghost',
+                              type: 'icon',
                               size: 'small',
                               icon: LucideIcons.x,
                               tooltip: '关闭',
@@ -236,25 +238,28 @@ class HyperUpdateDialog extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: HyperUiSpacing.lg),
-                      Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: _UpdateEmblem(
-                          icon: _icon,
-                          color: color,
-                          busy: _busy,
+                      // 错误状态只展示具体原因，不重复状态图标、标题和版本信息。
+                      if (!isError) ...<Widget>[
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: _UpdateEmblem(
+                            icon: _icon,
+                            color: color,
+                            busy: _busy,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: HyperUiSpacing.lg),
-                      Text(
-                        title ?? _title,
-                        style: TextStyle(
-                          color: tokens.foreground,
-                          fontSize: 24,
-                          height: 1.2,
-                          fontWeight: FontWeight.w600,
+                        const SizedBox(height: HyperUiSpacing.lg),
+                        Text(
+                          title ?? _title,
+                          style: TextStyle(
+                            color: tokens.foreground,
+                            fontSize: 24,
+                            height: 1.2,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: HyperUiSpacing.xs),
+                        const SizedBox(height: HyperUiSpacing.xs),
+                      ],
                       Text(
                         message ?? _message,
                         style: TextStyle(
@@ -265,7 +270,9 @@ class HyperUpdateDialog extends StatelessWidget {
                           height: 1.55,
                         ),
                       ),
-                      if (currentVersion != null || _showRelease) ...<Widget>[
+                      if (!isError &&
+                          status != HyperUpdateStatus.checking &&
+                          (currentVersion != null || _showRelease)) ...<Widget>[
                         const SizedBox(height: HyperUiSpacing.lg),
                         _UpdateVersionInfo(
                           currentVersion: currentVersion,
@@ -320,19 +327,22 @@ class HyperUpdateDialog extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      const HyperDivider(),
-                      const SizedBox(height: HyperUiSpacing.lg),
+                      if (!isError) ...<Widget>[
+                        const HyperDivider(),
+                        const SizedBox(height: HyperUiSpacing.lg),
+                      ],
                       if (!_busy)
                         HyperButton(
                           label: primaryLabel ?? actionLabel,
                           icon: actionIcon,
                           expanded: true,
                           onPressed: action,
+                          colorStyle: 'primary',
+                          type: 'filled',
                         ),
                       if (alternative != null) ...<Widget>[
                         if (!_busy) const SizedBox(height: HyperUiSpacing.xs),
                         HyperButton(
-                          type: 'ghost',
                           label: secondaryLabel ?? alternativeLabel,
                           expanded: true,
                           onPressed: alternative,

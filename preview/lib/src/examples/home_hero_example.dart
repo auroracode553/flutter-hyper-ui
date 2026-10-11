@@ -75,6 +75,8 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
           HyperButton(
             label: '开始使用',
             onPressed: () => HyperToast.show(context, '开始使用 Hyper UI'),
+            colorStyle: 'primary',
+            type: 'filled',
           ),
 
           // 把底部导航顶到屏幕底部、home indicator 上方

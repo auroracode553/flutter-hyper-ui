@@ -40,7 +40,8 @@ class _MaterialThemeExampleState extends State<MaterialThemeExample> {
                 children: [
                   for (final material in HyperMaterial.values)
                     HyperButton(
-                      type: material == _material ? 'filled' : 'tonal',
+                      colorStyle: material == _material ? 'primary' : null,
+                      type: 'filled',
                       label: material.name,
                       onPressed: () => setState(() => _material = material),
                     ),
@@ -54,7 +55,12 @@ class _MaterialThemeExampleState extends State<MaterialThemeExample> {
                   spacing: 12,
                   children: [
                     const HyperTextField(hintText: '输入内容'),
-                    HyperButton(label: '主要操作', onPressed: () {}),
+                    HyperButton(
+                      label: '主要操作',
+                      onPressed: () {},
+                      colorStyle: 'primary',
+                      type: 'filled',
+                    ),
                   ],
                 ),
               ),

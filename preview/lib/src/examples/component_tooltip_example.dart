@@ -17,7 +17,7 @@ class TooltipComponentExample extends StatelessWidget {
         HyperTooltip(
           message: '更改后会同步到所有设备。',
           child: HyperButton(
-            type: 'tonal',
+            type: 'icon',
             icon: LucideIcons.info,
             onPressed: () {},
           ),

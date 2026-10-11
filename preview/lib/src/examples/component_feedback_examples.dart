@@ -132,6 +132,8 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
         label: '应用筛选',
         expanded: true,
         onPressed: () => Navigator.pop(footerContext),
+        colorStyle: 'primary',
+        type: 'filled',
       ),
     );
   }
@@ -148,7 +150,12 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('右侧抽屉与返回值'),
-        HyperButton(label: '打开抽屉', onPressed: _openEnd),
+        HyperButton(
+          label: '打开抽屉',
+          onPressed: _openEnd,
+          colorStyle: 'primary',
+          type: 'filled',
+        ),
         const SizedBox(height: HyperUiSpacing.sm),
         HyperText('返回结果：$_result', size: 'small'),
         const SizedBox(height: HyperUiSpacing.lg),
@@ -212,6 +219,8 @@ class DialogComponentExample extends StatelessWidget {
             message: '保存后，新的设置会立即在所有设备生效。',
             confirmLabel: '保存',
           ),
+          colorStyle: 'primary',
+          type: 'filled',
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
@@ -384,6 +393,8 @@ class ActionSheetComponentExample extends StatelessWidget {
                   label: '同意并继续',
                   expanded: true,
                   onPressed: () => Navigator.pop(sheetContext),
+                  type: 'filled',
+                  colorStyle: 'primary',
                 ),
               ],
             ),
@@ -462,7 +473,6 @@ class _NoticeBarComponentExampleState extends State<NoticeBarComponentExample> {
   Widget build(BuildContext context) {
     if (!_visible) {
       return HyperButton(
-        type: 'ghost',
         label: '重新显示公告',
         onPressed: () => setState(() => _visible = true),
       );

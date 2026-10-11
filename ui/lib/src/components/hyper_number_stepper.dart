@@ -41,7 +41,7 @@ class HyperNumberStepper extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           HyperButton(
-            type: 'tonal',
+            type: 'icon',
             icon: LucideIcons.minus,
             size: 'small',
             color: canDecrease ? tokens.foreground : tokens.mutedForeground,
@@ -69,7 +69,7 @@ class HyperNumberStepper extends StatelessWidget {
             ),
           ),
           HyperButton(
-            type: 'tonal',
+            type: 'icon',
             icon: LucideIcons.plus,
             size: 'small',
             color: canIncrease ? tokens.foreground : tokens.mutedForeground,

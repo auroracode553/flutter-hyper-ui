@@ -37,7 +37,7 @@ HyperUiTheme.app(home: const AppHome());
 | 场景 | 现在的写法 |
 | --- | --- |
 | 默认按钮 | `HyperButton(label: '保存', onPressed: save)` |
-| 其他按钮外观 | `HyperButton(type: 'tonal', ...)`、`type: 'outline'`、`type: 'ghost'`、`type: 'danger'` |
+| 按钮外观 | 省略 type 为默认描边；type 控制 filled/tonal/icon；colorStyle 控制 primary/success/info/warning/danger，color 自定义颜色优先 |
 | 密码或多行输入 | `HyperTextField(type: 'password', ...)`、`HyperTextField(type: 'textarea', rows: 3, ...)` |
 | 表面材质 | `HyperUiTheme.app(material: HyperMaterial.soft, home: content)` |
 | 图片来源 | `HyperImage(type: 'network', source: url)`、`HyperImage(type: 'asset', source: path)` |

@@ -5,12 +5,10 @@ description: 玻璃表面、即时按压反馈、按钮与卡片
 
 <ComponentReference group-id="actions" />
 
-## 选择动作层级
+## 显示类型与配色
 
-| 变体 | 使用场景 |
+| 参数 | 可选值与作用 |
 | --- | --- |
-| `filled` | 页面当前最重要的提交或继续操作 |
-| `tonal` | 重要但不主导页面的动作 |
-| `outline` | 与主操作并列的次级操作 |
-| `ghost` | 工具栏或紧凑区域中的低强调动作 |
-| `danger` | 删除、退出等不可逆或高风险动作 |
+| type | 省略为默认白色描边；filled 填充、tonal 柔色、icon 圆形图标 |
+| colorStyle | primary、success、info、warning、danger 语义配色；省略为白色中性样式 |
+| color | 自定义基色，优先于 colorStyle；根据 type 应用于背景、文字和轮廓 |

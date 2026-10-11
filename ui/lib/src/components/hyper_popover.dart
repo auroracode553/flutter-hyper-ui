@@ -50,7 +50,7 @@ class HyperPopupMenu<T> extends StatelessWidget {
     maxHeight: MediaQuery.sizeOf(context).height * .4,
     padding: const EdgeInsets.all(5),
     triggerBuilder: (_, controller) => HyperButton(
-      type: 'tonal',
+      type: 'icon',
       icon: icon,
       tooltip: tooltip,
       onPressed: () =>

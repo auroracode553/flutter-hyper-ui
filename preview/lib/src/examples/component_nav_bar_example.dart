@@ -102,7 +102,7 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
           onSavePressed: () => setState(() => _feedback = '已点击保存'),
           leading: _selected == _NavBarExample.custom
               ? HyperButton(
-                  type: 'ghost',
+                  type: 'icon',
                   icon: HyperIcons.back,
                   tooltip: '返回',
                   onPressed: () => setState(() => _feedback = '已请求返回上一页'),
@@ -110,7 +110,6 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
               : null,
           trailing: _selected == _NavBarExample.custom
               ? HyperButton(
-                  type: 'ghost',
                   label: '分享',
                   onPressed: () => setState(() => _feedback = '已点击分享'),
                 )
@@ -145,7 +144,7 @@ class _NavBarControls extends StatelessWidget {
           children: _NavBarExample.values
               .map(
                 (value) => HyperButton(
-                  type: value == selected ? 'tonal' : 'ghost',
+                  type: value == selected ? null : null,
                   size: 'small',
                   label: value.label,
                   onPressed: () => onSelected(value),

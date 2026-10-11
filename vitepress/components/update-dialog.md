@@ -7,9 +7,11 @@ description: 检查更新、版本日志、下载与安装的柔光对话框
 
 ### 状态与交互
 
+与 Compose HyperUI 保持相同默认布局：标识块 40、图标 20、加载环 30；checking 隐藏版本，其他状态的版本信息直接排版，不嵌套卡片。error 仅保留页头、错误原因、重试和关闭，不显示状态图标、大标题、版本区域或操作区分隔线。次操作省略 type，使用默认描边按钮；主操作显式使用 filled 与 colorStyle = primary。
+
 | 状态 | 用途 | 主操作 | 可选次操作 |
 | --- | --- | --- | --- |
-| idle | 等待用户检查更新 | 检查更新 → onCheck | 关闭 → onClose |
+| idle | 隐藏组件，业务从外部入口开始检查 | — | — |
 | checking | 正在请求版本信息 | 加载标识 | 取消 → onCancel |
 | available | 展示新版本、发布日期、大小与更新日志 | 立即更新 → onUpdate | 稍后再说 → onLater |
 | upToDate | 当前已是最新版本 | 再次检查 → onCheck | 关闭 → onClose |

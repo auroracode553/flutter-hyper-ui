@@ -14,10 +14,10 @@ class _UpdateEmblem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    width: 64,
-    height: 64,
+    width: 40,
+    height: 40,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(HyperUiRadii.md),
+      borderRadius: BorderRadius.circular(HyperUiRadii.sm),
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -30,18 +30,18 @@ class _UpdateEmblem extends StatelessWidget {
       boxShadow: <BoxShadow>[
         BoxShadow(
           color: color.withAlpha(18),
-          blurRadius: 24,
-          offset: const Offset(0, 8),
+          blurRadius: 16,
+          offset: const Offset(0, 6),
         ),
       ],
     ),
     child: Stack(
       alignment: Alignment.center,
       children: <Widget>[
-        Icon(icon, size: 26, color: color),
+        Icon(icon, size: 20, color: color),
         if (busy)
           SizedBox.square(
-            dimension: 48,
+            dimension: 30,
             child: HyperSpinner(
               color: color,
               strokeWidth: 1.5,
@@ -71,59 +71,51 @@ class _UpdateVersionInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.hyperUi;
-    return Container(
-      padding: const EdgeInsets.all(HyperUiSpacing.sm),
-      decoration: BoxDecoration(
-        color: context.hyperGlass.surfaceSubtle,
-        borderRadius: BorderRadius.circular(HyperUiRadii.sm),
-        border: Border.all(color: tokens.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Wrap(
-            spacing: HyperUiSpacing.xs,
-            runSpacing: HyperUiSpacing.xs,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: <Widget>[
-              if (currentVersion != null && !completed)
-                Text(
-                  '当前 $currentVersion',
-                  style: TextStyle(color: tokens.mutedForeground, fontSize: 12),
-                ),
-              if (showRelease && currentVersion != null && !completed)
-                Icon(
-                  Directionality.of(context) == TextDirection.rtl
-                      ? LucideIcons.arrowLeft
-                      : LucideIcons.arrowRight,
-                  size: 14,
-                  color: tokens.mutedForeground,
-                ),
-              if (showRelease)
-                HyperBadge(
-                  label: '${completed ? '已更新至' : '新版本'} ${release!.version}',
-                  tone: completed ? HyperUiTone.success : HyperUiTone.primary,
-                ),
-              if (completed && !showRelease && currentVersion != null)
-                Text('当前 $currentVersion'),
-              if (mandatory)
-                const HyperBadge(label: '必要更新', tone: HyperUiTone.warning),
-            ],
-          ),
-          if (showRelease &&
-              (release!.releaseDate != null ||
-                  release!.sizeLabel != null)) ...<Widget>[
-            const SizedBox(height: HyperUiSpacing.xs),
-            Text(
-              <String>[
-                if (release!.releaseDate != null) release!.releaseDate!,
-                if (release!.sizeLabel != null) release!.sizeLabel!,
-              ].join(' · '),
-              style: TextStyle(color: tokens.mutedForeground, fontSize: 12),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Wrap(
+          spacing: HyperUiSpacing.xs,
+          runSpacing: HyperUiSpacing.xs,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: <Widget>[
+            if (currentVersion != null && !completed)
+              Text(
+                '当前 $currentVersion',
+                style: TextStyle(color: tokens.mutedForeground, fontSize: 12),
+              ),
+            if (showRelease && currentVersion != null && !completed)
+              Icon(
+                Directionality.of(context) == TextDirection.rtl
+                    ? LucideIcons.arrowLeft
+                    : LucideIcons.arrowRight,
+                size: 14,
+                color: tokens.mutedForeground,
+              ),
+            if (showRelease)
+              HyperBadge(
+                label: '${completed ? '已更新至' : '新版本'} ${release!.version}',
+                tone: completed ? HyperUiTone.success : HyperUiTone.primary,
+              ),
+            if (completed && !showRelease && currentVersion != null)
+              Text('当前 $currentVersion'),
+            if (mandatory)
+              const HyperBadge(label: '必要更新', tone: HyperUiTone.warning),
           ],
+        ),
+        if (showRelease &&
+            (release!.releaseDate != null ||
+                release!.sizeLabel != null)) ...<Widget>[
+          const SizedBox(height: HyperUiSpacing.xs),
+          Text(
+            <String>[
+              if (release!.releaseDate != null) release!.releaseDate!,
+              if (release!.sizeLabel != null) release!.sizeLabel!,
+            ].join(' · '),
+            style: TextStyle(color: tokens.mutedForeground, fontSize: 12),
+          ),
         ],
-      ),
+      ],
     );
   }
 }
@@ -236,9 +228,8 @@ class _UpdateProgress extends StatelessWidget {
               downloadProgress!.remainingLabel != null) ...<Widget>[
             const SizedBox(height: HyperUiSpacing.xxs),
             DefaultTextStyle(
-              style: DefaultTextStyle.of(
-                context,
-              ).style.copyWith(color: tokens.mutedForeground, fontSize: 12),
+              style: DefaultTextStyle.of(context).style
+                  .copyWith(color: tokens.mutedForeground, fontSize: 12),
               child: Wrap(
                 spacing: HyperUiSpacing.sm,
                 runSpacing: HyperUiSpacing.xxs,

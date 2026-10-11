@@ -18,12 +18,8 @@ class ButtonsExample extends StatelessWidget {
           children: [
             HyperButton(label: '小按钮', size: 'small', onPressed: _noop),
             HyperButton(label: '默认按钮', onPressed: _noop),
-            HyperButton(
-              type: 'outline',
-              label: '处理中',
-              loading: true,
-              onPressed: _noop,
-            ),
+            HyperButton(label: '大按钮', size: 'large', onPressed: _noop),
+            HyperButton(label: '处理中', loading: true, onPressed: _noop),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.md),
@@ -33,19 +29,42 @@ class ButtonsExample extends StatelessWidget {
           runSpacing: HyperUiSpacing.xs,
           children: [
             HyperButton(
-              type: 'outline',
+              colorStyle: 'primary',
+              type: 'filled',
+              label: 'Primary',
+              onPressed: _noop,
+            ),
+            HyperButton(
+              colorStyle: 'success',
+              type: 'filled',
+              label: 'Success',
+              onPressed: _noop,
+            ),
+            HyperButton(
+              colorStyle: 'info',
+              type: 'filled',
+              label: 'Info',
+              onPressed: _noop,
+            ),
+            HyperButton(
+              colorStyle: 'warning',
+              type: 'filled',
+              label: 'Warning',
+              onPressed: _noop,
+            ),
+            HyperButton(
               label: '导出',
               icon: LucideIcons.share2,
               onPressed: _noop,
             ),
             HyperButton(
-              type: 'danger',
-              label: '删除',
+              colorStyle: 'danger',
+              type: 'filled',
+              label: 'Danger',
               icon: LucideIcons.trash,
               onPressed: _noop,
             ),
             HyperButton(
-              type: 'tonal',
               label: '带图标胶囊',
               icon: LucideIcons.settings,
               onPressed: _noop,
@@ -53,41 +72,99 @@ class ButtonsExample extends StatelessWidget {
           ],
         ),
         const SizedBox(height: HyperUiSpacing.md),
-        // 图标按钮：仅图标时自动呈现圆形（省略 label）。
+        // icon 只控制显示形态，colorStyle 控制配色。
         Wrap(
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
           children: [
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.plus,
               onPressed: _noop,
               tooltip: '新建',
             ),
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.refreshCw,
               onPressed: _noop,
               tooltip: '刷新',
             ),
             HyperButton(
-              type: 'outline',
+              type: 'icon',
               icon: LucideIcons.share2,
               onPressed: _noop,
               tooltip: '分享',
             ),
             HyperButton(
-              type: 'danger',
+              colorStyle: 'danger',
+              type: 'icon',
               icon: LucideIcons.trash,
               onPressed: _noop,
               tooltip: '删除',
             ),
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.refreshCw,
               loading: true,
               onPressed: _noop,
               tooltip: '加载中',
+            ),
+          ],
+        ),
+        const SizedBox(height: HyperUiSpacing.md),
+        const HyperButton(label: '不可用'),
+        const SizedBox(height: HyperUiSpacing.md),
+        Wrap(
+          spacing: HyperUiSpacing.xs,
+          runSpacing: HyperUiSpacing.xs,
+          children: [
+            for (final colorStyle in <String?>[
+              null,
+              'primary',
+              'success',
+              'info',
+              'warning',
+              'danger',
+            ])
+              HyperButton(
+                type: 'filled',
+                colorStyle: colorStyle,
+                label: colorStyle ?? 'Default',
+                loading: true,
+                onPressed: _noop,
+              ),
+          ],
+        ),
+        const SizedBox(height: HyperUiSpacing.md),
+        Wrap(
+          spacing: HyperUiSpacing.xs,
+          runSpacing: HyperUiSpacing.xs,
+          children: [
+            HyperButton(colorStyle: 'success', label: '默认描边', onPressed: _noop),
+            HyperButton(
+              type: 'tonal',
+              colorStyle: 'success',
+              label: '柔色',
+              onPressed: _noop,
+            ),
+            HyperButton(
+              type: 'filled',
+              colorStyle: 'success',
+              label: '填充',
+              onPressed: _noop,
+            ),
+            HyperButton(
+              type: 'icon',
+              colorStyle: 'success',
+              icon: LucideIcons.check,
+              onPressed: _noop,
+            ),
+            HyperButton(
+              type: 'filled',
+              colorStyle: 'danger',
+              color: context.hyperUi.primary,
+              label: '自定义颜色优先',
+              onPressed: _noop,
             ),
           ],
         ),
@@ -97,6 +174,8 @@ class ButtonsExample extends StatelessWidget {
           label: '通栏按钮（expanded: true）',
           expanded: true,
           onPressed: _noop,
+          colorStyle: 'primary',
+          type: 'filled',
         ),
       ],
     );

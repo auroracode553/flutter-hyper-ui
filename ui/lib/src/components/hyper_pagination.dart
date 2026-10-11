@@ -1,4 +1,5 @@
 import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
@@ -62,7 +63,7 @@ class HyperPagination extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: rtl ? LucideIcons.chevronRight : LucideIcons.chevronLeft,
               size: 'small',
               color: page > 1 ? tokens.foreground : tokens.mutedForeground,
@@ -121,7 +122,7 @@ class HyperPagination extends StatelessWidget {
                         ),
                       ),
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: rtl ? LucideIcons.chevronLeft : LucideIcons.chevronRight,
               size: 'small',
               color: page < pageCount

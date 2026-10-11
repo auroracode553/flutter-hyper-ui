@@ -18,13 +18,13 @@ class NavigationExample extends StatelessWidget {
           safeArea: false,
           actions: [
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.search,
               tooltip: '搜索',
               onPressed: () {},
             ),
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.listChecks,
               tooltip: '选择',
               onPressed: () {},

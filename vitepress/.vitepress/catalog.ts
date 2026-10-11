@@ -186,21 +186,22 @@ export const componentGroups: ComponentGroup[] = [
       demo('cards', '卡片结构与选择状态', 'cards_example.dart', 520, '包含标题、状态、进度、标签和选中态。'),
     ],
     components: [
-      component('HyperButton', 'hyper_button.dart', '通过 type 统一提供 filled、tonal、outline、ghost、danger 五种视觉层级，并支持加载、禁用、图标按钮和通栏状态。', {
+      component('HyperButton', 'hyper_button.dart', '默认白色描边；type 控制 filled/tonal/icon，colorStyle 提供五种语义配色，color 自定义基色优先。', {
         propsDocs: [
-          { name: 'label', description: '按钮文字；省略时配合 icon 自动呈现方形图标按钮' },
+          { name: 'label', description: '按钮文字；省略时配合 icon 自动呈现圆形图标按钮' },
           { name: 'onPressed', description: '点击回调；为 null 时按钮进入禁用态' },
-          { name: 'type', description: '视觉类型：filled / tonal / outline / ghost / danger，默认 filled' },
+          { name: 'type', description: '显示类型，默认 null（白色描边）；filled / tonal / icon，与配色独立' },
+          { name: 'colorStyle', description: '预设配色 primary / success / info / warning / danger；默认 null 为白色中性样式，color 优先' },
           { name: 'size', description: '尺寸：small / default / large，默认 default' },
           { name: 'icon', description: '前置图标；label 省略时切换为图标按钮' },
           { name: 'trailingIcon', description: '后置图标' },
           { name: 'loading', description: '是否显示加载态，默认 false；加载期间禁止点击' },
           { name: 'expanded', description: '是否通栏铺满，默认 false；不传时按内容收缩（等价 inline-block）' },
           { name: 'tooltip', description: '悬停或长按提示文字' },
-          { name: 'color', description: '覆盖前景色，图标按钮可直接指定图标颜色' },
+          { name: 'color', description: '自定义基色，优先于 colorStyle；随 type 应用于填充、文字和轮廓' },
           { name: 'backgroundColor', description: '覆盖按钮背景色，图标按钮默认使用玻璃表面' },
         ],
-        preview: demo('component-button', 'HyperButton 状态', 'buttons_example.dart', 360, '展示按钮层级、尺寸、状态、图标按钮与宽度表现。'),
+        preview: demo('component-button', 'HyperButton 状态', 'buttons_example.dart', 360, '展示按钮层级、尺寸、加载、图标和宽度表现；禁用态保留单个按钮示例。'),
       }),
       component('HyperCard', 'hyper_card.dart', '具有标题、操作区、正文、底部和选中态的内容容器。', {
         propsDocs: [
@@ -489,17 +490,17 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperUpdateDialog', 'hyper_update_dialog.dart', '沿用 Hyper 柔光玻璃风格的完整更新对话框，覆盖检查、版本日志、下载、安装、完成与失败重试。', {
         propsDocs: [
           { name: 'status', description: '受控更新状态，默认 HyperUpdateStatus.idle；状态由业务层切换' },
-          { name: 'currentVersion', description: '当前安装版本；未提供时隐藏当前版本' },
+          { name: 'currentVersion', description: '当前安装版本；未提供、checking 或 error 时隐藏，其他状态直接排版不套卡片' },
           { name: 'release', description: '新版本信息，HyperUpdateRelease 类型；可为空' },
           { name: 'progress', description: '下载或安装进度 0–1；null 或非有限值显示不定进度，有限越界值收敛到 0–1' },
           { name: 'downloadProgress', description: '下载字节快照，HyperUpdateDownloadProgress 类型；下载阶段优先于 progress。总大小未知时显示下载量与不定进度' },
           { name: 'progressText', description: '额外的下载状态或安装阶段文字；字节快照自动展示下载量、速度和预计剩余时间' },
-          { name: 'title', description: '覆盖当前状态标题；默认按状态提供中文标题' },
+          { name: 'title', description: '覆盖当前状态标题；默认按状态提供中文标题，error 状态不展示标题' },
           { name: 'message', description: '覆盖当前状态说明，可用于展示业务错误原因' },
           { name: 'mandatory', description: '必要更新，默认 false；隐藏关闭、稍后与取消入口并阻止返回，completed / upToDate 状态恢复关闭' },
           { name: 'primaryLabel', description: '覆盖当前状态主按钮文字' },
           { name: 'secondaryLabel', description: '覆盖当前状态次按钮文字' },
-          { name: 'onCheck', description: 'idle / upToDate 状态的检查回调；为空时主按钮禁用' },
+          { name: 'onCheck', description: 'upToDate 状态再次检查的回调；为空时主按钮禁用，idle 隐藏组件' },
           { name: 'onUpdate', description: 'available 状态的开始下载回调；为空时主按钮禁用' },
           { name: 'onInstall', description: 'readyToInstall 状态的安装回调；为空时主按钮禁用' },
           { name: 'onRetry', description: 'error 状态的重试回调；业务层决定重试检查、下载或安装' },

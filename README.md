@@ -23,6 +23,14 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 
 所有组件均为受控或回调驱动，不读取业务状态、不内置路由名称、不依赖第三方状态管理方案。
 
+## 与 Compose 的样式同步
+
+按钮配色与显示形态独立：`type` 仅支持 `filled`、`tonal`、`icon`，省略时默认白色描边；`colorStyle` 支持 `primary`、`success`、`info`、`warning`、`danger`，自定义 `color` 优先于预设配色。按钮预览保留单个禁用文字示例，移除重复的禁用配色组。
+
+本项目与 `D:/my_project/Android-project/hyper-ui` 维护相同的默认视觉规则。按钮默认描边，省略 `type` 即可；显式类型仅有 `filled`、`tonal`、`icon`，主操作显式使用 `type = "filled"` 和 `colorStyle = "primary"`。
+
+`HyperUpdateDialog` 的标识块为 40、图标 20、加载环 30。检查中隐藏版本，其他状态的版本信息直接排版；错误状态只保留页头、具体原因、重试与关闭。关闭、取消和稍后再说使用默认描边按钮。两边的组件实现、API 文档和交互示例必须一起更新。
+
 ```dart
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';

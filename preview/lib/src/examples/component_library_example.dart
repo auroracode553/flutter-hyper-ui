@@ -35,7 +35,7 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
           type: HyperNavBarTypes.custom,
           actions: <Widget>[
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () => HyperToast.show(context, 'Navbar action'),
@@ -66,12 +66,40 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
                 label: '主要操作',
                 icon: LucideIcons.sparkles,
                 onPressed: () => HyperToast.show(context, '主要操作'),
+                colorStyle: 'primary',
+                type: 'filled',
               ),
-              HyperButton(type: 'tonal', label: '柔和', onPressed: () {}),
-              HyperButton(type: 'outline', label: '描边', onPressed: () {}),
-              HyperButton(type: 'ghost', label: '幽灵', onPressed: () {}),
-              HyperButton(type: 'danger', label: '危险', onPressed: () {}),
-              const HyperButton(label: '加载中', loading: true),
+              HyperButton(
+                colorStyle: 'success',
+                type: 'filled',
+                label: '成功',
+                onPressed: () {},
+              ),
+              HyperButton(
+                colorStyle: 'info',
+                type: 'filled',
+                label: '信息',
+                onPressed: () {},
+              ),
+              HyperButton(
+                colorStyle: 'warning',
+                type: 'filled',
+                label: '警告',
+                onPressed: () {},
+              ),
+              HyperButton(label: '默认', onPressed: () {}),
+              HyperButton(
+                colorStyle: 'danger',
+                type: 'filled',
+                label: '危险',
+                onPressed: () {},
+              ),
+              const HyperButton(
+                label: '加载中',
+                loading: true,
+                colorStyle: 'primary',
+                type: 'filled',
+              ),
             ],
           ),
         ),
@@ -217,7 +245,6 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
                 runSpacing: 8,
                 children: <Widget>[
                   HyperButton(
-                    type: 'tonal',
                     label: '打开抽屉',
                     onPressed: () => HyperDrawer.show<void>(
                       context,
@@ -232,7 +259,6 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
                     ),
                   ),
                   HyperButton(
-                    type: 'tonal',
                     label: '显示 Toast',
                     onPressed: () => HyperToast.show(
                       context,

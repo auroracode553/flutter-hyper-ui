@@ -167,6 +167,8 @@ class _HyperSelectionPanelState<T> extends State<_HyperSelectionPanel<T>> {
               size: 'large',
               expanded: true,
               onPressed: () => Navigator.pop(context, List<T>.of(selected)),
+              colorStyle: 'primary',
+              type: 'filled',
             ),
           ),
       ],

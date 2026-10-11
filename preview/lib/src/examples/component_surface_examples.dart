@@ -24,7 +24,7 @@ class CardComponentExample extends StatelessWidget {
           leading: const Icon(LucideIcons.sparkles),
           actions: [
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               onPressed: () {},

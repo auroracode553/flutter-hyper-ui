@@ -136,14 +136,13 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
     final effectiveTrailing = fixed
         ? switch (type) {
             HyperNavBarTypes.more => HyperButton(
-              type: 'ghost',
+              type: 'icon',
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               backgroundColor: HyperGlassTheme.of(context).surfaceStrong,
               onPressed: onMorePressed ?? () {},
             ),
             HyperNavBarTypes.edit => HyperButton(
-              type: 'ghost',
               label: '保存',
               size: 'small',
               onPressed: onSavePressed ?? () {},
@@ -251,7 +250,7 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => HyperButton(
     // 固定类型使用连续玻璃表面，保持与 Compose 预览相同的白色浮层效果。
-    type: 'ghost',
+    type: 'icon',
     icon: HyperIcons.back,
     tooltip: '返回',
     backgroundColor: HyperGlassTheme.of(context).surfaceStrong,

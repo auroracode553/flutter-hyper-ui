@@ -131,7 +131,7 @@ class _StandalonePreviewState extends State<_StandalonePreview> {
               safeArea: false,
               actions: [
                 HyperButton(
-                  type: 'tonal',
+                  type: 'icon',
                   icon: LucideIcons.sun,
                   tooltip: '切换明暗主题',
                   onPressed: widget.onToggleTheme,

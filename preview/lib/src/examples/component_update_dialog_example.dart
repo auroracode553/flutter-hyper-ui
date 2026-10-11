@@ -86,6 +86,8 @@ class _UpdateDialogComponentExampleState
                   ? '查看更新进度'
                   : '检查更新',
               onPressed: _dialogOpen ? null : _open,
+              colorStyle: 'primary',
+              type: 'filled',
             ),
             HyperButton(
               type: 'tonal',
@@ -111,6 +113,10 @@ class _UpdateDialogComponentExampleState
         ],
         const SizedBox(height: HyperUiSpacing.lg),
         const HyperText('状态预览', size: 'small'),
+        const HyperText(
+          '检查中隐藏版本；其他版本信息不套卡片。标识块 40、图标 20、加载环 30；错误仅保留原因与操作，次操作使用默认描边按钮。',
+          size: 'small',
+        ),
         const SizedBox(height: HyperUiSpacing.xs),
         Wrap(
           spacing: HyperUiSpacing.xs,

@@ -40,6 +40,8 @@ class FeedbackExample extends StatelessWidget {
             label: '选择文件',
             icon: LucideIcons.plus,
             onPressed: _noop,
+            colorStyle: 'primary',
+            type: 'filled',
           ),
         ),
       ],

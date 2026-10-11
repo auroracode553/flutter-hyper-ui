@@ -95,7 +95,6 @@ class _AtomsExampleState extends State<AtomsExample> {
               ),
             if (!_tagVisible)
               HyperButton(
-                type: 'ghost',
                 label: '恢复标签',
                 onPressed: () => setState(() => _tagVisible = true),
               ),
@@ -275,6 +274,8 @@ class _FormsExampleState extends State<FormsExample> {
                     HyperToast.show(context, '已保存', type: 'success');
                   }
                 },
+                colorStyle: 'primary',
+                type: 'filled',
               ),
             ],
           ),

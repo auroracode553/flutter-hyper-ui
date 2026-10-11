@@ -138,6 +138,8 @@ class _DatePanelState extends State<_DatePanel> {
         size: 'large',
         expanded: true,
         onPressed: () => Navigator.pop(context, _selected),
+        colorStyle: 'primary',
+        type: 'filled',
       ),
     ],
   );
@@ -208,6 +210,8 @@ class _TimePanelState extends State<_TimePanel> {
           context,
           HyperTimeOfDay(hour: _hour, minute: _minute),
         ),
+        colorStyle: 'primary',
+        type: 'filled',
       ),
     ],
   );
@@ -284,6 +288,8 @@ class _DateRangePanelState extends State<_DateRangePanel> {
         expanded: true,
         onPressed: () =>
             Navigator.pop(context, HyperDateRange(start: _start, end: _end)),
+        colorStyle: 'primary',
+        type: 'filled',
       ),
     ],
   );
@@ -352,7 +358,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
         Row(
           children: [
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.chevronLeft,
               tooltip: '上个月',
               size: 'small',
@@ -365,7 +371,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
             ),
             Expanded(
               child: HyperButton(
-                type: 'ghost',
                 label: '${_visibleMonth.year} 年 ${_visibleMonth.month} 月',
                 trailingIcon: LucideIcons.chevronDown,
                 expanded: true,
@@ -374,7 +379,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               ),
             ),
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.chevronRight,
               tooltip: '下个月',
               size: 'small',
@@ -401,7 +406,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             HyperButton(
-              type: 'ghost',
               label: '−10 年',
               size: 'small',
               onPressed: year - 10 >= widget.first.year
@@ -409,7 +413,7 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                   : null,
             ),
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.chevronLeft,
               tooltip: '上一年',
               size: 'small',
@@ -425,14 +429,13 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               ),
             ),
             HyperButton(
-              type: 'tonal',
+              type: 'icon',
               icon: LucideIcons.chevronRight,
               tooltip: '下一年',
               size: 'small',
               onPressed: year < widget.last.year ? () => _changeYear(1) : null,
             ),
             HyperButton(
-              type: 'ghost',
               label: '+10 年',
               size: 'small',
               onPressed: year + 10 <= widget.last.year
@@ -465,6 +468,8 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                               size: 'large',
                               expanded: true,
                               onPressed: onPressed,
+                              colorStyle: 'primary',
+                              type: 'filled',
                             )
                           : HyperButton(
                               type: 'tonal',

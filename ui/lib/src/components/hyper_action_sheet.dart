@@ -160,7 +160,6 @@ class _HyperActionList<T> extends StatelessWidget {
           ),
         const SizedBox(height: HyperUiSpacing.sm),
         HyperButton(
-          type: 'ghost',
           label: cancelLabel,
           expanded: true,
           onPressed: () => Navigator.pop(context),

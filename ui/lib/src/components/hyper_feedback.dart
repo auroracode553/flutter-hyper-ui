@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
+
 import 'hyper_progress_painters.dart';
+
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -192,13 +194,13 @@ abstract final class HyperDialog {
                     children: <Widget>[
                       if (showCancel)
                         HyperButton(
-                          type: 'ghost',
                           label: cancelLabel,
                           onPressed: () => Navigator.pop(dialogContext, false),
                         ),
                       type == 'danger'
                           ? HyperButton(
-                              type: 'danger',
+                              colorStyle: 'danger',
+                              type: 'filled',
                               label: confirmLabel,
                               onPressed: () =>
                                   Navigator.pop(dialogContext, true),
@@ -207,6 +209,8 @@ abstract final class HyperDialog {
                               label: confirmLabel,
                               onPressed: () =>
                                   Navigator.pop(dialogContext, true),
+                              colorStyle: 'primary',
+                              type: 'filled',
                             ),
                     ],
                   ),

@@ -66,6 +66,8 @@ class _PickerContentState<T> extends State<_PickerContent<T>> {
         size: 'large',
         expanded: true,
         onPressed: () => Navigator.pop(context, widget.options[_index].value),
+        colorStyle: 'primary',
+        type: 'filled',
       ),
     ],
   );

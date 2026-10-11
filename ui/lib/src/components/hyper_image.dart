@@ -1,6 +1,8 @@
 import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'package:flutter/widgets.dart';
+
 import 'hyper_modal.dart';
+
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -83,13 +85,12 @@ class HyperImage extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.topRight,
                         child: HyperButton(
-                          type: 'tonal',
+                          type: 'icon',
                           icon: LucideIcons.x,
                           tooltip: '关闭预览',
                           color: HyperUiThemeTokens.of(context).foreground,
-                          backgroundColor: HyperGlassTheme.of(
-                            context,
-                          ).surfaceStrong,
+                          backgroundColor: HyperGlassTheme.of(context)
+                              .surfaceStrong,
                           onPressed: () => Navigator.pop(dialogContext),
                         ),
                       ),

@@ -162,7 +162,7 @@ class HyperDrawer extends StatelessWidget {
                 ),
                 if (onClose != null)
                   HyperButton(
-                    type: 'tonal',
+                    type: 'icon',
                     tooltip: '关闭',
                     onPressed: onClose,
                     icon: LucideIcons.x,

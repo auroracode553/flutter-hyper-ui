@@ -109,14 +109,13 @@ HyperNavBar(
 // 自定义：固定类型之外的布局使用完整插槽。
 HyperNavBar(
   type: HyperNavBarTypes.custom,
-  leading: HyperButton(
-    type: 'tonal',
+  leading: HyperButton(type : 'tonal',
     icon: HyperIcons.back,
     tooltip: '返回',
     onPressed: () {},
   ),
   title: const Text('创作空间'),
-  trailing: HyperButton(type: 'ghost', label: '分享', onPressed: () {}),
+  trailing: HyperButton(label: '分享', onPressed: () {}),
 )
 ```
 
@@ -136,7 +135,7 @@ HyperNavBar(
     ],
   ),
   subtitle: const Text('把想法留下来'),
-  trailing: HyperButton(type: 'ghost', label: '编辑', onPressed: () {}),
+  trailing: HyperButton(label: '编辑', onPressed: () {}),
 )
 ```
 

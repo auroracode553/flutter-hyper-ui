@@ -1,7 +1,7 @@
-import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
+
 import 'hyper_progress_painters.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -16,7 +16,8 @@ import 'hyper_tooltip.dart';
 class HyperButton extends StatelessWidget {
   const HyperButton({
     super.key,
-    this.type = 'filled',
+    this.type,
+    this.colorStyle,
     this.label,
     this.child,
     this.onPressed,
@@ -29,22 +30,32 @@ class HyperButton extends StatelessWidget {
     this.color,
     this.backgroundColor,
   }) : assert(
-         type == 'filled' ||
-             type == 'tonal' ||
-             type == 'outline' ||
-             type == 'ghost' ||
-             type == 'danger',
-         'HyperButton.type must be filled, tonal, outline, ghost, or danger.',
+         type == null || type == 'filled' || type == 'tonal' || type == 'icon',
+         'HyperButton.type must be null, filled, tonal, or icon.',
+       ),
+       assert(
+         colorStyle == null ||
+             colorStyle == 'primary' ||
+             colorStyle == 'success' ||
+             colorStyle == 'info' ||
+             colorStyle == 'warning' ||
+             colorStyle == 'danger',
+         'HyperButton.colorStyle must be null, primary, success, info, warning, or danger.',
        ),
        assert(
          label == null || child == null,
          'HyperButton.label and child cannot be used together.',
+       ),
+       assert(
+         type != 'icon' || label == null,
+         'HyperButton icon type uses icon, child, or loading instead of label.',
        );
 
   final String? label;
   final Widget? child;
   final VoidCallback? onPressed;
-  final String type;
+  final String? type;
+  final String? colorStyle;
   final String size;
   final IconData? icon;
   final IconData? trailingIcon;
@@ -61,12 +72,16 @@ class HyperButton extends StatelessWidget {
         'HyperButton.label and child cannot be used together.',
       );
     }
+    if (type == 'icon' && label != null) {
+      throw ArgumentError(
+        'HyperButton icon type uses icon, child, or loading instead of label.',
+      );
+    }
     final variant = switch (type) {
-      'tonal' => _ButtonVariant.tonal,
-      'outline' => _ButtonVariant.outline,
-      'ghost' => _ButtonVariant.ghost,
-      'danger' => _ButtonVariant.danger,
+      null => _ButtonVariant.standard,
       'filled' => _ButtonVariant.filled,
+      'tonal' => _ButtonVariant.tonal,
+      'icon' => _ButtonVariant.icon,
       _ => throw ArgumentError.value(type, 'type', 'Invalid button type'),
     };
     final tokens = HyperUiThemeTokens.of(context);
@@ -76,7 +91,8 @@ class HyperButton extends StatelessWidget {
     final metrics = _HyperButtonMetrics.fromSize(size);
     final hasLabel = label != null && label!.isNotEmpty;
     final isIconOnly =
-        !hasLabel && this.child == null && (icon != null || loading);
+        type == 'icon' ||
+        (!hasLabel && this.child == null && (icon != null || loading));
     assert(
       (hasLabel ? 1 : 0) +
               (this.child != null ? 1 : 0) +
@@ -91,13 +107,11 @@ class HyperButton extends StatelessWidget {
       glass: glass,
       variant: variant,
       disabled: disabled,
+      color: color,
+      colorStyle: colorStyle,
     );
-    final foreground = color ?? visual.foreground;
-    final background =
-        backgroundColor ??
-        (isIconOnly && variant == _ButtonVariant.tonal
-            ? glass.surface
-            : visual.background);
+    final foreground = visual.foreground;
+    final background = backgroundColor ?? visual.background;
     final isSquare = isIconOnly;
     final borderRadius = BorderRadius.circular(metrics.height / 2);
     final effectiveIconSize = isIconOnly
@@ -110,17 +124,10 @@ class HyperButton extends StatelessWidget {
         horizontal: isIconOnly ? 0 : metrics.horizontal,
       ),
       decoration: BoxDecoration(
-        color:
-            backgroundColor != null ||
-                (isIconOnly && variant == _ButtonVariant.tonal) ||
-                visual.gradient == null
+        color: backgroundColor != null || visual.gradient == null
             ? background
             : null,
-        gradient:
-            backgroundColor != null ||
-                (isIconOnly && variant == _ButtonVariant.tonal)
-            ? null
-            : visual.gradient,
+        gradient: backgroundColor != null ? null : visual.gradient,
         borderRadius: borderRadius,
         border: Border.all(color: visual.border),
         boxShadow: visual.shadows,
@@ -271,27 +278,40 @@ class _HyperButtonVisual {
     required HyperGlassTheme glass,
     required _ButtonVariant variant,
     required bool disabled,
+    required Color? color,
+    required String? colorStyle,
   }) {
+    final preset = switch (colorStyle) {
+      null => glass.surfaceStrong,
+      'primary' => tokens.primary,
+      'success' => tokens.success,
+      'info' => tokens.info,
+      'warning' => tokens.warning,
+      'danger' => tokens.error,
+      _ => throw ArgumentError.value(
+        colorStyle,
+        'colorStyle',
+        'Invalid button color style',
+      ),
+    };
+    // color 覆盖预设配色，type 只决定显示形态。
+    final base = color ?? preset;
+    final hasTone = color != null || colorStyle != null;
     if (disabled) {
       return _HyperButtonVisual(
-        background: variant == _ButtonVariant.ghost
-            ? HyperPalette.transparent
-            : glass.controlTrack,
+        background: glass.controlTrack,
         foreground: tokens.mutedForeground.withAlpha(150),
         // 禁用态保留弱化轮廓，色相与启用态一致（edgeShade 在浅色下仅 7% 黑，轮廓不可见）。
-        border: variant == _ButtonVariant.ghost
-            ? HyperPalette.transparent
-            : tokens.border.withAlpha(110),
+        border: tokens.border.withAlpha(110),
       );
     }
 
-    if (variant == _ButtonVariant.filled || variant == _ButtonVariant.danger) {
-      final base = variant == _ButtonVariant.danger
-          ? tokens.error
-          : tokens.primary;
+    if (variant == _ButtonVariant.filled) {
       return _HyperButtonVisual(
         background: base,
-        foreground: tokens.primaryForeground,
+        foreground: !hasTone || base.computeLuminance() > 0.5
+            ? tokens.foreground
+            : tokens.primaryForeground,
         border: tokens.primaryForeground.withAlpha(45),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -313,25 +333,25 @@ class _HyperButtonVisual {
     }
 
     return switch (variant) {
-      _ButtonVariant.tonal => _HyperButtonVisual(
-        background: glass.selection,
-        foreground: tokens.foreground,
-        border: glass.edgeHighlight,
-      ),
-      _ButtonVariant.outline => _HyperButtonVisual(
+      _ButtonVariant.standard => _HyperButtonVisual(
         background: glass.surfaceSubtle,
-        foreground: tokens.foreground,
-        // outline 层级依赖可感知轮廓，使用语义边框令牌而非玻璃分隔色。
-        border: tokens.border,
+        foreground: hasTone ? base : tokens.foreground,
+        // 默认按钮采用描边外观，与 Compose 的无 type 调用保持一致。
+        border: hasTone ? base.withValues(alpha: 0.35) : tokens.border,
       ),
-      _ButtonVariant.ghost => _HyperButtonVisual(
-        background: HyperPalette.transparent,
-        foreground: tokens.foreground,
-        border: HyperPalette.transparent,
+      _ButtonVariant.tonal => _HyperButtonVisual(
+        background: hasTone ? base.withValues(alpha: 0.12) : glass.selection,
+        foreground: hasTone ? base : tokens.foreground,
+        border: hasTone ? base.withValues(alpha: 0.35) : glass.edgeHighlight,
+      ),
+      _ButtonVariant.icon => _HyperButtonVisual(
+        background: glass.surface,
+        foreground: hasTone ? base : tokens.foreground,
+        border: hasTone ? base.withValues(alpha: 0.35) : glass.edgeHighlight,
       ),
       _ => throw StateError('Unexpected button variant'),
     };
   }
 }
 
-enum _ButtonVariant { filled, tonal, outline, ghost, danger }
+enum _ButtonVariant { standard, filled, tonal, icon }

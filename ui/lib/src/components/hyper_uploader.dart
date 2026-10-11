@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
+
 import 'hyper_progress_painters.dart';
+
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
@@ -52,14 +54,14 @@ class HyperUploadItem {
   final Object? error;
 }
 
-typedef HyperFilePicker =
-    Future<List<HyperUploadFile>> Function(HyperUploadSource source);
-typedef HyperFileUpload =
-    Future<String> Function(
-      HyperUploadFile file,
-      ValueChanged<double> onProgress,
-      HyperUploadCancellation cancellation,
-    );
+typedef HyperFilePicker = Future<List<HyperUploadFile>> Function(
+  HyperUploadSource source,
+);
+typedef HyperFileUpload = Future<String> Function(
+  HyperUploadFile file,
+  ValueChanged<double> onProgress,
+  HyperUploadCancellation cancellation,
+);
 
 /// 平台选择与 HTTP 上传通过入参注入。组件负责 UI 和请求生命周期。
 class HyperUploader extends StatefulWidget {
@@ -299,7 +301,7 @@ class _UploadItemTile extends StatelessWidget {
                     top: 2,
                     right: 2,
                     child: HyperButton(
-                      type: 'tonal',
+                      type: 'icon',
                       icon: LucideIcons.x,
                       size: 'small',
                       tooltip: '删除 ${item.file.name}',
