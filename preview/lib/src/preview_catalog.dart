@@ -286,7 +286,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-radio',
       title: 'HyperRadio',
-      description: '互斥单选状态。',
+      description: '互斥单选与禁用项；标签行不叠加圆环触摸留白。',
       loadLibrary: () => example_component_form_examples.loadLibrary(),
       builder: (_) => example_component_form_examples.RadioComponentExample(),
     ),

@@ -379,10 +379,10 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '当前选项值' },
           { name: 'groupValue', description: '组选中值' },
-          { name: 'onChanged', description: '选中变化回调' },
-          { name: 'label', description: '标签文字' },
+          { name: 'onChanged', description: '选中变化回调；null 时圆环只占 21，不分配独立触摸区' },
+          { name: 'label', description: '标签文字；plain 列表行承载点击，最小高度 46' },
         ],
-        preview: demo('component-radio', 'HyperRadio 单选框', 'component_form_examples.dart', 420, '互斥单选组与禁用项。', 'RadioComponentExample'),
+        preview: demo('component-radio', 'HyperRadio 单选框', 'component_form_examples.dart', 420, '互斥单选组与禁用项；标签行不叠加触摸留白。', 'RadioComponentExample'),
       }),
       component('HyperSwitch', 'hyper_selection_controls.dart', '布尔值受控开关，滑块与轨道颜色同步过渡，支持 RTL。', {
         propsDocs: [

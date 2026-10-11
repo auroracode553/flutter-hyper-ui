@@ -116,10 +116,14 @@ class HyperRadio<T> extends StatelessWidget {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final selected = value == groupValue;
+    // 标签行承载点击；只展示的圆环不再占用独立触摸区。
+    final standaloneInteractive = label == null && onChanged != null;
     final radio = HyperPressable(
-      onPressed: !enabled || onChanged == null ? null : () => onChanged!(value),
+      onPressed: !enabled || !standaloneInteractive
+          ? null
+          : () => onChanged!(value),
       child: SizedBox.square(
-        dimension: 44,
+        dimension: standaloneInteractive ? 44 : 21,
         child: Center(
           child: AnimatedContainer(
             duration: HyperUiEffects.durationOf(

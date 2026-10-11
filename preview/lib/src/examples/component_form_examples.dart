@@ -335,6 +335,7 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('互斥单选'),
+        // 标签行统一处理点击，圆环不叠加独立触摸留白或额外行间距。
         for (final entry in labels.entries)
           HyperRadio<String>(
             value: entry.key,
@@ -347,6 +348,23 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
           ),
         const SizedBox(height: HyperUiSpacing.sm),
         HyperText('当前值：$_value', size: 'small'),
+        const SizedBox(height: HyperUiSpacing.lg),
+        _label('纯控件（无标签）'),
+        Row(
+          children: [
+            HyperRadio<String>(
+              value: 'system',
+              groupValue: _value,
+              onChanged: (value) => setState(() => _value = value),
+            ),
+            const SizedBox(width: HyperUiSpacing.sm),
+            const HyperRadio<String>(value: 'preview', groupValue: 'preview'),
+            const SizedBox(width: HyperUiSpacing.sm),
+            const HyperRadio<String>(
+              value: 'disabled', groupValue: null, enabled: false,
+            ),
+          ],
+        ),
       ],
     );
   }
