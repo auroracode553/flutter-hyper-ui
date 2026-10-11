@@ -148,7 +148,7 @@ class LayoutExample extends StatelessWidget {
             ])
               HyperCard(
                 padding: EdgeInsets.zero,
-                onTap: () => HyperToast.show(context, entry.$2),
+                onPressed: () => HyperToast.show(context, entry.$2),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -249,7 +249,7 @@ class _FormsExampleState extends State<FormsExample> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               HyperTextField(
-                hintText: '请输入称呼',
+                placeholder: '请输入称呼',
                 maxLength: 20,
                 showWordLimit: true,
                 validator: (value) =>
@@ -258,7 +258,7 @@ class _FormsExampleState extends State<FormsExample> {
               const HyperTextField(
                 type: 'password',
                 showPasswordToggle: true,
-                hintText: '可切换显示与隐藏',
+                placeholder: '可切换显示与隐藏',
               ),
               const HyperTextField(
                 type: 'textarea',
@@ -447,7 +447,7 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
                 HyperTabItem(icon: HyperIcons.profile, label: '我的'),
               ],
               selectedIndex: _tab,
-              onSelected: (value) => setState(() => _tab = value),
+              onChanged: (value) => setState(() => _tab = value),
             ),
           ],
         ),

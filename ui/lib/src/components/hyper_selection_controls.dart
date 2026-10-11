@@ -13,10 +13,12 @@ class HyperCheckbox extends StatelessWidget {
     super.key,
     required this.value,
     this.onChanged,
+    this.enabled = true,
     this.label,
     this.tristate = false,
-  });
+  }) : assert(tristate || value != null);
 
+  final bool enabled;
   final bool? value;
   final ValueChanged<bool?>? onChanged;
   final String? label;
@@ -78,7 +80,7 @@ class HyperCheckbox extends StatelessWidget {
 
     if (label == null) {
       return HyperPressable(
-        onPressed: onChanged == null ? null : toggle,
+        onPressed: !enabled || onChanged == null ? null : toggle,
         borderRadius: BorderRadius.circular(12),
         child: SizedBox.square(dimension: 44, child: Center(child: box)),
       );
@@ -86,9 +88,9 @@ class HyperCheckbox extends StatelessWidget {
     return HyperListTile(
       title: label!,
       trailing: box,
-      enabled: onChanged != null,
+      enabled: enabled && onChanged != null,
       showChevron: false,
-      onTap: onChanged == null ? null : toggle,
+      onPressed: !enabled || onChanged == null ? null : toggle,
     );
   }
 }
@@ -99,9 +101,11 @@ class HyperRadio<T> extends StatelessWidget {
     required this.value,
     required this.groupValue,
     this.onChanged,
+    this.enabled = true,
     this.label,
   });
 
+  final bool enabled;
   final T value;
   final T? groupValue;
   final ValueChanged<T>? onChanged;
@@ -113,7 +117,7 @@ class HyperRadio<T> extends StatelessWidget {
     final glass = HyperGlassTheme.of(context);
     final selected = value == groupValue;
     final radio = HyperPressable(
-      onPressed: onChanged == null ? null : () => onChanged!(value),
+      onPressed: !enabled || onChanged == null ? null : () => onChanged!(value),
       child: SizedBox.square(
         dimension: 44,
         child: Center(
@@ -142,9 +146,9 @@ class HyperRadio<T> extends StatelessWidget {
       type: 'plain',
       title: label!,
       trailing: radio,
-      enabled: onChanged != null,
+      enabled: enabled && onChanged != null,
       showChevron: false,
-      onTap: onChanged == null ? null : () => onChanged!(value),
+      onPressed: !enabled || onChanged == null ? null : () => onChanged!(value),
     );
   }
 }
@@ -154,24 +158,31 @@ class HyperSwitch extends StatelessWidget {
     super.key,
     required this.value,
     this.onChanged,
+    this.enabled = true,
     this.label,
   });
 
+  final bool enabled;
   final bool value;
   final ValueChanged<bool>? onChanged;
   final String? label;
 
   @override
   Widget build(BuildContext context) {
-    final control = _HyperSwitchControl(value: value, onChanged: onChanged);
+    final control = _HyperSwitchControl(
+      value: value,
+      onChanged: enabled ? onChanged : null,
+    );
     if (label == null) return control;
     return HyperListTile(
       type: 'plain',
       title: label!,
       trailing: control,
-      enabled: onChanged != null,
+      enabled: enabled && onChanged != null,
       showChevron: false,
-      onTap: onChanged == null ? null : () => onChanged!(!value),
+      onPressed: !enabled || onChanged == null
+          ? null
+          : () => onChanged!(!value),
     );
   }
 }
@@ -252,14 +263,19 @@ class HyperSlider extends StatelessWidget {
     super.key,
     required this.value,
     this.onChanged,
+    this.enabled = true,
     this.onChangeStart,
     this.onChangeEnd,
     this.min = 0,
     this.max = 100,
     this.divisions,
     this.showValue = true,
-  }) : assert(max > min);
+    this.readOnly = false,
+  }) : assert(max > min),
+       assert(divisions == null || divisions > 0);
 
+  final bool enabled;
+  final bool readOnly;
   final double value;
   final double min;
   final double max;
@@ -273,9 +289,18 @@ class HyperSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
-    final amount = ((value.clamp(min, max) - min) / (max - min)).toDouble();
+    final currentValue = value.isFinite
+        ? value.clamp(min, max).toDouble()
+        : min;
+    var interactionValue = currentValue;
+    final rtl = Directionality.of(context) == TextDirection.rtl;
+    final amount = ((currentValue - min) / (max - min)).toDouble();
     double nextValue(double localX, double width) {
-      final fraction = (localX / width).clamp(0.0, 1.0);
+      final fraction =
+          ((rtl ? width - localX : localX) / (width > 0 ? width : 1)).clamp(
+            0.0,
+            1.0,
+          );
       var next = min + fraction * (max - min);
       if (divisions != null && divisions! > 0) {
         next =
@@ -293,26 +318,37 @@ class HyperSlider extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) => GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTapDown: onChanged == null
+              onTapUp: !enabled || readOnly || onChanged == null
                   ? null
-                  : (details) => onChanged!(
-                      nextValue(details.localPosition.dx, constraints.maxWidth),
-                    ),
-              onHorizontalDragStart: onChanged == null
+                  : (details) {
+                      onChangeStart?.call(currentValue);
+                      final next = nextValue(
+                        details.localPosition.dx,
+                        constraints.maxWidth,
+                      );
+                      interactionValue = next;
+                      onChanged!(next);
+                      onChangeEnd?.call(next);
+                    },
+              onHorizontalDragStart: !enabled || readOnly || onChanged == null
                   ? null
-                  : (_) => onChangeStart?.call(value),
-              onHorizontalDragUpdate: onChanged == null
+                  : (_) => onChangeStart?.call(currentValue),
+              onHorizontalDragUpdate: !enabled || readOnly || onChanged == null
                   ? null
-                  : (details) => onChanged!(
-                      nextValue(details.localPosition.dx, constraints.maxWidth),
-                    ),
-              onHorizontalDragEnd: onChanged == null
+                  : (details) {
+                      interactionValue = nextValue(
+                        details.localPosition.dx,
+                        constraints.maxWidth,
+                      );
+                      onChanged!(interactionValue);
+                    },
+              onHorizontalDragEnd: !enabled || readOnly || onChanged == null
                   ? null
-                  : (_) => onChangeEnd?.call(value),
+                  : (_) => onChangeEnd?.call(interactionValue),
               child: SizedBox(
                 height: 44,
                 child: Stack(
-                  alignment: Alignment.centerLeft,
+                  alignment: rtl ? Alignment.centerRight : Alignment.centerLeft,
                   children: <Widget>[
                     Container(
                       height: 6,
@@ -330,16 +366,21 @@ class HyperSlider extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      left: (constraints.maxWidth * amount - 10).clamp(
-                        0.0,
-                        constraints.maxWidth - 20,
-                      ),
+                      left:
+                          (constraints.maxWidth * (rtl ? 1 - amount : amount) -
+                                  10)
+                              .clamp(
+                                0.0,
+                                constraints.maxWidth > 20
+                                    ? constraints.maxWidth - 20
+                                    : 0.0,
+                              ),
                       child: Container(
                         width: 20,
                         height: 20,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: onChanged == null ? tokens.muted : tokens.card,
+                          color: enabled ? tokens.card : tokens.muted,
                           border: Border.all(color: tokens.primary, width: 2),
                           boxShadow: <BoxShadow>[
                             BoxShadow(color: glass.shadow, blurRadius: 5),

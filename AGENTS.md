@@ -57,3 +57,10 @@
 - 禁止使用：`Semantics` / `ExcludeSemantics` / `MergeSemantics` 组件包装、`semanticLabel` 属性、`Icon.semanticLabel` / `Image.semanticLabel`、`barrierLabel` 等无障碍语义参数。
 - 组件不得暴露 `semanticLabel` 类入参；文档、示例与注释中不得出现“无障碍标签”“无障碍语义”等表述。
 - 允许保留与标签无关的自适应行为：`MediaQuery.disableAnimations`、`MediaQuery.highContrast`、`textScaler`、RTL 逻辑方向，以及键盘焦点/快捷键基础设施（`Focus`、`FocusableActionDetector`）。
+
+## 两端 API 一致性
+
+- 对应组件的业务参数、状态枚举、回调名称和默认语义必须保持一致；仅保留框架布局、宿主及原生类型差异。
+- 点击统一 onPressed，值变化统一 onChanged，关闭统一 onClose；页签采用 selectedIndex，单选采用 value/groupValue，插槽使用 title/subtitle/leading/trailing/actions/footer/child。
+- type 表示形态；按钮预设颜色使用 colorStyle，自定义颜色使用 color，禁止恢复 ghost、outline 或把颜色写回按钮 type。
+- API 重构直接删除旧名称并迁移调用方，同时同步两端实现、预览、README 和完整参数表，不增加兼容别名。

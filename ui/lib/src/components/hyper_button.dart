@@ -24,6 +24,7 @@ class HyperButton extends StatelessWidget {
     this.size = 'default',
     this.icon,
     this.trailingIcon,
+    this.enabled = true,
     this.loading = false,
     this.expanded = false,
     this.tooltip,
@@ -59,6 +60,7 @@ class HyperButton extends StatelessWidget {
   final String size;
   final IconData? icon;
   final IconData? trailingIcon;
+  final bool enabled;
   final bool loading;
   final bool expanded;
   final String? tooltip;
@@ -86,7 +88,7 @@ class HyperButton extends StatelessWidget {
     };
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
-    final disabled = onPressed == null;
+    final disabled = !enabled || onPressed == null;
     final blocked = disabled || loading;
     final metrics = _HyperButtonMetrics.fromSize(size);
     final hasLabel = label != null && label!.isNotEmpty;

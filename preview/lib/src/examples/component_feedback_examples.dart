@@ -91,7 +91,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
             HyperListTile(
               title: label,
               showChevron: true,
-              onTap: () => Navigator.pop(drawerContext, label),
+              onPressed: () => Navigator.pop(drawerContext, label),
             ),
         ],
       ),
@@ -112,7 +112,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
           HyperListTile(
             title: '仅显示收藏',
             trailing: HyperCheckbox(value: true, onChanged: (_) {}),
-            onTap: () {},
+            onPressed: () {},
           ),
           HyperListTile(
             title: '包含已归档',

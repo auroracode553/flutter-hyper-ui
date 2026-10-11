@@ -25,7 +25,7 @@ class HyperListTile extends StatelessWidget {
     this.leadingColor,
     this.titleColor,
     this.trailing,
-    this.onTap,
+    this.onPressed,
     this.selected = false,
     this.enabled = true,
     this.showChevron = true,
@@ -43,7 +43,7 @@ class HyperListTile extends StatelessWidget {
   final Color? leadingColor;
   final Color? titleColor;
   final Widget? trailing;
-  final VoidCallback? onTap;
+  final VoidCallback? onPressed;
   final bool selected;
   final bool enabled;
   final bool showChevron;
@@ -127,7 +127,7 @@ class HyperListTile extends StatelessWidget {
           if (trailing != null) ...<Widget>[
             const SizedBox(width: HyperUiSpacing.sm),
             trailing!,
-          ] else if (showChevron && onTap != null) ...<Widget>[
+          ] else if (showChevron && onPressed != null) ...<Widget>[
             const SizedBox(width: HyperUiSpacing.sm),
             Icon(
               LucideIcons.chevronRight,
@@ -141,7 +141,7 @@ class HyperListTile extends StatelessWidget {
 
     if (plain) {
       return HyperPressable(
-        onPressed: enabled ? onTap : null,
+        onPressed: enabled ? onPressed : null,
         enabled: enabled,
         pressedScale: 0.992,
         borderRadius: radius,
@@ -153,7 +153,7 @@ class HyperListTile extends StatelessWidget {
       radius: 18,
       type: 'regular',
       padding: const EdgeInsets.all(3),
-      onTap: enabled ? onTap : null,
+      onTap: enabled ? onPressed : null,
       color: selected ? glass.surfaceStrong : null,
       borderColor: selected ? tokens.primary.withAlpha(90) : null,
       child: row,

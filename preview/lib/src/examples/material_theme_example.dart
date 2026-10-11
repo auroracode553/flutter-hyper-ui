@@ -54,7 +54,7 @@ class _MaterialThemeExampleState extends State<MaterialThemeExample> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: 12,
                   children: [
-                    const HyperTextField(hintText: '输入内容'),
+                    const HyperTextField(placeholder: '输入内容'),
                     HyperButton(
                       label: '主要操作',
                       onPressed: () {},

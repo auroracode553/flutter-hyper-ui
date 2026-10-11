@@ -9,6 +9,7 @@ enum HyperUpdateStatus {
   checking,
   available,
   upToDate,
+  downloadQueued,
   downloading,
   readyToInstall,
   installing,

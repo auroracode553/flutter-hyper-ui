@@ -27,7 +27,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
         HyperTabBar(
           safeArea: false,
           selectedIndex: _index,
-          onSelected: (index) => setState(() => _index = index),
+          onChanged: (index) => setState(() => _index = index),
           items: const [
             HyperTabItem(icon: LucideIcons.house, label: '首页'),
             HyperTabItem(icon: LucideIcons.smartphone, label: '数码'),
@@ -45,7 +45,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
             margin: EdgeInsets.zero,
             selectedIndex: 0,
             badgeCount: 8,
-            onSelected: (_) => HyperToast.show(context, '打开通知'),
+            onChanged: (_) => HyperToast.show(context, '打开通知'),
             items: const [HyperTabItem(icon: LucideIcons.bell, label: '通知')],
           ),
         ),
@@ -61,7 +61,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
                 safeArea: false,
                 selectedIndex: 0,
                 badgeCount: 27,
-                onSelected: (_) => HyperToast.show(context, '打开通知'),
+                onChanged: (_) => HyperToast.show(context, '打开通知'),
                 items: const [
                   HyperTabItem(icon: LucideIcons.bell, label: '通知'),
                 ],
@@ -72,7 +72,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
                   safeArea: false,
                   margin: EdgeInsets.zero,
                   selectedIndex: _dockIndex,
-                  onSelected: (index) => setState(() => _dockIndex = index),
+                  onChanged: (index) => setState(() => _dockIndex = index),
                   items: const [
                     HyperTabItem(icon: LucideIcons.house, label: '首页'),
                     HyperTabItem(icon: LucideIcons.trendingUp, label: '选股'),

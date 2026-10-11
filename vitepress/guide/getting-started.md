@@ -96,7 +96,7 @@ class _AppHomeState extends State<AppHome> {
           HyperTabItem(icon: HyperIcons.profile, label: '我的'),
         ],
         selectedIndex: selectedIndex,
-        onSelected: (value) => setState(() => selectedIndex = value),
+        onChanged: (value) => setState(() => selectedIndex = value),
       ),
     ],
   );

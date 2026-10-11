@@ -13,8 +13,9 @@ description: 检查更新、版本日志、下载与安装的柔光对话框
 | --- | --- | --- | --- |
 | idle | 隐藏组件，业务从外部入口开始检查 | — | — |
 | checking | 正在请求版本信息 | 加载标识 | 取消 → onCancel |
-| available | 展示新版本、发布日期、大小与更新日志 | 立即更新 → onUpdate | 稍后再说 → onLater |
+| available | 展示新版本、发布日期、大小与更新日志 | 立即更新 → onDownload | 稍后再说 → onLater |
 | upToDate | 当前已是最新版本 | 再次检查 → onCheck | 关闭 → onClose |
+| downloadQueued | 系统下载排队，展示不定进度 | 等待系统下载 | 取消 → onCancel；关闭 → onClose |
 | downloading | 展示下载比例、字节下载量、速度与预计剩余时间 | 确定或不定进度 | 取消 → onCancel；关闭只移除弹窗 → onClose |
 | readyToInstall | 下载完成，等待安装 | 立即安装 → onInstall | 稍后再说 → onLater |
 | installing | 应用新版本 | 确定或不定进度 | 安装期间阻止关闭和返回 |
@@ -52,7 +53,7 @@ HyperUpdateDialog(
 )
 ```
 
-downloadProgress 只在下载阶段使用，并优先于 progress。总大小未知时传 null、0 或系统返回的负值，组件继续显示已下载量和可用速度，进度条改为不定进度，不显示百分比与预计剩余时间。安装阶段始终使用 progress，不会复用下载完成的 100%。字节单位按 1000 换算；速度由业务按相邻快照的字节差和时间差提供，等待网络时可以省略速度。
+downloadProgress 在 downloadQueued / downloading 阶段使用，并优先于 progress。总大小未知时传 null、0 或系统返回的负值，组件继续显示已下载量和可用速度，进度条改为不定进度，不显示百分比与预计剩余时间。安装阶段始终使用 progress，不会复用下载完成的 100%。字节单位按 1000 换算；速度由业务按相邻快照的字节差和时间差提供，等待网络时可以省略速度。
 
 与系统下载管理器接入时，将已下载字节与总字节映射到 downloadProgress；下载完成再切换到 readyToInstall。Android 通过系统下载列表安装 APK 时，可将 primaryLabel 设置为“打开系统下载”，onInstall 打开系统下载列表，并覆盖 message 提示用户点击 APK。仅在业务确认安装开始或版本已更新后切换 installing / completed，组件不假定系统安装已经完成。
 

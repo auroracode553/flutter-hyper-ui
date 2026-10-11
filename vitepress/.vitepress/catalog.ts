@@ -108,10 +108,10 @@ export const componentGroups: ComponentGroup[] = [
     components: [
       component('HyperText', 'hyper_typography.dart', '统一 small、default、large 三档文字尺寸。', {
         propsDocs: [
-          { name: 'data', description: '显示的文本内容' },
+          { name: 'text', description: '显示的文本内容' },
           { name: 'size', description: '文字尺寸：small / default / large，默认 default' },
           { name: 'color', description: '文字颜色' },
-          { name: 'weight', description: '字重' },
+          { name: 'fontWeight', description: '字重' },
           { name: 'maxLines', description: '最大行数' },
           { name: 'textAlign', description: '文字对齐方式' },
         ],
@@ -195,6 +195,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'size', description: '尺寸：small / default / large，默认 default' },
           { name: 'icon', description: '前置图标；label 省略时切换为图标按钮' },
           { name: 'trailingIcon', description: '后置图标' },
+          { name: 'enabled', description: '是否允许点击，默认 true；false 或 onPressed 为 null 时显示禁用态' },
           { name: 'loading', description: '是否显示加载态，默认 false；加载期间禁止点击' },
           { name: 'expanded', description: '是否通栏铺满，默认 false；不传时按内容收缩（等价 inline-block）' },
           { name: 'tooltip', description: '悬停或长按提示文字' },
@@ -212,7 +213,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'actions', description: '操作区组件列表，默认空数组' },
           { name: 'footer', description: '底部组件' },
           { name: 'padding', description: '内边距' },
-          { name: 'onTap', description: '点击回调' },
+          { name: 'onPressed', description: '点击回调' },
           { name: 'selected', description: '是否选中，默认 false' },
         ],
         preview: demo('component-card', 'HyperCard 结构', 'component_surface_examples.dart', 560, '完整结构、选中态与无标题纯内容。', 'CardComponentExample'),
@@ -291,9 +292,10 @@ export const componentGroups: ComponentGroup[] = [
     components: [
       component('HyperTextField', 'hyper_text_field.dart', '纯文本输入控件：支持单行/多行、密码、清空、前后缀插槽、字数统计与错误态，默认不带标题和图标。', {
         propsDocs: [
+          { name: 'value', description: '受控文本，与 Compose 同名；不同时传 controller 或 initialValue' },
           { name: 'controller', description: '文本编辑控制器，为空时按 initialValue 内部维护' },
           { name: 'focusNode', description: '焦点节点' },
-          { name: 'hintText', description: '占位提示文字' },
+          { name: 'placeholder', description: '占位提示文字' },
           { name: 'errorText', description: '错误提示文字，传入即为错误态' },
           { name: 'prefix', description: '前缀插槽，可放置图标等任意组件' },
           { name: 'suffix', description: '后缀插槽，可放置任意组件' },
@@ -330,6 +332,7 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperSegmentedControl / HyperSegmentOption', 'hyper_segmented_control.dart', '受控分段选择，等宽选中底板平滑移动，非等宽选项使用背景色过渡。', {
         propsDocs: [
+          { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'options', description: '选项列表' },
           { name: 'selectedValue', description: '当前选中值' },
           { name: 'onChanged', description: '选中变化回调' },
@@ -350,6 +353,7 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperDropdown', 'hyper_dropdown.dart', '锚定触发器缩放淡入淡出的泛型下拉，箭头同步旋转，支持快速反向操作。', {
         propsDocs: [
+          { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'options', description: '选项列表' },
           { name: 'value', description: '当前选中值' },
           { name: 'onChanged', description: '选中变化回调' },
@@ -362,6 +366,7 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperCheckbox', 'hyper_selection_controls.dart', '支持三态、禁用和标签的受控复选，勾选标记轻缩放淡入淡出。', {
         propsDocs: [
+          { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '是否选中' },
           { name: 'onChanged', description: '状态变化回调' },
           { name: 'label', description: '标签文字' },
@@ -371,6 +376,7 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperRadio', 'hyper_selection_controls.dart', '泛型值受控单选，选中圆环平滑过渡。', {
         propsDocs: [
+          { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '当前选项值' },
           { name: 'groupValue', description: '组选中值' },
           { name: 'onChanged', description: '选中变化回调' },
@@ -380,6 +386,7 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperSwitch', 'hyper_selection_controls.dart', '布尔值受控开关，滑块与轨道颜色同步过渡，支持 RTL。', {
         propsDocs: [
+          { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '是否开启' },
           { name: 'onChanged', description: '状态变化回调' },
           { name: 'label', description: '标签文字' },
@@ -388,6 +395,8 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperSlider', 'hyper_selection_controls.dart', '范围、分段和结束回调可配置的滑块。', {
         propsDocs: [
+          { name: 'enabled', description: '是否允许操作，默认 true' },
+          { name: 'readOnly', description: '只读，保持正常外观并停止修改值，默认 false' },
           { name: 'value', description: '当前值' },
           { name: 'onChanged', description: '拖动中回调' },
           { name: 'onChangeStart', description: '开始拖动回调' },
@@ -501,7 +510,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'primaryLabel', description: '覆盖当前状态主按钮文字' },
           { name: 'secondaryLabel', description: '覆盖当前状态次按钮文字' },
           { name: 'onCheck', description: 'upToDate 状态再次检查的回调；为空时主按钮禁用，idle 隐藏组件' },
-          { name: 'onUpdate', description: 'available 状态的开始下载回调；为空时主按钮禁用' },
+          { name: 'onDownload', description: 'available 状态的开始下载回调；为空时主按钮禁用' },
           { name: 'onInstall', description: 'readyToInstall 状态的安装回调；为空时主按钮禁用' },
           { name: 'onRetry', description: 'error 状态的重试回调；业务层决定重试检查、下载或安装' },
           { name: 'onCancel', description: '非必要更新时 checking / downloading 的取消回调；为空时隐藏取消入口' },
@@ -512,12 +521,12 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-update-dialog', 'HyperUpdateDialog 更新流程', 'component_update_dialog_example.dart', 1100, '字节进度、未知总量、关闭后继续下载、重试和强制更新。', 'UpdateDialogComponentExample'),
       }),
-      component('HyperUpdateStatus / HyperUpdateRelease', 'hyper_update_models.dart', '更新对话框的九种展示状态和版本信息模型；业务流程与 UI 保持分离。', {
+      component('HyperUpdateStatus / HyperUpdateRelease', 'hyper_update_models.dart', '更新对话框的十种展示状态和版本信息模型；业务流程与 UI 保持分离。', {
         id: 'update-status',
         sidebar: false,
         propsDocs: [
           { name: 'idle / checking / available / upToDate', description: '待检查、检查中、发现新版本、已是最新四种状态' },
-          { name: 'downloading / readyToInstall / installing / completed / error', description: '下载中、待安装、安装中、已完成、失败五种状态' },
+          { name: 'downloadQueued / downloading / readyToInstall / installing / completed / error', description: '系统排队、下载中、待安装、安装中、已完成、失败六种状态' },
           { name: 'version', description: '新版本号，必填，不能为空字符串' },
           { name: 'releaseDate', description: '展示用发布日期，由业务格式化；默认不显示' },
           { name: 'sizeLabel', description: '展示用更新包大小，例如 48.6 MB；默认不显示' },
@@ -709,7 +718,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'leadingIcon', description: '前置图标' },
           { name: 'leadingColor', description: '前置图标颜色' },
           { name: 'trailing', description: '尾部组件' },
-          { name: 'onTap', description: '点击回调' },
+          { name: 'onPressed', description: '点击回调' },
           { name: 'selected', description: '是否选中，默认 false' },
           { name: 'enabled', description: '是否启用，默认 true' },
           { name: 'showChevron', description: '是否显示右箭头，默认 true' },

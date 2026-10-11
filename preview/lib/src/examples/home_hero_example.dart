@@ -44,7 +44,7 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
 
           // 特性：桌面端 · 移动端自适应
           HyperCard(
-            onTap: () => HyperToast.show(context, '桌面端 · 移动端自适应'),
+            onPressed: () => HyperToast.show(context, '桌面端 · 移动端自适应'),
             child: Row(
               children: [
                 const HyperIcon(LucideIcons.monitorSmartphone),
@@ -85,7 +85,7 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
           // 底部导航
           HyperTabBar(
             selectedIndex: _tab,
-            onSelected: (index) => setState(() => _tab = index),
+            onChanged: (index) => setState(() => _tab = index),
             items: const [
               HyperTabItem(icon: LucideIcons.layers, label: '组件'),
               HyperTabItem(icon: LucideIcons.bookOpen, label: '文档'),

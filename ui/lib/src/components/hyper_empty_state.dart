@@ -6,14 +6,14 @@ import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 
 class HyperEmptyState extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
   final String title;
   final String? message;
   final Widget? action;
 
   const HyperEmptyState({
     super.key,
-    required this.icon,
+    this.icon,
     required this.title,
     this.message,
     this.action,
@@ -29,16 +29,18 @@ class HyperEmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            HyperGlass(
-              radius: HyperUiRadii.md,
-              type: 'subtle',
-              borderColor: tokens.input,
-              child: SizedBox.square(
-                dimension: 56,
-                child: Icon(icon, size: 24, color: tokens.primary),
+            if (icon != null) ...[
+              HyperGlass(
+                radius: HyperUiRadii.md,
+                type: 'subtle',
+                borderColor: tokens.input,
+                child: SizedBox.square(
+                  dimension: 56,
+                  child: Icon(icon, size: 24, color: tokens.primary),
+                ),
               ),
-            ),
-            const SizedBox(height: HyperUiSpacing.sm),
+              const SizedBox(height: HyperUiSpacing.sm),
+            ],
             Text(
               title,
               style: TextStyle(

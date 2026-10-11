@@ -25,7 +25,7 @@ class _DrawerExampleState extends State<DrawerExample> {
             HyperListTile(
               title: label,
               showChevron: true,
-              onTap: () => Navigator.pop(drawerContext, label),
+              onPressed: () => Navigator.pop(drawerContext, label),
             ),
         ],
       ),
@@ -52,9 +52,9 @@ class _DrawerExampleState extends State<DrawerExample> {
                 value: onlyUnread,
                 onChanged: (value) => setDrawerState(() => onlyUnread = value),
               ),
-              onTap: () => setDrawerState(() => onlyUnread = !onlyUnread),
+              onPressed: () => setDrawerState(() => onlyUnread = !onlyUnread),
             ),
-            const HyperTextField(hintText: '输入关键词，查看键盘适配'),
+            const HyperTextField(placeholder: '输入关键词，查看键盘适配'),
             const SizedBox(height: 20),
             for (var index = 1; index <= 12; index++)
               Padding(

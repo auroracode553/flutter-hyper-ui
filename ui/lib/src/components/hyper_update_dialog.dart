@@ -34,7 +34,7 @@ class HyperUpdateDialog extends StatelessWidget {
     this.primaryLabel,
     this.secondaryLabel,
     this.onCheck,
-    this.onUpdate,
+    this.onDownload,
     this.onInstall,
     this.onRetry,
     this.onCancel,
@@ -61,7 +61,7 @@ class HyperUpdateDialog extends StatelessWidget {
   final String? primaryLabel;
   final String? secondaryLabel;
   final VoidCallback? onCheck;
-  final VoidCallback? onUpdate;
+  final VoidCallback? onDownload;
   final VoidCallback? onInstall;
   final VoidCallback? onRetry;
   final VoidCallback? onCancel;
@@ -98,18 +98,21 @@ class HyperUpdateDialog extends StatelessWidget {
 
   bool get _busy =>
       status == HyperUpdateStatus.checking ||
-      status == HyperUpdateStatus.downloading ||
+      (status == HyperUpdateStatus.downloading ||
+          status == HyperUpdateStatus.downloadQueued) ||
       status == HyperUpdateStatus.installing;
 
   bool get _hasProgress =>
-      status == HyperUpdateStatus.downloading ||
+      (status == HyperUpdateStatus.downloading ||
+          status == HyperUpdateStatus.downloadQueued) ||
       status == HyperUpdateStatus.installing;
 
   bool get _showRelease =>
       release != null &&
       status != HyperUpdateStatus.idle &&
       status != HyperUpdateStatus.checking &&
-      status != HyperUpdateStatus.upToDate;
+      status != HyperUpdateStatus.upToDate &&
+      status != HyperUpdateStatus.error;
 
   HyperUiTone get _tone => switch (status) {
     HyperUpdateStatus.upToDate ||
@@ -122,6 +125,7 @@ class HyperUpdateDialog extends StatelessWidget {
     HyperUpdateStatus.idle ||
     HyperUpdateStatus.checking => LucideIcons.refreshCw,
     HyperUpdateStatus.available => LucideIcons.sparkles,
+    HyperUpdateStatus.downloadQueued ||
     HyperUpdateStatus.downloading => LucideIcons.download,
     HyperUpdateStatus.readyToInstall ||
     HyperUpdateStatus.installing => LucideIcons.packageCheck,
@@ -135,6 +139,7 @@ class HyperUpdateDialog extends StatelessWidget {
     HyperUpdateStatus.checking => '正在检查更新',
     HyperUpdateStatus.available => '发现新版本',
     HyperUpdateStatus.upToDate => '已是最新版本',
+    HyperUpdateStatus.downloadQueued => '已开始下载',
     HyperUpdateStatus.downloading => '正在下载更新',
     HyperUpdateStatus.readyToInstall => '更新已准备就绪',
     HyperUpdateStatus.installing => '正在安装更新',
@@ -148,6 +153,7 @@ class HyperUpdateDialog extends StatelessWidget {
     HyperUpdateStatus.available =>
       mandatory ? '此版本为必要更新，请更新后继续使用。' : '为你带来了新的功能与细节优化。',
     HyperUpdateStatus.upToDate => '所有新功能与体验优化，都已为你准备好。',
+    HyperUpdateStatus.downloadQueued => '更新包已交给系统下载管理器。',
     HyperUpdateStatus.downloading => '新版本正在路上，请保持网络连接。',
     HyperUpdateStatus.readyToInstall => '下载已完成，你可以开始安装新版本。',
     HyperUpdateStatus.installing => '正在应用新版本，请保持应用开启。',
@@ -158,7 +164,7 @@ class HyperUpdateDialog extends StatelessWidget {
   (String, VoidCallback?, IconData) get _primary => switch (status) {
     HyperUpdateStatus.idle => ('检查更新', onCheck, LucideIcons.refreshCw),
     HyperUpdateStatus.upToDate => ('再次检查', onCheck, LucideIcons.refreshCw),
-    HyperUpdateStatus.available => ('立即更新', onUpdate, LucideIcons.download),
+    HyperUpdateStatus.available => ('立即更新', onDownload, LucideIcons.download),
     HyperUpdateStatus.readyToInstall => (
       '立即安装',
       onInstall,
@@ -173,6 +179,7 @@ class HyperUpdateDialog extends StatelessWidget {
     if (_locked) return ('', null);
     return switch (status) {
       HyperUpdateStatus.checking ||
+      HyperUpdateStatus.downloadQueued ||
       HyperUpdateStatus.downloading => ('取消', onCancel),
       HyperUpdateStatus.available ||
       HyperUpdateStatus.readyToInstall => ('稍后再说', onLater),
@@ -189,7 +196,9 @@ class HyperUpdateDialog extends StatelessWidget {
     final color = _tone.color(tokens);
     final (actionLabel, action, actionIcon) = _primary;
     final (alternativeLabel, alternative) = _secondary;
-    final downloading = status == HyperUpdateStatus.downloading;
+    final downloading =
+        (status == HyperUpdateStatus.downloading ||
+        status == HyperUpdateStatus.downloadQueued);
     final amount = downloading && downloadProgress != null
         ? downloadProgress!.fraction
         : normalizeHyperProgress(progress);

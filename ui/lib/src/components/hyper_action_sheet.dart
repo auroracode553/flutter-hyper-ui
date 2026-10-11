@@ -156,7 +156,7 @@ class _HyperActionList<T> extends StatelessWidget {
             titleColor: action.isDanger ? tokens.error : null,
             enabled: action.enabled,
             showChevron: false,
-            onTap: () => Navigator.pop(context, action.value),
+            onPressed: () => Navigator.pop(context, action.value),
           ),
         const SizedBox(height: HyperUiSpacing.sm),
         HyperButton(

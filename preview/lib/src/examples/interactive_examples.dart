@@ -172,7 +172,7 @@ class _BusinessExampleState extends State<BusinessExample> {
       HyperTextField(
         type: 'search',
         prefix: const Icon(LucideIcons.search),
-        hintText: '搜索',
+        placeholder: '搜索',
         onChanged: (value) => setState(() => _query = value),
       ),
       if (_query.isNotEmpty) Text('正在搜索：$_query'),
@@ -190,7 +190,7 @@ class _BusinessExampleState extends State<BusinessExample> {
             subtitle: '柔光 · 跟随系统',
             leadingIcon: LucideIcons.palette,
             leadingColor: const Color(0xFF8C79CF),
-            onTap: () => HyperToast.show(context, '可在页面顶部切换明暗主题'),
+            onPressed: () => HyperToast.show(context, '可在页面顶部切换明暗主题'),
           ),
           HyperListTile(
             title: '消息通知',
@@ -205,7 +205,7 @@ class _BusinessExampleState extends State<BusinessExample> {
             title: '隐私与安全',
             leadingIcon: LucideIcons.shield,
             leadingColor: const Color(0xFF69A894),
-            onTap: () => HyperDialog.confirm(
+            onPressed: () => HyperDialog.confirm(
               context,
               title: '隐私与安全',
               message: '此处由业务应用接入安全设置。',

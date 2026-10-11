@@ -26,7 +26,8 @@ class _FormFieldComponentExampleState extends State<FormFieldComponentExample> {
           helperText: '最多填写 30 个字符',
           errorText: _name.isEmpty ? '请输入项目名称' : null,
           child: HyperTextField(
-            hintText: '例如：组件设计',
+            value: _name,
+            placeholder: '例如：组件设计',
             maxLength: 30,
             showWordLimit: true,
             onChanged: (value) => setState(() => _name = value),

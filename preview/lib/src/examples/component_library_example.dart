@@ -48,7 +48,7 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
           child: HyperTabBar(
             safeArea: false,
             selectedIndex: _tab,
-            onSelected: (value) => setState(() => _tab = value),
+            onChanged: (value) => setState(() => _tab = value),
             items: const <HyperTabItem>[
               HyperTabItem(icon: LucideIcons.house, label: '首页'),
               HyperTabItem(icon: LucideIcons.compass, label: '发现'),
@@ -112,7 +112,7 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
             children: <Widget>[
               const HyperTextField(
                 type: 'search',
-                hintText: '输入关键词',
+                placeholder: '输入关键词',
                 prefix: Icon(LucideIcons.search),
               ),
               HyperDropdown<String>(
@@ -174,7 +174,7 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
               subtitle: '主题、字号和动态效果',
               leadingIcon: LucideIcons.palette,
               leadingColor: const Color(0xFF8C79CF),
-              onTap: () => HyperToast.show(context, '外观与显示'),
+              onPressed: () => HyperToast.show(context, '外观与显示'),
             ),
             HyperListTile(
               title: '通知',
@@ -190,7 +190,7 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
               title: '隐私与安全',
               leadingIcon: LucideIcons.shield,
               leadingColor: const Color(0xFF5C9C88),
-              onTap: () {},
+              onPressed: () {},
             ),
           ],
         ),

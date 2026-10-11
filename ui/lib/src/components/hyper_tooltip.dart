@@ -17,8 +17,10 @@ class HyperTooltip extends StatefulWidget {
     required this.child,
     this.hoverDelay = const Duration(milliseconds: 500),
     this.maxWidth = 240,
+    this.enabled = true,
   }) : assert(maxWidth > 0);
 
+  final bool enabled;
   final String message;
   final Widget child;
   final Duration hoverDelay;
@@ -48,7 +50,7 @@ class _HyperTooltipState extends State<HyperTooltip>
   double _originX = 0;
 
   void _show({bool instant = false}) {
-    if (!mounted || widget.message.isEmpty) return;
+    if (!mounted || !widget.enabled || widget.message.isEmpty) return;
     final box = _anchorKey.currentContext?.findRenderObject() as RenderBox?;
     if (box == null || !box.hasSize) return;
     final origin = box.localToGlobal(Offset.zero);
@@ -112,7 +114,9 @@ class _HyperTooltipState extends State<HyperTooltip>
   @override
   void didUpdateWidget(covariant HyperTooltip oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.message.isEmpty && oldWidget.message.isNotEmpty) {
+    if (!widget.enabled ||
+        (widget.message.isEmpty && oldWidget.message.isNotEmpty)) {
+      _cancelHover();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _motion.close();
       });

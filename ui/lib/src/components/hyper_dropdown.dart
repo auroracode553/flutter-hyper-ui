@@ -17,6 +17,7 @@ class HyperDropdown<T> extends StatelessWidget {
     required this.options,
     this.value,
     this.onChanged,
+    this.enabled = true,
     this.label,
     this.placeholder = '请选择',
     this.menuMaxHeight = 320,
@@ -24,6 +25,7 @@ class HyperDropdown<T> extends StatelessWidget {
   });
 
   final List<HyperOption<T>> options;
+  final bool enabled;
   final T? value;
   final ValueChanged<T>? onChanged;
   final String? label;
@@ -69,7 +71,7 @@ class HyperDropdown<T> extends StatelessWidget {
                           type: 'plain',
                           title: option.label,
                           selected: option.value == value,
-                          enabled: option.enabled,
+                          enabled: enabled && option.enabled,
                           showChevron: false,
                           trailing: option.value == value
                               ? Icon(
@@ -78,10 +80,12 @@ class HyperDropdown<T> extends StatelessWidget {
                                   color: tokens.primary,
                                 )
                               : null,
-                          onTap: () {
-                            onChanged?.call(option.value);
-                            hyperMenuOf(menuContext)?.close();
-                          },
+                          onPressed: !enabled || onChanged == null
+                              ? null
+                              : () {
+                                  onChanged?.call(option.value);
+                                  hyperMenuOf(menuContext)?.close();
+                                },
                         ),
                     ],
                   ),
@@ -92,7 +96,7 @@ class HyperDropdown<T> extends StatelessWidget {
                   isPlaceholder: _selected == null,
                   label: label,
                   expanded: controller.isOpen,
-                  onTap: onChanged == null
+                  onTap: !enabled || onChanged == null
                       ? null
                       : () => controller.isOpen
                             ? controller.close()

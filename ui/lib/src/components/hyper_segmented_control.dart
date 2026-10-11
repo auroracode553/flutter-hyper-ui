@@ -28,6 +28,7 @@ class HyperSegmentedControl<T> extends StatelessWidget {
   final T selectedValue;
   final ValueChanged<T> onChanged;
   final bool equalWidth;
+  final bool enabled;
 
   const HyperSegmentedControl({
     super.key,
@@ -35,6 +36,7 @@ class HyperSegmentedControl<T> extends StatelessWidget {
     required this.selectedValue,
     required this.onChanged,
     this.equalWidth = true,
+    this.enabled = true,
   });
 
   @override
@@ -43,7 +45,7 @@ class HyperSegmentedControl<T> extends StatelessWidget {
       final item = _HyperSegmentItem<T>(
         option: option,
         selected: option.value == selectedValue,
-        onSelected: onChanged,
+        onSelected: enabled ? onChanged : null,
         constrainLabel: equalWidth,
         paintSelection: !equalWidth,
       );
@@ -97,10 +99,11 @@ class HyperSegmentedControl<T> extends StatelessWidget {
                           borderRadius: BorderRadius.circular(HyperUiRadii.sm),
                         ),
                       ),
-                      builder: (context, position, child) => Transform.translate(
-                        offset: Offset(position * cellWidth, 0),
-                        child: child,
-                      ),
+                      builder: (context, position, child) =>
+                          Transform.translate(
+                            offset: Offset(position * cellWidth, 0),
+                            child: child,
+                          ),
                     ),
                   ),
                 ),
@@ -114,7 +117,7 @@ class HyperSegmentedControl<T> extends StatelessWidget {
 class _HyperSegmentItem<T> extends StatelessWidget {
   final HyperSegmentOption<T> option;
   final bool selected;
-  final ValueChanged<T> onSelected;
+  final ValueChanged<T>? onSelected;
   final bool constrainLabel;
   final bool paintSelection;
 
@@ -131,7 +134,7 @@ class _HyperSegmentItem<T> extends StatelessWidget {
     final tokens = HyperUiThemeTokens.of(context);
     final foreground = selected
         ? tokens.foreground
-        : option.enabled
+        : option.enabled && onSelected != null
         ? tokens.foreground
         : tokens.mutedForeground;
     final background = selected && paintSelection
@@ -139,7 +142,9 @@ class _HyperSegmentItem<T> extends StatelessWidget {
         : HyperPalette.transparent;
 
     return HyperPressable(
-      onPressed: option.enabled ? () => onSelected(option.value) : null,
+      onPressed: option.enabled && onSelected != null
+          ? () => onSelected!(option.value)
+          : null,
       borderRadius: BorderRadius.circular(HyperUiRadii.sm),
       child: AnimatedContainer(
         duration: HyperUiEffects.durationOf(

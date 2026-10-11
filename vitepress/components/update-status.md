@@ -20,3 +20,5 @@ description: 更新流程状态与版本信息公开 API
 | error | 当前阶段失败 | 否 | — |
 
 HyperUpdateRelease 的 version 为必填；releaseDate 和 sizeLabel 是业务格式化后的展示文字，highlights 为逐条展示的更新日志。模型只包含展示数据，版本比较、请求地址、下载路径和平台安装流程均由业务实现。
+
+与 Compose 使用同一组状态名：idle、checking、available、upToDate、downloadQueued、downloading、readyToInstall、installing、completed、error。状态数据通过独立的 HyperUpdateRelease 和 HyperUpdateDownloadProgress 传递。

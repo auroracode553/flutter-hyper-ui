@@ -15,7 +15,7 @@ class HyperCard extends StatelessWidget {
   final List<Widget> actions;
   final Widget? footer;
   final EdgeInsetsGeometry padding;
-  final VoidCallback? onTap;
+  final VoidCallback? onPressed;
   final bool selected;
 
   const HyperCard({
@@ -27,7 +27,7 @@ class HyperCard extends StatelessWidget {
     this.actions = const [],
     this.footer,
     this.padding = const EdgeInsets.all(HyperUiSpacing.cardPadding),
-    this.onTap,
+    this.onPressed,
     this.selected = false,
   });
 
@@ -62,7 +62,7 @@ class HyperCard extends StatelessWidget {
     );
 
     return HyperGlass(
-      onTap: onTap,
+      onTap: onPressed,
       color: selected ? HyperGlassTheme.of(context).surfaceStrong : null,
       borderColor: selected ? tokens.primary : null,
       child: content,

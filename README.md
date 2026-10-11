@@ -4,6 +4,26 @@
 
 面向移动端的柔光玻璃 Flutter 组件库。组件使用 `Hyper` 前缀，通过 `package:flutter_hyper_ui/hyper_ui.dart` 引用。
 
+## 两端统一 API
+
+Compose 与 Flutter 对应组件使用相同的业务参数名称和默认语义。两端共同维护：
+
+| 用途 | 统一 API |
+| --- | --- |
+| 点击操作 | onPressed |
+| 表单与选择 | value / onChanged；单选为 value / groupValue / onChanged |
+| 页签与底部导航 | selectedIndex / onChanged，索引从 0 开始 |
+| 分段选择 | options / selectedValue / onChanged |
+| 滑块 | min = 0、max = 100、divisions = null；onChangeStart / onChangeEnd 回传数值 |
+| 文本输入 | placeholder、prefix、suffix、maxLength、enabled、readOnly |
+| 标题与插槽 | title、subtitle、leading、trailing、actions、footer、child |
+| 按钮外观 | type 控制形态，colorStyle 控制预设配色，color 覆盖预设 |
+| 更新弹窗 | status、currentVersion、release、downloadProgress、progress、message 与 onCheck / onDownload / onInstall / onRetry / onCancel / onLater / onClose |
+
+业务参数和回调保持同名。框架布局与宿主参数使用原生类型：Compose 的 Modifier、Composable、Dp、Float，与 Flutter 的 key、Widget、double、Duration；Flutter 的 controller 和 Navigator 弹层宿主、Compose 的受控 visible/open 与内容 DSL 按框架保留。组件特有参数以源码签名和完整参数表为准。
+
+旧名称直接删除，调用点、预览和文档同步迁移，不增加旧 API 别名。默认按钮省略 type 和 colorStyle，显示白色描边；显式 type 仅 filled、tonal、icon，colorStyle 为 primary、success、info、warning、danger。
+
 ## 设计系统
 
 Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实色、柔和及清透三档表面材质，并使用细边缘、低对比阴影和胶囊选中态；交互遵循按下即响应、拖拽 1:1 跟手、释放速度继承、边界柔性阻尼和减少动画适配。

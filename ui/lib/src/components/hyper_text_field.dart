@@ -20,9 +20,10 @@ class HyperTextField extends StatefulWidget {
     this.clearable = false,
     this.showPasswordToggle = false,
     this.showWordLimit = false,
+    this.value,
     this.controller,
     this.focusNode,
-    this.hintText,
+    this.placeholder,
     this.errorText,
     this.prefix,
     this.suffix,
@@ -50,6 +51,7 @@ class HyperTextField extends StatefulWidget {
          'type must be text, search, password, textarea, email, url, number, or tel.',
        ),
        assert(size == 'small' || size == 'default' || size == 'large'),
+       assert(value == null || (controller == null && initialValue == null)),
        assert(rows > 0),
        assert(maxLength == null || maxLength > 0);
 
@@ -61,9 +63,12 @@ class HyperTextField extends StatefulWidget {
   final bool clearable;
   final bool showPasswordToggle;
   final bool showWordLimit;
+
+  /// 与 Compose 相同的受控文本；使用 value 时不同时传 controller 或 initialValue。
+  final String? value;
   final TextEditingController? controller;
   final FocusNode? focusNode;
-  final String? hintText;
+  final String? placeholder;
   final String? errorText;
   final Widget? prefix;
   final Widget? suffix;
@@ -104,7 +109,7 @@ class _HyperTextFieldState extends State<HyperTextField> {
   void initState() {
     super.initState();
     _ownedController = widget.controller == null
-        ? TextEditingController(text: widget.initialValue)
+        ? TextEditingController(text: widget.value ?? widget.initialValue)
         : null;
     _ownedFocusNode = widget.focusNode == null ? FocusNode() : null;
     _controller.addListener(_refresh);
@@ -128,6 +133,26 @@ class _HyperTextFieldState extends State<HyperTextField> {
           ? TextEditingController.fromValue(value)
           : null;
       _controller.addListener(_refresh);
+    }
+    final controlledValue = widget.value;
+    if (controlledValue != null && _controller.text != controlledValue) {
+      // 保留有效的光标位置；业务替换文本后清除失效的组合区间。
+      final selection = _controller.selection;
+      _controller.value = TextEditingValue(
+        text: controlledValue,
+        selection: selection.isValid
+            ? TextSelection(
+                baseOffset: selection.baseOffset.clamp(
+                  0,
+                  controlledValue.length,
+                ),
+                extentOffset: selection.extentOffset.clamp(
+                  0,
+                  controlledValue.length,
+                ),
+              )
+            : TextSelection.collapsed(offset: controlledValue.length),
+      );
     }
     if (oldWidget.focusNode != widget.focusNode) {
       final previous = oldWidget.focusNode ?? _ownedFocusNode!;
@@ -160,7 +185,9 @@ class _HyperTextFieldState extends State<HyperTextField> {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final error = widget.errorText ?? field.errorText;
-    final active = widget.enabled && !widget.readOnly;
+    final effectiveReadOnly =
+        widget.readOnly || (widget.value != null && widget.onChanged == null);
+    final active = widget.enabled && !effectiveReadOnly;
     final multiline = widget._isTextarea;
     final password = widget._isPassword;
     final fontSize = hyperUiSizeValue(
@@ -256,10 +283,11 @@ class _HyperTextFieldState extends State<HyperTextField> {
                 Expanded(
                   child: Stack(
                     children: <Widget>[
-                      if (_controller.text.isEmpty && widget.hintText != null)
+                      if (_controller.text.isEmpty &&
+                          widget.placeholder != null)
                         IgnorePointer(
                           child: Text(
-                            widget.hintText!,
+                            widget.placeholder!,
                             style: TextStyle(
                               color: tokens.mutedForeground,
                               fontSize: fontSize,

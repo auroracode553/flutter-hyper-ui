@@ -19,7 +19,7 @@ class TextFieldComponentExample extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('基础输入'),
-        const HyperTextField(hintText: '请输入内容'),
+        const HyperTextField(placeholder: '请输入内容'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('可清空'),
@@ -27,7 +27,7 @@ class TextFieldComponentExample extends StatelessWidget {
           type: 'search',
           clearable: true,
           initialValue: '示例内容',
-          hintText: '输入后右侧显示清空按钮',
+          placeholder: '输入后右侧显示清空按钮',
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
@@ -35,27 +35,27 @@ class TextFieldComponentExample extends StatelessWidget {
         const HyperTextField(
           type: 'password',
           showPasswordToggle: true,
-          hintText: '请输入密码',
+          placeholder: '请输入密码',
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('前缀与后缀插槽'),
         const HyperTextField(
-          hintText: '搜索组件',
+          placeholder: '搜索组件',
           prefix: Icon(LucideIcons.search),
           suffix: Icon(LucideIcons.slidersHorizontal),
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('多行输入'),
-        const HyperTextField(type: 'textarea', rows: 3, hintText: '请输入多行内容'),
+        const HyperTextField(type: 'textarea', rows: 3, placeholder: '请输入多行内容'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('字数统计'),
         const HyperTextField(
           maxLength: 50,
           showWordLimit: true,
-          hintText: '最多输入 50 个字符',
+          placeholder: '最多输入 50 个字符',
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 

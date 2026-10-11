@@ -6,21 +6,21 @@ import '../theme/hyper_ui_size.dart';
 
 class HyperText extends StatelessWidget {
   const HyperText(
-    this.data, {
+    this.text, {
     super.key,
     this.size = 'default',
     this.color,
-    this.weight,
+    this.fontWeight,
     this.maxLines,
     this.textAlign,
   }) : assert(
          size == 'large' || size == 'default' || size == 'small',
          'HyperText.size must be large, default, or small.',
        );
-  final String data;
+  final String text;
   final String size;
   final Color? color;
-  final FontWeight? weight;
+  final FontWeight? fontWeight;
   final int? maxLines;
   final TextAlign? textAlign;
   @override
@@ -28,7 +28,7 @@ class HyperText extends StatelessWidget {
     final tokens = HyperUiThemeTokens.of(context);
     final fontSize = hyperUiSizeValue(size, small: 12, normal: 14, large: 18);
     return Text(
-      data,
+      text,
       maxLines: maxLines,
       textAlign: textAlign,
       overflow: maxLines == null ? null : TextOverflow.ellipsis,
@@ -36,7 +36,7 @@ class HyperText extends StatelessWidget {
         fontSize: fontSize,
         height: 1.4,
         fontWeight:
-            weight ?? (size == 'large' ? FontWeight.w700 : FontWeight.w400),
+            fontWeight ?? (size == 'large' ? FontWeight.w700 : FontWeight.w400),
         color:
             color ??
             (size == 'small' ? tokens.mutedForeground : tokens.foreground),

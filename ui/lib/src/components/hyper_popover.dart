@@ -76,7 +76,7 @@ class HyperPopupMenu<T> extends StatelessWidget {
               titleColor: action.isDanger ? tokens.error : null,
               enabled: action.enabled,
               showChevron: false,
-              onTap: () {
+              onPressed: () {
                 hyperMenuOf(menuContext)?.close();
                 onSelected(action.value);
               },

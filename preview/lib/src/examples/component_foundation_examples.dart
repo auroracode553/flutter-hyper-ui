@@ -32,7 +32,7 @@ class TextComponentExample extends StatelessWidget {
 
         _label('颜色、字重与行数截断'),
         HyperText('主题品牌色', color: HyperUiThemeTokens.of(context).primary),
-        const HyperText('加粗正文', weight: FontWeight.w600),
+        const HyperText('加粗正文', fontWeight: FontWeight.w600),
         const HyperText(
           'maxLines: 1 时超长文本自动省略：统一文字层级让界面在不同密度下保持稳定节奏。',
           maxLines: 1,

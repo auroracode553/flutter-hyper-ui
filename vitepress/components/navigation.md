@@ -12,7 +12,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 HyperTabBar(
   selectedIndex: selectedIndex,
-  onSelected: (index) {
+  onChanged: (index) {
     setState(() => selectedIndex = index);
   },
   items: const [
