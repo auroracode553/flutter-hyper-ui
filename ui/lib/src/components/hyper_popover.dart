@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../utils/hyper_menu_width.dart';
 import 'hyper_action_sheet.dart';
 import 'hyper_anchored_surface.dart';
 import 'hyper_button.dart';
@@ -10,14 +11,23 @@ import 'hyper_pressable.dart';
 
 /// 锚定控件的补充内容。
 class HyperPopover extends StatelessWidget {
-  const HyperPopover({super.key, required this.child, required this.content});
+  const HyperPopover({
+    super.key,
+    required this.child,
+    required this.content,
+    this.maxWidth = 280,
+    this.width,
+  }) : assert(maxWidth > 0 && maxWidth < double.infinity),
+       assert(width == null || (width > 0 && width < double.infinity));
 
   final Widget child;
   final Widget content;
+  final double maxWidth;
+  final double? width;
 
   @override
   Widget build(BuildContext context) => buildHyAnchoredSurface(
-    width: (MediaQuery.sizeOf(context).width - 32).clamp(0.0, 280.0).toDouble(),
+    width: (width ?? 180).clamp(0.0, maxWidth).toDouble(),
     maxHeight: MediaQuery.sizeOf(context).height * .4,
     padding: const EdgeInsets.all(14),
     triggerBuilder: (_, controller) => HyperPressable(
@@ -46,7 +56,11 @@ class HyperPopupMenu<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => buildHyAnchoredSurface(
-    width: (MediaQuery.sizeOf(context).width - 32).clamp(0.0, 240.0).toDouble(),
+    width: measureHyperMenuWidth(
+      context,
+      labels: actions.map((action) => action.label),
+      horizontalSpace: actions.any((action) => action.icon != null) ? 84 : 38,
+    ),
     maxHeight: MediaQuery.sizeOf(context).height * .4,
     padding: const EdgeInsets.all(5),
     triggerBuilder: (_, controller) => HyperButton(

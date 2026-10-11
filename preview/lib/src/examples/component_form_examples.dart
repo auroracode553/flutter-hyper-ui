@@ -169,6 +169,7 @@ class _DropdownComponentExampleState extends State<DropdownComponentExample> {
   String? _value = 'recent';
   String? _owner;
   int _pageSize = 20;
+  String? _longValue;
 
   @override
   Widget build(BuildContext context) {
@@ -201,20 +202,35 @@ class _DropdownComponentExampleState extends State<DropdownComponentExample> {
         ),
         const SizedBox(height: HyperUiSpacing.xl),
 
-        SizedBox(
+        HyperDropdown<int>(
           width: 220,
-          child: HyperDropdown<int>(
-            label: '每页数量',
-            value: _pageSize,
-            menuMaxHeight: 160,
-            onChanged: (value) => setState(() => _pageSize = value),
-            options: const [
-              HyperOption(value: 10, label: '每页 10 条'),
-              HyperOption(value: 20, label: '每页 20 条'),
-              HyperOption(value: 50, label: '每页 50 条'),
-              HyperOption(value: 100, label: '每页 100 条'),
-            ],
-          ),
+          label: '每页数量',
+          value: _pageSize,
+          menuMaxHeight: 160,
+          onChanged: (value) => setState(() => _pageSize = value),
+          options: const [
+            HyperOption(value: 10, label: '每页 10 条'),
+            HyperOption(value: 20, label: '每页 20 条'),
+            HyperOption(value: 50, label: '每页 50 条'),
+            HyperOption(value: 100, label: '每页 100 条'),
+          ],
+        ),
+        const SizedBox(height: HyperUiSpacing.xl),
+        HyperDropdown<String>(
+          label: '长选项',
+          value: _longValue,
+          onChanged: (value) => setState(() => _longValue = value),
+          options: const [
+            HyperOption(value: 'lastPlayed', label: '按最近播放时间排序并保留原始文件名称'),
+            HyperOption(value: 'name', label: '按名称'),
+          ],
+        ),
+        const SizedBox(height: HyperUiSpacing.xl),
+        HyperDropdown<String>(label: '空选项', options: const [], onChanged: (_) {}),
+        const SizedBox(height: HyperUiSpacing.xl),
+        const HyperDropdown<String>(
+          label: '禁用', enabled: false, value: 'recent',
+          options: [HyperOption(value: 'recent', label: '最近更新')],
         ),
       ],
     );

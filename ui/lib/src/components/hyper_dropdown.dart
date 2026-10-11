@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../utils/hyper_menu_width.dart';
 import 'hyper_anchored_surface.dart';
 import 'hyper_list_tile.dart';
 import 'hyper_select.dart';
@@ -22,7 +23,8 @@ class HyperDropdown<T> extends StatelessWidget {
     this.placeholder = '请选择',
     this.menuMaxHeight = 320,
     this.width,
-  });
+  }) : assert(menuMaxHeight > 0 && menuMaxHeight < double.infinity),
+       assert(width == null || (width > 0 && width < double.infinity));
 
   final List<HyperOption<T>> options;
   final bool enabled;
@@ -45,63 +47,71 @@ class HyperDropdown<T> extends StatelessWidget {
     final tokens = HyperUiThemeTokens.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
-        final triggerWidth =
-            width ??
-            (constraints.maxWidth.isFinite ? constraints.maxWidth : 240.0);
-        return SizedBox(
-          width: width,
-          child: buildHyAnchoredSurface(
+        final preferredWidth = width ?? measureHyperMenuWidth(
+          context,
+          labels: <String>[placeholder, for (final option in options) option.label],
+        );
+        final triggerWidth = preferredWidth.clamp(0.0, constraints.maxWidth).toDouble();
+        // 父容器可拉伸外层布局，但默认字段保持紧凑；显式 width 用于宽表单。
+        return Align(
+          alignment: AlignmentDirectional.topStart,
+          widthFactor: 1,
+          heightFactor: 1,
+          child: SizedBox(
             width: triggerWidth,
-            maxHeight: menuMaxHeight,
-            padding: const EdgeInsets.all(5),
-            contentBuilder: (menuContext) => options.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      '暂无选项',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: tokens.mutedForeground),
+            child: buildHyAnchoredSurface(
+              width: triggerWidth,
+              maxHeight: menuMaxHeight,
+              padding: const EdgeInsets.all(5),
+              contentBuilder: (menuContext) => options.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        '暂无选项',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: tokens.mutedForeground),
+                      ),
+                    )
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (final option in options)
+                          HyperListTile(
+                            type: 'plain',
+                            title: option.label,
+                            selected: option.value == value,
+                            enabled: enabled && option.enabled,
+                            showChevron: false,
+                            trailing: option.value == value
+                                ? Icon(
+                                    LucideIcons.check,
+                                    size: 18,
+                                    color: tokens.primary,
+                                  )
+                                : null,
+                            onPressed: !enabled || onChanged == null
+                                ? null
+                                : () {
+                                    onChanged?.call(option.value);
+                                    hyperMenuOf(menuContext)?.close();
+                                  },
+                          ),
+                      ],
                     ),
-                  )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (final option in options)
-                        HyperListTile(
-                          type: 'plain',
-                          title: option.label,
-                          selected: option.value == value,
-                          enabled: enabled && option.enabled,
-                          showChevron: false,
-                          trailing: option.value == value
-                              ? Icon(
-                                  LucideIcons.check,
-                                  size: 18,
-                                  color: tokens.primary,
-                                )
-                              : null,
-                          onPressed: !enabled || onChanged == null
-                              ? null
-                              : () {
-                                  onChanged?.call(option.value);
-                                  hyperMenuOf(menuContext)?.close();
-                                },
-                        ),
-                    ],
+              triggerBuilder: (anchorContext, controller) =>
+                  buildHySelectionField(
+                    anchorContext,
+                    value: _selected?.label ?? placeholder,
+                    isPlaceholder: _selected == null,
+                    label: label,
+                    expanded: controller.isOpen,
+                    onTap: !enabled || onChanged == null
+                        ? null
+                        : () => controller.isOpen
+                              ? controller.close()
+                              : controller.open(),
                   ),
-            triggerBuilder: (anchorContext, controller) =>
-                buildHySelectionField(
-                  anchorContext,
-                  value: _selected?.label ?? placeholder,
-                  isPlaceholder: _selected == null,
-                  label: label,
-                  expanded: controller.isOpen,
-                  onTap: !enabled || onChanged == null
-                      ? null
-                      : () => controller.isOpen
-                            ? controller.close()
-                            : controller.open(),
-                ),
+            ),
           ),
         );
       },

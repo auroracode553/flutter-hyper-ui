@@ -360,9 +360,9 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'label', description: '选择框上方的字段标题' },
           { name: 'placeholder', description: '占位文字，默认 请选择' },
           { name: 'menuMaxHeight', description: '下拉菜单最大高度，默认 320' },
-          { name: 'width', description: '宽度' },
+          { name: 'width', description: '字段与菜单期望宽度；默认 null，按最长文案加 68 控件占位限制在 160–240，仍服从父级可用空间' },
         ],
-        preview: demo('component-dropdown', 'HyperDropdown 下拉菜单', 'component_form_examples.dart', 420, '带标签单选、占位与禁用项、固定宽度与菜单高度。', 'DropdownComponentExample'),
+        preview: demo('component-dropdown', 'HyperDropdown 下拉菜单', 'component_form_examples.dart', 740, '160–240 自动宽度、220 显式宽度、长文案、占位、空列表与禁用项。', 'DropdownComponentExample'),
       }),
       component('HyperCheckbox', 'hyper_selection_controls.dart', '支持三态、禁用和标签的受控复选，勾选标记轻缩放淡入淡出。', {
         propsDocs: [
@@ -484,7 +484,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-toast', 'HyperToast 轻提示', 'component_feedback_examples.dart', 380, '四种语义色调、操作按钮与显示时长。', 'ToastComponentExample'),
       }),
-      component('HyperDialog', 'hyper_feedback.dart', '居中轻缩放淡入淡出的确认、提示或自定义正文对话框。', {
+      component('HyperDialog', 'hyper_feedback.dart', '居中轻缩放淡入淡出的对话框，窗口两侧各留 24，面板最大宽 420。', {
         propsDocs: [
           { name: 'title', description: '标题' },
           { name: 'message', description: '提示文字' },
@@ -580,8 +580,10 @@ export const componentGroups: ComponentGroup[] = [
         propsDocs: [
           { name: 'child', description: '锚点子组件' },
           { name: 'content', description: '气泡内容组件' },
+          { name: 'width', description: '期望内容宽度，默认 null 时采用 180；仍受 maxWidth 与窗口安全区约束' },
+          { name: 'maxWidth', description: '内容宽度上限，默认 280；不决定默认内容宽度' },
         ],
-        preview: demo('component-popover', 'HyperPopover 气泡', 'component_feedback_examples.dart', 260, '点击锚点查看补充说明。', 'PopoverComponentExample'),
+        preview: demo('component-popover', 'HyperPopover 气泡', 'component_feedback_examples.dart', 360, '180 紧凑说明与文件夹操作、240 显式宽度；选择后读取结果。', 'PopoverComponentExample'),
       }),
       component('HyperTooltip', 'hyper_tooltip.dart', '悬停与长按时轻缩放淡入淡出的玻璃提示，键盘聚焦即时显示。', {
         propsDocs: [
@@ -592,7 +594,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-tooltip', 'HyperTooltip 轻提示', 'component_tooltip_example.dart', 260, '悬停、长按与键盘聚焦。', 'TooltipComponentExample'),
       }),
-      component('HyperPopupMenu', 'hyper_popover.dart', '基于 HyperAction 的泛型弹出菜单，沿触发器一侧展开与收起。', {
+      component('HyperPopupMenu', 'hyper_popover.dart', '基于 HyperAction 的泛型弹出菜单，按操作文案自动取 160–240 宽度，沿触发器一侧展开与收起。', {
         propsDocs: [
           { name: 'actions', description: '菜单项列表' },
           { name: 'onChanged', description: '选中回调' },

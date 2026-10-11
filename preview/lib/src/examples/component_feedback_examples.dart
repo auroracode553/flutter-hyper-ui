@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
+import 'package:flutter_hyper_ui/src/components/hyper_anchored_surface.dart' show hyperMenuOf;
 
 // doc-region ToastComponentExample
 class ToastComponentExample extends StatelessWidget {
@@ -407,13 +408,55 @@ class ActionSheetComponentExample extends StatelessWidget {
 // end-doc-region ActionSheetComponentExample
 
 // doc-region PopoverComponentExample
-class PopoverComponentExample extends StatelessWidget {
+class PopoverComponentExample extends StatefulWidget {
   const PopoverComponentExample({super.key});
 
   @override
-  Widget build(BuildContext context) => const HyperPopover(
-    content: Text('Popover 保持页面上下文，适合展示简短补充说明。'),
-    child: Text('点击查看说明'),
+  State<PopoverComponentExample> createState() => _PopoverComponentExampleState();
+}
+
+class _PopoverComponentExampleState extends State<PopoverComponentExample> {
+  String _selected = '尚未选择';
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      const HyperPopover(
+        content: Text('Popover 保持页面上下文，适合展示简短补充说明。'),
+        child: Text('点击查看说明'),
+      ),
+      const SizedBox(height: HyperUiSpacing.xl),
+      HyperPopover(
+        child: const Text('文件夹操作'),
+        content: Builder(
+          builder: (menuContext) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final label in ['删除文件夹', '详情', '重命名'])
+                HyperListTile(
+                  type: 'plain',
+                  title: label,
+                  showChevron: false,
+                  onPressed: () {
+                    hyperMenuOf(menuContext)?.close();
+                    setState(() => _selected = label);
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
+      const SizedBox(height: HyperUiSpacing.sm),
+      Text('选择结果：$_selected'),
+      const SizedBox(height: HyperUiSpacing.xl),
+      const HyperPopover(
+        width: 240,
+        child: Text('查看较宽内容'),
+        content: Text('通过 width 为输入、说明等复杂内容保留更多空间。'),
+      ),
+    ],
   );
 }
 // end-doc-region PopoverComponentExample
