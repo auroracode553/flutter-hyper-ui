@@ -15,6 +15,7 @@ class HyperAction<T> {
     this.icon,
     this.type = 'default',
     this.enabled = true,
+    this.selected = false,
   }) : assert(type == 'default' || type == 'danger');
 
   final T value;
@@ -22,6 +23,9 @@ class HyperAction<T> {
   final IconData? icon;
   final String type;
   final bool enabled;
+
+  /// 当前动作是否已选中，供菜单和选择列表展示。
+  final bool selected;
 
   bool get isDanger => switch (type) {
     'default' => false,
@@ -155,6 +159,7 @@ class _HyperActionList<T> extends StatelessWidget {
             leadingColor: action.isDanger ? tokens.error : tokens.primary,
             titleColor: action.isDanger ? tokens.error : null,
             enabled: action.enabled,
+            selected: action.selected,
             showChevron: false,
             onPressed: () => Navigator.pop(context, action.value),
           ),

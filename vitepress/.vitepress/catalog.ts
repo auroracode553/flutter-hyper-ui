@@ -222,6 +222,7 @@ export const componentGroups: ComponentGroup[] = [
         propsDocs: [
           { name: 'child', description: '子组件' },
           { name: 'onPressed', description: '点击回调' },
+          { name: 'onLongPressed', description: '长按回调；与点击共用 enabled 和按压反馈，默认 null' },
           { name: 'enabled', description: '是否启用，默认 true' },
           { name: 'pressedScale', description: '按下时缩放比例，默认 0.975' },
           { name: 'pressedOpacity', description: '按下时透明度，默认 0.92' },
@@ -493,6 +494,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'cancelLabel', description: '取消按钮文字，默认 取消' },
           { name: 'type', description: '确认按钮类型：default / danger，默认 default' },
           { name: 'showCancel', description: '是否显示取消按钮，默认 true' },
+          { name: 'canConfirm', description: '可选提交校验回调；返回 false 时保持弹窗，默认不限制确认' },
         ],
         preview: demo('component-dialog', 'HyperDialog 对话框', 'component_feedback_examples.dart', 420, '标准确认、危险操作、仅确认按钮与自定义正文。', 'DialogComponentExample'),
       }),
@@ -570,6 +572,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'builder', description: '自定义内容构建器，与 actions 二选一' },
           { name: 'actions', description: '操作项列表' },
           { name: 'HyperAction.type', description: '操作类型：default / danger，默认 default' },
+          { name: 'HyperAction.selected', description: '操作是否已选中，默认 false' },
           { name: 'title', description: '标题' },
           { name: 'dismissible', description: '是否可点击外部关闭，默认 true' },
           { name: 'cancelLabel', description: '取消按钮文字，默认 取消' },
@@ -596,6 +599,7 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperPopupMenu', 'hyper_popover.dart', '基于 HyperAction 的泛型弹出菜单，按操作文案自动取 160–240 宽度，沿触发器一侧展开与收起。', {
         propsDocs: [
+          { name: 'enabled', description: '是否允许打开菜单，默认 true' },
           { name: 'actions', description: '菜单项列表' },
           { name: 'onChanged', description: '选中回调' },
           { name: 'icon', description: '触发图标，默认 LucideIcons.ellipsis' },

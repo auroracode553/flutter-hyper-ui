@@ -153,10 +153,17 @@ abstract final class HyperDialog {
     String cancelLabel = '取消',
     String type = 'default',
     bool showCancel = true,
+    bool Function()? canConfirm,
   }) {
     if (type != 'default' && type != 'danger') {
       throw ArgumentError.value(type, 'type', 'Invalid dialog type');
     }
+    // 表单先执行校验；返回 false 时保持当前弹层，供用户继续修改。
+    void confirm(BuildContext dialogContext) {
+      if (canConfirm?.call() == false) return;
+      Navigator.pop(dialogContext, true);
+    }
+
     return showHyperModal<bool>(
       context,
       builder: (dialogContext) => Padding(
@@ -202,13 +209,11 @@ abstract final class HyperDialog {
                               colorStyle: 'danger',
                               type: 'filled',
                               label: confirmLabel,
-                              onPressed: () =>
-                                  Navigator.pop(dialogContext, true),
+                              onPressed: () => confirm(dialogContext),
                             )
                           : HyperButton(
                               label: confirmLabel,
-                              onPressed: () =>
-                                  Navigator.pop(dialogContext, true),
+                              onPressed: () => confirm(dialogContext),
                               colorStyle: 'primary',
                               type: 'filled',
                             ),

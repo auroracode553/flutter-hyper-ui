@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
-import 'package:flutter_hyper_ui/src/components/hyper_anchored_surface.dart' show hyperMenuOf;
+import 'package:flutter_hyper_ui/src/components/hyper_anchored_surface.dart'
+    show hyperMenuOf;
 
 // doc-region ToastComponentExample
 class ToastComponentExample extends StatelessWidget {
@@ -257,6 +258,7 @@ class DialogComponentExample extends StatelessWidget {
             ),
             confirmLabel: '知道了',
             showCancel: false,
+            canConfirm: () => true,
           ),
         ),
       ],
@@ -412,7 +414,8 @@ class PopoverComponentExample extends StatefulWidget {
   const PopoverComponentExample({super.key});
 
   @override
-  State<PopoverComponentExample> createState() => _PopoverComponentExampleState();
+  State<PopoverComponentExample> createState() =>
+      _PopoverComponentExampleState();
 }
 
 class _PopoverComponentExampleState extends State<PopoverComponentExample> {

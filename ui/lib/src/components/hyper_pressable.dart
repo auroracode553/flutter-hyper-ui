@@ -11,6 +11,7 @@ class HyperPressable extends StatefulWidget {
     super.key,
     required this.child,
     this.onPressed,
+    this.onLongPressed,
     this.enabled = true,
     this.pressedScale = 0.975,
     this.pressedOpacity = 0.92,
@@ -19,6 +20,9 @@ class HyperPressable extends StatefulWidget {
 
   final Widget child;
   final VoidCallback? onPressed;
+
+  /// 长按操作与普通点击共用控件的可用状态和按压反馈。
+  final VoidCallback? onLongPressed;
   final bool enabled;
   final double pressedScale;
   final double pressedOpacity;
@@ -31,7 +35,9 @@ class HyperPressable extends StatefulWidget {
 class _HyperPressableState extends State<HyperPressable> {
   bool _pressed = false;
 
-  bool get _interactive => widget.enabled && widget.onPressed != null;
+  bool get _interactive =>
+      widget.enabled &&
+      (widget.onPressed != null || widget.onLongPressed != null);
 
   void _setPressed(bool value) {
     if (_pressed == value || !mounted) return;
@@ -65,6 +71,13 @@ class _HyperPressableState extends State<HyperPressable> {
         onTapUp: _interactive ? (_) => _setPressed(false) : null,
         onTapCancel: _interactive ? () => _setPressed(false) : null,
         onTap: _interactive ? widget.onPressed : null,
+        onLongPressStart: _interactive && widget.onLongPressed != null
+            ? (_) => _setPressed(true)
+            : null,
+        onLongPress: _interactive ? widget.onLongPressed : null,
+        onLongPressEnd: _interactive && widget.onLongPressed != null
+            ? (_) => _setPressed(false)
+            : null,
         child: AnimatedScale(
           scale: _pressed && !reduceMotion ? widget.pressedScale : 1,
           duration: reduceMotion ? Duration.zero : duration,

@@ -22,6 +22,8 @@ Compose 与 Flutter 对应组件使用相同的业务参数名称和默认语义
 
 业务参数和回调保持同名。框架布局与宿主参数使用原生类型：Compose 的 Modifier、Composable、Dp、Float，与 Flutter 的 key、Widget、double、Duration；Flutter 的 controller 和 Navigator 弹层宿主、Compose 的受控 visible/open 与内容 DSL 按框架保留。组件特有参数以源码签名和完整参数表为准。
 
+Flutter 的标准表单弹窗使用 HyperDialog.confirm，通过 canConfirm 校验提交；HyperPressable 提供 onLongPressed 长按回调；HyperPopupMenu 通过 enabled 控制打开能力，HyperAction.selected 展示当前选择。完整签名和参数表见对应组件文档。
+
 默认按钮省略 type 和 colorStyle，显示白色描边；显式 type 仅 filled、tonal、icon，colorStyle 为 primary、success、info、warning、danger。
 
 ## 设计系统

@@ -47,12 +47,16 @@ class HyperPopupMenu<T> extends StatelessWidget {
     required this.onChanged,
     this.icon = LucideIcons.ellipsis,
     this.tooltip = '更多操作',
+    this.enabled = true,
   });
 
   final List<HyperAction<T>> actions;
   final ValueChanged<T> onChanged;
   final IconData icon;
   final String tooltip;
+
+  /// 禁用时阻止打开菜单。
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) => buildHyAnchoredSurface(
@@ -67,8 +71,9 @@ class HyperPopupMenu<T> extends StatelessWidget {
       type: 'icon',
       icon: icon,
       tooltip: tooltip,
-      onPressed: () =>
-          controller.isOpen ? controller.close() : controller.open(),
+      onPressed: enabled
+          ? () => controller.isOpen ? controller.close() : controller.open()
+          : null,
     ),
     contentBuilder: (menuContext) {
       final tokens = HyperUiThemeTokens.of(menuContext);
@@ -88,9 +93,14 @@ class HyperPopupMenu<T> extends StatelessWidget {
               leadingIcon: action.icon,
               leadingColor: action.isDanger ? tokens.error : tokens.primary,
               titleColor: action.isDanger ? tokens.error : null,
-              enabled: action.enabled,
+              enabled: enabled && action.enabled,
+              selected: action.selected,
+              trailing: action.selected
+                  ? Icon(LucideIcons.check, size: 18, color: tokens.primary)
+                  : null,
               showChevron: false,
               onPressed: () {
+                if (!enabled || !action.enabled) return;
                 hyperMenuOf(menuContext)?.close();
                 onChanged(action.value);
               },
