@@ -37,6 +37,7 @@ enum _NavBarExample {
 class _NavBarComponentExampleState extends State<NavBarComponentExample> {
   _NavBarExample _selected = _NavBarExample.backOnly;
   String _feedback = '切换布局或点击顶部操作，查看导航反馈。';
+  bool _scrolledUnder = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,41 +60,53 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
             child: MediaQuery.removePadding(
               context: context,
               removeTop: true,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverPadding(
-                    padding: EdgeInsets.fromLTRB(
-                      16,
-                      safeArea.top + navBarHeight + 12,
-                      16,
-                      safeArea.bottom + 24,
-                    ),
-                    sliver: SliverList.builder(
-                      itemCount: 14,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: index == 0
-                            ? _NavBarControls(
-                                selected: _selected,
-                                feedback: _feedback,
-                                onChanged: (value) => setState(() {
-                                  _selected = value;
-                                  _feedback = '已切换为「${value.label}」';
-                                }),
-                              )
-                            : index == 1
-                            ? const _InspirationHeader()
-                            : _InspirationItem(index: index - 1),
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  if (notification.depth == 0 &&
+                      notification.metrics.axis == Axis.vertical) {
+                    final next = notification.metrics.extentBefore > 0.5;
+                    if (next != _scrolledUnder)
+                      setState(() => _scrolledUnder = next);
+                  }
+                  return false;
+                },
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverPadding(
+                      padding: EdgeInsets.fromLTRB(
+                        16,
+                        safeArea.top + navBarHeight + 12,
+                        16,
+                        safeArea.bottom + 24,
+                      ),
+                      sliver: SliverList.builder(
+                        itemCount: 14,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: index == 0
+                              ? _NavBarControls(
+                                  selected: _selected,
+                                  feedback: _feedback,
+                                  onChanged: (value) => setState(() {
+                                    _selected = value;
+                                    _feedback = '已切换为「${value.label}」';
+                                  }),
+                                )
+                              : index == 1
+                              ? const _InspirationHeader()
+                              : _InspirationItem(index: index - 1),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
-        // 导航操作悬浮在同一视口上方；HyperNavBar 不绘制整栏背景。
+        // 宿主只传滚动状态，过渡、采样与着色由导航组件统一处理。
         HyperNavBar(
+          scrolledUnder: _scrolledUnder,
           type: _selected.type,
           height: navBarHeight,
           title: title == null ? null : Text(title),
@@ -155,7 +168,7 @@ class _NavBarControls extends StatelessWidget {
         const SizedBox(height: 12),
         HyperText(feedback, size: 'small'),
         const SizedBox(height: 6),
-        const HyperText('向上滚动，观察正文经过固定导航栏。', size: 'small'),
+        const HyperText('向上滚动显示向下渐隐的毛玻璃，回到顶部恢复透明。', size: 'small'),
       ],
     ),
   );
@@ -217,7 +230,7 @@ class _InspirationItem extends StatelessWidget {
           const SizedBox(height: 18),
           HyperText(titles[(index - 1) % titles.length], size: 'large'),
           const SizedBox(height: 8),
-          const HyperText('导航栏保持透明，列表内容连续向上移动。'),
+          const HyperText('模糊和底色向下淡出到透明，标题与按钮保持清晰。'),
         ],
       ),
     );

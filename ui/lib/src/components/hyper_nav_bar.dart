@@ -1,10 +1,15 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_ui_effects.dart';
 import 'hyper_button.dart';
 import 'hyper_typography.dart';
+
+part 'hyper_nav_bar_surface.dart';
 
 /// 固定布局类型；custom 保留完整 Widget 插槽。
 abstract final class HyperNavBarTypes {
@@ -25,7 +30,8 @@ abstract final class HyperNavBarTypes {
   };
 }
 
-/// 透明导航容器；固定 type 生成常见布局，custom 使用完整插槽。
+/// 顶部静止时透明；[scrolledUnder] 为 true 时显示向下渐隐的背景材质。
+/// 固定 type 生成常见布局，custom 使用完整插槽。
 ///
 /// [leading]、[title]、[subtitle]、[trailing] 都接受任意 Widget。
 /// [child] 可完全接管内部布局；此时不生成自动返回按钮或默认标题布局。
@@ -43,6 +49,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.height = 44,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     this.safeArea = true,
+    this.scrolledUnder = false,
     this.onBackPressed,
     this.onMorePressed,
     this.onSavePressed,
@@ -68,6 +75,9 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   final EdgeInsetsGeometry padding;
 
   final bool safeArea;
+
+  /// 由滚动宿主提供正文是否已滚入导航区域；不改变导航高度或内容布局。
+  final bool scrolledUnder;
 
   /// 固定返回类型的回调；未传入时调用 Navigator.maybePop。
   final VoidCallback? onBackPressed;
@@ -123,7 +133,10 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
       height: height,
       child: Padding(padding: padding, child: child ?? _buildSlots(context)),
     );
-    return safeArea ? SafeArea(bottom: false, child: content) : content;
+    return _NavBarScrollSurface(
+      scrolledUnder: scrolledUnder,
+      child: safeArea ? SafeArea(bottom: false, child: content) : content,
+    );
   }
 
   Widget _buildSlots(BuildContext context) {

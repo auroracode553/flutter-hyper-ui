@@ -38,6 +38,8 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 ## 通用组件
 
 - 导航：`HyperTabBar`、`HyperTabs`、`HyperNavBar`（type 支持 custom、backOnly、titleOnly、backWithTitle、more、edit）、`HyperDrawer`、`HyperActionSheet`。
+
+`HyperNavBar.scrolledUnder` 默认 false，顶部保持透明；宿主根据主列表滚动位置传入 true 后，组件用 160ms 过渡显示覆盖状态栏的渐隐毛玻璃，向导航下方延伸 56px 后完全透明，不绘制底部分隔线。背景采样与底色一起淡出，前景操作独立保持清晰；延伸区域不占位、不拦截触摸。页面无需再包背景或模糊层；返回顶部传入 false，高对比和关闭动画适配由组件处理。Flutter 与 Compose 使用相同参数和默认视觉规则。
 - 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperSegmentedControl`。
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
 - 数据与菜单：`HyperBadge`（type 为 status/tag/count）、`HyperProgress`、`HyperListTile`、`HyperMenuGroup`、`HyperCard`。

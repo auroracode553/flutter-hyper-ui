@@ -629,7 +629,7 @@ export const componentGroups: ComponentGroup[] = [
       demo('full-navigation', '导航、步骤与列表联动', 'complete_examples.dart', 860),
     ],
     components: [
-      component('HyperNavBar / HyperNavBarTypes', 'hyper_nav_bar.dart', '默认 44px 透明导航容器；type 提供五种固定布局，custom 保留完整插槽，页面正文可滚动到导航栏与状态栏后方。', {
+      component('HyperNavBar / HyperNavBarTypes', 'hyper_nav_bar.dart', '默认 44px；顶部透明，scrolledUnder 驱动渐变毛玻璃，正文可滚动到导航栏与状态栏后方。', {
         id: 'nav-bar',
         navName: 'HyperNavBar',
         propsDocs: [
@@ -643,13 +643,14 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'child', description: '完整内部布局 Widget，与其他内容插槽互斥，不生成自动返回按钮' },
           { name: 'padding', description: '内容边距，默认左右 16px，可设置 EdgeInsets.zero' },
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
+          { name: 'scrolledUnder', description: '正文是否已滚入导航区域，默认 false；160ms 渐隐毛玻璃，背景向下延伸 56px 至透明，不占位、不绘制分隔线' },
           { name: 'onBackPressed', description: '默认返回按钮的点击回调；未提供时调用 Navigator.maybePop' },
           { name: 'onMorePressed', description: 'more 类型右侧更多操作回调' },
           { name: 'onSavePressed', description: 'edit 类型右侧保存操作回调' },
           { name: 'centerTitle', description: 'custom 类型主内容是否按整栏居中，默认 false' },
           { name: 'height', description: '导航内容高度，默认 44，不含顶部安全区' },
         ],
-        preview: { ...demo('component-nav-bar', '透明导航栏', 'component_nav_bar_example.dart', 680, '在手机屏幕内滚动正文，观察导航栏保持固定。', 'NavBarComponentExample'), fullScreen: true },
+        preview: { ...demo('component-nav-bar', '滚动毛玻璃导航栏', 'component_nav_bar_example.dart', 680, '向上滚动显示毛玻璃，回到顶部恢复透明。', 'NavBarComponentExample'), fullScreen: true },
       }),
       component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '多项液态悬浮底栏与带数量角标的单项圆形入口。', {
         propsDocs: [
