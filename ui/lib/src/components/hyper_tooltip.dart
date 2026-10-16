@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart' show PointerDeviceKind;
 
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_ui_theme.dart';
 import '../utils/hyper_overlay_motion.dart';
 import 'hyper_glass.dart';
 
@@ -32,11 +33,11 @@ class HyperTooltip extends StatefulWidget {
 
 class _HyperTooltipState extends State<HyperTooltip>
     with SingleTickerProviderStateMixin {
-  final OverlayPortalController _overlay = OverlayPortalController();
+  OverlayEntry? _overlayEntry;
   late final HyperOverlayMotion _motion = HyperOverlayMotion(
     vsync: this,
-    onShow: _overlay.show,
-    onHide: _overlay.hide,
+    onShow: _showOverlay,
+    onHide: _hideOverlay,
     duration: HyperUiEffects.tooltipDuration,
   );
   final GlobalKey _anchorKey = GlobalKey();
@@ -48,6 +49,27 @@ class _HyperTooltipState extends State<HyperTooltip>
   bool _focused = false;
   bool _longPressed = false;
   double _originX = 0;
+
+  void _showOverlay() {
+    if (_overlayEntry != null) return;
+    // Independent entries avoid Windows reparenting transient portal nodes.
+    final entry = OverlayEntry(builder: (_) => _buildOverlay());
+    _overlayEntry = entry;
+    Overlay.of(context).insert(entry);
+  }
+
+  void _hideOverlay() {
+    final entry = _overlayEntry;
+    _overlayEntry = null;
+    entry?.remove();
+    entry?.dispose();
+  }
+
+  void _refreshOverlay() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _overlayEntry?.markNeedsBuild();
+    });
+  }
 
   void _show({bool instant = false}) {
     if (!mounted || !widget.enabled || widget.message.isEmpty) return;
@@ -85,6 +107,7 @@ class _HyperTooltipState extends State<HyperTooltip>
           .toDouble();
     });
     _motion.setOpen(true, instant: instant);
+    _overlayEntry?.markNeedsBuild();
   }
 
   void _hideIfInactive() {
@@ -102,11 +125,24 @@ class _HyperTooltipState extends State<HyperTooltip>
     _motion.setReducedMotion(
       MediaQuery.maybeOf(context)?.disableAnimations ?? false,
     );
+    _refreshOverlay();
+  }
+
+  @override
+  void deactivate() {
+    _cancelHover();
+    _hideOverlay();
+    _motion.setOpen(false, instant: true);
+    _hovering = false;
+    _focused = false;
+    _longPressed = false;
+    super.deactivate();
   }
 
   @override
   void dispose() {
     _cancelHover();
+    _hideOverlay();
     _motion.dispose();
     super.dispose();
   }
@@ -114,6 +150,7 @@ class _HyperTooltipState extends State<HyperTooltip>
   @override
   void didUpdateWidget(covariant HyperTooltip oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _refreshOverlay();
     if (!widget.enabled ||
         (widget.message.isEmpty && oldWidget.message.isNotEmpty)) {
       _cancelHover();
@@ -123,36 +160,38 @@ class _HyperTooltipState extends State<HyperTooltip>
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildOverlay() {
     final tokens = HyperUiThemeTokens.of(context);
-    return OverlayPortal(
-      controller: _overlay,
-      overlayChildBuilder: (context) => Positioned(
-        left: _position.dx,
-        top: _position.dy,
-        child: IgnorePointer(
-          child: FractionalTranslation(
-            translation: Offset(0, _showBelow ? 0 : -1),
-            child: buildHySurfaceTransition(
-              animation: _motion.animation,
-              beginScale: 0.97,
-              origin: () => Alignment(_originX, _showBelow ? -1 : 1),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: _availableWidth),
-                child: HyperGlass(
-                  radius: 12,
-                  type: 'prominent',
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 7,
-                  ),
-                  child: Text(
-                    widget.message,
-                    style: TextStyle(
-                      color: tokens.foreground,
-                      fontSize: 12,
-                      height: 1.3,
+    return InheritedTheme.captureAll(
+      context,
+      HyperUiTheme(
+        data: HyperUiTheme.of(context),
+        child: Positioned(
+          left: _position.dx,
+          top: _position.dy,
+          child: IgnorePointer(
+            child: FractionalTranslation(
+              translation: Offset(0, _showBelow ? 0 : -1),
+              child: buildHySurfaceTransition(
+                animation: _motion.animation,
+                beginScale: 0.97,
+                origin: () => Alignment(_originX, _showBelow ? -1 : 1),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: _availableWidth),
+                  child: HyperGlass(
+                    radius: 12,
+                    type: 'prominent',
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 7,
+                    ),
+                    child: Text(
+                      widget.message,
+                      style: TextStyle(
+                        color: tokens.foreground,
+                        fontSize: 12,
+                        height: 1.3,
+                      ),
                     ),
                   ),
                 ),
@@ -161,42 +200,46 @@ class _HyperTooltipState extends State<HyperTooltip>
           ),
         ),
       ),
-      child: Focus(
-        onFocusChange: (focused) {
-          _focused = focused;
-          if (focused) {
-            _show(instant: true);
-          } else {
-            _hideIfInactive();
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Focus(
+      onFocusChange: (focused) {
+        _focused = focused;
+        if (focused) {
+          _show(instant: true);
+        } else {
+          _hideIfInactive();
+        }
+      },
+      child: MouseRegion(
+        onEnter: (event) {
+          if (event.kind != PointerDeviceKind.mouse &&
+              event.kind != PointerDeviceKind.stylus) {
+            return;
           }
+          _hovering = true;
+          _cancelHover();
+          _hoverTimer = Timer(widget.hoverDelay, _show);
         },
-        child: MouseRegion(
-          onEnter: (event) {
-            if (event.kind != PointerDeviceKind.mouse &&
-                event.kind != PointerDeviceKind.stylus) {
-              return;
-            }
-            _hovering = true;
-            _cancelHover();
-            _hoverTimer = Timer(widget.hoverDelay, _show);
+        onExit: (_) {
+          _hovering = false;
+          _cancelHover();
+          _hideIfInactive();
+        },
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onLongPressStart: (_) {
+            _longPressed = true;
+            _show();
           },
-          onExit: (_) {
-            _hovering = false;
-            _cancelHover();
+          onLongPressEnd: (_) {
+            _longPressed = false;
             _hideIfInactive();
           },
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onLongPressStart: (_) {
-              _longPressed = true;
-              _show();
-            },
-            onLongPressEnd: (_) {
-              _longPressed = false;
-              _hideIfInactive();
-            },
-            child: KeyedSubtree(key: _anchorKey, child: widget.child),
-          ),
+          child: KeyedSubtree(key: _anchorKey, child: widget.child),
         ),
       ),
     );
