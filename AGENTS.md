@@ -58,6 +58,12 @@
 - 组件不得暴露 `semanticLabel` 类入参；文档、示例与注释中不得出现“无障碍标签”“无障碍语义”等表述。
 - 允许保留与标签无关的自适应行为：`MediaQuery.disableAnimations`、`MediaQuery.highContrast`、`textScaler`、RTL 逻辑方向，以及键盘焦点/快捷键基础设施（`Focus`、`FocusableActionDetector`）。
 
+## 业务项目接入文档
+
+- 完整页面的底部导航示例必须使用 Scaffold.extendBody 与 bottomNavigationBar，让正文延伸至底栏后方；不得把 HyperTabBar 放在正文 Column 底部挤占视口。
+- 示例的底栏安全区和边距交给 HyperTabBar，滚动末尾余量只取一次 Scaffold 注入正文的实际 bottom padding；正文使用 SafeArea 时显式 bottom: false。
+- 业务项目的接入规则模板维护在 vitepress/guide/consumer-integration.md，共用悬浮宿主示例维护在 vitepress/components/tab-bar.md；快速开始和 README 应能直接到达这两个入口。
+
 ## 两端 API 一致性
 
 - 对应组件的业务参数、状态枚举、回调名称和默认语义必须保持一致；仅保留框架布局、宿主及原生类型差异。

@@ -58,9 +58,20 @@ HyperUiTheme.app(home: const AppHome());
 
 ## 创建第一个页面
 
-页面使用 Flutter 布局基底和 Hyper 组件：
+先将 [TabBar 文档中的共用悬浮宿主](../components/tab-bar.md#悬浮页面宿主)保存为业务项目的 `lib/widgets/app_floating_tab_scaffold.dart`，再复制下面的完整入口为 `lib/main.dart`。AppFloatingTabScaffold 和 AppPageScrollEnd 属于该业务文件，不是 UI 包导出的类。
+
+示例使用 Flutter 内置图标，业务项目的 `pubspec.yaml` 需保留 `flutter.uses-material-design: true`。依赖准备完成后，页面与底栏通过共用宿主组合：
 
 ```dart
+// lib/main.dart
+import 'package:flutter/material.dart' show Icons;
+import 'package:flutter/widgets.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
+
+import 'widgets/app_floating_tab_scaffold.dart';
+
+void main() => runApp(HyperUiTheme.app(home: const AppHome()));
+
 class AppHome extends StatefulWidget {
   const AppHome({super.key});
 
@@ -69,39 +80,46 @@ class AppHome extends StatefulWidget {
 }
 
 class _AppHomeState extends State<AppHome> {
-  int selectedIndex = 0;
+  int _selectedIndex = 0;
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: <Widget>[
-      const HyperNavBar(title: Text('收藏'), subtitle: Text('12 个项目')),
-      const Expanded(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverPadding(
-              padding: EdgeInsets.all(HyperUiSpacing.pagePadding),
-              sliver: SliverToBoxAdapter(
-                child: HyperCard(
-                  title: '开始创作',
-                  subtitle: '所有组件共享同一套材质与交互规则。',
+  Widget build(BuildContext context) {
+    final title = _selectedIndex == 0 ? '首页' : '我的';
+    final itemCount = _selectedIndex == 0 ? 24 : 3;
+    return AppFloatingTabScaffold(
+      items: const [
+        HyperTabItem(icon: Icons.home_rounded, label: '首页'),
+        HyperTabItem(icon: Icons.person_rounded, label: '我的'),
+      ],
+      selectedIndex: _selectedIndex,
+      onChanged: (index) => setState(() => _selectedIndex = index),
+      body: CustomScrollView(
+        key: PageStorageKey<int>(_selectedIndex),
+        slivers: [
+          PinnedHeaderSliver(child: HyperNavBar(title: Text(title))),
+          HyperPageContentSliver(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: Column(
+              children: List.generate(
+                itemCount,
+                (index) => HyperListTile(
+                  title: '$title · 项目 ${index + 1}',
+                  showChevron: false,
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-      HyperTabBar(
-        items: const <HyperTabItem>[
-          HyperTabItem(icon: HyperIcons.home, label: '首页'),
-          HyperTabItem(icon: HyperIcons.profile, label: '我的'),
+          ),
+          const SliverToBoxAdapter(child: AppPageScrollEnd()),
         ],
-        selectedIndex: selectedIndex,
-        onChanged: (value) => setState(() => selectedIndex = value),
       ),
-    ],
-  );
+    );
+  }
 }
 ```
+
+底栏由宿主的 bottomNavigationBar 挂载，正文可以滚动到它后方。HyperNavBar 负责顶部安全区，HyperTabBar 负责底部安全区；页面不再套整页 SafeArea。AppPageScrollEnd 在正文子树中读取实际底栏高度，只提供末项的滚动余量。
+
+将[业务项目 AGENTS.md 模板](./consumer-integration.md#可复制模板)合并到项目规则后，后续页面继续复用同一个宿主。
 
 ## 受控组件
 
