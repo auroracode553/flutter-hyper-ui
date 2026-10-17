@@ -346,7 +346,7 @@ class PreviewCatalog {
       id: 'component-nav-bar',
       fullScreen: true,
       title: 'HyperNavBar',
-      description: '固定 type 覆盖五种布局；正文滚入时显示向下渐隐的背景，回到顶部恢复透明。',
+      description: '滚动作用域自动感知正文；滚入时显示渐隐背景，回到顶部恢复透明。',
       loadLibrary: () => example_component_nav_bar_example.loadLibrary(),
       builder: (_) =>
           example_component_nav_bar_example.NavBarComponentExample(),

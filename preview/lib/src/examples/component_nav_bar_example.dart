@@ -37,7 +37,6 @@ enum _NavBarExample {
 class _NavBarComponentExampleState extends State<NavBarComponentExample> {
   _NavBarExample _selected = _NavBarExample.backOnly;
   String _feedback = '切换布局或点击顶部操作，查看导航反馈。';
-  bool _scrolledUnder = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,25 +50,16 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
       _NavBarExample.edit => '编辑资料',
       _NavBarExample.custom => '创作空间',
     };
-    return Stack(
-      children: <Widget>[
-        // 正文视口从屏幕顶部开始，首屏净空作为滚动内容的一部分。
-        Positioned.fill(
-          child: ColoredBox(
-            color: HyperUiThemeTokens.of(context).background,
-            child: MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  if (notification.depth == 0 &&
-                      notification.metrics.axis == Axis.vertical) {
-                    final next = notification.metrics.extentBefore > 0.5;
-                    if (next != _scrolledUnder)
-                      setState(() => _scrolledUnder = next);
-                  }
-                  return false;
-                },
+    return HyperNavBarScrollScope(
+      child: Stack(
+        children: <Widget>[
+          // 正文视口从屏幕顶部开始，首屏净空作为滚动内容的一部分。
+          Positioned.fill(
+            child: ColoredBox(
+              color: HyperUiThemeTokens.of(context).background,
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
                 child: CustomScrollView(
                   slivers: <Widget>[
                     SliverPadding(
@@ -103,32 +93,31 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
               ),
             ),
           ),
-        ),
-        // 宿主只传滚动状态，过渡、采样与着色由导航组件统一处理。
-        HyperNavBar(
-          scrolledUnder: _scrolledUnder,
-          type: _selected.type,
-          height: navBarHeight,
-          title: title == null ? null : Text(title),
-          onBackPressed: () => setState(() => _feedback = '已请求返回上一页'),
-          onMorePressed: () => setState(() => _feedback = '已点击更多'),
-          onSavePressed: () => setState(() => _feedback = '已点击保存'),
-          leading: _selected == _NavBarExample.custom
-              ? HyperButton(
-                  type: 'icon',
-                  icon: HyperIcons.back,
-                  tooltip: '返回',
-                  onPressed: () => setState(() => _feedback = '已请求返回上一页'),
-                )
-              : null,
-          trailing: _selected == _NavBarExample.custom
-              ? HyperButton(
-                  label: '分享',
-                  onPressed: () => setState(() => _feedback = '已点击分享'),
-                )
-              : null,
-        ),
-      ],
+          // 滚动感知、过渡、采样与着色由 UI 库统一处理。
+          HyperNavBar(
+            type: _selected.type,
+            height: navBarHeight,
+            title: title == null ? null : Text(title),
+            onBackPressed: () => setState(() => _feedback = '已请求返回上一页'),
+            onMorePressed: () => setState(() => _feedback = '已点击更多'),
+            onSavePressed: () => setState(() => _feedback = '已点击保存'),
+            leading: _selected == _NavBarExample.custom
+                ? HyperButton(
+                    type: 'icon',
+                    icon: HyperIcons.back,
+                    tooltip: '返回',
+                    onPressed: () => setState(() => _feedback = '已请求返回上一页'),
+                  )
+                : null,
+            trailing: _selected == _NavBarExample.custom
+                ? HyperButton(
+                    label: '分享',
+                    onPressed: () => setState(() => _feedback = '已点击分享'),
+                  )
+                : null,
+          ),
+        ],
+      ),
     );
   }
 }

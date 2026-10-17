@@ -10,6 +10,7 @@ import 'hyper_button.dart';
 import 'hyper_typography.dart';
 
 part 'hyper_nav_bar_surface.dart';
+part 'hyper_nav_bar_scroll_scope.dart';
 
 /// 固定布局类型；custom 保留完整 Widget 插槽。
 abstract final class HyperNavBarTypes {
@@ -30,7 +31,24 @@ abstract final class HyperNavBarTypes {
   };
 }
 
-/// 顶部静止时透明；[scrolledUnder] 为 true 时显示向下渐隐的背景材质。
+/// Flutter 滚动宿主：包装主滚动视口与导航栏，不接管 ScrollController。
+class HyperNavBarScrollScope extends StatefulWidget {
+  const HyperNavBarScrollScope({
+    super.key,
+    required this.child,
+    this.scrollKey,
+  });
+
+  final Widget child;
+
+  /// 当前逻辑页面的标识；变化时重置滚动状态，不重建子树或接管控制器。
+  final Object? scrollKey;
+
+  @override
+  State<HyperNavBarScrollScope> createState() => _HyperNavBarScrollScopeState();
+}
+
+/// 顶部静止时透明；滚动作用域或 [scrolledUnder] 驱动向下渐隐的背景材质。
 /// 固定 type 生成常见布局，custom 使用完整插槽。
 ///
 /// [leading]、[title]、[subtitle]、[trailing] 都接受任意 Widget。
@@ -76,7 +94,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   final bool safeArea;
 
-  /// 由滚动宿主提供正文是否已滚入导航区域；不改变导航高度或内容布局。
+  /// true 强制显示；false 使用滚动作用域状态，无作用域时保持透明。
   final bool scrolledUnder;
 
   /// 固定返回类型的回调；未传入时调用 Navigator.maybePop。
@@ -134,7 +152,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
       child: Padding(padding: padding, child: child ?? _buildSlots(context)),
     );
     return _NavBarScrollSurface(
-      scrolledUnder: scrolledUnder,
+      scrolledUnder: scrolledUnder || _NavBarScrollState.read(context),
       child: safeArea ? SafeArea(bottom: false, child: content) : content,
     );
   }

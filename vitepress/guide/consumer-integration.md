@@ -9,6 +9,8 @@
 3. 将下面的模板合并到**业务项目根目录**的 `AGENTS.md`。
 4. 修改 UI 后执行静态分析，检查完整布局树，并按业务项目允许的方式验证界面。
 
+顶部导航使用 [HyperNavBarScrollScope](../components/nav-bar.md#自动滚动作用域) 包装导航栏与主滚动视口的共同父级；HyperNavBar 自动读取滚动状态。将该组合放在业务项目的共用页面宿主中，避免每页重复监听与绘制模糊。
+
 Hyper UI 仓库自己的 `AGENTS.md` 用来约束库内开发。业务项目仅通过 path、Git 或包依赖引用组件，不会因此继承依赖仓库的指令文件。以 Codex 为例，它按全局目录以及当前项目根目录到工作目录的路径加载指令，具体范围见 [OpenAI 的 AGENTS.md 文档](https://learn.chatgpt.com/docs/agent-configuration/agents-md)。使用其他编码工具时，同时核对该工具支持的指令文件与加载范围。
 
 ## 可复制模板
@@ -25,6 +27,7 @@ Hyper UI 仓库自己的 `AGENTS.md` 用来约束库内开发。业务项目仅�
 - 禁止用 Container、InkWell、GestureDetector、AnimatedContainer 等重复实现库中已有控件，禁止用 Material/Cupertino 控件替代已有 Hyper UI 控件。
 - Scaffold 等页面机制、基础布局、文本、图标和业务专用绘制可以使用 Flutter 基础组件；外观差异通过公开参数、插槽、HyperUiTheme 和主题 tokens 配置。
 - 修改前查阅当前依赖版本的组件接口和示例，不凭组件名猜测默认安全区、边距或高度。
+- 顶部导航与主滚动视口共用 HyperNavBarScrollScope，渐隐模糊由 HyperNavBar 处理；在项目共用页面宿主接入，不逐页复制滚动状态和 BackdropFilter。
 
 ## 悬浮底部导航
 

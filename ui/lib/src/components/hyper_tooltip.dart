@@ -132,10 +132,15 @@ class _HyperTooltipState extends State<HyperTooltip>
   void deactivate() {
     _cancelHover();
     _hideOverlay();
-    _motion.setOpen(false, instant: true);
     _hovering = false;
     _focused = false;
     _longPressed = false;
+    // 移除浮层后，其动画监听器要到本帧结束才释放，避免构建期间通知重建。
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_hovering && !_focused && !_longPressed) {
+        _motion.setOpen(false, instant: true);
+      }
+    });
     super.deactivate();
   }
 

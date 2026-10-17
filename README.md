@@ -6,6 +6,8 @@
 
 业务项目接入时，请一并阅读[Hyper UI 使用规则与可复制的 AGENTS.md 模板](vitepress/guide/consumer-integration.md)，并复用 [TabBar 共用悬浮宿主](vitepress/components/tab-bar.md#悬浮页面宿主)。完整页面示例见[快速开始](vitepress/guide/getting-started.md#创建第一个页面)。
 
+顶部滚动毛玻璃使用 [HyperNavBarScrollScope + HyperNavBar](vitepress/components/nav-bar.md)：作用域包住导航与主滚动视口即可自动响应滚动，无需在每个页面复制监听与模糊绘制。
+
 ## 两端统一 API
 
 Compose 与 Flutter 对应组件使用相同的业务参数名称和默认语义。两端共同维护：

@@ -40,7 +40,7 @@ const HyperNavBar({
 | height | double | 否 | 44 | 导航栏内容高度，不含安全区。 |
 | padding | EdgeInsetsGeometry | 否 | EdgeInsets.symmetric(horizontal: 16) | 内容内边距。 |
 | safeArea | bool | 否 | true | 是否避让顶部安全区。 |
-| scrolledUnder | bool | 否 | false | 正文是否已滚入导航区域；为 true 时渐显毛玻璃，为 false 时恢复透明。 |
+| scrolledUnder | bool | 否 | false | true 强制显示毛玻璃；false 使用滚动作用域状态，无作用域时保持透明。 |
 | onBackPressed | VoidCallback? | 否 | null | 默认返回按钮回调；未提供时调用 Navigator.maybePop。 |
 | onMorePressed | VoidCallback? | 否 | null | more 类型右侧更多操作回调。 |
 | onSavePressed | VoidCallback? | 否 | null | edit 类型右侧保存操作回调。 |
@@ -50,28 +50,31 @@ const HyperNavBar({
 
 预览提供五种固定类型：`backOnly`、`titleOnly`、`backWithTitle`、`more` 和 `edit`；需要完整插槽时使用 `custom`。固定类型直接传 `type`，标题和动作回调由调用方注入。
 
-导航在 scrolledUnder 为 false 时完全透明，不执行背景采样；为 true 时显示向下渐隐的背景模糊与主题表面色，160ms 完成过渡。背景覆盖顶部安全区，向导航下方延伸 56px 并淡出到完全透明；蒙版同时淡出 20px 模糊采样和底色，不绘制底部分隔线。延伸区域不占布局高度、不拦截触摸，标题和按钮在独立前景层保持清晰。高对比模式仅在导航区域使用实色，关闭动画时立即切换。
+导航在正文顶部时完全透明，不执行背景采样；滚入时显示向下渐隐的背景模糊与主题表面色，160ms 完成过渡。背景覆盖顶部安全区，向导航下方延伸 56px 并淡出到完全透明；蒙版同时淡出 20px 模糊采样和底色，不绘制底部分隔线。延伸区域不占布局高度、不拦截触摸，标题和按钮在独立前景层保持清晰。高对比模式仅在导航区域使用实色，关闭动画时立即切换。
 
-滚动位置归页面宿主管理。使用 NotificationListener 读取主列表的 extentBefore，并将是否大于 0.5 传给 scrolledUnder；忽略横向和嵌套列表，通知返回 false，避免截断其他监听器。反向列表使用 extentAfter；恢复滚动位置或程序滚动时也应同步状态。组件不创建、接管或释放页面的 ScrollController。
-
-要让内容滚动到导航栏和状态栏后方，页面需让滚动视口占满屏幕，并把导航栏叠在上方。首屏留白放进滚动内容，随内容一起滚走；不要用 Column 把导航栏和列表上下排列。Scaffold 接入时设置 extendBodyBehindAppBar 为 true，并把 Scaffold 提供的 MediaQuery.padding.top 计入列表内部 padding。
+## 自动滚动作用域
 
 ```dart
-// State 内字段；仅在布尔状态改变时刷新，不逐像素重建页面。
-bool scrolledUnder = false;
+const HyperNavBarScrollScope({Key? key, required Widget child, Object? scrollKey})
+```
 
+| 参数 | 类型 | 必填 | 默认值 | 作用 |
+| --- | --- | --- | --- | --- |
+| child | Widget | 是 | 无 | 导航栏与主滚动视口的共同父级。 |
+| scrollKey | Object? | 否 | null | 逻辑页面标识；变化时重置滚动状态，不替换子树或影响底栏动画。 |
+
+HyperNavBarScrollScope 是 Flutter 布局宿主，自动读取主视口的滚动通知和布局指标。普通垂直列表使用 extentBefore，反向列表使用 extentAfter，以 0.5 为切换阈值；忽略横向和嵌套列表，不截断通知，不创建、接管或释放 ScrollController。恢复滚动位置、程序滚动和窗口尺寸变化也会同步。只有布尔状态改变时才更新依赖它的导航栏。
+
+将作用域放在导航栏和滚动视口的共同父级，HyperNavBar 自动使用该状态，不必逐页声明滚动字段。scrolledUnder 为 true 可强制显示；false 使用作用域状态，没有作用域时保持透明。需要完全手动控制的页面不包装作用域，直接传入 scrolledUnder。
+
+正文必须能画到导航和状态栏后方。下面将首屏净空放进滚动内容，随正文滚走；不要用 Column 把导航栏和列表上下排列。也可以用 PinnedHeaderSliver 承载导航；Scaffold.appBar 布局则开启 extendBodyBehindAppBar，并只处理一次顶部安全区。
+
+```dart
 Widget build(BuildContext context) {
-    final safeArea = MediaQuery.paddingOf(context);
-    const navBarHeight = 44.0;
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {
-        if (notification.depth == 0 && notification.metrics.axis == Axis.vertical) {
-          final next = notification.metrics.extentBefore > 0.5;
-          if (next != scrolledUnder) setState(() => scrolledUnder = next);
-        }
-        return false;
-      },
-      child: Stack(
+  final safeArea = MediaQuery.paddingOf(context);
+  const navBarHeight = 44.0;
+  return HyperNavBarScrollScope(
+    child: Stack(
       children: [
         Positioned.fill(
           child: MediaQuery.removePadding(
@@ -94,14 +97,13 @@ Widget build(BuildContext context) {
           ),
         ),
         HyperNavBar(
-          scrolledUnder: scrolledUnder,
           type: HyperNavBarTypes.backOnly,
           height: navBarHeight,
           onBackPressed: () {},
         ),
       ],
-      ),
-    );
+    ),
+  );
 }
 ```
 
