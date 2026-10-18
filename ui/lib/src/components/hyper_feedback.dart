@@ -183,7 +183,8 @@ abstract final class HyperDialog {
                   Text(
                     title,
                     style: TextStyle(
-                      color: HyperUiThemeTokens.of(context).foreground,
+                      // 弹窗可能晚于发起页面关闭，使用仍挂载的弹窗上下文。
+                      color: HyperUiThemeTokens.of(dialogContext).foreground,
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                     ),
