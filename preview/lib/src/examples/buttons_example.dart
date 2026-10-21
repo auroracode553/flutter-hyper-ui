@@ -142,12 +142,6 @@ class ButtonsExample extends StatelessWidget {
           children: [
             HyperButton(colorStyle: 'success', label: '默认描边', onPressed: _noop),
             HyperButton(
-              type: 'tonal',
-              colorStyle: 'success',
-              label: '柔色',
-              onPressed: _noop,
-            ),
-            HyperButton(
               type: 'filled',
               colorStyle: 'success',
               label: '填充',

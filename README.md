@@ -28,7 +28,11 @@ Compose 与 Flutter 对应组件使用相同的业务参数名称和默认语义
 
 Flutter 的标准表单弹窗使用 HyperDialog.confirm，通过 canConfirm 校验提交；HyperPressable 提供 onLongPressed 长按回调；HyperPopupMenu 通过 enabled 控制打开能力，HyperAction.selected 展示当前选择。完整签名和参数表见对应组件文档。
 
-默认按钮省略 type 和 colorStyle，显示白色描边；显式 type 仅 filled、tonal、icon，colorStyle 为 primary、success、info、warning、danger。
+默认按钮省略 type 和 colorStyle，显示白色描边；显式 type 仅 filled、icon，colorStyle 为 primary、success、info、warning、danger。
+
+内嵌月历使用 [HyperCalendarMonth](vitepress/components/calendar-month.md)，复用日期选择器原有六行网格；需要辅助文字、角标及附属条目时组合 [HyperCalendarDay](vitepress/components/calendar-day.md)。紧凑只读模式合并绘制整月，业务历法与日程仍由调用方处理。
+
+内嵌月历可传 emphasizedDays 使用现有主题色强调日期；日期格的条目最多占三行，溢出数量单独占最后一行，宿主可用 minimumHeight 的 itemRows 预留空间。
 
 ## 设计系统
 
@@ -53,9 +57,9 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 
 ## 与 Compose 的样式同步
 
-按钮配色与显示形态独立：`type` 仅支持 `filled`、`tonal`、`icon`，省略时默认白色描边；`colorStyle` 支持 `primary`、`success`、`info`、`warning`、`danger`，自定义 `color` 优先于预设配色。按钮预览展示尺寸、配色、图标、加载、禁用和通栏形态。
+按钮配色与显示形态独立：`type` 仅支持 `filled`、`icon`，省略时默认白色描边；`colorStyle` 支持 `primary`、`success`、`info`、`warning`、`danger`，自定义 `color` 优先于预设配色。按钮预览展示尺寸、配色、图标、加载、禁用和通栏形态。
 
-本项目与 `D:/my_project/Android-project/hyper-ui` 维护相同的默认视觉规则。按钮默认描边，省略 `type` 即可；显式类型仅有 `filled`、`tonal`、`icon`，主操作显式使用 `type = "filled"` 和 `colorStyle = "primary"`。
+本项目与 `D:/my_project/Android-project/hyper-ui` 维护相同的默认视觉规则。按钮默认描边，省略 `type` 即可；显式类型仅有 `filled`、`icon`，主操作显式使用 `type = "filled"` 和 `colorStyle = "primary"`。
 
 `HyperDropdown` 默认按最长选项或占位文字加 68 控件占位计算宽度，限制在 160–240，并服从父级空间；菜单匹配字段，显式 width 用于宽表单。`HyperPopover` 默认宽 180，width 可显式指定，maxWidth = 280 仅限制上限；`HyperPopupMenu` 按操作文案与图标占位自动取 160–240。两端 Dropdown、Popover 文档与预览同步展示紧凑默认值、显式宽度、长文案和可交互状态。
 

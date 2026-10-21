@@ -25,24 +25,20 @@ class ToastComponentExample extends StatelessWidget {
           runSpacing: HyperUiSpacing.sm,
           children: [
             HyperButton(
-              type: 'tonal',
               label: '默认',
               onPressed: () => HyperToast.show(context, '已复制到剪贴板'),
             ),
             HyperButton(
-              type: 'tonal',
               label: '成功',
               onPressed: () =>
                   HyperToast.show(context, '保存成功', type: 'success'),
             ),
             HyperButton(
-              type: 'tonal',
               label: '警告',
               onPressed: () =>
                   HyperToast.show(context, '请检查输入内容', type: 'warning'),
             ),
             HyperButton(
-              type: 'tonal',
               label: '错误',
               onPressed: () =>
                   HyperToast.show(context, '网络连接失败', type: 'error'),
@@ -53,7 +49,6 @@ class ToastComponentExample extends StatelessWidget {
 
         _label('操作按钮与时长'),
         HyperButton(
-          type: 'tonal',
           label: '可撤销（4 秒）',
           onPressed: () => HyperToast.show(
             context,
@@ -163,7 +158,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('左侧抽屉与底部操作区'),
-        HyperButton(type: 'tonal', label: '打开筛选抽屉', onPressed: _openStart),
+        HyperButton(label: '打开筛选抽屉', onPressed: _openStart),
       ],
     );
   }
@@ -228,7 +223,6 @@ class DialogComponentExample extends StatelessWidget {
 
         _label('危险操作与自定义按钮'),
         HyperButton(
-          type: 'tonal',
           label: '删除确认（danger）',
           onPressed: () => HyperDialog.confirm(
             context,
@@ -242,7 +236,6 @@ class DialogComponentExample extends StatelessWidget {
 
         _label('仅确认按钮与自定义正文'),
         HyperButton(
-          type: 'tonal',
           label: '公告（showCancel: false）',
           onPressed: () => HyperDialog.confirm(
             context,
@@ -299,7 +292,6 @@ class LoadingComponentExample extends StatelessWidget {
 
         _label('全局任务遮罩'),
         HyperButton(
-          type: 'tonal',
           label: '预览全局加载',
           onPressed: () => HyperLoading.during<void>(
             context,
@@ -330,7 +322,6 @@ class ActionSheetComponentExample extends StatelessWidget {
       children: [
         _label('自定义内容'),
         HyperButton(
-          type: 'tonal',
           label: '打开底部弹层',
           onPressed: () => HyperActionSheet.show<void>(
             context,
@@ -347,7 +338,6 @@ class ActionSheetComponentExample extends StatelessWidget {
 
         _label('操作列表'),
         HyperButton(
-          type: 'tonal',
           label: '打开操作菜单',
           onPressed: () => HyperActionSheet.choose<String>(
             context,
@@ -382,7 +372,6 @@ class ActionSheetComponentExample extends StatelessWidget {
 
         _label('强制操作（dismissible: false）'),
         HyperButton(
-          type: 'tonal',
           label: '打开强制阅读弹层',
           onPressed: () => HyperActionSheet.show<void>(
             context,

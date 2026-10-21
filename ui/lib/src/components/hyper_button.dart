@@ -31,8 +31,8 @@ class HyperButton extends StatelessWidget {
     this.color,
     this.backgroundColor,
   }) : assert(
-         type == null || type == 'filled' || type == 'tonal' || type == 'icon',
-         'HyperButton.type must be null, filled, tonal, or icon.',
+         type == null || type == 'filled' || type == 'icon',
+         'HyperButton.type must be null, filled, or icon.',
        ),
        assert(
          colorStyle == null ||
@@ -82,7 +82,6 @@ class HyperButton extends StatelessWidget {
     final variant = switch (type) {
       null => _ButtonVariant.standard,
       'filled' => _ButtonVariant.filled,
-      'tonal' => _ButtonVariant.tonal,
       'icon' => _ButtonVariant.icon,
       _ => throw ArgumentError.value(type, 'type', 'Invalid button type'),
     };
@@ -341,11 +340,6 @@ class _HyperButtonVisual {
         // 默认按钮采用描边外观，与 Compose 的无 type 调用保持一致。
         border: hasTone ? base.withValues(alpha: 0.35) : tokens.border,
       ),
-      _ButtonVariant.tonal => _HyperButtonVisual(
-        background: hasTone ? base.withValues(alpha: 0.12) : glass.selection,
-        foreground: hasTone ? base : tokens.foreground,
-        border: hasTone ? base.withValues(alpha: 0.35) : glass.edgeHighlight,
-      ),
       _ButtonVariant.icon => _HyperButtonVisual(
         background: glass.surface,
         foreground: hasTone ? base : tokens.foreground,
@@ -356,4 +350,4 @@ class _HyperButtonVisual {
   }
 }
 
-enum _ButtonVariant { standard, filled, tonal, icon }
+enum _ButtonVariant { standard, filled, icon }

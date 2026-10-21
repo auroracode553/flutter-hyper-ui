@@ -93,14 +93,12 @@ class _UpdateDialogComponentExampleState
               type: 'filled',
             ),
             HyperButton(
-              type: 'tonal',
               label: '已是最新',
               onPressed: _controller.busy || _dialogOpen
                   ? null
                   : () => _open(latest: true),
             ),
             HyperButton(
-              type: 'tonal',
               label: '失败与重试',
               onPressed: _controller.busy || _dialogOpen
                   ? null

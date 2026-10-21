@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_button.dart';
@@ -28,7 +27,6 @@ class HyperNumberStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
     final canDecrease = onChanged != null && value > min;
     final canIncrease = onChanged != null && value < max;
 
@@ -44,8 +42,6 @@ class HyperNumberStepper extends StatelessWidget {
             type: 'icon',
             icon: LucideIcons.minus,
             size: 'small',
-            color: canDecrease ? tokens.foreground : tokens.mutedForeground,
-            backgroundColor: glass.selection,
             onPressed: canDecrease
                 ? () => onChanged!((value - step).clamp(min, max).toInt())
                 : null,
@@ -72,8 +68,6 @@ class HyperNumberStepper extends StatelessWidget {
             type: 'icon',
             icon: LucideIcons.plus,
             size: 'small',
-            color: canIncrease ? tokens.foreground : tokens.mutedForeground,
-            backgroundColor: glass.selection,
             onPressed: canIncrease
                 ? () => onChanged!((value + step).clamp(min, max).toInt())
                 : null,

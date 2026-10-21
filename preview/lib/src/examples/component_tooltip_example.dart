@@ -25,7 +25,7 @@ class TooltipComponentExample extends StatelessWidget {
         const SizedBox(height: HyperUiSpacing.lg),
         HyperTooltip(
           message: '这是一段较长的说明，会在可用宽度内自动换行。',
-          child: HyperButton(type: 'tonal', label: '查看权限说明', onPressed: () {}),
+          child: HyperButton(label: '查看权限说明', onPressed: () {}),
         ),
       ],
     );

@@ -5,7 +5,7 @@ import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_action_sheet.dart';
 import 'hyper_button.dart';
-import 'hyper_pressable.dart';
+import 'hyper_calendar_month.dart';
 import 'hyper_segmented_control.dart';
 import 'hyper_wheel_picker.dart';
 
@@ -472,7 +472,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                               type: 'filled',
                             )
                           : HyperButton(
-                              type: 'tonal',
                               label: '$month 月',
                               size: 'large',
                               expanded: true,
@@ -490,103 +489,12 @@ class _CalendarMonthState extends State<_CalendarMonth> {
     );
   }
 
-  Widget _buildDays(HyperUiThemeTokens tokens) {
-    final year = _visibleMonth.year;
-    final month = _visibleMonth.month;
-    final firstWeekday = DateTime(year, month).weekday - 1;
-    final daysInMonth = DateTime(year, month + 1, 0).day;
-    final today = _dateOnly(DateTime.now());
-    const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
-
-    return Column(
-      children: [
-        Row(
-          children: [
-            for (final weekday in weekdays)
-              Expanded(
-                child: Center(
-                  child: Text(
-                    weekday,
-                    style: TextStyle(
-                      color: tokens.mutedForeground,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-        const SizedBox(height: HyperUiSpacing.xs),
-        for (var row = 0; row < 6; row++)
-          Row(
-            children: [
-              for (var column = 0; column < 7; column++)
-                _buildDayCell(
-                  tokens,
-                  row * 7 + column - firstWeekday + 1,
-                  daysInMonth,
-                  today,
-                ),
-            ],
-          ),
-      ],
-    );
-  }
-
-  Widget _buildDayCell(
-    HyperUiThemeTokens tokens,
-    int day,
-    int daysInMonth,
-    DateTime today,
-  ) {
-    if (day < 1 || day > daysInMonth) {
-      return const Expanded(child: SizedBox(height: 42));
-    }
-    final date = DateTime(_visibleMonth.year, _visibleMonth.month, day);
-    final enabled = !date.isBefore(widget.first) && !date.isAfter(widget.last);
-    final isStart = date == widget.start;
-    final isEnd = widget.end != null && date == widget.end;
-    final selected = isStart || isEnd;
-    final between =
-        widget.end != null &&
-        date.isAfter(widget.start) &&
-        date.isBefore(widget.end!);
-    final isToday = date == today;
-
-    return Expanded(
-      child: HyperPressable(
-        onPressed: enabled ? () => widget.onSelected(date) : null,
-        borderRadius: BorderRadius.circular(21),
-        child: Container(
-          height: 42,
-          alignment: Alignment.center,
-          color: between ? tokens.selectionBackground : null,
-          child: Container(
-            width: 36,
-            height: 36,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: selected ? tokens.primary : null,
-              shape: BoxShape.circle,
-              border: isToday && enabled && !selected
-                  ? Border.all(color: tokens.primary)
-                  : null,
-            ),
-            child: Text(
-              '$day',
-              style: TextStyle(
-                color: selected
-                    ? tokens.primaryForeground
-                    : enabled
-                    ? tokens.foreground
-                    : tokens.mutedForeground.withAlpha(105),
-                fontSize: 14,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  Widget _buildDays(HyperUiThemeTokens tokens) => HyperCalendarMonth(
+    month: _visibleMonth,
+    firstDate: widget.first,
+    lastDate: widget.last,
+    selectedDate: widget.start,
+    endDate: widget.end,
+    onChanged: widget.onSelected,
+  );
 }

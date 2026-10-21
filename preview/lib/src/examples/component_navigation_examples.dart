@@ -259,7 +259,6 @@ class _StepsComponentExampleState extends State<StepsComponentExample> {
       ),
       const SizedBox(height: 16),
       HyperButton(
-        type: 'tonal',
         label: '下一步',
         onPressed: () => setState(() => _current = (_current + 1) % 3),
       ),

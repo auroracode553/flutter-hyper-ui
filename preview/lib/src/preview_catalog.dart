@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'examples/actions_example.dart' deferred as example_actions_example;
 import 'examples/buttons_example.dart' deferred as example_buttons_example;
+import 'examples/calendar_examples.dart' deferred as example_calendar_examples;
 import 'examples/cards_example.dart' deferred as example_cards_example;
 import 'examples/component_action_examples.dart'
     deferred as example_component_action_examples;
@@ -466,6 +467,20 @@ class PreviewCatalog {
       '滚轮选择器。',
       () => example_component_form_examples.loadLibrary(),
       (_) => example_component_form_examples.PickerComponentExample(),
+    ),
+    _componentPreview(
+      'component-calendar-day',
+      'HyperCalendarDay',
+      '日期格、角标与附属条目。',
+      () => example_calendar_examples.loadLibrary(),
+      (_) => example_calendar_examples.CalendarDayComponentExample(),
+    ),
+    _componentPreview(
+      'component-calendar-month',
+      'HyperCalendarMonth',
+      '内嵌、紧凑与只读月历。',
+      () => example_calendar_examples.loadLibrary(),
+      (_) => example_calendar_examples.CalendarMonthComponentExample(),
     ),
     _componentPreview(
       'component-date-picker',

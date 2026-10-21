@@ -54,14 +54,14 @@ class HyperUploadItem {
   final Object? error;
 }
 
-typedef HyperFilePicker = Future<List<HyperUploadFile>> Function(
-  HyperUploadSource source,
-);
-typedef HyperFileUpload = Future<String> Function(
-  HyperUploadFile file,
-  ValueChanged<double> onProgress,
-  HyperUploadCancellation cancellation,
-);
+typedef HyperFilePicker =
+    Future<List<HyperUploadFile>> Function(HyperUploadSource source);
+typedef HyperFileUpload =
+    Future<String> Function(
+      HyperUploadFile file,
+      ValueChanged<double> onProgress,
+      HyperUploadCancellation cancellation,
+    );
 
 /// 平台选择与 HTTP 上传通过入参注入。组件负责 UI 和请求生命周期。
 class HyperUploader extends StatefulWidget {
@@ -333,7 +333,6 @@ class _UploadItemTile extends StatelessWidget {
               const HyperBadge(label: '已上传', tone: HyperUiTone.success)
             else
               HyperButton(
-                type: 'tonal',
                 label: item.status == HyperUploadStatus.error ? '重试' : '上传',
                 size: 'small',
                 expanded: true,

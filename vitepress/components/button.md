@@ -9,7 +9,7 @@ description: Hyper UI 按钮组件
 
 交互预览仅保留一个禁用文字按钮，不重复展示禁用后外观相同的配色。
 
-省略 type 时采用描边按钮，主操作显式使用 filled 与 colorStyle = primary；其他显示类型为 tonal、icon；语义配色由 colorStyle 指定 primary、success、info、warning、danger。关闭和取消不需要传 type。
+省略 type 时采用描边按钮，主操作显式使用 filled 与 colorStyle = primary；另一种显示类型为 icon；语义配色由 colorStyle 指定 primary、success、info、warning、danger。关闭和取消不需要传 type。
 
 ```dart
 HyperButton(label: '关闭', onPressed: onClose)

@@ -66,7 +66,7 @@ class EmptyStateComponentExample extends StatelessWidget {
           icon: LucideIcons.searchX,
           title: '没有找到结果',
           message: '换一个关键词，或者清除筛选条件后重试。',
-          action: HyperButton(type: 'tonal', label: '清除筛选', onPressed: () {}),
+          action: HyperButton(label: '清除筛选', onPressed: () {}),
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 

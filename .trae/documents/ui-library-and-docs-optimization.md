@@ -24,7 +24,7 @@
 | 3 | 同文件 L258 | switch `trackOutlineColor: edgeShade` | 轨道描边几乎不可见 | 改 `tokens.input` |
 | 4 | `ui/lib/src/components/hyper_list_tile.dart` L156 | 默认 leading 容器 `Border.all(edgeHighlight)` | 90% 白高光当轮廓用，浅色下不可见 | 改玻璃合成边框 `Color.alphaBlend(glass.edgeShade, glass.edgeHighlight)`（与 HyperGlass 约定一致） |
 
-不改的（有意保留）：HyperButton tonal 变体的 `edgeHighlight` 白色 rim（玻璃高光美学）、`HyperGlass` 合成边框（卡片是面不是控件）。存量 lint（Radio 废弃 API 等）不在本次范围。
+保留 HyperButton 图标变体的 `edgeHighlight` 白色 rim（玻璃高光美学）与 `HyperGlass` 合成边框。按钮形态仅保留默认白色描边、filled 与 icon。存量 lint（Radio 废弃 API 等）不在本次范围。
 
 ---
 

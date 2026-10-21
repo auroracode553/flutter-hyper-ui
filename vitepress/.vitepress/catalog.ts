@@ -186,11 +186,11 @@ export const componentGroups: ComponentGroup[] = [
       demo('cards', '卡片结构与选择状态', 'cards_example.dart', 520, '包含标题、状态、进度、标签和选中态。'),
     ],
     components: [
-      component('HyperButton', 'hyper_button.dart', '默认白色描边；type 控制 filled/tonal/icon，colorStyle 提供五种语义配色，color 自定义基色优先。', {
+      component('HyperButton', 'hyper_button.dart', '默认白色描边；type 控制 filled/icon，colorStyle 提供五种语义配色，color 自定义基色优先。', {
         propsDocs: [
           { name: 'label', description: '按钮文字；省略时配合 icon 自动呈现圆形图标按钮' },
           { name: 'onPressed', description: '点击回调；为 null 时按钮进入禁用态' },
-          { name: 'type', description: '显示类型，默认 null（白色描边）；filled / tonal / icon，与配色独立' },
+          { name: 'type', description: '显示类型，默认 null（白色描边）；filled / icon，与配色独立' },
           { name: 'colorStyle', description: '预设配色 primary / success / info / warning / danger；默认 null 为白色中性样式，color 优先' },
           { name: 'size', description: '尺寸：small / default / large，默认 default' },
           { name: 'icon', description: '前置图标；label 省略时切换为图标按钮' },
@@ -409,7 +409,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-slider', 'HyperSlider 滑块', 'component_form_examples.dart', 560, '连续取值、离散分段、自定义范围与提交回调。', 'SliderComponentExample'),
       }),
-      component('HyperNumberStepper', 'hyper_number_stepper.dart', '用于整数数量的紧凑受控增减器，支持上下限和步长。', {
+      component('HyperNumberStepper', 'hyper_number_stepper.dart', '用于整数数量的紧凑受控增减器，加减操作沿用 HyperButton 默认图标按钮样式，支持上下限和步长。', {
         propsDocs: [
           { name: 'value', description: '当前整数值，需处于上下限范围内' },
           { name: 'onChanged', description: '值变化回调；为空时只读' },
@@ -426,6 +426,48 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'title', description: '标题，默认 选择选项' },
         ],
         preview: demo('component-picker', 'HyperPicker 滚轮选择器', 'component_form_examples.dart', 420, '基础滚轮选择与指定初始项。', 'PickerComponentExample'),
+      }),
+      component('HyperCalendarDay / HyperCalendarItem', 'hyper_calendar_day.dart', '复用日期选择器外观的日期格，可展示辅助文字、角标及少量附属条目。', {
+        propsDocs: [
+          { name: 'day', description: '日期数字，必填，范围 1–31' },
+          { name: 'selected', description: '受控选中态，默认 false' },
+          { name: 'today', description: '今日描边，默认 false' },
+          { name: 'enabled', description: '是否可交互，默认 true' },
+          { name: 'adjacent', description: '跨月弱化显示，默认 false' },
+          { name: 'emphasized', description: '主题色数字，默认 false' },
+          { name: 'inRange', description: '区间中间背景，默认 false' },
+          { name: 'size', description: 'small/default/large，默认 default' },
+          { name: 'expanded', description: '占满宿主提供的有限高度，默认 false' },
+          { name: 'subtitle', description: '日期辅助文字，默认 null' },
+          { name: 'subtitleColor', description: '辅助文字颜色，默认跟随主题次要文字色' },
+          { name: 'badge', description: '短角标文字，默认 null' },
+          { name: 'badgeColor', description: '角标颜色，默认主题色' },
+          { name: 'items', description: '附属条目，默认空列表；最多三行，溢出时最后一行单独显示剩余数量' },
+          { name: 'itemCount', description: '全部条目数量，默认 items.length；用于溢出计数' },
+          { name: 'onPressed', description: '日期点击，默认 null' },
+          { name: 'onLongPressed', description: '日期长按，默认 null' },
+          { name: 'onItemsPressed', description: '条目区域点击，默认使用 onPressed' },
+          { name: 'label', description: 'HyperCalendarItem 的必填文字' },
+          { name: 'color', description: 'HyperCalendarItem 的可选颜色，默认主题色' },
+        ],
+        preview: demo('component-calendar-day', 'HyperCalendarDay 日期格', 'calendar_examples.dart', 340, '选中、今日、禁用、辅助信息、条目与长按。', 'CalendarDayComponentExample'),
+      }),
+      component('HyperCalendarMonth', 'hyper_calendar_month.dart', '无卡片的受控六行月历；支持一周起始日、紧凑尺寸和合并绘制的只读模式。', {
+        propsDocs: [
+          { name: 'month', description: '显示月份，必填，仅使用年月' },
+          { name: 'selectedDate', description: '受控选中日期，默认 null' },
+          { name: 'endDate', description: '区间结束日期，默认 null' },
+          { name: 'firstDate', description: '最早可选日期，默认不限制' },
+          { name: 'lastDate', description: '最晚可选日期，默认不限制' },
+          { name: 'weekStart', description: '星期一为 1、星期日为 7，默认 1' },
+          { name: 'size', description: 'small/default/large，默认 default' },
+          { name: 'showWeekdays', description: '是否展示星期表头，默认 true' },
+          { name: 'readOnly', description: '只读合并绘制，不响应日期点击，默认 false' },
+          { name: 'emphasizedDays', description: '当前月份使用主题色的日期数字集合，默认空集合；只读与交互模式一致' },
+          { name: 'expanded', description: '占满宿主提供的有限高度，默认 false' },
+          { name: 'onChanged', description: '日期点击回调，默认 null' },
+        ],
+        preview: demo('component-calendar-month', 'HyperCalendarMonth 内嵌月历', 'calendar_examples.dart', 660, '切换月份、起始日、紧凑尺寸与只读模式。', 'CalendarMonthComponentExample'),
       }),
       component('HyperDatePicker / HyperTimeOfDay / HyperDateRange', 'hyper_date_picker.dart', '在玻璃底部弹层中通过月历选择日期或区间，时间单独使用滚轮。', {
         propsDocs: [

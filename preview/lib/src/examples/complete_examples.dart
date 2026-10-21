@@ -201,7 +201,6 @@ class LayoutExample extends StatelessWidget {
           title: '没有找到结果',
           message: '试试其他关键词',
           action: HyperButton(
-            type: 'tonal',
             label: '重新搜索',
             onPressed: () => HyperToast.show(context, '已重置搜索条件'),
           ),
@@ -351,7 +350,6 @@ class _FormsExampleState extends State<FormsExample> {
               runSpacing: 8,
               children: [
                 HyperButton(
-                  type: 'tonal',
                   label: '选项',
                   onPressed: () async {
                     final result = await HyperPicker.show(
@@ -367,7 +365,6 @@ class _FormsExampleState extends State<FormsExample> {
                   },
                 ),
                 HyperButton(
-                  type: 'tonal',
                   label: '日期',
                   onPressed: () async {
                     final result = await HyperDatePicker.date(context);
@@ -378,7 +375,6 @@ class _FormsExampleState extends State<FormsExample> {
                   },
                 ),
                 HyperButton(
-                  type: 'tonal',
                   label: '时间',
                   onPressed: () async {
                     final result = await HyperDatePicker.time(context);
@@ -387,7 +383,6 @@ class _FormsExampleState extends State<FormsExample> {
                   },
                 ),
                 HyperButton(
-                  type: 'tonal',
                   label: '区间',
                   onPressed: () async {
                     final result = await HyperDatePicker.range(context);
@@ -479,7 +474,6 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
               steps: const [HyperStep('提交'), HyperStep('处理中'), HyperStep('完成')],
             ),
             HyperButton(
-              type: 'tonal',
               label: '下一步',
               onPressed: () => setState(() => _step = (_step + 1) % 3),
             ),

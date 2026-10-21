@@ -226,10 +226,16 @@ class _DropdownComponentExampleState extends State<DropdownComponentExample> {
           ],
         ),
         const SizedBox(height: HyperUiSpacing.xl),
-        HyperDropdown<String>(label: '空选项', options: const [], onChanged: (_) {}),
+        HyperDropdown<String>(
+          label: '空选项',
+          options: const [],
+          onChanged: (_) {},
+        ),
         const SizedBox(height: HyperUiSpacing.xl),
         const HyperDropdown<String>(
-          label: '禁用', enabled: false, value: 'recent',
+          label: '禁用',
+          enabled: false,
+          value: 'recent',
           options: [HyperOption(value: 'recent', label: '最近更新')],
         ),
       ],
@@ -361,7 +367,9 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
             const HyperRadio<String>(value: 'preview', groupValue: 'preview'),
             const SizedBox(width: HyperUiSpacing.sm),
             const HyperRadio<String>(
-              value: 'disabled', groupValue: null, enabled: false,
+              value: 'disabled',
+              groupValue: null,
+              enabled: false,
             ),
           ],
         ),
@@ -602,7 +610,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
         _label('基础滚轮选择'),
         Row(
           children: [
-            HyperButton(type: 'tonal', label: '选择交付周期', onPressed: _pick),
+            HyperButton(label: '选择交付周期', onPressed: _pick),
             const SizedBox(width: 14),
             HyperBadge(label: _value),
           ],
@@ -612,7 +620,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
         _label('指定初始项（initialIndex: 2）'),
         Row(
           children: [
-            HyperButton(type: 'tonal', label: '选择城市', onPressed: _pickCity),
+            HyperButton(label: '选择城市', onPressed: _pickCity),
             const SizedBox(width: 14),
             HyperBadge(label: _city),
           ],
@@ -671,7 +679,6 @@ class _DatePickerComponentExampleState
         Row(
           children: [
             HyperButton(
-              type: 'tonal',
               label: '选择日期',
               icon: LucideIcons.calendar,
               onPressed: _pickDate,
@@ -686,7 +693,6 @@ class _DatePickerComponentExampleState
         Row(
           children: [
             HyperButton(
-              type: 'tonal',
               label: '选择时间',
               icon: LucideIcons.clock,
               onPressed: _pickTime,
@@ -701,7 +707,6 @@ class _DatePickerComponentExampleState
         Row(
           children: [
             HyperButton(
-              type: 'tonal',
               label: '选择区间',
               icon: LucideIcons.calendarDays,
               onPressed: _pickRange,

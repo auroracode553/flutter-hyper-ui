@@ -148,7 +148,8 @@ HyperNavBar(
 // 自定义：固定类型之外的布局使用完整插槽。
 HyperNavBar(
   type: HyperNavBarTypes.custom,
-  leading: HyperButton(type : 'tonal',
+  leading: HyperButton(
+    type: 'icon',
     icon: HyperIcons.back,
     tooltip: '返回',
     onPressed: () {},
