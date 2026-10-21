@@ -72,7 +72,7 @@ class HyperCalendarDay extends StatelessWidget {
               (hasSubtitle ? textScaler.scale(9) * 1.2 + 2 : 0) +
               (size == 'small' ? 6 : 12),
         ) +
-        itemRows * (textScaler.scale(10) * 1.2 + 8);
+        itemRows * (textScaler.scale(10) * 1.2 + 4);
   }
 
   @override
@@ -97,7 +97,8 @@ class HyperCalendarDay extends StatelessWidget {
         : size == 'large'
         ? 17.0
         : 14.0;
-    final labelHeight = scaler.scale(10) * 1.2 + 6;
+    // 紧凑条目保留完整字高，避免三行标签撑出手机月盘的可用高度。
+    final labelHeight = scaler.scale(10) * 1.2 + 2;
 
     Widget buildContent(double height) {
       final visible = ((height - baseHeight) / (labelHeight + 2)).floor().clamp(

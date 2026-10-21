@@ -270,6 +270,7 @@ class _CheckboxComponentExampleState extends State<CheckboxComponentExample> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('受控复选'),
+        // 直接展示组件默认标签行，不添加卡片包装。
         HyperCheckbox(
           value: _value,
           label: '同步到所有设备',

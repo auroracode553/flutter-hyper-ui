@@ -40,12 +40,16 @@ Widget buildHyAnchoredSurface({
   required EdgeInsetsGeometry padding,
   required WidgetBuilder contentBuilder,
   required Widget Function(BuildContext, HyperMenuController) triggerBuilder,
+  bool? visible,
+  VoidCallback? onClose,
 }) => _HyperAnchoredSurface(
   width: width,
   maxHeight: maxHeight,
   padding: padding,
   contentBuilder: contentBuilder,
   triggerBuilder: triggerBuilder,
+  visible: visible,
+  onClose: onClose,
 );
 
 class _HyperAnchoredSurface extends StatefulWidget {
@@ -55,6 +59,8 @@ class _HyperAnchoredSurface extends StatefulWidget {
     required this.padding,
     required this.contentBuilder,
     required this.triggerBuilder,
+    this.visible,
+    this.onClose,
   });
 
   final double width;
@@ -62,6 +68,8 @@ class _HyperAnchoredSurface extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final WidgetBuilder contentBuilder;
   final Widget Function(BuildContext, HyperMenuController) triggerBuilder;
+  final bool? visible;
+  final VoidCallback? onClose;
 
   @override
   State<_HyperAnchoredSurface> createState() => _HyperAnchoredSurfaceState();
@@ -84,10 +92,37 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
   );
 
   void _setOpen(bool open) {
+    if (widget.visible != null) {
+      if (!open && widget.visible!) widget.onClose?.call();
+      return;
+    }
+    _applyOpen(open);
+  }
+
+  void _applyOpen(bool open) {
     if (!mounted) return;
     if (open == _motion.isOpen) return;
     _motion.setOpen(open);
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.visible == true) _syncVisibility();
+  }
+
+  @override
+  void didUpdateWidget(covariant _HyperAnchoredSurface oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.visible != widget.visible) _syncVisibility();
+  }
+
+  void _syncVisibility() {
+    // OverlayPortal 不能在构建阶段开关；回调读取最新状态，快速反向也不回放旧值。
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && widget.visible != null) _applyOpen(widget.visible!);
+    });
   }
 
   @override
@@ -114,7 +149,12 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
   }
 
   @override
-  Widget build(BuildContext context) => OverlayPortal(
+  Widget build(BuildContext context) => PopScope<Object?>(
+    canPop: !_motion.isOpen,
+    onPopInvokedWithResult: (didPop, _) {
+      if (!didPop && _motion.isOpen) _controller.close();
+    },
+    child: OverlayPortal(
     controller: _portal,
     overlayChildBuilder: (overlayContext) => Stack(
       children: <Widget>[
@@ -179,6 +219,7 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
         builder: (anchorContext) =>
             widget.triggerBuilder(anchorContext, _controller),
       ),
+    ),
     ),
   );
 }

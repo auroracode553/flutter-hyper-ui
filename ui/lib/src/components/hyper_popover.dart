@@ -7,12 +7,13 @@ import 'hyper_action_sheet.dart';
 import 'hyper_anchored_surface.dart';
 import 'hyper_button.dart';
 import 'hyper_list_tile.dart';
-import 'hyper_pressable.dart';
 
 /// 锚定控件的补充内容。
 class HyperPopover extends StatelessWidget {
   const HyperPopover({
     super.key,
+    required this.visible,
+    required this.onClose,
     required this.child,
     required this.content,
     this.maxWidth = 280,
@@ -22,6 +23,8 @@ class HyperPopover extends StatelessWidget {
 
   final Widget child;
   final Widget content;
+  final bool visible;
+  final VoidCallback onClose;
   final double maxWidth;
   final double? width;
 
@@ -30,11 +33,9 @@ class HyperPopover extends StatelessWidget {
     width: (width ?? 180).clamp(0.0, maxWidth).toDouble(),
     maxHeight: MediaQuery.sizeOf(context).height * .4,
     padding: const EdgeInsets.all(14),
-    triggerBuilder: (_, controller) => HyperPressable(
-      onPressed: () =>
-          controller.isOpen ? controller.close() : controller.open(),
-      child: child,
-    ),
+    visible: visible,
+    onClose: onClose,
+    triggerBuilder: (_, _) => child,
     contentBuilder: (_) => content,
   );
 }

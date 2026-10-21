@@ -26,7 +26,17 @@ class HyperText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final fontSize = hyperUiSizeValue(size, small: 12, normal: 14, large: 18);
+    // 默认档继承宿主插槽排版，独立使用时回落到组件基准。
+    final inheritedStyle = context
+        .dependOnInheritedWidgetOfExactType<DefaultTextStyle>()
+        ?.style;
+    final useHostStyle = size == 'default';
+    final fontSize = hyperUiSizeValue(
+      size,
+      small: 12,
+      normal: inheritedStyle?.fontSize ?? 14,
+      large: 18,
+    );
     return Text(
       text,
       maxLines: maxLines,
@@ -34,11 +44,14 @@ class HyperText extends StatelessWidget {
       overflow: maxLines == null ? null : TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: fontSize,
-        height: 1.4,
+        height: useHostStyle ? inheritedStyle?.height ?? 1.4 : 1.4,
         fontWeight:
-            fontWeight ?? (size == 'large' ? FontWeight.w700 : FontWeight.w400),
+            fontWeight ??
+            (useHostStyle ? inheritedStyle?.fontWeight : null) ??
+            (size == 'large' ? FontWeight.w700 : FontWeight.w400),
         color:
             color ??
+            (useHostStyle ? inheritedStyle?.color : null) ??
             (size == 'small' ? tokens.mutedForeground : tokens.foreground),
       ),
     );
@@ -64,9 +77,22 @@ class HyperIcon extends StatelessWidget {
   final String size;
   final Color? color;
   @override
-  Widget build(BuildContext context) => Icon(
-    icon,
-    size: hyperUiSizeValue(size, small: 18, normal: 24, large: 32),
-    color: color ?? HyperUiThemeTokens.of(context).foreground,
-  );
+  Widget build(BuildContext context) {
+    final inheritedTheme = context
+        .dependOnInheritedWidgetOfExactType<IconTheme>()
+        ?.data;
+    return Icon(
+      icon,
+      size: hyperUiSizeValue(
+        size,
+        small: 18,
+        normal: inheritedTheme?.size ?? 24,
+        large: 32,
+      ),
+      color:
+          color ??
+          inheritedTheme?.color ??
+          HyperUiThemeTokens.of(context).foreground,
+    );
+  }
 }

@@ -4,6 +4,8 @@
 
 面向移动端的柔光玻璃 Flutter 组件库。组件使用 `Hyper` 前缀，通过 `package:flutter_hyper_ui/hyper_ui.dart` 引用。
 
+维护组件前必读 [UI 样式与功能实现基线](vitepress/guide/design-system.md)：记录当前材质、尺寸、状态、组件实现与专用样式保留清单。涉及用途不明确的样式或交互变化，先向使用者确认，禁止批量替换。
+
 业务项目接入时，请一并阅读[Hyper UI 使用规则与可复制的 AGENTS.md 模板](vitepress/guide/consumer-integration.md)，并复用 [TabBar 共用悬浮宿主](vitepress/components/tab-bar.md#悬浮页面宿主)。完整页面示例见[快速开始](vitepress/guide/getting-started.md#创建第一个页面)。
 
 顶部滚动毛玻璃使用 [HyperNavBarScrollScope + HyperNavBar](vitepress/components/nav-bar.md)：作用域包住导航与主滚动视口即可自动响应滚动，无需在每个页面复制监听与模糊绘制。
@@ -32,7 +34,7 @@ Flutter 的标准表单弹窗使用 HyperDialog.confirm，通过 canConfirm 校�
 
 内嵌月历使用 [HyperCalendarMonth](vitepress/components/calendar-month.md)，复用日期选择器原有六行网格；需要辅助文字、角标及附属条目时组合 [HyperCalendarDay](vitepress/components/calendar-day.md)。紧凑只读模式合并绘制整月，业务历法与日程仍由调用方处理。
 
-内嵌月历可传 emphasizedDays 使用现有主题色强调日期；日期格的条目最多占三行，溢出数量单独占最后一行，宿主可用 minimumHeight 的 itemRows 预留空间。
+内嵌月历可传 emphasizedDays 使用现有主题色强调日期；日期格的条目最多占三行，溢出数量单独占最后一行，宿主可用 minimumHeight 的 itemRows 预留空间。条目保留完整字高并使用紧凑留白，默认缩放下 large 的三行最小高度为 96。
 
 ## 设计系统
 
@@ -45,13 +47,16 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 
 ## 通用组件
 
-- 导航：`HyperTabBar`、`HyperTabs`、`HyperNavBar`（type 支持 custom、backOnly、titleOnly、backWithTitle、more、edit）、`HyperDrawer`、`HyperActionSheet`。
+- 导航：`HyperTabBar`（single / multiple，不提供禁用状态）、`HyperTabs`、`HyperNavBar`（type 支持 custom、backOnly、titleOnly、backWithTitle、more、edit）、`HyperDrawer`、`HyperActionSheet`。
 
 `HyperNavBar.scrolledUnder` 默认 false，顶部保持透明；宿主根据主列表滚动位置传入 true 后，组件用 160ms 过渡显示覆盖状态栏的渐隐毛玻璃，向导航下方延伸 56px 后完全透明，不绘制底部分隔线。背景采样与底色一起淡出，前景操作独立保持清晰；延伸区域不占位、不拦截触摸。页面无需再包背景或模糊层；返回顶部传入 false，高对比和关闭动画适配由组件处理。Flutter 与 Compose 使用相同参数和默认视觉规则。
 - 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperSegmentedControl`。
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
+
 - 数据与菜单：`HyperBadge`（type 为 status/tag/count）、`HyperProgress`、`HyperListTile`、`HyperMenuGroup`、`HyperCard`。
 - 反馈：`HyperToast`、`HyperDialog`、`HyperLoading`、`HyperSkeleton`。
+
+`HyperCheckbox`、`HyperRadio`、`HyperSwitch` 默认直接展示控件；带 label 时使用 plain 标签行，不自动附带卡片背景、描边或阴影。
 
 所有组件均为受控或回调驱动，不读取业务状态、不内置路由名称、不依赖第三方状态管理方案。
 

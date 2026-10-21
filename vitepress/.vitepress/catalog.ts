@@ -109,9 +109,9 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperText', 'hyper_typography.dart', '统一 small、default、large 三档文字尺寸。', {
         propsDocs: [
           { name: 'text', description: '显示的文本内容' },
-          { name: 'size', description: '文字尺寸：small / default / large，默认 default' },
-          { name: 'color', description: '文字颜色' },
-          { name: 'fontWeight', description: '字重' },
+          { name: 'size', description: 'small / default / large；默认 default，在插槽中继承宿主字号、行高与字重，独立使用基准为 14' },
+          { name: 'color', description: '文字颜色；default 未指定时继承宿主颜色' },
+          { name: 'fontWeight', description: '字重；未指定时使用当前档位或宿主默认值' },
           { name: 'maxLines', description: '最大行数' },
           { name: 'textAlign', description: '文字对齐方式' },
         ],
@@ -120,8 +120,8 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperIcon / HyperIcons', 'hyper_typography.dart', '统一的图标组件与常用业务图标集合。', {
         propsDocs: [
           { name: 'icon', description: '图标数据，IconData 类型' },
-          { name: 'size', description: '图标大小，默认 24' },
-          { name: 'color', description: '图标颜色' },
+          { name: 'size', description: 'small / default / large；默认 default 继承插槽尺寸，独立使用基准为 24' },
+          { name: 'color', description: '图标颜色；未指定时继承宿主图标颜色' },
         ],
         preview: demo('component-icon', 'HyperIcon 图标', 'component_foundation_examples.dart', 340, '常用语义图标、尺寸与颜色。', 'IconComponentExample'),
       }),
@@ -365,12 +365,12 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-dropdown', 'HyperDropdown 下拉菜单', 'component_form_examples.dart', 740, '160–240 自动宽度、220 显式宽度、长文案、占位、空列表与禁用项。', 'DropdownComponentExample'),
       }),
-      component('HyperCheckbox', 'hyper_selection_controls.dart', '支持三态、禁用和标签的受控复选，勾选标记轻缩放淡入淡出。', {
+      component('HyperCheckbox', 'hyper_selection_controls.dart', '支持三态与禁用的受控复选；标签行不附带卡片，勾选标记轻缩放淡入淡出。', {
         propsDocs: [
           { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '是否选中' },
           { name: 'onChanged', description: '状态变化回调' },
-          { name: 'label', description: '标签文字' },
+          { name: 'label', description: '标签文字；plain 行承载点击，不附带卡片背景、描边或阴影' },
           { name: 'tristate', description: '是否三态，默认 false' },
         ],
         preview: demo('component-checkbox', 'HyperCheckbox 复选框', 'component_form_examples.dart', 520, '受控复选、三态、禁用与无标签纯控件。', 'CheckboxComponentExample'),
@@ -381,7 +381,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'value', description: '当前选项值' },
           { name: 'groupValue', description: '组选中值' },
           { name: 'onChanged', description: '选中变化回调；null 时圆环只占 21，不分配独立触摸区' },
-          { name: 'label', description: '标签文字；plain 列表行承载点击，最小高度 46' },
+          { name: 'label', description: '标签文字；无卡片的 plain 列表行承载点击，最小高度 46' },
         ],
         preview: demo('component-radio', 'HyperRadio 单选框', 'component_form_examples.dart', 420, '互斥单选组与禁用项；标签行不叠加触摸留白。', 'RadioComponentExample'),
       }),
@@ -390,7 +390,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '是否开启' },
           { name: 'onChanged', description: '状态变化回调' },
-          { name: 'label', description: '标签文字' },
+          { name: 'label', description: '标签文字；使用无卡片背景、描边或阴影的 plain 行' },
         ],
         preview: demo('component-switch', 'HyperSwitch 开关', 'component_form_examples.dart', 500, '受控开关、禁用与无标签纯控件。', 'SwitchComponentExample'),
       }),
@@ -696,7 +696,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: { ...demo('component-nav-bar', '滚动毛玻璃导航栏', 'component_nav_bar_example.dart', 680, '向上滚动显示毛玻璃，回到顶部恢复透明。', 'NavBarComponentExample'), fullScreen: true },
       }),
-      component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '多项液态悬浮底栏与带数量角标的单项圆形入口。', {
+      component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '多项液态悬浮底栏与带数量角标的单项圆形入口；不提供禁用状态。', {
         propsDocs: [
           { name: 'type', description: "'multiple' 多项导航（默认）或 'single' 独立圆形入口" },
           { name: 'items', description: '多项模式至少 2 项；单项模式恰好 1 项，仅显示图标' },

@@ -86,6 +86,7 @@ class HyperCheckbox extends StatelessWidget {
       );
     }
     return HyperListTile(
+      type: 'plain',
       title: label!,
       trailing: box,
       enabled: enabled && onChanged != null,

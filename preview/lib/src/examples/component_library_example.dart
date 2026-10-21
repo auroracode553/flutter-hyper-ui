@@ -128,42 +128,40 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
             ],
           ),
         ),
-        HyperCard(
-          title: 'Selection controls',
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 12,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              HyperCheckbox(
-                value: _checked,
-                label: 'Checkbox',
-                onChanged: (value) => setState(() => _checked = value ?? false),
-              ),
-              HyperRadio<int>(
-                value: 0,
-                groupValue: _radio,
-                label: 'Radio A',
-                onChanged: (value) => setState(() => _radio = value),
-              ),
-              HyperRadio<int>(
-                value: 1,
-                groupValue: _radio,
-                label: 'Radio B',
-                onChanged: (value) => setState(() => _radio = value),
-              ),
-              HyperSwitch(
-                value: _enabled,
-                label: 'Switch',
-                onChanged: (value) => setState(() => _enabled = value),
-              ),
-              HyperSlider(
-                value: _slider,
-                divisions: 100,
-                onChanged: (value) => setState(() => _slider = value),
-              ),
-            ],
-          ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const HyperText('Selection controls', size: 'small'),
+            HyperCheckbox(
+              value: _checked,
+              label: 'Checkbox',
+              onChanged: (value) => setState(() => _checked = value ?? false),
+            ),
+            HyperRadio<int>(
+              value: 0,
+              groupValue: _radio,
+              label: 'Radio A',
+              onChanged: (value) => setState(() => _radio = value),
+            ),
+            HyperRadio<int>(
+              value: 1,
+              groupValue: _radio,
+              label: 'Radio B',
+              onChanged: (value) => setState(() => _radio = value),
+            ),
+            HyperSwitch(
+              value: _enabled,
+              label: 'Switch',
+              onChanged: (value) => setState(() => _enabled = value),
+            ),
+            HyperSlider(
+              value: _slider,
+              divisions: 100,
+              onChanged: (value) => setState(() => _slider = value),
+            ),
+          ],
         ),
         HyperMenuGroup(
           title: 'MenuGroup',

@@ -5,6 +5,8 @@ description: HyperTabBar 组件与公开 API
 
 <ComponentDoc component-id="tab-bar" />
 
+底栏不提供整体或单项禁用状态；单项入口可直接点击，多项导航支持点击与横向拖动切换。
+
 ## 单项入口
 
 `type: 'single'` 用于与底部导航并排的独立操作入口，例如通知。它绘制 56px 的圆形图标按钮，并可显示数量角标；点击时始终通过 `onChanged(0)` 通知调用方。`badgeCount` 为 0 时隐藏角标，超过 99 时显示 `99+`。

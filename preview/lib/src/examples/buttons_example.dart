@@ -17,7 +17,8 @@ class ButtonsExample extends StatelessWidget {
           runSpacing: HyperUiSpacing.xs,
           children: [
             HyperButton(label: '小按钮', size: 'small', onPressed: _noop),
-            HyperButton(label: '默认按钮', onPressed: _noop),
+            // 默认档文字由按钮提供字号、字重与颜色。
+            HyperButton(onPressed: _noop, child: const HyperText('默认按钮')),
             HyperButton(label: '大按钮', size: 'large', onPressed: _noop),
             HyperButton(label: '处理中', loading: true, onPressed: _noop),
           ],
@@ -79,7 +80,7 @@ class ButtonsExample extends StatelessWidget {
           children: [
             HyperButton(
               type: 'icon',
-              icon: LucideIcons.plus,
+              child: const HyperIcon(LucideIcons.plus),
               onPressed: _noop,
               tooltip: '新建',
             ),

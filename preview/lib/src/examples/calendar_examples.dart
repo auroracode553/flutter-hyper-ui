@@ -36,7 +36,12 @@ class _CalendarDayComponentExampleState
       const SizedBox(height: 16),
       SizedBox(
         width: 100,
-        height: 120,
+        height: HyperCalendarDay.minimumHeight(
+          MediaQuery.textScalerOf(context),
+          size: 'large',
+          hasSubtitle: true,
+          itemRows: 3,
+        ),
         child: HyperCalendarDay(
           day: 11,
           size: 'large',

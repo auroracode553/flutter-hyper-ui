@@ -25,7 +25,6 @@ class HyperTabBar extends StatefulWidget {
     required this.selectedIndex,
     required this.onChanged,
     this.type = 'multiple',
-    this.enabled = true,
     this.badgeCount = 0,
     this.safeArea = true,
     EdgeInsetsGeometry? margin,
@@ -44,7 +43,6 @@ class HyperTabBar extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onChanged;
   final String type;
-  final bool enabled;
   final int badgeCount;
   final bool safeArea;
   final Color? color;
@@ -64,13 +62,12 @@ class _HyperTabBarState extends State<HyperTabBar> {
   int _logical(int visual) => _rtl ? widget.items.length - visual - 1 : visual;
 
   void _select(int index) {
-    if (!widget.enabled || index == widget.selectedIndex) return;
+    if (index == widget.selectedIndex) return;
     HapticFeedback.selectionClick();
     widget.onChanged(index);
   }
 
   void _drag(double x, double width) {
-    if (!widget.enabled) return;
     final index = ((x - _inset) / (width - 2 * _inset) * widget.items.length)
         .floor()
         .clamp(0, widget.items.length - 1);
@@ -95,7 +92,7 @@ class _HyperTabBarState extends State<HyperTabBar> {
         count: widget.badgeCount,
         child: HyperPressable(
           borderRadius: BorderRadius.circular(height / 2),
-          onPressed: widget.enabled ? () => widget.onChanged(0) : null,
+          onPressed: () => widget.onChanged(0),
           child: HyperGlass(
             radius: height / 2,
             child: SizedBox.square(
