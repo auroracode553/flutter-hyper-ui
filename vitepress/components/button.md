@@ -18,3 +18,10 @@ HyperButton(type: 'icon', icon: LucideIcons.x, onPressed: onClose)
 ```
 
 colorStyle 支持 primary、success、info、warning、danger，默认不指定配色；color 自定义基色优先。type 与配色独立，所有参数省略时保持白色描边和中性文字，深色模式随主题。
+
+自定义按钮主体使用 content，与 label 互斥。content 内的 HyperText、HyperIcon 默认继承按钮排版与图标样式。
+
+```dart
+HyperButton(onPressed: onSave, content: const HyperText('保存'))
+HyperButton(type: 'icon', onPressed: onAdd, content: const HyperIcon(LucideIcons.plus))
+```

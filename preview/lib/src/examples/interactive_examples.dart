@@ -9,6 +9,7 @@ class OverlayExample extends StatefulWidget {
 }
 
 class _OverlayExampleState extends State<OverlayExample> {
+  bool _popoverOpen = false;
   @override
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
@@ -125,9 +126,14 @@ class _OverlayExampleState extends State<OverlayExample> {
                 if (context.mounted) HyperToast.show(context, '加载完成');
               },
             ),
-            const HyperPopover(
-              content: Text('玻璃浮层承载补充信息，点击外部即可关闭。'),
-              child: Text('气泡说明'),
+            HyperPopover(
+              visible: _popoverOpen,
+              onClose: () => setState(() => _popoverOpen = false),
+              content: const Text('玻璃浮层承载补充信息，点击外部即可关闭。'),
+              child: HyperPressable(
+                onPressed: () => setState(() => _popoverOpen = !_popoverOpen),
+                child: const Text('气泡说明'),
+              ),
             ),
             HyperPopupMenu(
               actions: const [

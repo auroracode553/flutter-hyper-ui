@@ -56,7 +56,8 @@ function parseParameter(source: string, named: boolean): Omit<ApiProp, 'descript
   const typed = /^.+?\s+(\w+)(?:\s*=\s*(.+))?$/s.exec(declaration);
   const match = field ?? typed;
   if (!match) return null;
-  const defaultValue = match[2]?.trim() || '—';
+  const defaultValue = match[2]?.trim()
+    || (!required && named && /\?\s+\w+$/.test(declaration) ? 'null' : '—');
   return {
     name: match[1],
     required: required || (!named && defaultValue === '—'),
@@ -64,10 +65,11 @@ function parseParameter(source: string, named: boolean): Omit<ApiProp, 'descript
   };
 }
 
-function parseConstructor(code: string): Omit<ApiProp, 'description'>[] {
+function parseCallables(code: string): Omit<ApiProp, 'description'>[] {
   const props: Omit<ApiProp, 'description'>[] = [];
-  const constructor = /^\s*(?:const\s+|factory\s+)?Hyper\w*(?:\.\w+)?\s*\(/gm;
-  for (const match of code.matchAll(constructor)) {
+  // 静态弹层入口同样提供公开参数，泛型 show<T> 不能遗漏。
+  const callable = /^\s*(?:(?:const\s+|factory\s+)?Hyper\w*(?:\.\w+)?|static\s+[^\n(]+)\s*\(/gm;
+  for (const match of code.matchAll(callable)) {
     const opening = code.indexOf('(', match.index);
     const closing = closingParenthesis(code, opening);
     if (closing < 0) continue;
@@ -87,10 +89,10 @@ function parseConstructor(code: string): Omit<ApiProp, 'description'>[] {
   return props;
 }
 
-/** Combine source-derived constructor defaults with the curated catalog descriptions. */
+/** Combine source-derived callable defaults with the curated catalog descriptions. */
 export function componentPropsFor(code: string, documented: ComponentPropDoc[]): ApiProp[] {
   const descriptionByName = new Map(documented.map(({ name, description }) => [name, description]));
-  const props = parseConstructor(code).map((prop) => ({
+  const props = parseCallables(code).map((prop) => ({
     ...prop,
     description: descriptionByName.get(prop.name) ?? '参见公开签名。',
   }));

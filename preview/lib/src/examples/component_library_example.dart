@@ -247,7 +247,7 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
                     onPressed: () => HyperDrawer.show<void>(
                       context,
                       title: '通用抽屉',
-                      builder: (_) => const HyperMenuGroup(
+                      contentBuilder: (_) => const HyperMenuGroup(
                         children: <Widget>[
                           HyperListTile(title: '筛选条件'),
                           HyperListTile(title: '排序方式'),

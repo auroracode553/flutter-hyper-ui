@@ -204,7 +204,7 @@ HyperCheckbox、HyperRadio、HyperSwitch 的标签行统一使用 plain，不自
 | filled | 基色渐变、淡描边和阴影；前景按是否指定色调与亮度计算 |
 | 禁用 | enabled 为 false 或 onPressed 为空；controlTrack 背景、mutedForeground 的 alpha 150、border 的 alpha 110 |
 | 加载 | 阻止重复点击；图标按钮用加载环替代图标，文字按钮保留内容并显示加载环；不自动切换为禁用配色 |
-| 内容 | label 与 child 互斥；type 为 icon 时不能传 label；tooltip 由 HyperTooltip 提供 |
+| 内容 | label 与 content 互斥；type 为 icon 时不能传 label；tooltip 由 HyperTooltip 提供 |
 | 宽度 | 默认随内容收缩；expanded 才通栏；图标按钮宽高相同 |
 | 圆角 | 按钮高度的一半，不能改用统一方形圆角 |
 | backgroundColor | 覆盖默认背景并关闭背景渐变；仅保留有明确用途的调用 |
@@ -270,8 +270,8 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认 small 图标按钮，数字项保留专用选中态 |
 | [HyperSlideMenu](../components/slide-menu.md) | hyper_slide_menu.dart | 逻辑 start / end 操作区，默认每项宽 64、圆角 18；保留跟手、越界阻尼、速度投影与弹簧；展开时屏蔽正文操作，点击操作先收起再通知调用方 |
 | [HyperActionSheet](../components/action-sheet.md) | hyper_action_sheet.dart | show 展示自定义内容，choose 展示 HyperAction 列表；圆角 30、内边距 16、最大高为键盘避让后可用高度的 85%；选中、禁用、危险色和取消按钮分别保留 |
-| [HyperDrawer](../components/drawer.md) | hyper_drawer.dart | 默认从逻辑 end 进入，宽 320 并按窗口收敛，安全边距最小 12、圆角 30；header / footer 固定；自带滚动内容需 scrollable: false，避免重复滚动 |
-| [HyperPopover](../components/popover.md) | hyper_popover.dart | child 是自定义触发内容；默认宽 180，maxWidth 280 仅限制上限；锚定浮层，不擅自把触发器改为图标按钮 |
+| [HyperDrawer](../components/drawer.md) | hyper_drawer.dart、hyper_drawer_surface.dart | show 为模态入口，正文 contentBuilder；默认 start、宽 320，窄屏最大窗口宽减 56；贴边全高、实色背景，无外侧留白／圆角／描边／卡片阴影；正文默认零间距，安全区在背景内部；固定标题／页脚、滑动关闭；自带滚动内容设 scrollable: false |
+| [HyperPopover](../components/popover.md) | hyper_popover.dart | visible / onClose 由调用方控制；child 只提供锚点，由自身操作触发；默认宽 180，maxWidth 280 仅限制上限；保留锚定浮层样式 |
 | [HyperPopupMenu](../components/popup-menu.md) | hyper_popover.dart | 默认更多图标按钮，enabled 控制打开；菜单自动测宽 160–240，菜单项复用 HyperListTile；危险、禁用和 selected 状态保留 |
 | [HyperSteps](../components/steps.md) | hyper_navigation.dart | 默认 horizontal，支持纵向步骤；current 控制当前进度，完成线、未完成轨道和步骤标签是专用状态绘制 |
 
@@ -336,12 +336,16 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 ## 状态与生命周期不能随样式整理改变
 
 - 受控与内部状态分开：Stepper、Pagination、TabBar 的业务值由调用方传入；Carousel 的当前页、Collapse 的展开、Uploader 的文件项由组件维护；Tabs 支持初始值和外部选中索引。不能统一改成全受控或全内部状态。
+- 共有默认行为：Checkbox 标签行的方框只占 21；Card 选中边框使用完整主题色；ListTile 的 leading 间距为 12、trailing 间距为 8；Tabs 重复点击当前项不通知值变化；Button 的主体插槽命名为 content。
+- TextField 的长度限制与计数使用用户可见字符；Android 当前按 UTF-16 处理，分段对齐作为独立专项。Flutter Toast 的零时长会立即关闭，Android 的零时长保留不自动关闭语义；默认文字操作两端均先关闭提示再回调。
+- HyperText 有 maxLines 时默认省略号；Android 显式 overflow 可覆盖。Android 的 Popover / SlideMenu / Tabs 保留受控宿主形式，不照搬 Flutter 内部状态或控制器；缺失组件及日期时间／区间入口只列能力缺口，不自动新增。
+- Android Dropdown 在展开后被禁用或移除回调时自动收起，该行为保留；Flutter 当前没有对应自动收起分支，不据此删除 Android 的收起处理。
 - 输入框可代管未传入的 controller / focusNode，只释放自己创建的对象；显式 readOnly，或 value 已传入但 onChanged 为空时，保持只读。不要为了可点击而补空回调。
 - Slider 的 readOnly 保留正常展示并停止修改；按钮 onPressed 为空进入禁用态；CalendarMonth 的 readOnly 改走整月合并绘制。这些状态含义不同，不能统一成一层灰色或透明度。
 - 取消选择器、日期面板或多选面板时，不提交临时选择。showHyperModal 等待退出路由完成后返回；不能提前销毁仍参与退出绘制的内容与控制器。
 - Uploader 保留 ready / uploading / success / error；选择后自动调用注入的 upload，按文件 ID 防重复请求并限制数量和大小，移除及销毁时取消令牌，忽略已取消任务的后续结果。底层传输是否真正取消由适配器观察令牌实现。
-- UpdateDialog 只展示 idle / checking / available / upToDate / downloadQueued / downloading / readyToInstall / installing / completed / error。检查、下载和安装由业务回调驱动；show 不允许点遮罩关闭，强制更新和安装中限制退出操作，不把预览模拟服务放进库。
-- 锚定浮层退出后再移除，收起期间不继续接收操作；Drawer 的 dismissible 只控制遮罩点击，不能据此推断系统返回键被禁止。
+- UpdateDialog 接收 idle / checking / available / upToDate / downloadQueued / downloading / readyToInstall / installing / completed / error，idle 不显示内容。检查、下载和安装由业务回调驱动；show 不允许点遮罩关闭，强制更新和安装中限制退出操作，不把预览模拟服务放进库。
+- 锚定浮层退出后再移除，收起期间不继续接收操作；Drawer 使用 dismissOnClickOutside / dismissOnBackPress / gesturesEnabled 分别控制遮罩、返回键与滑动关闭；向外超过宽度 30% 或速度达 400 时关闭，否则 180ms 复位。面板以 280ms 从自身宽度之外平移，遮罩独立淡入。
 - NavBarScrollScope 只跟踪 depth 为 0 的竖向主视口，滚动超过 0.5 判断正文经过导航；scrollKey 改变时重置。NavBar 将显式 scrolledUnder 与作用域状态合并，160ms 显示背景，向下延伸 56 渐隐且不占位、不拦截触摸；高对比时改为不延伸的实底，减少动画时直接切换。
 - 两端导航背景均从屏幕顶部覆盖状态栏，安全区在背景内部，只有标题与按钮避让。Android 文档预览注入模拟系统 Insets，导航与正文共用同一来源；不得把模拟留白放到整个导航栏外部，也不得在正文重复累加。
 - 保留现有 RTL、字体缩放、键盘焦点及减少动画处理；不为统一外观删掉这些分支。仅交互用途的 HyperPressable 不等价于自定义按钮样式。

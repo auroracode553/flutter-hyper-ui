@@ -155,52 +155,53 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
       if (!didPop && _motion.isOpen) _controller.close();
     },
     child: OverlayPortal(
-    controller: _portal,
-    overlayChildBuilder: (overlayContext) => Stack(
-      children: <Widget>[
-        Positioned.fill(
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: _controller.close,
-          ),
-        ),
-        Positioned.fill(
-          child: CustomSingleChildLayout(
-            delegate: HyperAnchoredLayout(
-              anchor: _anchorRect(overlayContext),
-              insets: EdgeInsets.fromLTRB(
-                MediaQuery.paddingOf(overlayContext).left + 12,
-                MediaQuery.paddingOf(overlayContext).top + 12,
-                MediaQuery.paddingOf(overlayContext).right + 12,
-                MediaQuery.paddingOf(overlayContext).bottom +
-                    MediaQuery.viewInsetsOf(overlayContext).bottom +
-                    12,
-              ),
-              width: widget.width,
-              maxHeight: widget.maxHeight,
-              onPositioned: (origin) => _origin = origin,
+      controller: _portal,
+      overlayChildBuilder: (overlayContext) => Stack(
+        children: <Widget>[
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: _controller.close,
             ),
-            child: IgnorePointer(
-              ignoring: !_motion.isOpen,
-              child: buildHySurfaceTransition(
-                animation: _motion.animation,
-                origin: () => _origin,
-                child: ExcludeFocus(
-                  excluding: !_motion.isOpen,
-                  child: _HyperMenuScope(
-                    controller: _controller,
-                    child: SizedBox(
-                      width: widget.width,
-                      child: HyperGlass(
-                        radius: 18,
-                        type: 'prominent',
-                        padding: widget.padding,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: widget.maxHeight,
-                          ),
-                          child: SingleChildScrollView(
-                            child: Builder(builder: widget.contentBuilder),
+          ),
+          Positioned.fill(
+            child: CustomSingleChildLayout(
+              delegate: HyperAnchoredLayout(
+                anchor: _anchorRect(overlayContext),
+                insets: EdgeInsets.fromLTRB(
+                  MediaQuery.paddingOf(overlayContext).left + 12,
+                  MediaQuery.paddingOf(overlayContext).top + 12,
+                  MediaQuery.paddingOf(overlayContext).right + 12,
+                  MediaQuery.paddingOf(overlayContext).bottom +
+                      MediaQuery.viewInsetsOf(overlayContext).bottom +
+                      12,
+                ),
+                width: widget.width,
+                maxHeight: widget.maxHeight,
+                onPositioned: (origin) => _origin = origin,
+              ),
+              child: IgnorePointer(
+                ignoring: !_motion.isOpen,
+                child: buildHySurfaceTransition(
+                  animation: _motion.animation,
+                  origin: () => _origin,
+                  child: ExcludeFocus(
+                    excluding: !_motion.isOpen,
+                    child: _HyperMenuScope(
+                      controller: _controller,
+                      child: SizedBox(
+                        width: widget.width,
+                        child: HyperGlass(
+                          radius: 18,
+                          type: 'prominent',
+                          padding: widget.padding,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight: widget.maxHeight,
+                            ),
+                            child: SingleChildScrollView(
+                              child: Builder(builder: widget.contentBuilder),
+                            ),
                           ),
                         ),
                       ),
@@ -210,16 +211,15 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
               ),
             ),
           ),
-        ),
-      ],
-    ),
-    child: SizedBox(
-      key: _anchorKey,
-      child: Builder(
-        builder: (anchorContext) =>
-            widget.triggerBuilder(anchorContext, _controller),
+        ],
       ),
-    ),
+      child: SizedBox(
+        key: _anchorKey,
+        child: Builder(
+          builder: (anchorContext) =>
+              widget.triggerBuilder(anchorContext, _controller),
+        ),
+      ),
     ),
   );
 }

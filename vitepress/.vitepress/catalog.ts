@@ -189,6 +189,7 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperButton', 'hyper_button.dart', '默认白色描边；type 控制 filled/icon，colorStyle 提供五种语义配色，color 自定义基色优先。', {
         propsDocs: [
           { name: 'label', description: '按钮文字；省略时配合 icon 自动呈现圆形图标按钮' },
+          { name: 'content', description: '自定义按钮主体，与 label 互斥；继承按钮排版与图标样式' },
           { name: 'onPressed', description: '点击回调；为 null 时按钮进入禁用态' },
           { name: 'type', description: '显示类型，默认 null（白色描边）；filled / icon，与配色独立' },
           { name: 'colorStyle', description: '预设配色 primary / success / info / warning / danger；默认 null 为白色中性样式，color 优先' },
@@ -598,14 +599,19 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-loading', 'HyperLoading 加载', 'component_feedback_examples.dart', 420, '局部加载（尺寸与文案）与全局任务遮罩。', 'LoadingComponentExample'),
       }),
-      component('HyperDrawer / HyperDrawerPlacement', 'hyper_drawer.dart', '支持双侧弹出、RTL、自定义宽度、固定底部操作区与泛型返回结果的柔光抽屉。', {
+      component('HyperDrawer / HyperDrawerPlacement', 'hyper_drawer.dart', '贴边全高的模态抽屉，支持双侧展开、RTL、固定页脚、滑动关闭与返回结果。', {
         propsDocs: [
-          { name: 'child', description: '内容组件' },
+          { name: 'context', description: '必填宿主上下文，用于查找根导航器、主题与逻辑方向' },
+          { name: 'contentBuilder', description: '必填正文构建器；通过 Navigator.pop 返回结果' },
           { name: 'title', description: '标题' },
-          { name: 'footer', description: '底部操作区组件' },
-          { name: 'onClose', description: '关闭回调' },
+          { name: 'footerBuilder', description: '固定页脚构建器，内边距 16' },
+          { name: 'placement', description: 'start / end，默认 start；RTL 自动镜像' },
+          { name: 'width', description: '目标宽度，默认 320；最大为窗口宽度减 56' },
+          { name: 'contentPadding', description: '正文内边距，默认 EdgeInsets.zero' },
           { name: 'scrollable', description: '是否可滚动，默认 true' },
-          { name: 'padding', description: '内边距' },
+          { name: 'dismissOnClickOutside', description: '点击遮罩关闭，默认 true' },
+          { name: 'dismissOnBackPress', description: '系统返回键关闭，默认 true' },
+          { name: 'gesturesEnabled', description: '允许横向滑动关闭，默认 true' },
         ],
         preview: demo('component-drawer', 'HyperDrawer 抽屉', 'component_feedback_examples.dart', 460, '右侧抽屉返回值、左侧抽屉与底部操作区。', 'DrawerComponentExample'),
       }),
@@ -623,6 +629,8 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperPopover', 'hyper_popover.dart', '从锚点一侧缩放淡入淡出的补充说明气泡。', {
         propsDocs: [
+          { name: 'visible', description: '必填；由调用方持有的可见状态' },
+          { name: 'onClose', description: '必填；外部点击或返回请求关闭，调用方更新 visible' },
           { name: 'child', description: '锚点子组件' },
           { name: 'content', description: '气泡内容组件' },
           { name: 'width', description: '期望内容宽度，默认 null 时采用 180；仍受 maxWidth 与窗口安全区约束' },

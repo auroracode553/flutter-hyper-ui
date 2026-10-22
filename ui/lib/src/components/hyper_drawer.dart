@@ -7,182 +7,69 @@ import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import '../utils/hyper_overlay_motion.dart';
-import 'hyper_glass.dart';
 import 'hyper_button.dart';
 import 'hyper_layout.dart';
+import 'hyper_surface_scope.dart';
 
-/// 逻辑方向；在 RTL 布局中 start 位于右侧，end 位于左侧。
+part 'hyper_drawer_surface.dart';
+
+/// 逻辑方向；RTL 时 start 在右侧，end 在左侧。
 enum HyperDrawerPlacement { start, end }
 
-/// 柔光抽屉面板。直接使用时，父级需提供有限高度。
-class HyperDrawer extends StatelessWidget {
-  const HyperDrawer({
-    super.key,
-    required this.child,
-    this.title,
-    this.footer,
-    this.onClose,
-    this.scrollable = true,
-  });
-
-  final Widget child;
-  final String? title;
-  final Widget? footer;
-  final VoidCallback? onClose;
-
-  /// ListView 等自带滚动的内容应设为 false，以获得有限高度。
-  final bool scrollable;
-
-  /// 打开模态抽屉，通过 Navigator.pop(drawerContext, result) 返回结果。
-  /// dismissible 仅控制遮罩点击，系统返回键仍可关闭抽屉。
+/// 贴边全高的模态抽屉；内容与返回结果由调用方提供。
+abstract final class HyperDrawer {
   static Future<T?> show<T>(
     BuildContext context, {
-    required WidgetBuilder builder,
+    required WidgetBuilder contentBuilder,
     String? title,
     WidgetBuilder? footerBuilder,
-    HyperDrawerPlacement placement = HyperDrawerPlacement.end,
+    HyperDrawerPlacement placement = HyperDrawerPlacement.start,
     double width = 320,
-    bool dismissible = true,
+    EdgeInsetsGeometry contentPadding = EdgeInsets.zero,
     bool scrollable = true,
+    bool dismissOnClickOutside = true,
+    bool dismissOnBackPress = true,
+    bool gesturesEnabled = true,
   }) {
-    assert(width > 0 && width.isFinite);
+    if (!width.isFinite || width <= 0) {
+      throw ArgumentError.value(width, 'width', 'Must be finite and positive');
+    }
     final direction = Directionality.of(context);
-    final isLeft =
-        (placement == HyperDrawerPlacement.start) ==
-        (direction == TextDirection.ltr);
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final theme = HyperUiTheme.of(context);
-    final scrim = HyperGlassTheme.of(context).scrim;
     final navigator = Navigator.of(context, rootNavigator: true);
     final themes = InheritedTheme.capture(from: context, to: navigator.context);
-
     return showGeneralDialog<T>(
       context: context,
       useRootNavigator: true,
       barrierDismissible: false,
       barrierColor: const Color(0x00000000),
-      transitionDuration: reduceMotion
+      transitionDuration: MediaQuery.disableAnimationsOf(context)
           ? Duration.zero
           : HyperUiEffects.overlayDuration,
-      pageBuilder: (routeContext, animation, secondaryAnimation) =>
+      pageBuilder: (drawerContext, animation, secondaryAnimation) =>
           HyperUiTheme(
             data: theme,
             child: themes.wrap(
               Directionality(
                 textDirection: direction,
-                child: Builder(
-                  builder: (drawerContext) {
-                    // 在路由内读取键盘和安全区，随窗口尺寸变化重新约束宽度。
-                    return LayoutBuilder(
-                      builder: (context, constraints) => Padding(
-                        padding: MediaQuery.viewInsetsOf(drawerContext),
-                        child: SafeArea(
-                          minimum: const EdgeInsets.all(12),
-                          child: Align(
-                            alignment: isLeft
-                                ? Alignment.centerLeft
-                                : Alignment.centerRight,
-                            child: SizedBox(
-                              width: math.max(
-                                0,
-                                math.min(width, constraints.maxWidth - 24),
-                              ),
-                              height: double.infinity,
-                              child: HyperDrawer(
-                                title: title,
-                                footer: footerBuilder?.call(drawerContext),
-                                onClose: () =>
-                                    Navigator.of(drawerContext).pop(),
-                                scrollable: scrollable,
-                                child: builder(drawerContext),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                child: _DrawerSurface(
+                  animation: animation,
+                  placement: placement,
+                  width: width,
+                  contentPadding: contentPadding,
+                  scrollable: scrollable,
+                  dismissOnClickOutside: dismissOnClickOutside,
+                  dismissOnBackPress: dismissOnBackPress,
+                  gesturesEnabled: gesturesEnabled,
+                  title: title,
+                  contentBuilder: contentBuilder,
+                  footerBuilder: footerBuilder,
                 ),
               ),
             ),
           ),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return Stack(
-          children: <Widget>[
-            Positioned.fill(
-              child: FadeTransition(
-                opacity: animation,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: dismissible ? () => Navigator.pop(context) : null,
-                  child: ColoredBox(color: scrim),
-                ),
-              ),
-            ),
-            buildHySurfaceTransition(
-              animation: animation,
-              curve: HyperUiEffects.overlayCurve,
-              beginScale: 1,
-              offset: Offset(
-                MediaQuery.sizeOf(context).width * (isLeft ? -0.12 : 0.12),
-                0,
-              ),
-              child: child,
-            ),
-          ],
-        );
-      },
+      // 面板自身负责平移，遮罩单独淡入；不叠加整页缩放或淡入。
+      transitionBuilder: (_, _, _, child) => child,
     );
   }
-
-  @override
-  Widget build(BuildContext context) => HyperGlass(
-    radius: 30,
-    type: 'prominent',
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (title != null || onClose != null)
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 8, 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: title == null
-                      ? const SizedBox.shrink()
-                      : Text(
-                          title!,
-                          style: TextStyle(
-                            color: HyperUiThemeTokens.of(context).foreground,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                ),
-                if (onClose != null)
-                  HyperButton(
-                    type: 'icon',
-                    tooltip: '关闭',
-                    onPressed: onClose,
-                    icon: LucideIcons.x,
-                  ),
-              ],
-            ),
-          ),
-        Expanded(
-          child: scrollable
-              ? SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: child,
-                )
-              : Padding(padding: const EdgeInsets.all(16), child: child),
-        ),
-        if (footer != null) ...[
-          const HyperDivider(),
-          Padding(padding: const EdgeInsets.all(16), child: footer),
-        ],
-      ],
-    ),
-  );
 }

@@ -49,6 +49,8 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 
 - 导航：`HyperTabBar`（single / multiple，不提供禁用状态）、`HyperTabs`、`HyperNavBar`（type 支持 custom、backOnly、titleOnly、backWithTitle、more、edit）、`HyperDrawer`、`HyperActionSheet`。
 
+`HyperDrawer.show` 打开贴边、全高的模态抽屉；默认 start，正文使用 contentBuilder、默认零内边距。遮罩、返回键和横向滑动可分别控制关闭，标题及页脚固定；完整 API 见[抽屉文档](vitepress/components/drawer.md)。
+
 `HyperNavBar.scrolledUnder` 默认 false，顶部保持透明；宿主根据主列表滚动位置传入 true 后，组件用 160ms 过渡显示覆盖状态栏的渐隐毛玻璃，向导航下方延伸 56px 后完全透明，不绘制底部分隔线。背景采样与底色一起淡出，前景操作独立保持清晰；延伸区域不占位、不拦截触摸。页面无需再包背景或模糊层；返回顶部传入 false，高对比和关闭动画适配由组件处理。Flutter 与 Compose 使用相同参数和默认视觉规则。
 - 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperSegmentedControl`。
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
@@ -64,9 +66,9 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 
 按钮配色与显示形态独立：`type` 仅支持 `filled`、`icon`，省略时默认白色描边；`colorStyle` 支持 `primary`、`success`、`info`、`warning`、`danger`，自定义 `color` 优先于预设配色。按钮预览展示尺寸、配色、图标、加载、禁用和通栏形态。
 
-本项目与 `D:/my_project/Android-project/hyper-ui` 维护相同的默认视觉规则。按钮默认描边，省略 `type` 即可；显式类型仅有 `filled`、`icon`，主操作显式使用 `type = "filled"` 和 `colorStyle = "primary"`。
+本项目与 `D:/my_project/android_project/hyper-ui` 维护相同的默认视觉规则。按钮默认描边，省略 `type` 即可；显式类型仅有 `filled`、`icon`，主操作显式使用 `type = "filled"` 和 `colorStyle = "primary"`；自定义按钮主体两端统一使用 `content`。
 
-`HyperDropdown` 默认按最长选项或占位文字加 68 控件占位计算宽度，限制在 160–240，并服从父级空间；菜单匹配字段，显式 width 用于宽表单。`HyperPopover` 默认宽 180，width 可显式指定，maxWidth = 280 仅限制上限；`HyperPopupMenu` 按操作文案与图标占位自动取 160–240。两端 Dropdown、Popover 文档与预览同步展示紧凑默认值、显式宽度、长文案和可交互状态。
+`HyperDropdown` 默认按最长选项或占位文字加 68 控件占位计算宽度，限制在 160–240，并服从父级空间；菜单匹配字段，显式 width 用于宽表单。`HyperPopover` 的 visible / onClose 由调用方控制，child 自行触发；默认宽 180，width 可显式指定，maxWidth = 280 仅限制上限；`HyperPopupMenu` 按操作文案与图标占位自动取 160–240。两端 Dropdown、Popover 文档与预览同步展示紧凑默认值、显式宽度、长文案和可交互状态。
 
 `HyperDialog` 两端共用窗口两侧各 24 的留白、420 的面板宽度上限、圆角 26 和内容内边距 18；窄屏按实际可用宽度收敛。
 

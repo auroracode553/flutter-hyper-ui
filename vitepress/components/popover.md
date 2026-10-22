@@ -5,6 +5,22 @@ description: HyperPopover 组件与公开 API
 
 <ComponentDoc component-id="popover" />
 
+## 状态与触发
+
+visible、onClose、child 和 content 必填。调用方持有 visible；onClose 请求调用方将其设为 false。child 只提供锚点，不再额外包一层点击区域，因此可由按钮、字段内部操作或长按决定何时打开；内容中的操作也直接更新同一个 visible。点击外部或系统返回先关闭气泡，保留当前页面。
+
+```dart
+HyperPopover(
+  visible: visible,
+  onClose: () => setState(() => visible = false),
+  child: HyperPressable(
+    onPressed: () => setState(() => visible = !visible),
+    child: const HyperText('查看说明'),
+  ),
+  content: const HyperText('补充内容'),
+)
+```
+
 ## 宽度与布局
 
 默认内容宽 180，maxWidth: 280 只限制上限；复杂内容可显式传 width: 240。最终宽度为 min(width ?? 180, maxWidth, 窗口安全区可用宽度)，短菜单不会默认撑到 280。

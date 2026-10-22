@@ -19,7 +19,7 @@ class HyperButton extends StatelessWidget {
     this.type,
     this.colorStyle,
     this.label,
-    this.child,
+    this.content,
     this.onPressed,
     this.size = 'default',
     this.icon,
@@ -44,16 +44,16 @@ class HyperButton extends StatelessWidget {
          'HyperButton.colorStyle must be null, primary, success, info, warning, or danger.',
        ),
        assert(
-         label == null || child == null,
-         'HyperButton.label and child cannot be used together.',
+         label == null || content == null,
+         'HyperButton.label and content cannot be used together.',
        ),
        assert(
          type != 'icon' || label == null,
-         'HyperButton icon type uses icon, child, or loading instead of label.',
+         'HyperButton icon type uses icon, content, or loading instead of label.',
        );
 
   final String? label;
-  final Widget? child;
+  final Widget? content;
   final VoidCallback? onPressed;
   final String? type;
   final String? colorStyle;
@@ -69,14 +69,14 @@ class HyperButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (label != null && this.child != null) {
+    if (label != null && content != null) {
       throw ArgumentError(
-        'HyperButton.label and child cannot be used together.',
+        'HyperButton.label and content cannot be used together.',
       );
     }
     if (type == 'icon' && label != null) {
       throw ArgumentError(
-        'HyperButton icon type uses icon, child, or loading instead of label.',
+        'HyperButton icon type uses icon, content, or loading instead of label.',
       );
     }
     final variant = switch (type) {
@@ -93,14 +93,14 @@ class HyperButton extends StatelessWidget {
     final hasLabel = label != null && label!.isNotEmpty;
     final isIconOnly =
         type == 'icon' ||
-        (!hasLabel && this.child == null && (icon != null || loading));
+        (!hasLabel && content == null && (icon != null || loading));
     assert(
       (hasLabel ? 1 : 0) +
-              (this.child != null ? 1 : 0) +
+              (content != null ? 1 : 0) +
               (icon != null ? 1 : 0) +
               (loading ? 1 : 0) >
           0,
-      'HyperButton needs label, child, icon, or loading.',
+      'HyperButton needs label, content, icon, or loading.',
     );
 
     final visual = _HyperButtonVisual.resolve(
@@ -119,7 +119,7 @@ class HyperButton extends StatelessWidget {
         ? metrics.iconOnlyIconSize
         : metrics.labelIconSize;
 
-    final content = Container(
+    final buttonBody = Container(
       height: metrics.height,
       padding: EdgeInsets.symmetric(
         horizontal: isIconOnly ? 0 : metrics.horizontal,
@@ -176,7 +176,7 @@ class HyperButton extends StatelessWidget {
           onPressed: blocked ? null : onPressed,
           enabled: !blocked,
           borderRadius: borderRadius,
-          child: content,
+          child: buttonBody,
         ),
       ),
     );
@@ -195,12 +195,12 @@ class HyperButton extends StatelessWidget {
         child: HyperSpinner(strokeWidth: 2, color: foreground),
       );
     }
-    return child ?? Icon(icon!);
+    return content ?? Icon(icon!);
   }
 
   Widget _buildContent(Color foreground) {
-    final content =
-        child ?? Text(label!, maxLines: 1, overflow: TextOverflow.ellipsis);
+    final labelContent =
+        content ?? Text(label!, maxLines: 1, overflow: TextOverflow.ellipsis);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: expanded ? MainAxisSize.max : MainAxisSize.min,
@@ -215,7 +215,7 @@ class HyperButton extends StatelessWidget {
           Icon(icon),
           const SizedBox(width: HyperUiSpacing.xs),
         ],
-        if (expanded) Flexible(child: content) else content,
+        if (expanded) Flexible(child: labelContent) else labelContent,
         if (trailingIcon != null) ...<Widget>[
           const SizedBox(width: HyperUiSpacing.xs),
           Icon(trailingIcon),

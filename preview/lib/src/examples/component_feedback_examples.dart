@@ -1,8 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
-import 'package:flutter_hyper_ui/src/components/hyper_anchored_surface.dart'
-    show hyperMenuOf;
 
 // doc-region ToastComponentExample
 class ToastComponentExample extends StatelessWidget {
@@ -81,8 +79,9 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
     final result = await HyperDrawer.show<String>(
       context,
       title: '选择工作空间',
+      placement: HyperDrawerPlacement.end,
       width: 320,
-      builder: (drawerContext) => Column(
+      contentBuilder: (drawerContext) => Column(
         children: [
           for (final label in const ['产品设计', '移动端', '文档站'])
             HyperListTile(
@@ -104,7 +103,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
       title: '筛选条件',
       placement: HyperDrawerPlacement.start,
       width: 300,
-      builder: (drawerContext) => Column(
+      contentBuilder: (drawerContext) => Column(
         children: [
           HyperListTile(
             title: '仅显示收藏',
@@ -409,44 +408,62 @@ class PopoverComponentExample extends StatefulWidget {
 
 class _PopoverComponentExampleState extends State<PopoverComponentExample> {
   String _selected = '尚未选择';
+  bool _hintOpen = false;
+  bool _menuOpen = false;
+  bool _wideOpen = false;
 
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     mainAxisSize: MainAxisSize.min,
     children: [
-      const HyperPopover(
-        content: Text('Popover 保持页面上下文，适合展示简短补充说明。'),
-        child: Text('点击查看说明'),
+      HyperPopover(
+        visible: _hintOpen,
+        onClose: () => setState(() => _hintOpen = false),
+        content: const Text('Popover 保持页面上下文，适合展示简短补充说明。'),
+        child: HyperPressable(
+          onPressed: () => setState(() => _hintOpen = !_hintOpen),
+          child: const Text('点击查看说明'),
+        ),
       ),
       const SizedBox(height: HyperUiSpacing.xl),
       HyperPopover(
-        child: const Text('文件夹操作'),
-        content: Builder(
-          builder: (menuContext) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (final label in ['删除文件夹', '详情', '重命名'])
-                HyperListTile(
-                  type: 'plain',
-                  title: label,
-                  showChevron: false,
-                  onPressed: () {
-                    hyperMenuOf(menuContext)?.close();
-                    setState(() => _selected = label);
-                  },
-                ),
-            ],
-          ),
+        visible: _menuOpen,
+        onClose: () => setState(() => _menuOpen = false),
+        child: HyperPressable(
+          onPressed: () => setState(() => _menuOpen = !_menuOpen),
+          child: const Text('文件夹操作'),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final label in ['删除文件夹', '详情', '重命名'])
+              HyperListTile(
+                type: 'plain',
+                title: label,
+                showChevron: false,
+                onPressed: () {
+                  setState(() {
+                    _menuOpen = false;
+                    _selected = label;
+                  });
+                },
+              ),
+          ],
         ),
       ),
       const SizedBox(height: HyperUiSpacing.sm),
       Text('选择结果：$_selected'),
       const SizedBox(height: HyperUiSpacing.xl),
-      const HyperPopover(
+      HyperPopover(
+        visible: _wideOpen,
+        onClose: () => setState(() => _wideOpen = false),
         width: 240,
-        child: Text('查看较宽内容'),
-        content: Text('通过 width 为输入、说明等复杂内容保留更多空间。'),
+        child: HyperPressable(
+          onPressed: () => setState(() => _wideOpen = !_wideOpen),
+          child: const Text('查看较宽内容'),
+        ),
+        content: const Text('通过 width 为输入、说明等复杂内容保留更多空间。'),
       ),
     ],
   );

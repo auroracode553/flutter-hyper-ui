@@ -11,5 +11,5 @@ description: HyperText 组件与公开 API
 const HyperText('默认文字');
 const HyperText('大号文字', size: 'large');
 HyperText('品牌色', color: HyperUiThemeTokens.of(context).primary);
-HyperButton(onPressed: () {}, child: const HyperText('继承按钮排版'));
+HyperButton(onPressed: () {}, content: const HyperText('继承按钮排版'));
 ```

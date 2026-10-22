@@ -18,7 +18,7 @@ class _DrawerExampleState extends State<DrawerExample> {
       placement: HyperDrawerPlacement.start,
       width: 300,
       scrollable: false,
-      builder: (drawerContext) => ListView(
+      contentBuilder: (drawerContext) => ListView(
         padding: EdgeInsets.zero,
         children: [
           for (final label in ['概览', '我的项目', '收藏', '设置'])
@@ -39,8 +39,9 @@ class _DrawerExampleState extends State<DrawerExample> {
     final result = await HyperDrawer.show<bool>(
       context,
       title: '筛选通知',
-      dismissible: false,
-      builder: (drawerContext) => StatefulBuilder(
+      placement: HyperDrawerPlacement.end,
+      dismissOnClickOutside: false,
+      contentBuilder: (drawerContext) => StatefulBuilder(
         builder: (context, setDrawerState) => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -84,7 +85,7 @@ class _DrawerExampleState extends State<DrawerExample> {
   @override
   Widget build(BuildContext context) => HyperCard(
     title: '抽屉',
-    subtitle: '侧边导航与筛选面板，沿用柔光玻璃材质。',
+    subtitle: '贴边全高的侧边导航与筛选面板，支持滑动关闭。',
     child: Column(
       mainAxisSize: MainAxisSize.min,
       spacing: 12,

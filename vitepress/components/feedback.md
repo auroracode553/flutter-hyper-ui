@@ -13,7 +13,7 @@ final result = await HyperDrawer.show<String>(
   title: '项目详情',
   placement: HyperDrawerPlacement.end,
   width: 360,
-  builder: (_) => const Text('在这里放置详情、菜单或表单。'),
+  contentBuilder: (_) => const Text('在这里放置详情、菜单或表单。'),
   footerBuilder: (drawerContext) => HyperButton(
     label: '完成',
     onPressed: () => Navigator.pop(drawerContext, '已完成'),

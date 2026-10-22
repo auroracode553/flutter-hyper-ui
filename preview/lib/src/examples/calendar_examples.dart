@@ -26,6 +26,7 @@ class _CalendarDayComponentExampleState
               child: HyperCalendarDay(
                 day: day,
                 today: day == 8,
+                inRange: day == 7,
                 selected: _selected == day,
                 enabled: day != 10,
                 onPressed: () => setState(() => _selected = day),
