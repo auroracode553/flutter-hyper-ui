@@ -19,11 +19,13 @@ class HyperGlass extends StatelessWidget {
     this.radius = 24,
     this.type = 'regular',
     this.borderColor,
+    this.showBorder = true,
     this.shadows,
     this.color,
     this.onPressed,
     this.clipBehavior = Clip.antiAlias,
-  }) : assert(
+  }) : _isCard = false,
+       assert(
          type == 'subtle' ||
              type == 'regular' ||
              type == 'prominent' ||
@@ -31,15 +33,33 @@ class HyperGlass extends StatelessWidget {
          'HyperGlass.type must be subtle, regular, prominent, or solid.',
        );
 
+  /// 内容卡片共用入口：底色、无描边与阴影策略在此集中维护。
+  /// 圆角、间距和状态强调仍由具体组件提供，不增加布局包装。
+  const HyperGlass.card({
+    super.key,
+    required this.child,
+    this.padding = EdgeInsets.zero,
+    this.radius = 24,
+    this.borderColor,
+    this.showBorder = false,
+    this.color,
+    this.onPressed,
+    this.clipBehavior = Clip.antiAlias,
+  }) : type = 'regular',
+       shadows = null,
+       _isCard = true;
+
   final Widget child;
   final EdgeInsetsGeometry padding;
   final double radius;
   final String type;
   final Color? color;
   final Color? borderColor;
+  final bool showBorder;
   final List<BoxShadow>? shadows;
   final VoidCallback? onPressed;
   final Clip clipBehavior;
+  final bool _isCard;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +89,9 @@ class HyperGlass extends StatelessWidget {
       decoration: BoxDecoration(
         color: surfaceColor,
         borderRadius: shape,
-        border: Border.all(color: effectiveBorder),
+        border: showBorder || highContrast
+            ? Border.all(color: effectiveBorder)
+            : null,
       ),
       child: HyperSurfaceScope(
         child: Padding(padding: padding, child: child),
@@ -103,7 +125,11 @@ class HyperGlass extends StatelessWidget {
           borderRadius: shape,
           boxShadow:
               shadows ??
-              (type == 'subtle' ? const <BoxShadow>[] : glass.surfaceShadows),
+              (_isCard
+                  ? glass.cardShadows
+                  : type == 'subtle'
+                  ? const <BoxShadow>[]
+                  : glass.surfaceShadows),
         ),
         child: result,
       ),

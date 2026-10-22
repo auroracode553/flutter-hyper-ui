@@ -149,9 +149,9 @@ class HyperListTile extends StatelessWidget {
       );
     }
 
-    return HyperGlass(
+    return HyperGlass.card(
       radius: 18,
-      type: 'regular',
+      showBorder: selected,
       padding: const EdgeInsets.all(3),
       onPressed: enabled ? onPressed : null,
       color: selected ? glass.surfaceStrong : null,

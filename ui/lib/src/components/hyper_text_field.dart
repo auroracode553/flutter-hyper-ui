@@ -96,7 +96,20 @@ class HyperTextField extends StatefulWidget {
   State<HyperTextField> createState() => _HyperTextFieldState();
 }
 
-class _HyperTextFieldState extends State<HyperTextField> {
+class _HyperTextFieldState extends State<HyperTextField>
+    implements TextSelectionGestureDetectorBuilderDelegate {
+  @override
+  final editableTextKey = GlobalKey<EditableTextState>();
+  late final _selectionGestures = TextSelectionGestureDetectorBuilder(
+    delegate: this,
+  );
+
+  @override
+  bool get forcePressEnabled => false;
+
+  @override
+  bool get selectionEnabled => widget.enabled;
+
   TextEditingController? _ownedController;
   FocusNode? _ownedFocusNode;
   bool _obscured = true;
@@ -215,6 +228,10 @@ class _HyperTextFieldState extends State<HyperTextField> {
         : tokens.input;
     final radius = BorderRadius.circular(20);
     final editor = EditableText(
+      key: editableTextKey,
+      // 统一由框架选择手势处理点击、长按和拖选；每次点击都会请求键盘，
+      // Android 返回手势关闭输入法但保留焦点后也能再次打开。
+      rendererIgnoresPointer: true,
       controller: _controller,
       focusNode: _focusNode,
       style: TextStyle(
@@ -281,21 +298,27 @@ class _HyperTextFieldState extends State<HyperTextField> {
                   const SizedBox(width: 8),
                 ],
                 Expanded(
-                  child: Stack(
-                    children: <Widget>[
-                      if (_controller.text.isEmpty &&
-                          widget.placeholder != null)
-                        IgnorePointer(
-                          child: Text(
-                            widget.placeholder!,
-                            style: TextStyle(
-                              color: tokens.mutedForeground,
-                              fontSize: fontSize,
+                  child: IgnorePointer(
+                    ignoring: !widget.enabled,
+                    child: _selectionGestures.buildGestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      child: Stack(
+                        children: <Widget>[
+                          if (_controller.text.isEmpty &&
+                              widget.placeholder != null)
+                            IgnorePointer(
+                              child: Text(
+                                widget.placeholder!,
+                                style: TextStyle(
+                                  color: tokens.mutedForeground,
+                                  fontSize: fontSize,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      editor,
-                    ],
+                          editor,
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 if (widget.suffix != null) ...<Widget>[

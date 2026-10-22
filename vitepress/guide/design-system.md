@@ -94,6 +94,21 @@ HyperUiTheme.app(
 
 浮动功能层允许内容从下方经过；模态层需要把背景推到次要位置。阴影只负责层级分离，不用作装饰性发光。
 
+Flutter 导航栏滚动材质以 background 画布色着色，不使用 card 内容卡片色，顶部与页面背景保持一致；渐隐、模糊、按钮及布局规则保持原有行为。
+
+维护库或开发业务页面前先读[使用规则与页面开发规范](./consumer-integration.md)，再核对组件 API。应用入口全局开启 edge-to-edge，独立入口共用透明系统栏配置；页面正文延伸到手势区，不用整页底部 SafeArea 或固定空白裁短正文。导航栏保留原有模糊采样与滚动渐显/渐隐，禁止添加实色底板或业务宿主裁切来遮住效果。TabBar 保持悬浮，正文滚入其后方；未经明确布局要求，配色和阴影调整不得改变底栏高度、占位、边距、安全区、正文视口或滚动范围。具体控件或滚动末尾的必要避让只处理一次，键盘仍可缩小表单视口。
+
+Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、HyperCollapse 和 HyperSlideMenu 的内容装饰共用内部 HyperGlass.card 入口。默认常规表面、无普通描边与 cardShadows 在此集中维护，不在调用组件重复指定；圆角、间距和选择状态仍由各组件保留。cardShadows 的环境阴影使用主题 shadow 的 75% alpha、模糊 18、扩散 -4、向下偏移 4；接触阴影使用 40% alpha、模糊 4、扩散 -1、向下偏移 1。选中态主题色边框与高对比模式的识别边界保留。页面使用 background，不将画布覆盖为卡片色：浅色默认画布 #F1F3F7、实色卡片 #FFFFFF，深色默认画布 #111318、实色卡片 #1B1F27；软材质和清透材质继续使用同档位的库内卡片表面。
+
+| 用途 | 共用入口或规则 | 适用组件 |
+| --- | --- | --- |
+| 正文内容卡片 | 内部 HyperGlass.card，双层柔阴影，普通状态无描边 | HyperCard、HyperMenuGroup、独立 HyperListTile、HyperCollapse、HyperSlideMenu 的 decorateChild |
+| 操作与输入 | 原有控件表面、状态色与识别边界 | Button、TextField、Select、Stepper、SegmentedControl、Uploader；不自动改为卡片样式 |
+| 导航与浮层 | 原有导航材质或 surfaceShadows | NavBar、TabBar、Popover、Dropdown、PopupMenu、Dialog、BottomSheet、ActionSheet、Tooltip；不受内容卡片入口影响 |
+| 状态与提示 | 原有语义色和专用图标表面 | NoticeBar、EmptyState、Badge；不抹去提示或状态差异 |
+
+内部通用 HyperGlass 的 showBorder 默认仍为 true；新增正文卡片容器优先复用 HyperGlass.card，已有表面内的列表行使用自动或 plain 模式，避免嵌套阴影。业务项目使用公开 HyperCard 等组件，不导入内部表面。Android 对应的四个已有组件通过内部 hyperCardSurface/ContentCard 复用相同参数；当前没有 HyperCollapse，不为本次同步新增组件。不得借共用表面修改组件尺寸、动效、导航占位或安全区。
+
 ## 动效与物理
 
 ### 按压
@@ -348,7 +363,7 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 - Uploader 保留 ready / uploading / success / error；选择后自动调用注入的 upload，按文件 ID 防重复请求并限制数量和大小，移除及销毁时取消令牌，忽略已取消任务的后续结果。底层传输是否真正取消由适配器观察令牌实现。
 - UpdateDialog 接收 idle / checking / available / upToDate / downloadQueued / downloading / readyToInstall / installing / completed / error，idle 不显示内容。检查、下载和安装由业务回调驱动；show 不允许点遮罩关闭，强制更新和安装中限制退出操作，不把预览模拟服务放进库。
 - 锚定浮层退出后再移除，收起期间不继续接收操作；Drawer 使用 dismissOnClickOutside / dismissOnBackPress / gesturesEnabled 分别控制遮罩、返回键与滑动关闭；向外超过宽度 30% 或速度达 400 时关闭，否则 180ms 复位。面板以 280ms 从自身宽度之外平移，遮罩独立淡入。
-- NavBarScrollScope 只跟踪 depth 为 0 的竖向主视口，滚动超过 0.5 判断正文经过导航；scrollKey 改变时重置。NavBar 将显式 scrolledUnder 与作用域状态合并，160ms 显示背景，向下延伸 56 渐隐且不占位、不拦截触摸；高对比时改为不延伸的实底，减少动画时直接切换。
+- NavBarScrollScope 只跟踪 depth 为 0 的竖向主视口，滚动超过 0.5 判断正文经过导航；scrollKey 改变时重置。NavBar 将显式 scrolledUnder 与作用域状态合并，160ms 显示背景，在状态栏顶部至导航底部以内渐隐，不越界、不占位、不拦截触摸；高对比时改为不延伸的实底，减少动画时直接切换。
 - 两端导航背景均从屏幕顶部覆盖状态栏，安全区在背景内部，只有标题与按钮避让。Android 文档预览注入模拟系统 Insets，导航与正文共用同一来源；不得把模拟留白放到整个导航栏外部，也不得在正文重复累加。
 - 保留现有 RTL、字体缩放、键盘焦点及减少动画处理；不为统一外观删掉这些分支。仅交互用途的 HyperPressable 不等价于自定义按钮样式。
 

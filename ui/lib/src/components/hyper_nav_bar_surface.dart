@@ -1,6 +1,6 @@
 part of 'hyper_nav_bar.dart';
 
-/// 导航背景向正文渐隐；蒙版同时淡出模糊与底色，不留下矩形边界。
+/// 模糊和底色在导航自身范围内渐隐，底边之外不参与绘制。
 class _NavBarScrollSurface extends StatelessWidget {
   const _NavBarScrollSurface({
     required this.scrolledUnder,
@@ -31,7 +31,7 @@ class _NavBarScrollSurface extends StatelessWidget {
               top: 0,
               left: 0,
               right: 0,
-              bottom: highContrast ? 0 : -56,
+              bottom: 0,
               child: IgnorePointer(
                 child: ClipRect(
                   child: highContrast
@@ -39,7 +39,7 @@ class _NavBarScrollSurface extends StatelessWidget {
                           color: tokens.background.withValues(alpha: progress),
                         )
                       : _NavBarFadingBackdrop(
-                          color: tokens.card,
+                          color: tokens.background,
                           progress: progress,
                         ),
                 ),
@@ -65,7 +65,7 @@ class _NavBarFadingBackdrop extends StatelessWidget {
     shaderCallback: (bounds) => LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      stops: const [0, 0.45, 0.68, 0.86, 1],
+      stops: const [0, 0.6, 0.78, 0.92, 1],
       colors: [
         for (final opacity in const [1.0, 1.0, 0.8, 0.3, 0.0])
           const Color.fromRGBO(
@@ -84,7 +84,7 @@ class _NavBarFadingBackdrop extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: const [0, 0.4, 0.66, 1],
+            stops: const [0, 0.55, 0.78, 1],
             colors: [
               for (final opacity in const [0.96, 0.94, 0.74, 0.0])
                 color.withValues(alpha: opacity),

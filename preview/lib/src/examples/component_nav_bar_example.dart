@@ -93,7 +93,7 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
               ),
             ),
           ),
-          // 滚动感知、过渡、采样与着色由 UI 库统一处理。
+          // 库负责滚动与采样；渐隐在导航底部内结束，下方正文保持清晰。
           HyperNavBar(
             type: _selected.type,
             height: navBarHeight,

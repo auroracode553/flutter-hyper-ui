@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region CardComponentExample
+// 卡片、列表与折叠面板共用库内卡片表面；选中态保留主题色边框。
 class CardComponentExample extends StatelessWidget {
   const CardComponentExample({super.key});
 

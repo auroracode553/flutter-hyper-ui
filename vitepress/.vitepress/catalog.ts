@@ -205,7 +205,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-button', 'HyperButton 状态', 'buttons_example.dart', 360, '展示按钮层级、尺寸、加载、图标和宽度表现；禁用态保留单个按钮示例。'),
       }),
-      component('HyperCard', 'hyper_card.dart', '具有标题、操作区、正文、底部和选中态的内容容器。', {
+      component('HyperCard', 'hyper_card.dart', '默认无描边、使用双层柔阴影，具有标题、操作区、正文、底部和选中态的内容容器。', {
         propsDocs: [
           { name: 'child', description: '正文内容组件' },
           { name: 'title', description: '标题' },
@@ -694,7 +694,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'child', description: '完整内部布局 Widget，与其他内容插槽互斥，不生成自动返回按钮' },
           { name: 'padding', description: '内容边距，默认左右 16px，可设置 EdgeInsets.zero' },
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
-          { name: 'scrolledUnder', description: '默认 false，使用滚动作用域状态；true 强制显示。无作用域时手动控制；160ms 渐隐毛玻璃，向下延伸 56px，不占位、不绘制分隔线' },
+          { name: 'scrolledUnder', description: '默认 false，使用滚动作用域状态；true 强制显示。无作用域时手动控制；160ms 渐隐毛玻璃，在导航底部内渐隐，不越界、不占位、不绘制分隔线' },
           { name: 'HyperNavBarScrollScope.child', description: '必填 Widget；包装导航栏和主滚动视口的共同父级，自动监听垂直主列表，忽略嵌套/横向列表，不接管 ScrollController' },
           { name: 'HyperNavBarScrollScope.scrollKey', description: '可选逻辑页面标识，默认 null；改变时重置滚动状态，不替换子树，适用于 Tab 或设置子页面切换' },
           { name: 'onBackPressed', description: '默认返回按钮的点击回调；未提供时调用 Navigator.maybePop' },
@@ -802,7 +802,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'actionExtent', description: '操作区域宽度，默认 64' },
           { name: 'radius', description: '圆角大小，默认 18' },
           { name: 'enabled', description: '是否启用侧滑，默认 true' },
-          { name: 'decorateChild', description: '是否为内容添加材质装饰，默认 true' },
+          { name: 'decorateChild', description: '是否为内容添加共用卡片表面，默认 true；已有卡片容器时设 false，避免重复装饰' },
         ],
         preview: demo('component-slide-menu', 'HyperSlideMenu 侧滑菜单', 'component_navigation_examples.dart', 300, '左右拖动列表行查看快捷操作。', 'SlideMenuComponentExample'),
       }),
@@ -827,7 +827,7 @@ export const componentGroups: ComponentGroup[] = [
       demo('business', '业务组件组合', 'interactive_examples.dart', 850, '搜索、通知、设置菜单、折叠面板与时间轴。'),
     ],
     components: [
-            component('HyperCollapse', 'hyper_business.dart', '高度与透明度同步过渡的折叠内容，支持快速反向与内容状态保留。', {
+            component('HyperCollapse', 'hyper_business.dart', '共用内容卡片表面的折叠面板，高度与透明度同步过渡，支持快速反向与内容状态保留。', {
         propsDocs: [
           { name: 'title', description: '标题' },
           { name: 'child', description: '内容组件' },

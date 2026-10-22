@@ -64,7 +64,7 @@ class _HyperCollapseState extends State<HyperCollapse>
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    return HyperGlass(
+    return HyperGlass.card(
       radius: 20,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -112,7 +112,10 @@ class _HyperCollapseState extends State<HyperCollapse>
                       child: TickerMode(
                         // 收起后保留内容状态，暂停其内部持续动画。
                         enabled: _expansion.value > 0,
-                        child: FadeTransition(opacity: _expansion, child: child),
+                        child: FadeTransition(
+                          opacity: _expansion,
+                          child: child,
+                        ),
                       ),
                     ),
                   ),

@@ -6,7 +6,7 @@
 
 维护组件前必读 [UI 样式与功能实现基线](vitepress/guide/design-system.md)：记录当前材质、尺寸、状态、组件实现与专用样式保留清单。涉及用途不明确的样式或交互变化，先向使用者确认，禁止批量替换。
 
-业务项目接入时，请一并阅读[Hyper UI 使用规则与可复制的 AGENTS.md 模板](vitepress/guide/consumer-integration.md)，并复用 [TabBar 共用悬浮宿主](vitepress/components/tab-bar.md#悬浮页面宿主)。完整页面示例见[快速开始](vitepress/guide/getting-started.md#创建第一个页面)。
+AI 与开发者开始库维护或业务页面开发前，必须优先阅读 [Hyper UI 使用规则、页面开发规范与 AGENTS.md 模板](vitepress/guide/consumer-integration.md)，再核对设计基线和组件接口。应用入口全局启用全面屏，页面正文延伸到手势区，保留 Navbar 的滚动模糊与 TabBar 的悬浮滚动规则；将这些要求写入业务项目根目录 AGENTS.md。底部导航复用 [TabBar 共用悬浮宿主](vitepress/components/tab-bar.md#悬浮页面宿主)，完整入口见[快速开始](vitepress/guide/getting-started.md#创建第一个页面)。
 
 顶部滚动毛玻璃使用 [HyperNavBarScrollScope + HyperNavBar](vitepress/components/nav-bar.md)：作用域包住导航与主滚动视口即可自动响应滚动，无需在每个页面复制监听与模糊绘制。
 
@@ -51,7 +51,7 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 
 `HyperDrawer.show` 打开贴边、全高的模态抽屉；默认 start，正文使用 contentBuilder、默认零内边距。遮罩、返回键和横向滑动可分别控制关闭，标题及页脚固定；完整 API 见[抽屉文档](vitepress/components/drawer.md)。
 
-`HyperNavBar.scrolledUnder` 默认 false，顶部保持透明；宿主根据主列表滚动位置传入 true 后，组件用 160ms 过渡显示覆盖状态栏的渐隐毛玻璃，向导航下方延伸 56px 后完全透明，不绘制底部分隔线。背景采样与底色一起淡出，前景操作独立保持清晰；延伸区域不占位、不拦截触摸。页面无需再包背景或模糊层；返回顶部传入 false，高对比和关闭动画适配由组件处理。Flutter 与 Compose 使用相同参数和默认视觉规则。
+`HyperNavBar.scrolledUnder` 默认 false，顶部保持透明；宿主根据主列表滚动位置传入 true 后，组件用 160ms 过渡显示覆盖状态栏的渐隐毛玻璃，在状态栏顶部至导航底部的范围内渐隐至透明，不绘制底部分隔线。背景采样与底色一起淡出，前景操作独立保持清晰；材质层不占位、不拦截触摸，导航底部之外不绘制。页面无需再包背景或模糊层；返回顶部传入 false，高对比和关闭动画适配由组件处理。Flutter 与 Compose 使用相同参数和默认视觉规则。
 - 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperSegmentedControl`。
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
 

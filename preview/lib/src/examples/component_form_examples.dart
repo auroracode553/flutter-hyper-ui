@@ -6,6 +6,7 @@ import 'package:flutter_hyper_ui/hyper_ui.dart';
 class TextFieldComponentExample extends StatelessWidget {
   const TextFieldComponentExample({super.key});
 
+  // 基础输入可连续操作：打开键盘、系统返回收起、再次点同一位置。
   // 字段标题写在输入框外部：输入组件本身不携带标题与说明。
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),

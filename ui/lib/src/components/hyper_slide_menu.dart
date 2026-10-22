@@ -157,9 +157,8 @@ class _HyperSlideMenuState extends State<HyperSlideMenu>
                   child: AbsorbPointer(
                     absorbing: opened,
                     child: widget.decorateChild
-                        ? HyperGlass(
+                        ? HyperGlass.card(
                             radius: widget.radius,
-                            type: 'regular',
                             child: widget.child,
                           )
                         : widget.child,

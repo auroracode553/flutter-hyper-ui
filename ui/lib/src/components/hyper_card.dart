@@ -41,6 +41,7 @@ class HyperCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
+    final glass = HyperGlassTheme.of(context);
     final content = Padding(
       padding: padding,
       child: Column(
@@ -61,9 +62,10 @@ class HyperCard extends StatelessWidget {
       ),
     );
 
-    return HyperGlass(
+    return HyperGlass.card(
       onPressed: onPressed,
-      color: selected ? HyperGlassTheme.of(context).surfaceStrong : null,
+      showBorder: selected,
+      color: selected ? glass.surfaceStrong : null,
       borderColor: selected ? tokens.primary : null,
       child: content,
     );

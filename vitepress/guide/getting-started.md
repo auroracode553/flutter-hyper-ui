@@ -2,6 +2,8 @@
 
 Hyper UI 是独立的 Flutter 组件包。界面颜色、玻璃表面和交互样式由 Hyper 组件提供。
 
+开始接入或页面开发前，先阅读[使用规则与页面开发规范](./consumer-integration.md)，将其中 AGENTS.md 模板按实际依赖路径合并到业务项目，再核对[设计系统基线](./design-system.md)与相关组件接口。
+
 ## 环境要求
 
 - Flutter `>= 3.32.0`
@@ -31,6 +33,42 @@ HyperUiTheme.app(home: const AppHome());
 默认跟随系统明暗模式，材质默认为 `HyperMaterial.solid`。需要固定模式时传 `brightness: Brightness.light` 或 `Brightness.dark`；品牌色用 `primary`。通过 `material: HyperMaterial.soft` 或 `HyperMaterial.clear` 切换全应用材质。局部覆盖使用 `HyperUiTheme(data: ..., child: ...)`。
 
 完整配置与运行时切换见[主题配置](./theming.md)。
+
+## 应用全局全面屏
+
+应用在启动入口全局开启 edge-to-edge；主入口与独立 Flutter/Activity 入口都要执行。HyperUiTheme.app 不代替系统模式配置。全局主题宿主通过 AnnotatedRegion 配置透明系统栏，下面示例默认跟随系统明暗；应用支持自选主题时，图标亮暗必须跟随实际应用主题。
+
+```dart
+import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_hyper_ui/hyper_ui.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  runApp(HyperUiTheme.app(
+    home: const AppHome(),
+    builder: (context, child) {
+      final dark = HyperUiTheme.of(context).brightness == Brightness.dark;
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: const Color(0x00000000),
+          systemNavigationBarColor: const Color(0x00000000),
+          systemStatusBarContrastEnforced: false,
+          systemNavigationBarContrastEnforced: false,
+          statusBarIconBrightness: dark ? Brightness.light : Brightness.dark,
+          statusBarBrightness: dark ? Brightness.dark : Brightness.light,
+          systemNavigationBarIconBrightness:
+              dark ? Brightness.light : Brightness.dark,
+        ),
+        child: child!,
+      );
+    },
+  ));
+}
+```
+
+页面画布使用主题 background 贯穿状态栏、正文和手势区。不要给整页包底部 SafeArea 或为系统栏单独绘制色块；必要控件可局部避让，末项滚动余量放在滚动内容内部。Navbar 的模糊与渐隐由库提供，禁止用实色底板挡住采样。TabBar 周围透明，保留原有尺寸与滚动范围。
 
 ## 简化后的组件 API
 
@@ -66,11 +104,34 @@ HyperUiTheme.app(home: const AppHome());
 // lib/main.dart
 import 'package:flutter/material.dart' show Icons;
 import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 import 'widgets/app_floating_tab_scaffold.dart';
 
-void main() => runApp(HyperUiTheme.app(home: const AppHome()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  runApp(HyperUiTheme.app(
+    home: const AppHome(),
+    builder: (context, child) {
+      final dark = HyperUiTheme.of(context).brightness == Brightness.dark;
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: const Color(0x00000000),
+          systemNavigationBarColor: const Color(0x00000000),
+          systemStatusBarContrastEnforced: false,
+          systemNavigationBarContrastEnforced: false,
+          statusBarIconBrightness: dark ? Brightness.light : Brightness.dark,
+          statusBarBrightness: dark ? Brightness.dark : Brightness.light,
+          systemNavigationBarIconBrightness:
+              dark ? Brightness.light : Brightness.dark,
+        ),
+        child: child!,
+      );
+    },
+  ));
+}
 
 class AppHome extends StatefulWidget {
   const AppHome({super.key});

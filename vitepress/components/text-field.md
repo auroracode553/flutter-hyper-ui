@@ -7,6 +7,8 @@ description: HyperTextField 组件与公开 API
 
 ## 公开用法
 
+输入区使用 Flutter 文本选择手势，点击会请求键盘；Android 返回手势收起键盘而保留焦点后，再点相同位置也能重新打开。长按和拖动选择继续由框架处理；只读、受控无回调和禁用字段不唤起输入键盘。
+
 ```dart
 HyperTextField(
   type: 'textarea',

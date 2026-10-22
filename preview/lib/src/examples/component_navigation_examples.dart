@@ -176,6 +176,7 @@ class MenuGroupComponentExample extends StatelessWidget {
 
 // doc-region SlideMenuComponentExample
 class SlideMenuComponentExample extends StatelessWidget {
+  // 内容装饰由库内卡片表面提供，侧滑操作区保持自身状态色。
   const SlideMenuComponentExample({super.key});
 
   @override

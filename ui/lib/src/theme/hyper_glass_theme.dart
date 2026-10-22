@@ -58,6 +58,22 @@ class HyperGlassTheme {
   final double blur;
   final double blurStrong;
 
+  /// 内容卡片通过柔和的环境阴影与接触阴影分层，低于浮层高度。
+  List<BoxShadow> get cardShadows => <BoxShadow>[
+    BoxShadow(
+      color: shadow.withValues(alpha: shadow.a * 0.75),
+      blurRadius: 18,
+      spreadRadius: -4,
+      offset: const Offset(0, 4),
+    ),
+    BoxShadow(
+      color: shadow.withValues(alpha: shadow.a * 0.4),
+      blurRadius: 4,
+      spreadRadius: -1,
+      offset: const Offset(0, 1),
+    ),
+  ];
+
   List<BoxShadow> get surfaceShadows => <BoxShadow>[
     BoxShadow(
       color: shadow,

@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region CollapseComponentExample
+// 折叠面板复用内容卡片表面，布局和开合状态仍由组件自身管理。
 class CollapseComponentExample extends StatefulWidget {
   const CollapseComponentExample({super.key});
 
