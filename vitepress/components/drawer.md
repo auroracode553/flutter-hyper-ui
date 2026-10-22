@@ -20,6 +20,8 @@ width 默认 320，最大为窗口宽度减 56，保留遮罩点击区。content
 
 面板在 280ms 内从自身宽度之外平移进入，遮罩单独淡入。向外滑动超过宽度 30% 或释放速度达到 400 逻辑像素／秒时关闭；未达到阈值则在 180ms 内回到展开位置。遮罩、返回键和滑动分别由 dismissOnClickOutside、dismissOnBackPress、gesturesEnabled 控制。
 
+show 返回的 Future 在退出动画结束后完成，便于继续导航或恢复底层原生视图。
+
 ```dart
 final result = await HyperDrawer.show<String>(
   context,

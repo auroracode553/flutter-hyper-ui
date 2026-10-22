@@ -18,6 +18,7 @@ class HyperPopover extends StatelessWidget {
     required this.content,
     this.maxWidth = 280,
     this.width,
+    this.scrollable = true,
   }) : assert(maxWidth > 0 && maxWidth < double.infinity),
        assert(width == null || (width > 0 && width < double.infinity));
 
@@ -28,6 +29,9 @@ class HyperPopover extends StatelessWidget {
   final double maxWidth;
   final double? width;
 
+  /// 内容自带列表时关闭外层滚动，保留浮层高度约束。
+  final bool scrollable;
+
   @override
   Widget build(BuildContext context) => buildHyAnchoredSurface(
     width: (width ?? 180).clamp(0.0, maxWidth).toDouble(),
@@ -35,6 +39,7 @@ class HyperPopover extends StatelessWidget {
     padding: const EdgeInsets.all(14),
     visible: visible,
     onClose: onClose,
+    scrollable: scrollable,
     triggerBuilder: (_, _) => child,
     contentBuilder: (_) => content,
   );

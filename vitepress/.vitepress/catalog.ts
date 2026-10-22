@@ -635,8 +635,9 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'content', description: '气泡内容组件' },
           { name: 'width', description: '期望内容宽度，默认 null 时采用 180；仍受 maxWidth 与窗口安全区约束' },
           { name: 'maxWidth', description: '内容宽度上限，默认 280；不决定默认内容宽度' },
+          { name: 'scrollable', description: '默认 true，由浮层滚动内容；设 false 可嵌入自行滚动的惰性列表，仍受原高度和安全区约束' },
         ],
-        preview: demo('component-popover', 'HyperPopover 气泡', 'component_feedback_examples.dart', 360, '180 紧凑说明与文件夹操作、240 显式宽度；选择后读取结果。', 'PopoverComponentExample'),
+        preview: demo('component-popover', 'HyperPopover 气泡', 'component_feedback_examples.dart', 360, '180 紧凑说明与文件夹操作、240 显式宽度与惰性列表；选择后读取结果。', 'PopoverComponentExample'),
       }),
       component('HyperTooltip', 'hyper_tooltip.dart', '悬停与长按时轻缩放淡入淡出的玻璃提示，键盘聚焦即时显示。', {
         propsDocs: [

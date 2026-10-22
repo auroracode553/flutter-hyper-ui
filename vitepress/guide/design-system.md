@@ -177,6 +177,8 @@ HyperCheckbox、HyperRadio、HyperSwitch 的标签行统一使用 plain，不自
 
 `HyperText` 只有 small / default / large 三档，独立使用的基准字号为 12 / 14 / 18、行高 1.4。default 在按钮、导航等插槽中继承宿主的字号、行高、字重与颜色；显式 color、fontWeight 优先。small 保留 12、w400、mutedForeground，large 保留 18、w700、foreground。HyperIcon 基准尺寸为 18 / 24 / 32，default 继承宿主图标尺寸，各档未显式指定 color 时继承宿主图标颜色。字号变化时布局应跟随 `MediaQuery.textScalerOf(context)`，不要用固定高度裁切正文。
 
+Flutter 图形直接使用 lucide_icons_flutter，Android 与 Preview 直接使用 Lucide Compose 图标库，选择相同语义的图标。不在项目内复制字体轮廓、SVG 路径或维护图标别名表。
+
 ## 反馈语义
 
 `HyperUiTone` 将颜色与业务内容解耦：
@@ -270,8 +272,8 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认 small 图标按钮，数字项保留专用选中态 |
 | [HyperSlideMenu](../components/slide-menu.md) | hyper_slide_menu.dart | 逻辑 start / end 操作区，默认每项宽 64、圆角 18；保留跟手、越界阻尼、速度投影与弹簧；展开时屏蔽正文操作，点击操作先收起再通知调用方 |
 | [HyperActionSheet](../components/action-sheet.md) | hyper_action_sheet.dart | show 展示自定义内容，choose 展示 HyperAction 列表；圆角 30、内边距 16、最大高为键盘避让后可用高度的 85%；选中、禁用、危险色和取消按钮分别保留 |
-| [HyperDrawer](../components/drawer.md) | hyper_drawer.dart、hyper_drawer_surface.dart | show 为模态入口，正文 contentBuilder；默认 start、宽 320，窄屏最大窗口宽减 56；贴边全高、实色背景，无外侧留白／圆角／描边／卡片阴影；正文默认零间距，安全区在背景内部；固定标题／页脚、滑动关闭；自带滚动内容设 scrollable: false |
-| [HyperPopover](../components/popover.md) | hyper_popover.dart | visible / onClose 由调用方控制；child 只提供锚点，由自身操作触发；默认宽 180，maxWidth 280 仅限制上限；保留锚定浮层样式 |
+| [HyperDrawer](../components/drawer.md) | hyper_drawer.dart、hyper_drawer_surface.dart | show 为模态入口，退出动画完成后返回结果，正文 contentBuilder；默认 start、宽 320，窄屏最大窗口宽减 56；贴边全高、实色背景，无外侧留白／圆角／描边／卡片阴影；正文默认零间距，安全区在背景内部；固定标题／页脚、滑动关闭；自带滚动内容设 scrollable: false |
+| [HyperPopover](../components/popover.md) | hyper_popover.dart | visible / onClose 由调用方控制；child 只提供锚点，由自身操作触发；默认宽 180，maxWidth 280 仅限制上限；scrollable 默认 true，false 时由有界子列表滚动；保留锚定浮层样式 |
 | [HyperPopupMenu](../components/popup-menu.md) | hyper_popover.dart | 默认更多图标按钮，enabled 控制打开；菜单自动测宽 160–240，菜单项复用 HyperListTile；危险、禁用和 selected 状态保留 |
 | [HyperSteps](../components/steps.md) | hyper_navigation.dart | 默认 horizontal，支持纵向步骤；current 控制当前进度，完成线、未完成轨道和步骤标签是专用状态绘制 |
 

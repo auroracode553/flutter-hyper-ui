@@ -27,6 +27,8 @@ HyperPopover(
 
 与 Compose 共用圆角 18、内边距 14、锚点间距 6、窗口安全边距 12 和窗口高度 40% 上限。两端预览展示补充说明、文件夹操作与较宽内容；文件夹操作使用“删除文件夹 / 详情 / 重命名”，选择后收起并显示结果。
 
+scrollable 默认 true，由浮层滚动普通内容。内容自带 ListView 等滚动宿主时设置 scrollable: false，浮层仍提供原有高度上限与安全区约束。短内容使用 Column(mainAxisSize: MainAxisSize.min)；需要固定标题和惰性列表时，在其下使用 Flexible 与 ListView.builder(shrinkWrap: true, primary: false)。不要再套无高度约束的纵向滚动容器。较宽内容预览同时展示这种组合。
+
 ## 交互动画
 
 气泡从靠近锚点的一侧以 0.96 倍缩放淡入，180ms 完成；收起时沿同一路径淡出后移除。支持快速反向操作，系统启用“减少动态效果”时仅保留短淡入淡出。

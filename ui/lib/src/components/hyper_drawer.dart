@@ -30,7 +30,7 @@ abstract final class HyperDrawer {
     bool dismissOnClickOutside = true,
     bool dismissOnBackPress = true,
     bool gesturesEnabled = true,
-  }) {
+  }) async {
     if (!width.isFinite || width <= 0) {
       throw ArgumentError.value(width, 'width', 'Must be finite and positive');
     }
@@ -38,9 +38,7 @@ abstract final class HyperDrawer {
     final theme = HyperUiTheme.of(context);
     final navigator = Navigator.of(context, rootNavigator: true);
     final themes = InheritedTheme.capture(from: context, to: navigator.context);
-    return showGeneralDialog<T>(
-      context: context,
-      useRootNavigator: true,
+    final route = RawDialogRoute<T>(
       barrierDismissible: false,
       barrierColor: const Color(0x00000000),
       transitionDuration: MediaQuery.disableAnimationsOf(context)
@@ -71,5 +69,9 @@ abstract final class HyperDrawer {
       // 面板自身负责平移，遮罩单独淡入；不叠加整页缩放或淡入。
       transitionBuilder: (_, _, _, child) => child,
     );
+    final result = await navigator.push(route);
+    // 完成退出后再交还调用方，避免正文原生视图或后续路由提前显示。
+    await route.completed;
+    return result;
   }
 }

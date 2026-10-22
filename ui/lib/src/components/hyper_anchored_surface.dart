@@ -42,6 +42,7 @@ Widget buildHyAnchoredSurface({
   required Widget Function(BuildContext, HyperMenuController) triggerBuilder,
   bool? visible,
   VoidCallback? onClose,
+  bool scrollable = true,
 }) => _HyperAnchoredSurface(
   width: width,
   maxHeight: maxHeight,
@@ -50,6 +51,7 @@ Widget buildHyAnchoredSurface({
   triggerBuilder: triggerBuilder,
   visible: visible,
   onClose: onClose,
+  scrollable: scrollable,
 );
 
 class _HyperAnchoredSurface extends StatefulWidget {
@@ -61,6 +63,7 @@ class _HyperAnchoredSurface extends StatefulWidget {
     required this.triggerBuilder,
     this.visible,
     this.onClose,
+    this.scrollable = true,
   });
 
   final double width;
@@ -70,6 +73,7 @@ class _HyperAnchoredSurface extends StatefulWidget {
   final Widget Function(BuildContext, HyperMenuController) triggerBuilder;
   final bool? visible;
   final VoidCallback? onClose;
+  final bool scrollable;
 
   @override
   State<_HyperAnchoredSurface> createState() => _HyperAnchoredSurfaceState();
@@ -199,9 +203,13 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
                             constraints: BoxConstraints(
                               maxHeight: widget.maxHeight,
                             ),
-                            child: SingleChildScrollView(
-                              child: Builder(builder: widget.contentBuilder),
-                            ),
+                            child: widget.scrollable
+                                ? SingleChildScrollView(
+                                    child: Builder(
+                                      builder: widget.contentBuilder,
+                                    ),
+                                  )
+                                : Builder(builder: widget.contentBuilder),
                           ),
                         ),
                       ),

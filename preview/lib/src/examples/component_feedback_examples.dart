@@ -459,11 +459,34 @@ class _PopoverComponentExampleState extends State<PopoverComponentExample> {
         visible: _wideOpen,
         onClose: () => setState(() => _wideOpen = false),
         width: 240,
+        scrollable: false,
         child: HyperPressable(
           onPressed: () => setState(() => _wideOpen = !_wideOpen),
           child: const Text('查看较宽内容'),
         ),
-        content: const Text('通过 width 为输入、说明等复杂内容保留更多空间。'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('通过 width 为输入、说明等复杂内容保留更多空间。'),
+            Flexible(
+              child: ListView.builder(
+                primary: false,
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: 20,
+                itemBuilder: (context, index) => HyperListTile(
+                  type: 'plain',
+                  showChevron: false,
+                  title: '补充内容 ${index + 1}',
+                  onPressed: () => setState(() {
+                    _selected = '补充内容 ${index + 1}';
+                    _wideOpen = false;
+                  }),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     ],
   );

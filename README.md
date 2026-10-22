@@ -68,7 +68,7 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 
 本项目与 `D:/my_project/android_project/hyper-ui` 维护相同的默认视觉规则。按钮默认描边，省略 `type` 即可；显式类型仅有 `filled`、`icon`，主操作显式使用 `type = "filled"` 和 `colorStyle = "primary"`；自定义按钮主体两端统一使用 `content`。
 
-`HyperDropdown` 默认按最长选项或占位文字加 68 控件占位计算宽度，限制在 160–240，并服从父级空间；菜单匹配字段，显式 width 用于宽表单。`HyperPopover` 的 visible / onClose 由调用方控制，child 自行触发；默认宽 180，width 可显式指定，maxWidth = 280 仅限制上限；`HyperPopupMenu` 按操作文案与图标占位自动取 160–240。两端 Dropdown、Popover 文档与预览同步展示紧凑默认值、显式宽度、长文案和可交互状态。
+`HyperDropdown` 默认按最长选项或占位文字加 68 控件占位计算宽度，限制在 160–240，并服从父级空间；菜单匹配字段，显式 width 用于宽表单。`HyperPopover` 的 visible / onClose 由调用方控制，child 自行触发；默认宽 180，width 可显式指定，maxWidth = 280 仅限制上限；scrollable 默认 true，内容自带惰性列表时设为 false，保留原高度和安全区约束。`HyperPopupMenu` 按操作文案与图标占位自动取 160–240。两端 Dropdown、Popover 文档与预览同步展示紧凑默认值、显式宽度、长文案和可交互状态。
 
 `HyperDialog` 两端共用窗口两侧各 24 的留白、420 的面板宽度上限、圆角 26 和内容内边距 18；窄屏按实际可用宽度收敛。
 
