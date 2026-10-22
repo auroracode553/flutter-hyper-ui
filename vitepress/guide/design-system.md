@@ -357,7 +357,7 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 - TextField 的长度限制与计数使用用户可见字符；Android 当前按 UTF-16 处理，分段对齐作为独立专项。Flutter Toast 的零时长会立即关闭，Android 的零时长保留不自动关闭语义；默认文字操作两端均先关闭提示再回调。
 - HyperText 有 maxLines 时默认省略号；Android 显式 overflow 可覆盖。Android 的 Popover / SlideMenu / Tabs 保留受控宿主形式，不照搬 Flutter 内部状态或控制器；缺失组件及日期时间／区间入口只列能力缺口，不自动新增。
 - Android Dropdown 在展开后被禁用或移除回调时自动收起，该行为保留；Flutter 当前没有对应自动收起分支，不据此删除 Android 的收起处理。
-- 输入框可代管未传入的 controller / focusNode，只释放自己创建的对象；显式 readOnly，或 value 已传入但 onChanged 为空时，保持只读。不要为了可点击而补空回调。
+- 输入框采用框架文本选择手势处理点击、长按和拖选；点击调用 EditableTextState.requestKeyboard，系统返回手势关闭键盘后即使焦点未变也能再次唤起。只读和禁用不能唤起键盘。输入框可代管未传入的 controller / focusNode，只释放自己创建的对象；显式 readOnly，或 value 已传入但 onChanged 为空时，保持只读。不要为了可点击而补空回调。
 - Slider 的 readOnly 保留正常展示并停止修改；按钮 onPressed 为空进入禁用态；CalendarMonth 的 readOnly 改走整月合并绘制。这些状态含义不同，不能统一成一层灰色或透明度。
 - 取消选择器、日期面板或多选面板时，不提交临时选择。showHyperModal 等待退出路由完成后返回；不能提前销毁仍参与退出绘制的内容与控制器。
 - Uploader 保留 ready / uploading / success / error；选择后自动调用注入的 upload，按文件 ID 防重复请求并限制数量和大小，移除及销毁时取消令牌，忽略已取消任务的后续结果。底层传输是否真正取消由适配器观察令牌实现。
