@@ -13,6 +13,7 @@ class TabBarComponentExample extends StatefulWidget {
 class _TabBarComponentExampleState extends State<TabBarComponentExample> {
   int _index = 0;
   int _dockIndex = 0;
+  int _actionCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,21 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
             onChanged: (_) => HyperToast.show(context, '打开通知'),
             items: const [HyperTabItem(icon: LucideIcons.bell, label: '通知')],
           ),
+        ),
+        const SizedBox(height: 24),
+        Text('非悬浮动作栏：已触发 $_actionCount 次（最近禁用）'),
+        HyperTabBar(
+          floating: false,
+          selectedIndex: null,
+          safeArea: false,
+          itemEnabled: (item) => item.label != '最近',
+          onChanged: (_) => setState(() => _actionCount++),
+          items: const [
+            HyperTabItem(icon: LucideIcons.house, label: '首页'),
+            HyperTabItem(icon: LucideIcons.info, label: '最近'),
+            HyperTabItem(icon: LucideIcons.bell, label: '消息'),
+            HyperTabItem(icon: LucideIcons.settings, label: '设置'),
+          ],
         ),
         const SizedBox(height: 24),
         const Text('组合示例：左侧通知入口 + 底部导航'),

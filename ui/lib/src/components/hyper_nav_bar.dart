@@ -11,6 +11,7 @@ import 'hyper_typography.dart';
 
 part 'hyper_nav_bar_surface.dart';
 part 'hyper_nav_bar_scroll_scope.dart';
+part 'hyper_nav_bar_scroll_observer.dart';
 
 /// 固定布局类型；custom 保留完整 Widget 插槽。
 abstract final class HyperNavBarTypes {
@@ -33,16 +34,39 @@ abstract final class HyperNavBarTypes {
 
 /// Flutter 滚动宿主：包装主滚动视口与导航栏，不接管 ScrollController。
 class HyperNavBarScrollScope extends StatefulWidget {
-  const HyperNavBarScrollScope({
+  const HyperNavBarScrollScope({super.key, required this.child, this.scrollKey})
+    : _scrollController = null,
+      active = true;
+
+  /// 分页或嵌套滚动中绑定已有主控制器，由库向最近的作用域提供真实位置。
+  factory HyperNavBarScrollScope.source({
+    Key? key,
+    required ScrollController scrollController,
+    bool active = true,
+    required Widget child,
+  }) => _HyperNavBarScrollSource(
+    key: key,
+    scrollController: scrollController,
+    active: active,
+    child: child,
+  );
+
+  const HyperNavBarScrollScope._source({
     super.key,
+    required ScrollController scrollController,
+    required this.active,
     required this.child,
-    this.scrollKey,
-  });
+  }) : _scrollController = scrollController,
+       scrollKey = null;
 
   final Widget child;
 
   /// 当前逻辑页面的标识；变化时重置滚动状态，不重建子树或接管控制器。
   final Object? scrollKey;
+  final ScrollController? _scrollController;
+
+  /// source 所在逻辑页是否活动；隐藏页不能驱动外层导航。
+  final bool active;
 
   @override
   State<HyperNavBarScrollScope> createState() => _HyperNavBarScrollScopeState();
@@ -94,7 +118,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   final bool safeArea;
 
-  /// true 强制显示；false 使用滚动作用域状态，无作用域时保持透明。
+  /// true 强制显示；false 优先读取作用域，否则使用 Scaffold 内置滚动观察者。
   final bool scrolledUnder;
 
   /// 固定返回类型的回调；未传入时调用 Navigator.maybePop。
@@ -151,8 +175,8 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
       height: height,
       child: Padding(padding: padding, child: child ?? _buildSlots(context)),
     );
-    return _NavBarScrollSurface(
-      scrolledUnder: scrolledUnder || _NavBarScrollState.read(context),
+    return _NavBarScrollBinding(
+      scrolledUnder: scrolledUnder,
       child: safeArea ? SafeArea(bottom: false, child: content) : content,
     );
   }

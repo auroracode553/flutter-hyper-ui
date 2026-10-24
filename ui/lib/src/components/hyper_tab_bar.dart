@@ -17,7 +17,7 @@ class HyperTabItem {
   final String label;
 }
 
-/// 内容收缩的悬浮导航。点击和横向拖动共用一个选择出口。
+/// 悬浮或全宽贴底导航；空选中值用于可重复点击的动作入口。
 class HyperTabBar extends StatefulWidget {
   const HyperTabBar({
     super.key,
@@ -27,24 +27,33 @@ class HyperTabBar extends StatefulWidget {
     this.type = 'multiple',
     this.badgeCount = 0,
     this.safeArea = true,
+    this.floating = true,
+    this.itemEnabled,
     EdgeInsetsGeometry? margin,
     this.color,
   }) : assert(type == 'multiple' || type == 'single'),
        assert(type == 'single' ? items.length == 1 : items.length >= 2),
-       assert(selectedIndex >= 0 && selectedIndex < items.length),
+       assert(
+         selectedIndex == null ||
+             (selectedIndex >= 0 && selectedIndex < items.length),
+       ),
+       assert(floating || type == 'multiple'),
        margin =
            margin ??
-           (type == 'single'
+           (!floating || type == 'single'
                ? EdgeInsets.zero
                : const EdgeInsets.fromLTRB(20, 8, 20, 0));
 
   static const double height = 56;
+  static const double dockedHeight = 60;
   final List<HyperTabItem> items;
-  final int selectedIndex;
+  final int? selectedIndex;
   final ValueChanged<int> onChanged;
   final String type;
   final int badgeCount;
   final bool safeArea;
+  final bool floating;
+  final bool Function(HyperTabItem)? itemEnabled;
   final Color? color;
   final EdgeInsetsGeometry margin;
 
@@ -53,7 +62,7 @@ class HyperTabBar extends StatefulWidget {
 }
 
 class _HyperTabBarState extends State<HyperTabBar> {
-  static const double _inset = 4;
+  double get _inset => widget.floating ? 4 : 0;
   int? _dragIndex;
 
   bool get _rtl => Directionality.of(context) == TextDirection.rtl;
@@ -62,10 +71,13 @@ class _HyperTabBarState extends State<HyperTabBar> {
   int _logical(int visual) => _rtl ? widget.items.length - visual - 1 : visual;
 
   void _select(int index) {
-    if (index == widget.selectedIndex) return;
+    if (index == widget.selectedIndex || !_enabled(index)) return;
     HapticFeedback.selectionClick();
     widget.onChanged(index);
   }
+
+  bool _enabled(int index) =>
+      widget.itemEnabled?.call(widget.items[index]) ?? true;
 
   void _drag(double x, double width) {
     final index = ((x - _inset) / (width - 2 * _inset) * widget.items.length)
@@ -77,7 +89,11 @@ class _HyperTabBarState extends State<HyperTabBar> {
   @override
   void didUpdateWidget(covariant HyperTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.items.length != widget.items.length) _dragIndex = null;
+    if (oldWidget.items.length != widget.items.length ||
+        oldWidget.floating != widget.floating ||
+        (oldWidget.selectedIndex == null) != (widget.selectedIndex == null)) {
+      _dragIndex = null;
+    }
   }
 
   @override
@@ -90,17 +106,21 @@ class _HyperTabBarState extends State<HyperTabBar> {
       bar = HyperBadge(
         type: 'count',
         count: widget.badgeCount,
-        child: HyperPressable(
-          borderRadius: BorderRadius.circular(height / 2),
-          onPressed: () => widget.onChanged(0),
-          child: HyperGlass(
-            radius: height / 2,
-            child: SizedBox.square(
-              dimension: height,
-              child: Icon(
-                widget.items.single.icon,
-                size: 22,
-                color: activeColor,
+        child: Opacity(
+          opacity: _enabled(0) ? 1 : 0.4,
+          child: HyperPressable(
+            enabled: _enabled(0),
+            borderRadius: BorderRadius.circular(height / 2),
+            onPressed: () => widget.onChanged(0),
+            child: HyperGlass(
+              radius: height / 2,
+              child: SizedBox.square(
+                dimension: height,
+                child: Icon(
+                  widget.items.single.icon,
+                  size: 22,
+                  color: activeColor,
+                ),
               ),
             ),
           ),
@@ -120,12 +140,21 @@ class _HyperTabBarState extends State<HyperTabBar> {
         itemWidth = math.max(itemWidth, label.width + 32);
         label.dispose();
       }
-      final barHeight = math.max(
-        height,
-        MediaQuery.textScalerOf(context).scale(12) * 1.08 + 36,
-      );
+      final bottomInset = widget.safeArea
+          ? MediaQuery.paddingOf(context).bottom
+          : 0.0;
+      final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
+      // 贴底总高度包含安全区，保持普通手势导航下的紧凑尺寸。
+      final barHeight = widget.floating
+          ? math.max(height, textHeight + 36)
+          : math.max(
+              math.max(HyperTabBar.dockedHeight - bottomInset, 40.0),
+              textHeight + 26,
+            );
       bar = SizedBox(
-        width: itemWidth * widget.items.length + 2 * _inset,
+        width: widget.floating
+            ? itemWidth * widget.items.length + 2 * _inset
+            : double.infinity,
         height: barHeight,
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -135,41 +164,55 @@ class _HyperTabBarState extends State<HyperTabBar> {
               return const SizedBox.shrink();
             }
             final cellWidth = (width - 2 * _inset) / widget.items.length;
-            final selected = _dragIndex ?? _visual(widget.selectedIndex);
+            final selected =
+                _dragIndex ??
+                (widget.selectedIndex == null
+                    ? null
+                    : _visual(widget.selectedIndex!));
+            final selectionMode = widget.selectedIndex != null;
             return RepaintBoundary(
               child: GestureDetector(
-                onHorizontalDragStart: (details) =>
-                    _drag(details.localPosition.dx, width),
-                onHorizontalDragUpdate: (details) =>
-                    _drag(details.localPosition.dx, width),
-                onHorizontalDragCancel: () => setState(() => _dragIndex = null),
-                onHorizontalDragEnd: (_) {
-                  final index = _dragIndex;
-                  setState(() => _dragIndex = null);
-                  if (index != null) _select(_logical(index));
-                },
-                child: HyperGlass(
-                  radius: barHeight / 2,
-                  type: 'prominent',
+                onHorizontalDragStart: selectionMode
+                    ? (details) => _drag(details.localPosition.dx, width)
+                    : null,
+                onHorizontalDragUpdate: selectionMode
+                    ? (details) => _drag(details.localPosition.dx, width)
+                    : null,
+                onHorizontalDragCancel: selectionMode
+                    ? () => setState(() => _dragIndex = null)
+                    : null,
+                onHorizontalDragEnd: selectionMode
+                    ? (_) {
+                        final index = _dragIndex;
+                        setState(() => _dragIndex = null);
+                        if (index != null) _select(_logical(index));
+                      }
+                    : null,
+                child: _TabBarSurface(
+                  floating: widget.floating,
+                  height: barHeight,
                   child: Stack(
                     children: [
                       // 只移动一个选中块，不再逐帧重建文字或执行矩阵折射滤镜。
-                      AnimatedPositioned(
-                        duration: MediaQuery.disableAnimationsOf(context)
-                            ? Duration.zero
-                            : const Duration(milliseconds: 160),
-                        curve: Curves.easeOutCubic,
-                        left: _inset + selected * cellWidth + 1,
-                        top: _inset,
-                        width: cellWidth - 2,
-                        height: barHeight - 2 * _inset,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: glass.selection,
-                            borderRadius: BorderRadius.circular(barHeight / 2),
+                      if (selected != null)
+                        AnimatedPositioned(
+                          duration: MediaQuery.disableAnimationsOf(context)
+                              ? Duration.zero
+                              : const Duration(milliseconds: 160),
+                          curve: Curves.easeOutCubic,
+                          left: _inset + selected * cellWidth + 1,
+                          top: _inset,
+                          width: cellWidth - 2,
+                          height: barHeight - 2 * _inset,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: glass.selection,
+                              borderRadius: BorderRadius.circular(
+                                barHeight / 2,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
                       Positioned.fill(
                         left: _inset,
                         right: _inset,
@@ -182,18 +225,22 @@ class _HyperTabBarState extends State<HyperTabBar> {
                               index++
                             )
                               Expanded(
-                                child: HyperPressable(
-                                  pressedScale: 1,
-                                  borderRadius: BorderRadius.circular(
-                                    barHeight / 2,
-                                  ),
-                                  onPressed: () => _select(_logical(index)),
-                                  child: _TabLabel(
-                                    item: widget.items[_logical(index)],
-                                    selected: index == selected,
-                                    color: index == selected
-                                        ? activeColor
-                                        : tokens.foreground,
+                                child: Opacity(
+                                  opacity: _enabled(_logical(index)) ? 1 : 0.4,
+                                  child: HyperPressable(
+                                    enabled: _enabled(_logical(index)),
+                                    pressedScale: 1,
+                                    borderRadius: BorderRadius.circular(
+                                      barHeight / 2,
+                                    ),
+                                    onPressed: () => _select(_logical(index)),
+                                    child: _TabLabel(
+                                      item: widget.items[_logical(index)],
+                                      selected: index == selected,
+                                      color: index == selected
+                                          ? activeColor
+                                          : tokens.foreground,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -210,10 +257,31 @@ class _HyperTabBarState extends State<HyperTabBar> {
       );
     }
     bar = Padding(padding: widget.margin, child: bar);
-    return widget.safeArea ? SafeArea(top: false, child: bar) : bar;
+    bar = widget.safeArea ? SafeArea(top: false, child: bar) : bar;
+    // 贴底背景包含底部安全区，业务宿主不再补底板或重复 SafeArea。
+    return widget.floating
+        ? bar
+        : ColoredBox(color: tokens.background, child: bar);
   }
 
   static const double height = HyperTabBar.height;
+}
+
+/// 仅悬浮形态绘制玻璃胶囊，贴底形态直接使用外层页面表面。
+class _TabBarSurface extends StatelessWidget {
+  const _TabBarSurface({
+    required this.floating,
+    required this.height,
+    required this.child,
+  });
+  final bool floating;
+  final double height;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => floating
+      ? HyperGlass(radius: height / 2, type: 'prominent', child: child)
+      : child;
 }
 
 class _TabLabel extends StatelessWidget {

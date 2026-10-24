@@ -680,7 +680,7 @@ export const componentGroups: ComponentGroup[] = [
       demo('full-navigation', '导航、步骤与列表联动', 'complete_examples.dart', 860),
     ],
     components: [
-      component('HyperNavBar / HyperNavBarTypes / HyperNavBarScrollScope', 'hyper_nav_bar.dart', '默认 44px；滚动作用域自动驱动渐隐毛玻璃，支持手动 scrolledUnder。', {
+      component('HyperNavBar / HyperNavBarTypes / HyperNavBarScrollScope', 'hyper_nav_bar.dart', '默认 44px；普通 Scaffold 自动感知滚动，复合页面优先使用显式作用域驱动渐隐毛玻璃。', {
         id: 'nav-bar',
         navName: 'HyperNavBar',
         propsDocs: [
@@ -694,9 +694,11 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'child', description: '完整内部布局 Widget，与其他内容插槽互斥，不生成自动返回按钮' },
           { name: 'padding', description: '内容边距，默认左右 16px，可设置 EdgeInsets.zero' },
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
-          { name: 'scrolledUnder', description: '默认 false，使用滚动作用域状态；true 强制显示。无作用域时手动控制；160ms 渐隐毛玻璃，在导航底部内渐隐，不越界、不占位、不绘制分隔线' },
+          { name: 'scrolledUnder', description: '默认 false，优先读取显式作用域，否则自动订阅最近 Scaffold 的滚动观察者；均不存在时透明。true 强制显示；160ms 渐隐毛玻璃，在导航底部内渐隐，不越界、不占位、不绘制分隔线' },
           { name: 'HyperNavBarScrollScope.child', description: '必填 Widget；包装导航栏和主滚动视口的共同父级，自动监听垂直主列表，忽略嵌套/横向列表，不接管 ScrollController' },
           { name: 'HyperNavBarScrollScope.scrollKey', description: '可选逻辑页面标识，默认 null；改变时重置滚动状态，不替换子树，适用于 Tab 或设置子页面切换' },
+          { name: 'HyperNavBarScrollScope.source.scrollController', description: 'source 构造必填的主视口 ScrollController；与子视口共用实例，库内自动订阅、替换及清理，不接管控制器生命周期和滚动行为' },
+          { name: 'HyperNavBarScrollScope.source.active', description: '默认 true；分页/保留 Tab 中仅当前逻辑页启用，非活动来源不贡献导航状态；source 位于普通作用域内且不占布局空间' },
           { name: 'onBackPressed', description: '默认返回按钮的点击回调；未提供时调用 Navigator.maybePop' },
           { name: 'onMorePressed', description: 'more 类型右侧更多操作回调' },
           { name: 'onSavePressed', description: 'edit 类型右侧保存操作回调' },
@@ -705,16 +707,18 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: { ...demo('component-nav-bar', '滚动毛玻璃导航栏', 'component_nav_bar_example.dart', 680, '向上滚动显示毛玻璃，回到顶部恢复透明。', 'NavBarComponentExample'), fullScreen: true },
       }),
-      component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '多项液态悬浮底栏与带数量角标的单项圆形入口；不提供禁用状态。', {
+      component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '悬浮或全宽贴底底栏，支持可重复动作、单项禁用与独立角标入口。', {
         propsDocs: [
           { name: 'type', description: "'multiple' 多项导航（默认）或 'single' 独立圆形入口" },
           { name: 'items', description: '多项模式至少 2 项；单项模式恰好 1 项，仅显示图标' },
-          { name: 'selectedIndex', description: '当前选中索引；单项模式固定为 0' },
+          { name: 'selectedIndex', description: '当前选中索引；null 为无选中块、可重复点击且不响应拖动的动作模式' },
           { name: 'onChanged', description: '点击回调；单项模式传入索引 0' },
           { name: 'badgeCount', description: '单项模式的数量角标，默认 0 不显示，超过 99 显示 99+' },
           { name: 'safeArea', description: '是否适配安全区，默认 true' },
+          { name: 'floating', description: '默认 true 保留悬浮；false 为 multiple 全宽平直贴底，默认零边距' },
+          { name: 'itemEnabled', description: '各项可用性，默认全部可用；禁用项停止点击和拖动提交' },
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
-          { name: 'margin', description: '外边距；单项默认 0，多项默认水平 20、顶部 8' },
+          { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 20、顶部 8' },
         ],
         preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '体验多项导航、独立圆形入口和左侧通知入口组合示例。', 'TabBarComponentExample'),
       }),

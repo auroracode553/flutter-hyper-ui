@@ -5,7 +5,23 @@ description: HyperTabBar 组件与公开 API
 
 <ComponentDoc component-id="tab-bar" />
 
-底栏不提供整体或单项禁用状态；单项入口可直接点击，多项导航支持点击与横向拖动切换。
+底栏默认悬浮；floating=false 为全宽贴底的 multiple 形态。itemEnabled 控制单项禁用；选择模式支持点击与横向拖动，selectedIndex=null 则为可重复触发且不响应拖动的动作模式。
+
+## 非悬浮动作栏
+
+`floating: false` 使用库内全宽平直表面，没有悬浮胶囊、圆角、外侧留白或浮层阴影；默认 margin 为零，safeArea 默认 true。默认总高 60，底部安全区计入其中，操作区至少 40；大字体或较高的系统导航区才按需增长。放入 Scaffold.bottomNavigationBar 时采用普通正文避让，不叠加底板、额外 SafeArea 或固定底栏高度。
+
+```dart
+HyperTabBar(
+  floating: false,
+  selectedIndex: null,
+  items: actions,
+  itemEnabled: (item) => item.label != '前进' || canGoForward,
+  onChanged: onAction,
+)
+```
+
+空选中值不绘制常驻选中块，每次有效点击都会回调，适合浏览器前进、后退和菜单操作。非空选中值保持原有选择行为，重复点击当前项不回调，拖动松手提交。两种模式中的禁用项均不触发操作。
 
 ## 单项入口
 

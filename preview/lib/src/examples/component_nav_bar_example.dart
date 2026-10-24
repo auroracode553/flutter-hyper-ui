@@ -35,8 +35,15 @@ enum _NavBarExample {
 }
 
 class _NavBarComponentExampleState extends State<NavBarComponentExample> {
+  final _scroll = ScrollController();
   _NavBarExample _selected = _NavBarExample.backOnly;
   String _feedback = '切换布局或点击顶部操作，查看导航反馈。';
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +57,8 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
       _NavBarExample.edit => '编辑资料',
       _NavBarExample.custom => '创作空间',
     };
-    return HyperNavBarScrollScope(
+    // 模拟 Scaffold 已提供的观察者，预览无需业务监听即可响应普通列表。
+    return ScrollNotificationObserver(
       child: Stack(
         children: <Widget>[
           // 正文视口从屏幕顶部开始，首屏净空作为滚动内容的一部分。
@@ -61,6 +69,7 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
                 context: context,
                 removeTop: true,
                 child: CustomScrollView(
+                  controller: _scroll,
                   slivers: <Widget>[
                     SliverPadding(
                       padding: EdgeInsets.fromLTRB(

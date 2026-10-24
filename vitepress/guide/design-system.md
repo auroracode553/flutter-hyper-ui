@@ -281,9 +281,9 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 
 | 组件与文档 | 实现文件 | 当前样式与功能 |
 | --- | --- | --- |
-| [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart 及两个同名前缀 part 文件 | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
+| [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart 及同名前缀 part 文件 | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
 | [HyperTabs](../components/tabs.md) | hyper_navigation.dart、hyper_tab_controller.dart | 默认项区高 48，加表面内边距后为 54；胶囊选中块，支持 scrollable 和页面联动；pages 默认高 180；外部 selectedIndex 与初始索引的职责分开 |
-| [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | single / multiple，默认 multiple，高 56；multiple 默认 margin 为 20 / 8 / 20 / 0，single 为零；自身处理底部安全区；拖动预览、松手提交，与点击共用选择出口；不提供整体或单项禁用状态 |
+| [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | single / multiple，默认 multiple，高 56；floating 默认 true 保留悬浮，false 为全宽平直贴底、总高 60（含安全区）与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
 | [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认 small 图标按钮，数字项保留专用选中态 |
 | [HyperSlideMenu](../components/slide-menu.md) | hyper_slide_menu.dart | 逻辑 start / end 操作区，默认每项宽 64、圆角 18；保留跟手、越界阻尼、速度投影与弹簧；展开时屏蔽正文操作，点击操作先收起再通知调用方 |
 | [HyperActionSheet](../components/action-sheet.md) | hyper_action_sheet.dart | show 展示自定义内容，choose 展示 HyperAction 列表；圆角 30、内边距 16、最大高为键盘避让后可用高度的 85%；选中、禁用、危险色和取消按钮分别保留 |
@@ -363,7 +363,8 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 - Uploader 保留 ready / uploading / success / error；选择后自动调用注入的 upload，按文件 ID 防重复请求并限制数量和大小，移除及销毁时取消令牌，忽略已取消任务的后续结果。底层传输是否真正取消由适配器观察令牌实现。
 - UpdateDialog 接收 idle / checking / available / upToDate / downloadQueued / downloading / readyToInstall / installing / completed / error，idle 不显示内容。检查、下载和安装由业务回调驱动；show 不允许点遮罩关闭，强制更新和安装中限制退出操作，不把预览模拟服务放进库。
 - 锚定浮层退出后再移除，收起期间不继续接收操作；Drawer 使用 dismissOnClickOutside / dismissOnBackPress / gesturesEnabled 分别控制遮罩、返回键与滑动关闭；向外超过宽度 30% 或速度达 400 时关闭，否则 180ms 复位。面板以 280ms 从自身宽度之外平移，遮罩独立淡入。
-- NavBarScrollScope 只跟踪 depth 为 0 的竖向主视口，滚动超过 0.5 判断正文经过导航；scrollKey 改变时重置。NavBar 将显式 scrolledUnder 与作用域状态合并，160ms 显示背景，在状态栏顶部至导航底部以内渐隐，不越界、不占位、不拦截触摸；高对比时改为不延伸的实底，减少动画时直接切换。
+- NavBarScrollScope 对普通列表跟踪 depth=0 的竖向主视口，scrollKey 变化时重置通知状态；分页或嵌套页面使用其 source 构造绑定已有主 ScrollController 和 active，订阅、位置恢复、指标变化及清理统一由库处理。存在显式来源时不使用其他视口通知，非活动来源不贡献状态。超过 0.5 判为滚入，帧尾合并且仅通知依赖的导航，不重建整页；不改变视口约束、偏移、physics、边距或安全区。NavBar 将显式 scrolledUnder 与作用域状态合并，160ms 显示背景，在状态栏顶部至导航底部以内渐隐，不越界、不占位、不拦截触摸；高对比时改为不延伸的实底，减少动画时直接切换。
+- 没有显式作用域的普通 Scaffold，由 Navbar 内部订阅最近的 ScrollNotificationObserver，框架将初始/恢复/尺寸指标通知转换成滚动通知；仅处理 depth=0 的竖向视口。显式作用域与 source 优先，不重复订阅；绑定变化时清理旧观察者，帧尾合并状态，只重建导航。WebView 的滚动不属于该通道，不擅自添加业务 Bridge 监听。自动感知不新增渲染盒，不改正文或底栏布局。
 - 两端导航背景均从屏幕顶部覆盖状态栏，安全区在背景内部，只有标题与按钮避让。Android 文档预览注入模拟系统 Insets，导航与正文共用同一来源；不得把模拟留白放到整个导航栏外部，也不得在正文重复累加。
 - 保留现有 RTL、字体缩放、键盘焦点及减少动画处理；不为统一外观删掉这些分支。仅交互用途的 HyperPressable 不等价于自定义按钮样式。
 
