@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, rmSync } from 'node:fs';
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { assertFlutterDependencies } from './flutter-dependency-check.mjs';
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(scriptDirectory, '..');
@@ -31,10 +32,16 @@ function assertSafePreviewTarget() {
   }
 }
 
+// 文档发布 JavaScript 预览，复用包解析和编译缓存，不额外试编译未发布的 Wasm。
+assertFlutterDependencies({
+  projectDirectory: previewDirectory,
+  sourceDirectories: [resolve(repositoryRoot, 'ui', 'lib'), resolve(previewDirectory, 'lib')],
+});
+
 console.log('构建 Flutter Web release…');
 run(
   'flutter',
-  ['build', 'web', '--release', '--no-web-resources-cdn', '--base-href', previewBaseHref],
+  ['build', 'web', '--release', '--no-pub', '--no-wasm-dry-run', '--no-web-resources-cdn', '--base-href', previewBaseHref],
   previewDirectory,
 );
 

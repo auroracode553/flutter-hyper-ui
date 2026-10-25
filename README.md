@@ -184,3 +184,9 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 - [组件文档](vitepress/components/catalog.md)
 
 本地脚本必须由使用者显式启动；watcher 启动后可以自动热重载，但所有脚本都不会部署。
+
+## 构建性能配置
+
+组件库及 Web 预览复用 Flutter 自身的增量编译缓存。日常预览沿用现有常驻开发服务，通过热重启/热重载更新，不重复生成 release；正式文档构建和开发服务均先检查已准备的依赖，再使用 --no-pub，避免每次重复解析或下载依赖。文档发布 JavaScript 预览，关闭 Flutter 默认额外执行的 Wasm 兼容性试编译，不改变 JavaScript 的发布优化级别。
+
+依赖、SDK 与平台构建资源由使用者先行准备；首次构建需要填充缓存。常规迭代保留 build、.dart_tool 和 Gradle 缓存，不把 flutter clean 作为固定构建步骤。不同 Flutter 工程逐个构建，工程内部按任务依赖并行。
