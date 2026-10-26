@@ -1,5 +1,9 @@
 # UI 样式与功能实现基线
 
+普通设置菜单使用 HyperMenuGroup + HyperListTile 默认样式；独立分组标题使用 HyperSectionTitle，与菜单组 title 共用 14 字号、w700 排版。页面垂直留白 12、完整分组间距 16，分别读取 HyperUiSpacing.pageVertical / sectionVertical。业务预览与功能绘制独立保留。
+
+三选项主题设置统一使用 HyperThemeModeDialog：跟随系统、浅色、深色，36 最小行高、4 垂直内边距、21 圆环，无额外行间距或关闭按钮；普通 Radio 标签行与菜单行高保持独立。
+
 Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一组同时约束材质、层级、触控反馈、运动和排版的规则。
 
 本文依据当前 ui/lib/src/ 实现整理，基线日期为 2026-10-21。它同时约束默认视觉、功能行为和组件复用边界，供维护者及 AI 修改前阅读。完整公开签名与参数表仍由[各组件页](../components/catalog.md)维护，本文不替代参数文档。
@@ -379,3 +383,6 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 HyperTabBar 各形态统一默认内容高度 56，悬浮多项默认顶部间距 8、底部间距 20。页面不覆写底栏高度；与 Compose 端相同，字体扩展在组件内部处理，并排动作在共同 Row 中保持等高。
 
 按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
+
+
+列表水平留白由调用方页面统一提供一次。plain 行默认水平留白为 0；HyperMenuGroup 和独立 glass 行保留水平 14dp 的卡片内边距；列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留垂直 4dp。

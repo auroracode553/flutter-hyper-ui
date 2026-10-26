@@ -145,6 +145,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
 
 // doc-region ListTileComponentExample
 class ListTileComponentExample extends StatelessWidget {
+  // 预览宿主提供页面留白，组件不再重复缩进。
   const ListTileComponentExample({super.key});
 
   Widget _label(String text) => Padding(
@@ -194,6 +195,7 @@ class ListTileComponentExample extends StatelessWidget {
 
 // doc-region MenuGroupComponentExample
 class MenuGroupComponentExample extends StatelessWidget {
+  // 标题与组内行、分隔线共用宿主水平留白。
   const MenuGroupComponentExample({super.key});
 
   @override

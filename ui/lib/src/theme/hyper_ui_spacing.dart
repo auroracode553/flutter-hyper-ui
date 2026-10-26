@@ -13,4 +13,6 @@ class HyperUiSpacing {
   static const double pagePadding = 16;
   static const double cardPadding = 12;
   static const double itemGap = 8;
+  static const double pageVertical = 12;
+  static const double sectionVertical = 16;
 }
