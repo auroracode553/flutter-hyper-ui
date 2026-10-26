@@ -13,6 +13,7 @@ class TabBarComponentExample extends StatefulWidget {
 class _TabBarComponentExampleState extends State<TabBarComponentExample> {
   int _index = 0;
   int _dockIndex = 0;
+  int _pairIndex = 0;
   int _actionCount = 0;
 
   @override
@@ -64,6 +65,38 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
             HyperTabItem(icon: LucideIcons.bell, label: '消息'),
             HyperTabItem(icon: LucideIcons.settings, label: '设置'),
           ],
+        ),
+        const SizedBox(height: 24),
+        Text('右侧独立入口：已触发 $_actionCount 次，均使用默认高度'),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: HyperTabBar(
+                  safeArea: false,
+                  margin: EdgeInsets.zero,
+                  selectedIndex: _pairIndex,
+                  onChanged: (index) => setState(() => _pairIndex = index),
+                  items: const [
+                    HyperTabItem(icon: LucideIcons.history, label: '最近'),
+                    HyperTabItem(icon: LucideIcons.list, label: '列表'),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              HyperTabBar(
+                type: 'single',
+                safeArea: false,
+                selectedIndex: null,
+                onChanged: (_) => setState(() => _actionCount++),
+                items: const [
+                  HyperTabItem(icon: LucideIcons.folderOpen, label: '打开'),
+                ],
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 24),
         const Text('组合示例：左侧通知入口 + 底部导航'),

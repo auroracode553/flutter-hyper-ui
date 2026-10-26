@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'examples/component_safe_area_example.dart'
+    deferred as example_component_safe_area;
 
 import 'examples/actions_example.dart' deferred as example_actions_example;
 import 'examples/buttons_example.dart' deferred as example_buttons_example;
@@ -351,6 +353,13 @@ class PreviewCatalog {
       loadLibrary: () => example_component_nav_bar_example.loadLibrary(),
       builder: (_) =>
           example_component_nav_bar_example.NavBarComponentExample(),
+    ),
+    PreviewItem(
+      id: 'component-safe-area',
+      title: 'HyperSafeArea',
+      description: '方向、系统区与嵌套单次消费。',
+      loadLibrary: () => example_component_safe_area.loadLibrary(),
+      builder: (_) => example_component_safe_area.SafeAreaComponentExample(),
     ),
     PreviewItem(
       id: 'component-tab-bar',

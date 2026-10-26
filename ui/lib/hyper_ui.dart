@@ -5,6 +5,7 @@ export 'src/components/hyper_pressable.dart';
 export 'src/components/hyper_typography.dart';
 export 'src/components/hyper_image.dart';
 export 'src/components/hyper_layout.dart';
+export 'src/components/hyper_safe_area.dart';
 export 'src/components/hyper_selection_controls.dart';
 export 'src/components/hyper_dropdown.dart';
 export 'src/components/hyper_slide_menu.dart';
@@ -25,7 +26,7 @@ export 'src/components/hyper_tab_bar.dart';
 export 'src/components/hyper_lists.dart';
 export 'src/components/hyper_business.dart';
 export 'src/components/hyper_notice_bar.dart';
-export 'src/utils/hyper_utils.dart';
+export 'src/utils/hyper_utils.dart' hide HyperSafeArea;
 export 'src/theme/hyper_ui_effects.dart';
 export 'src/theme/hyper_glass_theme.dart';
 

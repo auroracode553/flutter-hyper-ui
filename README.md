@@ -190,3 +190,7 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 组件库及 Web 预览复用 Flutter 自身的增量编译缓存。日常预览沿用现有常驻开发服务，通过热重启/热重载更新，不重复生成 release；正式文档构建和开发服务均先检查已准备的依赖，再使用 --no-pub，避免每次重复解析或下载依赖。文档发布 JavaScript 预览，关闭 Flutter 默认额外执行的 Wasm 兼容性试编译，不改变 JavaScript 的发布优化级别。
 
 依赖、SDK 与平台构建资源由使用者先行准备；首次构建需要填充缓存。常规迭代保留 build、.dart_tool 和 Gradle 缓存，不把 flutter clean 作为固定构建步骤。不同 Flutter 工程逐个构建，工程内部按任务依赖并行。
+
+HyperTabBar 各形态统一默认内容高度 56，悬浮多项默认顶部间距 8、底部间距 20。页面不覆写底栏高度；与 Compose 端相同，字体扩展在组件内部处理，并排动作在共同 Row 中保持等高。
+
+按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。

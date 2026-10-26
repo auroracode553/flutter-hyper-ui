@@ -243,6 +243,13 @@ export const componentGroups: ComponentGroup[] = [
       demo('layout', '布局容器与占位状态', 'complete_examples.dart', 740),
     ],
     components: [
+      component('HyperSafeArea', 'hyper_safe_area.dart', '按需保护顶部或底部，统一底部最小 20，并避免嵌套重复留白。', {
+        propsDocs: [
+          { name: 'edge', description: 'Top / Bottom，默认 bottom，不包含 IME Insets' },
+          { name: 'child', description: '需要保护的内容，不改变自身业务高度' },
+        ],
+        preview: demo('component-safe-area', 'HyperSafeArea', 'component_safe_area_example.dart', 440, '方向、系统区与嵌套交互。', 'SafeAreaComponentExample'),
+      }),
       component('HyperPageContentSliver', 'hyper_page_content.dart', '页面内容 sliver：统一内容边距，宽屏（桌面/平板）下居中限宽，手机端占满。可放入 CustomScrollView。', {
         propsDocs: [
           { name: 'child', description: '页面内容' },
@@ -718,7 +725,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'floating', description: '默认 true 保留悬浮；false 为 multiple 全宽平直贴底，默认零边距' },
           { name: 'itemEnabled', description: '各项可用性，默认全部可用；禁用项停止点击和拖动提交' },
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
-          { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 20、顶部 8' },
+          { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 20、顶部 8、底部 20' },
         ],
         preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '体验多项导航、独立圆形入口和左侧通知入口组合示例。', 'TabBarComponentExample'),
       }),

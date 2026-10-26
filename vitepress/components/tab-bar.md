@@ -9,7 +9,7 @@ description: HyperTabBar 组件与公开 API
 
 ## 非悬浮动作栏
 
-`floating: false` 使用库内全宽平直表面，没有悬浮胶囊、圆角、外侧留白或浮层阴影；默认 margin 为零，safeArea 默认 true。默认总高 60，底部安全区计入其中，操作区至少 40；大字体或较高的系统导航区才按需增长。放入 Scaffold.bottomNavigationBar 时采用普通正文避让，不叠加底板、额外 SafeArea 或固定底栏高度。
+`floating: false` 使用库内全宽平直表面，没有悬浮胶囊、圆角、外侧留白或浮层阴影；默认 margin 为零，safeArea 默认 true。与悬浮和单动作共用默认内容高度 56，字体扩展仅在组件内部处理；安全区位于内容高度之外。放入 Scaffold.bottomNavigationBar 时采用普通正文避让，不叠加底板、额外 SafeArea 或固定底栏高度。
 
 ```dart
 HyperTabBar(
@@ -110,3 +110,7 @@ class AppPageScrollEnd extends StatelessWidget {
 `AppPageScrollEnd` 放在 CustomScrollView 的末尾 SliverToBoxAdapter 中，或 SingleChildScrollView 的内容末尾。它增加可滚动的距离，让最后一项完整滚出遮挡；不要把它放在滚动容器外，不要再叠加 viewPadding.bottom。使用 ListView 时，将实际底部 padding 合并到列表 padding 中一次即可，不能再同时追加末尾余量。
 
 完整的主题入口、页面切换与滚动正文见[快速开始](../guide/getting-started.md#创建第一个页面)。跨项目复用规则见[业务项目接入与 AGENTS.md 模板](../guide/consumer-integration.md)。
+
+## 默认尺寸与并排操作
+
+所有形态共用 HyperTabBar.height = 56，不由业务设置固定高度或 SizedBox.square 限制尺寸。悬浮多项默认 margin 为 (20, 8, 20, 20)，并排入口由共同 Row 处理一次边距。右侧 single 操作入口与主导航使用相同默认高度；预览支持点击和切换观察。
