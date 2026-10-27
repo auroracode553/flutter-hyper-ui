@@ -89,6 +89,8 @@ HyperUiTheme.app(
 
 ## 空间层级
 
+模态遮罩由根层 Positioned.fill 覆盖完整视口，不放在 SafeArea 内。Android 对应的 Dialog 窗口同样固定全面屏透明；系统栏与键盘的避让属于内容面板，不能裁短遮罩。两端继续使用现有 scrim 令牌与退出动画，不额外添加系统 dim。
+
 页面从后向前分为四层：
 
 1. 主题背景色：由页面宿主绘制。
