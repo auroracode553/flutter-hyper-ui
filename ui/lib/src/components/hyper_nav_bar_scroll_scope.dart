@@ -1,6 +1,6 @@
-part of 'hyper_nav_bar.dart';
+part of 'hyper_scroll_gradient.dart';
 
-// 导航滚动状态、控制器订阅与继承通知；由 hyper_nav_bar.dart 引入。
+// 导航与独立材质共用的滚动状态和订阅；由 hyper_scroll_gradient.dart 引入。
 bool _navBarHasContentBefore(ScrollMetrics metrics) =>
     metrics.axis == Axis.vertical &&
     (metrics.axisDirection == AxisDirection.up

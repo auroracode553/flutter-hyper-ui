@@ -1,4 +1,4 @@
-part of 'hyper_nav_bar.dart';
+part of 'hyper_scroll_gradient.dart';
 
 /// 普通 Scaffold 的内置观察者接入；显式作用域存在时不重复订阅。
 class _NavBarScrollBinding extends StatefulWidget {
@@ -66,7 +66,7 @@ class _NavBarScrollBindingState extends State<_NavBarScrollBinding> {
   }
 
   @override
-  Widget build(BuildContext context) => _NavBarScrollSurface(
+  Widget build(BuildContext context) => _ScrollGradientSurface(
     scrolledUnder:
         widget.scrolledUnder ||
         _NavBarScrollState.read(context) ||

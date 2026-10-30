@@ -31,6 +31,8 @@ import 'examples/component_navigation_examples.dart'
     deferred as example_component_navigation_examples;
 import 'examples/component_nav_bar_example.dart'
     deferred as example_component_nav_bar_example;
+import 'examples/component_scroll_gradient_example.dart'
+    deferred as example_component_scroll_gradient_example;
 import 'examples/component_number_stepper_example.dart'
     deferred as example_component_number_stepper_example;
 import 'examples/component_pagination_example.dart'
@@ -361,10 +363,18 @@ class PreviewCatalog {
           example_component_feedback_examples.DrawerComponentExample(),
     ),
     PreviewItem(
+      id: 'component-scroll-gradient',
+      fullScreen: true,
+      title: 'HyperScrollGradient',
+      description: '滚动渐显的主题渐变，不采样正文。',
+      loadLibrary: () => example_component_scroll_gradient_example.loadLibrary(),
+      builder: (_) => example_component_scroll_gradient_example.ScrollGradientComponentExample(),
+    ),
+    PreviewItem(
       id: 'component-nav-bar',
       fullScreen: true,
       title: 'HyperNavBar',
-      description: '滚动作用域自动感知正文；滚入时显示渐隐背景，回到顶部恢复透明。',
+      description: 'standard 显示操作行，simple 仅适配状态栏和挖孔；两种形态共用滚动渐变。',
       loadLibrary: () => example_component_nav_bar_example.loadLibrary(),
       builder: (_) =>
           example_component_nav_bar_example.NavBarComponentExample(),

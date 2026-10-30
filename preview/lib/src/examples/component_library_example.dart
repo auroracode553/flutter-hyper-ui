@@ -32,7 +32,7 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
           title: const Text('Navbar'),
           subtitle: const Text('44px 透明导航栏'),
           safeArea: false,
-          type: HyperNavBarTypes.custom,
+          layout: HyperNavBarLayouts.custom,
           actions: <Widget>[
             HyperButton(
               type: 'icon',

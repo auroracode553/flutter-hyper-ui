@@ -8,9 +8,9 @@
 
 维护组件前必读 [UI 样式与功能实现基线](vitepress/guide/design-system.md)：记录当前材质、尺寸、状态、组件实现与专用样式保留清单。涉及用途不明确的样式或交互变化，先向使用者确认，禁止批量替换。
 
-AI 与开发者开始库维护或业务页面开发前，必须优先阅读 [Hyper UI 使用规则、页面开发规范与 AGENTS.md 模板](vitepress/guide/consumer-integration.md)，再核对设计基线和组件接口。应用入口全局启用全面屏，页面正文延伸到手势区，保留 Navbar 的滚动模糊与 TabBar 的悬浮滚动规则；将这些要求写入业务项目根目录 AGENTS.md。底部导航复用 [TabBar 共用悬浮宿主](vitepress/components/tab-bar.md#悬浮页面宿主)，完整入口见[快速开始](vitepress/guide/getting-started.md#创建第一个页面)。
+AI 与开发者开始库维护或业务页面开发前，必须优先阅读 [Hyper UI 使用规则、页面开发规范与 AGENTS.md 模板](vitepress/guide/consumer-integration.md)，再核对设计基线和组件接口。应用入口全局启用全面屏，页面正文延伸到手势区，保留 Navbar 的滚动渐变与 TabBar 的悬浮滚动规则；将这些要求写入业务项目根目录 AGENTS.md。底部导航复用 [TabBar 共用悬浮宿主](vitepress/components/tab-bar.md#悬浮页面宿主)，完整入口见[快速开始](vitepress/guide/getting-started.md#创建第一个页面)。
 
-顶部滚动毛玻璃使用 [HyperNavBarScrollScope + HyperNavBar](vitepress/components/nav-bar.md)：作用域包住导航与主滚动视口即可自动响应滚动，无需在每个页面复制监听与模糊绘制。
+顶部滚动渐变使用 [HyperNavBarScrollScope + HyperNavBar](vitepress/components/nav-bar.md)：作用域包住导航与主滚动视口即可自动响应滚动，无需在每个页面复制监听与模糊绘制。
 
 普通 Scaffold 的 HyperNavBar 会直接使用框架内置滚动观察者，页面无需额外包装或手写监听。显式作用域存在时优先使用作用域，保留正文与侧栏、复合视口之间的边界。
 
@@ -51,13 +51,15 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 - `HyperMaterial`：通过 `HyperUiTheme.app(material: ...)` 在 `solid / soft / clear` 间切换全应用材质，局部子树可用 `copyWith(material: ...)` 覆盖。
 - `HyperPressable`：按钮、卡片和菜单行共享的即时按压反馈，不包含业务行为。
 
+独立顶部渐变使用 [HyperScrollGradient](vitepress/components/scroll-gradient.md)，Navbar 共用同一实现和主滚动作用域，不采样正文。HyperNavBar.type 仅区分 standard（标准操作行）和 simple（真实状态栏/挖孔，无标题与操作行）；standard 的内容布局由 layout 选择。首屏净空只进入滚动内容，不增加永久占位。
+
 ## 通用组件
 
-- 导航：`HyperTabBar`（single / multiple，floating=false 全宽非悬浮，selectedIndex=null 可重复动作，itemEnabled 单项禁用）、`HyperTabs`、`HyperNavBar`（type 支持 custom、backOnly、titleOnly、backWithTitle、more、edit）、`HyperDrawer`、`HyperActionSheet`。
+- 导航：`HyperTabBar`（single / multiple，floating=false 全宽非悬浮，selectedIndex=null 可重复动作，itemEnabled 单项禁用）、`HyperTabs`、`HyperNavBar`（type 为 standard / simple，standard 的 layout 选择内容布局）、`HyperDrawer`、`HyperActionSheet`。
 
 `HyperDrawer.show` 打开贴边、全高的模态抽屉；默认 start，正文使用 contentBuilder、默认零内边距。遮罩、返回键和横向滑动可分别控制关闭，标题及页脚固定；完整 API 见[抽屉文档](vitepress/components/drawer.md)。
 
-`HyperNavBar.scrolledUnder` 默认 false，优先使用库内显式作用域，否则自动接入最近 Scaffold 的观察者；没有任何状态来源时透明，true 仅用于强制显示。导航用 160ms 过渡显示覆盖状态栏的渐隐毛玻璃，在状态栏顶部至导航底部的范围内渐隐至透明，不绘制底部分隔线。背景采样与底色一起淡出，前景操作独立保持清晰；材质层不占位、不拦截触摸，导航底部之外不绘制。返回顶部自动恢复透明，页面无需再包背景或模糊层，高对比和关闭动画适配由组件处理。Flutter 与 Compose 保持相同默认视觉规则，滚动状态使用各框架的宿主 API 接入。
+HyperNavBar.scrolledUnder 默认 false，优先使用显式主滚动作用域，否则接入 Scaffold 观察者；true 强制显示。type=standard 保留 44px 操作行，type=simple 仅真实状态栏/挖孔高度。二者复用 HyperScrollGradient，以 160ms 过渡显示主题渐变，无模糊或像素采样；前景清晰，背景透传手势，不占据正文视口，关闭动画时即时切换。
 - 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperFilterBar`。
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
 

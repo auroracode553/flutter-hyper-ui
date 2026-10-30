@@ -1,20 +1,24 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import '../theme/hyper_ui_effects.dart';
 import 'hyper_button.dart';
 import 'hyper_typography.dart';
 
-part 'hyper_nav_bar_surface.dart';
-part 'hyper_nav_bar_scroll_scope.dart';
-part 'hyper_nav_bar_scroll_observer.dart';
+import 'hyper_scroll_gradient.dart';
+
+export 'hyper_scroll_gradient.dart' show HyperNavBarScrollScope;
+
+/// 导航显示形态；simple 仅适配状态栏和挖孔，不生成操作行。
+abstract final class HyperNavBarTypes {
+  static const standard = 'standard';
+  static const simple = 'simple';
+  static const values = <String>{standard, simple};
+}
 
 /// 固定布局类型；custom 保留完整 Widget 插槽。
-abstract final class HyperNavBarTypes {
+abstract final class HyperNavBarLayouts {
   static const custom = 'custom';
   static const backOnly = 'backOnly';
   static const titleOnly = 'titleOnly';
@@ -32,48 +36,8 @@ abstract final class HyperNavBarTypes {
   };
 }
 
-/// Flutter 滚动宿主：包装主滚动视口与导航栏，不接管 ScrollController。
-class HyperNavBarScrollScope extends StatefulWidget {
-  const HyperNavBarScrollScope({super.key, required this.child, this.scrollKey})
-    : _scrollController = null,
-      active = true;
-
-  /// 分页或嵌套滚动中绑定已有主控制器，由库向最近的作用域提供真实位置。
-  factory HyperNavBarScrollScope.source({
-    Key? key,
-    required ScrollController scrollController,
-    bool active = true,
-    required Widget child,
-  }) => _HyperNavBarScrollSource(
-    key: key,
-    scrollController: scrollController,
-    active: active,
-    child: child,
-  );
-
-  const HyperNavBarScrollScope._source({
-    super.key,
-    required ScrollController scrollController,
-    required this.active,
-    required this.child,
-  }) : _scrollController = scrollController,
-       scrollKey = null;
-
-  final Widget child;
-
-  /// 当前逻辑页面的标识；变化时重置滚动状态，不重建子树或接管控制器。
-  final Object? scrollKey;
-  final ScrollController? _scrollController;
-
-  /// source 所在逻辑页是否活动；隐藏页不能驱动外层导航。
-  final bool active;
-
-  @override
-  State<HyperNavBarScrollScope> createState() => _HyperNavBarScrollScopeState();
-}
-
 /// 顶部静止时透明；滚动作用域或 [scrolledUnder] 驱动向下渐隐的背景材质。
-/// 固定 type 生成常见布局，custom 使用完整插槽。
+/// 固定 layout 生成常见布局，custom 使用完整插槽。
 ///
 /// [leading]、[title]、[subtitle]、[trailing] 都接受任意 Widget。
 /// [child] 可完全接管内部布局；此时不生成自动返回按钮或默认标题布局。
@@ -81,7 +45,8 @@ class HyperNavBarScrollScope extends StatefulWidget {
 class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   const HyperNavBar({
     super.key,
-    this.type = HyperNavBarTypes.custom,
+    this.type = HyperNavBarTypes.standard,
+    this.layout = HyperNavBarLayouts.custom,
     this.title,
     this.subtitle,
     this.leading,
@@ -99,6 +64,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   }) : assert(height > 0 && height < double.infinity);
 
   final String type;
+  final String layout;
 
   /// 主内容插槽：文字、图标、搜索框、分段控件或任意组合。
   final Widget? title;
@@ -130,14 +96,46 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
   final bool centerTitle;
 
   @override
-  Size get preferredSize => Size.fromHeight(height);
+  Size get preferredSize =>
+      Size.fromHeight(type == HyperNavBarTypes.simple ? 0 : height);
 
   @override
   Widget build(BuildContext context) {
     if (!HyperNavBarTypes.values.contains(type)) {
       throw ArgumentError.value(type, 'type', 'Unsupported HyperNavBar type');
     }
-    if (type != HyperNavBarTypes.custom &&
+    if (type == HyperNavBarTypes.simple) {
+      if (layout != HyperNavBarLayouts.custom ||
+          title != null ||
+          subtitle != null ||
+          leading != null ||
+          trailing != null ||
+          actions.isNotEmpty ||
+          child != null ||
+          onBackPressed != null ||
+          onMorePressed != null ||
+          onSavePressed != null ||
+          centerTitle) {
+        throw ArgumentError(
+          'simple accepts no title, actions or content layout.',
+        );
+      }
+      return HyperScrollGradient(
+        scrolledUnder: scrolledUnder,
+        child: SizedBox(
+          width: double.infinity,
+          height: MediaQuery.paddingOf(context).top,
+        ),
+      );
+    }
+    if (!HyperNavBarLayouts.values.contains(layout)) {
+      throw ArgumentError.value(
+        layout,
+        'layout',
+        'Unsupported HyperNavBar layout',
+      );
+    }
+    if (layout != HyperNavBarLayouts.custom &&
         (leading != null ||
             trailing != null ||
             actions.isNotEmpty ||
@@ -148,13 +146,13 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
         'Fixed HyperNavBar types accept title and callbacks only; use custom for slots.',
       );
     }
-    if (type == HyperNavBarTypes.backOnly && title != null) {
+    if (layout == HyperNavBarLayouts.backOnly && title != null) {
       throw ArgumentError('backOnly does not accept title.');
     }
-    if (type != HyperNavBarTypes.custom &&
-        type != HyperNavBarTypes.backOnly &&
+    if (layout != HyperNavBarLayouts.custom &&
+        layout != HyperNavBarLayouts.backOnly &&
         title == null) {
-      throw ArgumentError('This HyperNavBar type requires title.');
+      throw ArgumentError('This HyperNavBar layout requires title.');
     }
     if (child != null &&
         (title != null ||
@@ -175,36 +173,36 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
       height: height,
       child: Padding(padding: padding, child: child ?? _buildSlots(context)),
     );
-    return _NavBarScrollBinding(
+    return HyperScrollGradient(
       scrolledUnder: scrolledUnder,
       child: safeArea ? SafeArea(bottom: false, child: content) : content,
     );
   }
 
   Widget _buildSlots(BuildContext context) {
-    final fixed = type != HyperNavBarTypes.custom;
+    final fixed = layout != HyperNavBarLayouts.custom;
     final effectiveLeading = fixed
-        ? type == HyperNavBarTypes.titleOnly
+        ? layout == HyperNavBarLayouts.titleOnly
               ? null
               : _BackButton(onPressed: onBackPressed)
         : leading;
     final effectiveTrailing = fixed
-        ? switch (type) {
-            HyperNavBarTypes.more => HyperButton(
+        ? switch (layout) {
+            HyperNavBarLayouts.more => HyperButton(
               type: 'icon',
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
               backgroundColor: HyperGlassTheme.of(context).surfaceStrong,
               onPressed: onMorePressed ?? () {},
             ),
-            HyperNavBarTypes.edit => HyperButton(
+            HyperNavBarLayouts.edit => HyperButton(
               label: '保存',
               onPressed: onSavePressed ?? () {},
             ),
             _ => null,
           }
         : trailing ?? _buildActions();
-    final middle = type == HyperNavBarTypes.backOnly
+    final middle = layout == HyperNavBarLayouts.backOnly
         ? null
         : _buildTitle(context);
     if (centerTitle) {

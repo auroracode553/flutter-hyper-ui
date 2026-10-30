@@ -25,17 +25,18 @@ enum _NavBarExample {
   final String description;
 
   String get type => switch (this) {
-    _NavBarExample.backOnly => HyperNavBarTypes.backOnly,
-    _NavBarExample.titleOnly => HyperNavBarTypes.titleOnly,
-    _NavBarExample.backWithTitle => HyperNavBarTypes.backWithTitle,
-    _NavBarExample.more => HyperNavBarTypes.more,
-    _NavBarExample.edit => HyperNavBarTypes.edit,
-    _NavBarExample.custom => HyperNavBarTypes.custom,
+    _NavBarExample.backOnly => HyperNavBarLayouts.backOnly,
+    _NavBarExample.titleOnly => HyperNavBarLayouts.titleOnly,
+    _NavBarExample.backWithTitle => HyperNavBarLayouts.backWithTitle,
+    _NavBarExample.more => HyperNavBarLayouts.more,
+    _NavBarExample.edit => HyperNavBarLayouts.edit,
+    _NavBarExample.custom => HyperNavBarLayouts.custom,
   };
 }
 
 class _NavBarComponentExampleState extends State<NavBarComponentExample> {
   final _scroll = ScrollController();
+  bool _simple = false;
   _NavBarExample _selected = _NavBarExample.backOnly;
   String _feedback = '切换布局或点击顶部操作，查看导航反馈。';
 
@@ -48,7 +49,7 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
   @override
   Widget build(BuildContext context) {
     final safeArea = MediaQuery.paddingOf(context);
-    const navBarHeight = 44.0;
+    final navBarHeight = _simple ? 0.0 : 44.0;
     final title = switch (_selected) {
       _NavBarExample.backOnly => null,
       _NavBarExample.titleOnly => '今日灵感',
@@ -83,13 +84,34 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
                         itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.only(bottom: 12),
                           child: index == 0
-                              ? _NavBarControls(
-                                  selected: _selected,
-                                  feedback: _feedback,
-                                  onChanged: (value) => setState(() {
-                                    _selected = value;
-                                    _feedback = '已切换为「${value.label}」';
-                                  }),
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        HyperButton(
+                                          label: '标准导航',
+                                          onPressed: () =>
+                                              setState(() => _simple = false),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        HyperButton(
+                                          label: '简约导航',
+                                          onPressed: () =>
+                                              setState(() => _simple = true),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    _NavBarControls(
+                                      selected: _selected,
+                                      feedback: _feedback,
+                                      onChanged: (value) => setState(() {
+                                        _selected = value;
+                                        _feedback = '已切换为「${value.label}」';
+                                      }),
+                                    ),
+                                  ],
                                 )
                               : index == 1
                               ? const _InspirationHeader()
@@ -102,29 +124,32 @@ class _NavBarComponentExampleState extends State<NavBarComponentExample> {
               ),
             ),
           ),
-          // 库负责滚动与采样；渐隐在导航底部内结束，下方正文保持清晰。
-          HyperNavBar(
-            type: _selected.type,
-            height: navBarHeight,
-            title: title == null ? null : Text(title),
-            onBackPressed: () => setState(() => _feedback = '已请求返回上一页'),
-            onMorePressed: () => setState(() => _feedback = '已点击更多'),
-            onSavePressed: () => setState(() => _feedback = '已点击保存'),
-            leading: _selected == _NavBarExample.custom
-                ? HyperButton(
-                    type: 'icon',
-                    icon: HyperIcons.back,
-                    tooltip: '返回',
-                    onPressed: () => setState(() => _feedback = '已请求返回上一页'),
-                  )
-                : null,
-            trailing: _selected == _NavBarExample.custom
-                ? HyperButton(
-                    label: '分享',
-                    onPressed: () => setState(() => _feedback = '已点击分享'),
-                  )
-                : null,
-          ),
+          // 库负责滚动与渐变；渐隐在导航底部内结束，下方正文保持清晰。
+          if (_simple)
+            const HyperNavBar(type: HyperNavBarTypes.simple)
+          else
+            HyperNavBar(
+              layout: _selected.type,
+              height: navBarHeight,
+              title: title == null ? null : Text(title),
+              onBackPressed: () => setState(() => _feedback = '已请求返回上一页'),
+              onMorePressed: () => setState(() => _feedback = '已点击更多'),
+              onSavePressed: () => setState(() => _feedback = '已点击保存'),
+              leading: _selected == _NavBarExample.custom
+                  ? HyperButton(
+                      type: 'icon',
+                      icon: HyperIcons.back,
+                      tooltip: '返回',
+                      onPressed: () => setState(() => _feedback = '已请求返回上一页'),
+                    )
+                  : null,
+              trailing: _selected == _NavBarExample.custom
+                  ? HyperButton(
+                      label: '分享',
+                      onPressed: () => setState(() => _feedback = '已点击分享'),
+                    )
+                  : null,
+            ),
         ],
       ),
     );
@@ -165,7 +190,7 @@ class _NavBarControls extends StatelessWidget {
         const SizedBox(height: 12),
         HyperText(feedback),
         const SizedBox(height: 6),
-        const HyperText('向上滚动显示向下渐隐的毛玻璃，回到顶部恢复透明。'),
+        const HyperText('向上滚动显示向下渐隐的渐变，回到顶部恢复透明。'),
       ],
     ),
   );

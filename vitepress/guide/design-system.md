@@ -100,9 +100,9 @@ HyperUiTheme.app(
 
 浮动功能层允许内容从下方经过；模态层需要把背景推到次要位置。阴影只负责层级分离，不用作装饰性发光。
 
-Flutter 导航栏滚动材质以 background 画布色着色，不使用 card 内容卡片色，顶部与页面背景保持一致；渐隐、模糊、按钮及布局规则保持原有行为。
+Flutter 导航栏以 background 画布色绘制滚动渐变，不使用 card 色，不创建 BackdropFilter 或采样正文。standard 保留标题与操作行，simple 只有真实状态栏/挖孔高度；两者共用渐显与底部渐隐。
 
-维护库或开发业务页面前先读[使用规则与页面开发规范](./consumer-integration.md)，再核对组件 API。应用入口全局开启 edge-to-edge，独立入口共用透明系统栏配置；页面正文延伸到手势区，不用整页底部 SafeArea 或固定空白裁短正文。导航栏保留原有模糊采样与滚动渐显/渐隐，禁止添加实色底板或业务宿主裁切来遮住效果。TabBar 保持悬浮，正文滚入其后方；未经明确布局要求，配色和阴影调整不得改变底栏高度、占位、边距、安全区、正文视口或滚动范围。具体控件或滚动末尾的必要避让只处理一次，键盘仍可缩小表单视口。
+维护库或开发业务页面前先读[使用规则与页面开发规范](./consumer-integration.md)，再核对组件 API。应用入口全局开启 edge-to-edge，独立入口共用透明系统栏配置；页面正文延伸到手势区，不用整页底部 SafeArea 或固定空白裁短正文。导航栏保留原有滚动渐变与渐显/渐隐，禁止添加实色底板或业务宿主裁切来遮住效果。TabBar 保持悬浮，正文滚入其后方；未经明确布局要求，配色和阴影调整不得改变底栏高度、占位、边距、安全区、正文视口或滚动范围。具体控件或滚动末尾的必要避让只处理一次，键盘仍可缩小表单视口。
 
 Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、HyperCollapse 和 HyperSlideMenu 的内容装饰共用内部 HyperGlass.card 入口。默认常规表面、无普通描边与 cardShadows 在此集中维护，不在调用组件重复指定；圆角、间距和选择状态仍由各组件保留。cardShadows 的环境阴影使用主题 shadow 的 75% alpha、模糊 18、扩散 -4、向下偏移 4；接触阴影使用 40% alpha、模糊 4、扩散 -1、向下偏移 1。选中态主题色边框与高对比模式的识别边界保留。页面使用 background，不将画布覆盖为卡片色：浅色默认画布 #F1F3F7、实色卡片 #FFFFFF，深色默认画布 #111318、实色卡片 #1B1F27；软材质和清透材质继续使用同档位的库内卡片表面。
 
@@ -287,7 +287,8 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 
 | 组件与文档 | 实现文件 | 当前样式与功能 |
 | --- | --- | --- |
-| [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart 及同名前缀 part 文件 | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
+| [HyperScrollGradient](../components/scroll-gradient.md) | hyper_scroll_gradient.dart、hyper_scroll_gradient_surface.dart、hyper_nav_bar_scroll_scope.dart、hyper_nav_bar_scroll_observer.dart | 与 Navbar 共用 160ms 主题渐变；读取已有主滚动来源，不采样正文，不增加栏高与安全区 |
+| [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart，材质与滚动状态复用 HyperScrollGradient | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
 | [HyperFilterBar](../components/filter-bar.md) | hyper_filter_bar.dart | 横向分类筛选；普通项浅底与 1dp 弱边线，选中 8% 主题色底、18% 主题色细线与主题色文字，无阴影，整栏周围透明；单项最小高 32、宽 48，内边距 12×6、间距 6；业务持有 selectedIndex，内部滚动保持选中项可见 |
 | [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | single / multiple，默认 multiple，高 56；floating 默认 true 保留悬浮，false 为全宽平直贴底、默认内容高 56 与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
 | [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认图标按钮，数字项保留专用选中态 |

@@ -1,16 +1,35 @@
 ---
 title: HyperNavBar
-description: 44px 顶部透明、滚动时渐显毛玻璃的导航栏
+description: 44px 顶部透明、滚动时渐显渐变的导航栏
 ---
 
 <ComponentDoc component-id="nav-bar" />
+
+滚动材质直接复用 [HyperScrollGradient](./scroll-gradient.md)，默认视觉与滚动来源保持一致。仅需要状态栏或自定义覆盖材质时直接组合该组件，不添加空操作行。
+
+## 导航形态
+
+- type = 'standard'：默认保留 44px 操作行、标题、返回与操作插槽，layout 选择具体内容布局。
+- type = 'simple'：只覆盖真实状态栏/挖孔高度；preferredSize 不包含操作行，不接受标题、操作回调或非默认 layout。height、padding 和 safeArea 只控制 standard，simple 始终读取真实顶部 Insets。
+
+```dart
+const HyperNavBar(type: HyperNavBarTypes.simple)
+const HyperNavBar(
+  type: HyperNavBarTypes.standard,
+  layout: HyperNavBarLayouts.backWithTitle,
+  title: Text('详情'),
+)
+```
+
+两种形态都只做随滚动渐显的主题渐变，不创建 BackdropFilter、不采样正文。放在全屏正文上方，首屏避让进入滚动内容，不能以 Column、固定 Spacer 或视口外 padding 挤占正文。
 
 ## 公开参数
 
 ```dart
 const HyperNavBar({
   Key? key,
-  String type = HyperNavBarTypes.custom,
+  String type = HyperNavBarTypes.standard,
+  String layout = HyperNavBarLayouts.custom,
   Widget? title,
   Widget? subtitle,
   Widget? leading,
@@ -32,7 +51,8 @@ const HyperNavBar({
 | --- | --- | --- | --- | --- |
 | title | Widget? | 否 | null | 主标题插槽。 |
 | subtitle | Widget? | 否 | null | 副标题插槽。 |
-| type | String | 否 | HyperNavBarTypes.custom | 固定布局类型：custom、backOnly、titleOnly、backWithTitle、more、edit。 |
+| type | String | 否 | HyperNavBarTypes.standard | standard 保留标准操作行；simple 只适配真实状态栏/挖孔，无标题、操作及额外工具栏高度。 |
+| layout | String | 否 | HyperNavBarLayouts.custom | 固定布局类型：custom、backOnly、titleOnly、backWithTitle、more、edit。 |
 | leading | Widget? | 否 | null | custom 类型的左侧导航内容。 |
 | trailing | Widget? | 否 | null | 右侧自定义内容，与 actions 二选一。 |
 | actions | List&lt;Widget&gt; | 否 | const [] | 右侧操作列表。 |
@@ -40,7 +60,7 @@ const HyperNavBar({
 | height | double | 否 | 44 | 导航栏内容高度，不含安全区。 |
 | padding | EdgeInsetsGeometry | 否 | EdgeInsets.symmetric(horizontal: 16) | 内容内边距。 |
 | safeArea | bool | 否 | true | 是否避让顶部安全区。 |
-| scrolledUnder | bool | 否 | false | true 强制显示毛玻璃；false 优先使用显式滚动作用域，否则自动读取最近 Scaffold 的观察者；均不存在时透明。 |
+| scrolledUnder | bool | 否 | false | true 强制显示渐变；false 优先使用显式滚动作用域，否则自动读取最近 Scaffold 的观察者；均不存在时透明。 |
 | onBackPressed | VoidCallback? | 否 | null | 默认返回按钮回调；未提供时调用 Navigator.maybePop。 |
 | onMorePressed | VoidCallback? | 否 | null | more 类型右侧更多操作回调。 |
 | onSavePressed | VoidCallback? | 否 | null | edit 类型右侧保存操作回调。 |
@@ -48,9 +68,9 @@ const HyperNavBar({
 
 ## 页面导航
 
-预览提供五种固定类型：`backOnly`、`titleOnly`、`backWithTitle`、`more` 和 `edit`；需要完整插槽时使用 `custom`。固定类型直接传 `type`，标题和动作回调由调用方注入。
+预览提供五种固定类型：`backOnly`、`titleOnly`、`backWithTitle`、`more` 和 `edit`；需要完整插槽时使用 `custom`。固定类型直接传 `layout`，标题和动作回调由调用方注入。
 
-导航在正文顶部时完全透明，不执行背景采样；滚入时显示向下渐隐的背景模糊与主题 background 画布色，160ms 完成过渡。导航不使用 card 内容卡片色，避免页面与顶部产生色块分割。背景覆盖顶部安全区，在导航底部以内淡出到完全透明；蒙版同时淡出 20px 模糊采样和底色，不绘制底部分隔线。延伸区域不占布局高度、不拦截触摸，标题和按钮在独立前景层保持清晰。高对比模式仅在导航区域使用实色，关闭动画时立即切换。
+导航在正文顶部时透明，离顶后以 160ms easeOutCubic 显示主题 background 向下渐隐的渐变，回到顶部恢复透明。standard 范围为状态栏顶部至操作行底部，simple 只有真实顶部系统区；不录制或采样正文，不创建 BackdropFilter，不做像素模糊。前景保持清晰，背景透传正文手势，关闭动画时即时切换。
 
 ## 普通 Scaffold 自动接入
 
@@ -59,7 +79,7 @@ HyperNavBar 自动订阅最近的 ScrollNotificationObserver；Flutter 的 Scaff
 ```dart
 Scaffold(
   appBar: const HyperNavBar(
-    type: HyperNavBarTypes.backWithTitle,
+    layout: HyperNavBarLayouts.backWithTitle,
     title: Text('设置'),
   ),
   body: ListView(children: settingsItems),
@@ -144,7 +164,7 @@ Widget build(BuildContext context) {
           ),
         ),
         HyperNavBar(
-          type: HyperNavBarTypes.backOnly,
+          layout: HyperNavBarLayouts.backOnly,
           height: navBarHeight,
           onBackPressed: () {},
         ),
@@ -159,26 +179,26 @@ Widget build(BuildContext context) {
 ```dart
 // 仅返回：不传 title。
 HyperNavBar(
-  type: HyperNavBarTypes.backOnly,
+  layout: HyperNavBarLayouts.backOnly,
   onBackPressed: () {},
 )
 
 // 仅标题：固定类型自动隐藏返回按钮。
 const HyperNavBar(
-  type: HyperNavBarTypes.titleOnly,
+  layout: HyperNavBarLayouts.titleOnly,
   title: Text('今日灵感'),
 )
 
 // 返回与标题：固定类型自动生成尖括号返回按钮。
 HyperNavBar(
-  type: HyperNavBarTypes.backWithTitle,
+  layout: HyperNavBarLayouts.backWithTitle,
   title: const Text('今日灵感'),
   onBackPressed: () {},
 )
 
-// 更多操作：右侧标准按钮由 type 生成。
+// 更多操作：右侧标准按钮由 layout 生成。
 HyperNavBar(
-  type: HyperNavBarTypes.more,
+  layout: HyperNavBarLayouts.more,
   title: const Text('消息'),
   onBackPressed: () {},
   onMorePressed: () {},
@@ -186,7 +206,7 @@ HyperNavBar(
 
 // 编辑页：右侧显示保存文字操作。
 HyperNavBar(
-  type: HyperNavBarTypes.edit,
+  layout: HyperNavBarLayouts.edit,
   title: const Text('编辑资料'),
   onBackPressed: () {},
   onSavePressed: () {},
@@ -194,7 +214,7 @@ HyperNavBar(
 
 // 自定义：固定类型之外的布局使用完整插槽。
 HyperNavBar(
-  type: HyperNavBarTypes.custom,
+  layout: HyperNavBarLayouts.custom,
   leading: HyperButton(
     type: 'icon',
     icon: HyperIcons.back,
@@ -211,7 +231,7 @@ HyperNavBar(
 ```dart
 HyperNavBar(
   height: 56,
-  type: HyperNavBarTypes.custom,
+  layout: HyperNavBarLayouts.custom,
   leading: const HyperAvatar(text: '林'),
   title: const Row(
     mainAxisSize: MainAxisSize.min,
