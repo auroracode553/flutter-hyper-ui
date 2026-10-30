@@ -734,7 +734,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-tabs', 'HyperTabs 分段切换', 'component_form_examples.dart', 500, '受控切换、非等宽布局、图标选项与禁用项。', 'TabsComponentExample'),
       }),
-      component('HyperFilterBar', 'hyper_filter_bar.dart', '最小高度 32dp 的横向分类筛选栏，标签按内容宽度排列。', {
+      component('HyperFilterBar', 'hyper_filter_bar.dart', '浅底细线的紧凑分类按钮，选中使用淡主题色，最小高度 32dp。', {
         propsDocs: [
           { name: 'items', description: '分类数据列表，不能为空' },
           { name: 'selectedIndex', description: '当前选中索引，从 0 开始' },
@@ -743,7 +743,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'enabled', description: '整栏是否可用，默认 true' },
           { name: 'itemEnabled', description: '单项可用性，默认全部可用' },
         ],
-        preview: demo('component-filter-bar', 'HyperFilterBar 分类筛选', 'component_navigation_examples.dart', 220, '横向滚动、整栏及单项禁用，外部索引切换时显示选中项。', 'FilterBarComponentExample'),
+        preview: demo('component-filter-bar', 'HyperFilterBar 分类筛选', 'component_navigation_examples.dart', 220, '浅底细线与淡主题色选中态、横向滚动、整栏及单项禁用。', 'FilterBarComponentExample'),
       }),
       component('HyperCarousel', 'hyper_carousel.dart', '支持滑动、可选自动播放和页码回调的紧凑轮播。', {
         propsDocs: [
@@ -782,9 +782,9 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-progress', 'HyperProgress 进度', 'component_navigation_examples.dart', 360, '线性粗细、环形和不定进度。', 'ProgressComponentExample'),
       }),
-      component('HyperListTile', 'hyper_list_tile.dart', '支持图标、头像、标签、元信息和自定义尾部；默认无水平留白。', {
+      component('HyperListTile', 'hyper_list_tile.dart', '支持图标、头像、标签、元信息和自定义尾部；独立行保留水平 14dp 内边距，复用父表面时共享留白。', {
         propsDocs: [
-          { name: 'type', description: '表面类型：auto / plain / glass，默认 auto' },
+          { name: 'type', description: '表面类型：auto / plain / glass，默认 auto；独立 plain 行保留水平内边距，组内 plain 行共享父表面留白' },
           { name: 'title', description: '标题' },
           { name: 'subtitle', description: '副标题' },
           { name: 'meta', description: '元信息文字' },

@@ -189,7 +189,7 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 
 本地脚本必须由使用者显式启动；watcher 启动后可以自动热重载，但所有脚本都不会部署。
 
-分段切换使用 [HyperTabs](vitepress/components/tabs.md)，横向分类筛选使用最小高度 32 的 [HyperFilterBar](vitepress/components/filter-bar.md)。每类组件只保留一套默认规格，不提供尺寸档位。
+分段切换使用 [HyperTabs](vitepress/components/tabs.md)，横向分类筛选使用最小高度 32 的 [HyperFilterBar](vitepress/components/filter-bar.md)。每类组件只保留一套默认规格，不提供尺寸档位。HyperFilterBar 普通项使用浅底细线，选中使用淡主题色底与主题色文字，不加阴影。
 
 ## 构建性能配置
 
@@ -202,4 +202,4 @@ HyperTabBar 各形态统一默认内容高度 56，悬浮多项默认顶部间�
 按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
 
 
-列表水平留白由调用方页面统一提供一次。plain 行默认水平留白为 0；HyperMenuGroup 和独立 glass 行保留水平 14dp 的卡片内边距；列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留垂直 4dp。
+页面水平外边距由调用方统一提供。独立 plain 行和独立 glass 行保留左右各 14dp 的行内留白；仅在 HyperMenuGroup 或已有表面作用域中复用父表面的 plain 行不叠加水平留白。列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留水平 14dp、垂直 4dp。

@@ -100,4 +100,4 @@
 ## 组件规格与分类筛选
 
 - 每类组件只提供一套默认规格，禁止新增或恢复 small/default/large 等尺寸档位及兼容参数。文字、图标继续继承宿主样式，必要的业务布局与字体缩放独立保留。
-- HyperTabs 用于固定分段切换，使用 tabs / selectedIndex / onChanged；可左右滑动的分类筛选使用紧凑 HyperFilterBar。禁止恢复整条 54dp 分类胶囊或旧分段组件名称，不保留废弃别名与兼容壳。
+- HyperTabs 用于固定分段切换，使用 tabs / selectedIndex / onChanged；可左右滑动的分类筛选使用紧凑 HyperFilterBar，分类项保持浅底细线、淡主题色选中态，不添加阴影和厚重描边。禁止恢复整条 54dp 分类胶囊或旧分段组件名称，不保留废弃别名与兼容壳。

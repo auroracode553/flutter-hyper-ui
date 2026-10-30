@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_glass_theme.dart';
-import '../theme/hyper_palette.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
@@ -117,8 +116,17 @@ class _HyperFilterBarState<T> extends State<HyperFilterBar<T>> {
                 final enabled =
                     widget.enabled && (widget.itemEnabled?.call(item) ?? true);
                 final foreground = selected
-                    ? tokens.foreground
+                    ? tokens.primary
                     : tokens.mutedForeground;
+                final background = selected
+                    ? Color.alphaBlend(
+                        tokens.primary.withValues(alpha: .08),
+                        glass.surfaceSubtle,
+                      )
+                    : glass.surfaceSubtle;
+                final outline = selected
+                    ? tokens.primary.withValues(alpha: .18)
+                    : tokens.border.withValues(alpha: tokens.border.a * .55);
                 return Opacity(
                   opacity: enabled ? 1 : .4,
                   child: HyperPressable(
@@ -144,9 +152,12 @@ class _HyperFilterBarState<T> extends State<HyperFilterBar<T>> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: selected
-                            ? glass.selection
-                            : HyperPalette.transparent,
+                        color: background,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      // 前景绘制细线，不让装饰边框增加布局内边距或改变选项尺寸。
+                      foregroundDecoration: BoxDecoration(
+                        border: Border.all(color: outline, width: 1),
                         borderRadius: BorderRadius.circular(100),
                       ),
                       child: Align(

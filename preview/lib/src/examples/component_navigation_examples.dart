@@ -145,7 +145,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
 
 // doc-region ListTileComponentExample
 class ListTileComponentExample extends StatelessWidget {
-  // 预览宿主提供页面留白，组件不再重复缩进。
+  // 同时展示独立卡片与平铺行，核对选中背景内的默认留白。
   const ListTileComponentExample({super.key});
 
   Widget _label(String text) => Padding(
@@ -170,6 +170,7 @@ class ListTileComponentExample extends StatelessWidget {
 
         _label('选中与禁用状态'),
         const HyperListTile(
+          type: 'plain',
           title: '已选择的项目',
           subtitle: '展示选中状态',
           selected: true,
@@ -298,6 +299,11 @@ class _FilterBarComponentExampleState extends State<FilterBarComponentExample> {
       ),
       const SizedBox(height: 12),
       HyperText('当前选中：${_categories[_selected]}'),
+      const SizedBox(height: 12),
+      HyperText(
+        '点击分类切换，左右滑动查看更多',
+        color: HyperUiThemeTokens.of(context).mutedForeground,
+      ),
     ],
   );
 }

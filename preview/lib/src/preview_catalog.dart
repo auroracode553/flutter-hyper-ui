@@ -596,7 +596,7 @@ class PreviewCatalog {
     _componentPreview(
       'component-filter-bar',
       'HyperFilterBar',
-      '紧凑横向分类筛选。',
+      '浅底细线的紧凑分类按钮，淡主题色选中态。',
       () => example_component_navigation_examples.loadLibrary(),
       (_) => example_component_navigation_examples.FilterBarComponentExample(),
     ),

@@ -288,7 +288,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | 组件与文档 | 实现文件 | 当前样式与功能 |
 | --- | --- | --- |
 | [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart 及同名前缀 part 文件 | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
-| [HyperFilterBar](../components/filter-bar.md) | hyper_filter_bar.dart | 横向分类筛选；独立选中胶囊，周围透明；单项最小高 32、宽 48，内边距 12×6、间距 6；业务持有 selectedIndex，内部滚动保持选中项可见 |
+| [HyperFilterBar](../components/filter-bar.md) | hyper_filter_bar.dart | 横向分类筛选；普通项浅底与 1dp 弱边线，选中 8% 主题色底、18% 主题色细线与主题色文字，无阴影，整栏周围透明；单项最小高 32、宽 48，内边距 12×6、间距 6；业务持有 selectedIndex，内部滚动保持选中项可见 |
 | [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | single / multiple，默认 multiple，高 56；floating 默认 true 保留悬浮，false 为全宽平直贴底、默认内容高 56 与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
 | [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认图标按钮，数字项保留专用选中态 |
 | [HyperSlideMenu](../components/slide-menu.md) | hyper_slide_menu.dart | 逻辑 start / end 操作区，默认每项宽 64、圆角 18；保留跟手、越界阻尼、速度投影与弹簧；展开时屏蔽正文操作，点击操作先收起再通知调用方 |
@@ -387,4 +387,4 @@ HyperTabBar 各形态统一默认内容高度 56，悬浮多项默认顶部间�
 按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
 
 
-列表水平留白由调用方页面统一提供一次。plain 行默认水平留白为 0；HyperMenuGroup 和独立 glass 行保留水平 14dp 的卡片内边距；列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留垂直 4dp。
+页面水平外边距由调用方统一提供。独立 plain 行和独立 glass 行保留左右各 14dp 的行内留白；仅在 HyperMenuGroup 或已有表面作用域中复用父表面的 plain 行不叠加水平留白。列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留水平 14dp、垂直 4dp。

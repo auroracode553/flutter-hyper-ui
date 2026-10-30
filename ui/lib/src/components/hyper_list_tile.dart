@@ -55,11 +55,9 @@ class HyperListTile extends StatelessWidget {
     if (type != 'auto' && type != 'plain' && type != 'glass') {
       throw ArgumentError.value(type, 'type', 'Invalid list tile type');
     }
-    final plain =
-        type == 'plain' ||
-        (type == 'auto' &&
-            (HyperMenuGroup.contains(context) ||
-                HyperSurfaceScope.contains(context)));
+    final hasParentSurface =
+        HyperMenuGroup.contains(context) || HyperSurfaceScope.contains(context);
+    final plain = type == 'plain' || (type == 'auto' && hasParentSurface);
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final radius = BorderRadius.circular(plain ? 12 : 15);
@@ -67,8 +65,11 @@ class HyperListTile extends StatelessWidget {
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
       constraints: const BoxConstraints(minHeight: 46),
-      // plain 共享父级留白，独立卡片仍保护内部内容。
-      padding: EdgeInsets.symmetric(horizontal: plain ? 0 : 14, vertical: 8),
+      // 仅复用父表面时共享其留白，独立平铺行仍保护选中背景内的内容。
+      padding: EdgeInsets.symmetric(
+        horizontal: plain && hasParentSurface ? 0 : 14,
+        vertical: 8,
+      ),
       decoration: BoxDecoration(
         color: selected ? glass.selection : HyperPalette.transparent,
         borderRadius: radius,
