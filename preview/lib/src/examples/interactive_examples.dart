@@ -16,7 +16,7 @@ class _OverlayExampleState extends State<OverlayExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('恰到好处的回应', size: 'large'),
+      const HyperText('恰到好处的回应'),
       HyperCard(
         title: '轻提示',
         child: Wrap(
@@ -84,7 +84,7 @@ class _OverlayExampleState extends State<OverlayExample> {
                   mainAxisSize: MainAxisSize.min,
                   spacing: 12,
                   children: [
-                    HyperText('把复杂留给系统。', size: 'large'),
+                    HyperText('把复杂留给系统。'),
                     HyperText('让界面回归轻盈与自然。'),
                     HyperSkeleton(rows: 2),
                   ],
@@ -168,7 +168,7 @@ class _BusinessExampleState extends State<BusinessExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('日常，由细节组成', size: 'large'),
+      const HyperText('日常，由细节组成'),
       HyperTextField(
         type: 'search',
         prefix: const Icon(LucideIcons.search),

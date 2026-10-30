@@ -26,8 +26,8 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: 18,
       children: <Widget>[
-        const HyperText('Hyper UI 组件库', size: 'large'),
-        const HyperText('统一材质、状态与动效，不绑定任何业务。', size: 'small'),
+        const HyperText('Hyper UI 组件库'),
+        const HyperText('统一材质、状态与动效，不绑定任何业务。'),
         HyperNavBar(
           title: const Text('Navbar'),
           subtitle: const Text('44px 透明导航栏'),
@@ -133,7 +133,7 @@ class _ComponentLibraryExampleState extends State<ComponentLibraryExample> {
           spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const HyperText('Selection controls', size: 'small'),
+            const HyperText('Selection controls'),
             HyperCheckbox(
               value: _checked,
               label: 'Checkbox',

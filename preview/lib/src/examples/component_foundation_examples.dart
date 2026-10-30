@@ -8,7 +8,7 @@ class TextComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -17,16 +17,12 @@ class TextComponentExample extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('文字尺寸'),
+        _label('统一文字规格'),
         const Column(
           mainAxisSize: MainAxisSize.min,
           spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            HyperText('Large 大号文字', size: 'large'),
-            HyperText('Default 默认文字'),
-            HyperText('Small 辅助文字', size: 'small'),
-          ],
+          children: [HyperText('默认文字 · 继承宿主排版')],
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
@@ -49,7 +45,7 @@ class IconComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -73,24 +69,15 @@ class IconComponentExample extends StatelessWidget {
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
-        _label('尺寸与颜色'),
+        _label('统一规格与颜色'),
         const Wrap(
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyperIcon(HyperIcons.image, size: 'small'),
-            HyperIcon(HyperIcons.image, size: 'default'),
-            HyperIcon(HyperIcons.image, size: 'large'),
-            HyperIcon(
-              HyperIcons.warning,
-              size: 'large',
-              color: HyperUiColors.warning,
-            ),
-            HyperIcon(
-              HyperIcons.success,
-              size: 'large',
-              color: HyperUiColors.success,
-            ),
+            HyperIcon(HyperIcons.image),
+            HyperIcon(HyperIcons.image),
+            HyperIcon(HyperIcons.warning, color: HyperUiColors.warning),
+            HyperIcon(HyperIcons.success, color: HyperUiColors.success),
           ],
         ),
       ],
@@ -105,7 +92,7 @@ class ImageComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -151,7 +138,7 @@ class ImageComponentExample extends StatelessWidget {
                   children: [
                     Icon(LucideIcons.imageOff),
                     SizedBox(height: 4),
-                    HyperText('加载失败', size: 'small'),
+                    HyperText('加载失败'),
                   ],
                 ),
               ),
@@ -170,7 +157,7 @@ class AvatarComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -179,14 +166,14 @@ class AvatarComponentExample extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('文字头像与尺寸'),
+        _label('文字头像'),
         const Wrap(
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyperAvatar(text: '林', size: 'default'),
-            HyperAvatar(text: 'UI', size: 'large'),
-            HyperAvatar(size: 'large'),
+            HyperAvatar(text: '林'),
+            HyperAvatar(text: 'UI'),
+            HyperAvatar(),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.lg),
@@ -196,18 +183,10 @@ class AvatarComponentExample extends StatelessWidget {
           spacing: 18,
           runSpacing: 18,
           children: [
-            HyperAvatar(text: '设计', size: 'large', radius: 20),
-            HyperAvatar(text: '品', size: 'large', radius: 16),
-            HyperAvatar(
-              text: 'A',
-              size: 'large',
-              backgroundColor: HyperUiColors.primary,
-            ),
-            HyperAvatar(
-              text: 'B',
-              size: 'large',
-              backgroundColor: HyperUiColors.success,
-            ),
+            HyperAvatar(text: '设计', radius: 20),
+            HyperAvatar(text: '品', radius: 16),
+            HyperAvatar(text: 'A', backgroundColor: HyperUiColors.primary),
+            HyperAvatar(text: 'B', backgroundColor: HyperUiColors.success),
           ],
         ),
       ],
@@ -239,7 +218,7 @@ class _CountBadgeExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -262,14 +241,14 @@ class _CountBadgeExample extends StatelessWidget {
             HyperBadge(
               type: 'count',
               count: 128,
-              child: HyperIcon(LucideIcons.mail, size: 'large'),
+              child: HyperIcon(LucideIcons.mail),
             ),
             // showZero: 数字为 0 也显示。
             HyperBadge(
               type: 'count',
               count: 0,
               showZero: true,
-              child: HyperIcon(LucideIcons.inbox, size: 'large'),
+              child: HyperIcon(LucideIcons.inbox),
             ),
           ],
         ),
@@ -283,7 +262,7 @@ class _CountBadgeExample extends StatelessWidget {
             HyperBadge(
               type: 'count',
               dot: true,
-              child: HyperIcon(LucideIcons.bell, size: 'large'),
+              child: HyperIcon(LucideIcons.bell),
             ),
           ],
         ),
@@ -297,7 +276,7 @@ class _StatusBadgeExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -356,7 +335,7 @@ class _TagBadgeExampleState extends State<_TagBadgeExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -436,7 +415,7 @@ class ToneComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -455,7 +434,7 @@ class ToneComponentExample extends StatelessWidget {
           ],
         ),
         const SizedBox(height: HyperUiSpacing.sm),
-        const HyperText('HyperUiTone 跨组件复用：徽标、提示、通知等共用同一套语义色。', size: 'small'),
+        const HyperText('HyperUiTone 跨组件复用：徽标、提示、通知等共用同一套语义色。'),
       ],
     );
   }

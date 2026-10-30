@@ -106,10 +106,9 @@ export const componentGroups: ComponentGroup[] = [
       demo('data', '徽标、列表与进度', 'data_example.dart', 460, '用于检查数据展示组件的常用组合。'),
     ],
     components: [
-      component('HyperText', 'hyper_typography.dart', '统一 small、default、large 三档文字尺寸。', {
+      component('HyperText', 'hyper_typography.dart', '统一文字规格，继承宿主字号和颜色。', {
         propsDocs: [
           { name: 'text', description: '显示的文本内容' },
-          { name: 'size', description: 'small / default / large；默认 default，在插槽中继承宿主字号、行高与字重，独立使用基准为 14' },
           { name: 'color', description: '文字颜色；default 未指定时继承宿主颜色' },
           { name: 'fontWeight', description: '字重；未指定时使用当前档位或宿主默认值' },
           { name: 'maxLines', description: '最大行数' },
@@ -120,7 +119,6 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperIcon / HyperIcons', 'hyper_typography.dart', '统一的图标组件与常用业务图标集合。', {
         propsDocs: [
           { name: 'icon', description: '图标数据，IconData 类型' },
-          { name: 'size', description: 'small / default / large；默认 default 继承插槽尺寸，独立使用基准为 24' },
           { name: 'color', description: '图标颜色；未指定时继承宿主图标颜色' },
         ],
         preview: demo('component-icon', 'HyperIcon 图标', 'component_foundation_examples.dart', 340, '常用语义图标、尺寸与颜色。', 'IconComponentExample'),
@@ -144,7 +142,6 @@ export const componentGroups: ComponentGroup[] = [
         propsDocs: [
           { name: 'image', description: '头像图片数据源，ImageProvider 类型' },
           { name: 'text', description: '文字头像内容' },
-          { name: 'size', description: '头像尺寸，默认 40' },
           { name: 'radius', description: '圆角大小，为空时为圆形' },
           { name: 'color', description: '文字或默认图标颜色' },
           { name: 'backgroundColor', description: '背景颜色' },
@@ -193,7 +190,6 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'onPressed', description: '点击回调；为 null 时按钮进入禁用态' },
           { name: 'type', description: '显示类型，默认 null（白色描边）；filled / icon，与配色独立' },
           { name: 'colorStyle', description: '预设配色 primary / success / info / warning / danger；默认 null 为白色中性样式，color 优先' },
-          { name: 'size', description: '尺寸：small / default / large，默认 default' },
           { name: 'icon', description: '前置图标；label 省略时切换为图标按钮' },
           { name: 'trailingIcon', description: '后置图标' },
           { name: 'enabled', description: '是否允许点击，默认 true；false 或 onPressed 为 null 时显示禁用态' },
@@ -304,7 +300,6 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'enabled', description: '是否启用，默认 true' },
           { name: 'readOnly', description: '是否只读，默认 false' },
           { name: 'type', description: '输入类型：text / search / password / textarea，默认 text' },
-          { name: 'size', description: '尺寸：small / default / large，默认 default' },
           { name: 'color', description: '输入文字颜色' },
           { name: 'showPasswordToggle', description: '是否显示密码显隐按钮，默认 false' },
           { name: 'clearable', description: '是否显示清空按钮，默认 false' },
@@ -331,16 +326,6 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'trailing', description: '标题右侧附加组件' },
         ],
         preview: demo('component-form-field', 'HyperFormField 字段容器', 'component_form_field_example.dart', 360, '文本输入与数值控件共享标题、说明和错误层级。', 'FormFieldComponentExample'),
-      }),
-      component('HyperSegmentedControl / HyperSegmentOption', 'hyper_segmented_control.dart', '受控分段选择，等宽选中底板平滑移动，非等宽选项使用背景色过渡。', {
-        propsDocs: [
-          { name: 'enabled', description: '是否允许操作，默认 true' },
-          { name: 'options', description: '选项列表' },
-          { name: 'selectedValue', description: '当前选中值' },
-          { name: 'onChanged', description: '选中变化回调' },
-          { name: 'equalWidth', description: '是否等宽，默认 true' },
-        ],
-        preview: demo('component-segmented-control', 'HyperSegmentedControl 分段选择', 'component_form_examples.dart', 500, '受控切换、非等宽布局、图标选项与禁用项。', 'SegmentedControlComponentExample'),
       }),
       component('HyperSelect / HyperOption', 'hyper_select.dart', '底部弹层单选或多选，支持禁用项。', {
         propsDocs: [
@@ -437,7 +422,6 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'adjacent', description: '跨月弱化显示，默认 false' },
           { name: 'emphasized', description: '主题色数字，默认 false' },
           { name: 'inRange', description: '区间中间背景，默认 false' },
-          { name: 'size', description: 'small/default/large，默认 default' },
           { name: 'expanded', description: '占满宿主提供的有限高度，默认 false' },
           { name: 'subtitle', description: '日期辅助文字，默认 null' },
           { name: 'subtitleColor', description: '辅助文字颜色，默认跟随主题次要文字色' },
@@ -461,7 +445,6 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'firstDate', description: '最早可选日期，默认不限制' },
           { name: 'lastDate', description: '最晚可选日期，默认不限制' },
           { name: 'weekStart', description: '星期一为 1、星期日为 7，默认 1' },
-          { name: 'size', description: 'small/default/large，默认 default' },
           { name: 'showWeekdays', description: '是否展示星期表头，默认 true' },
           { name: 'readOnly', description: '只读合并绘制，不响应日期点击，默认 false' },
           { name: 'emphasizedDays', description: '当前月份使用主题色的日期数字集合，默认空集合；只读与交互模式一致' },
@@ -595,7 +578,6 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperLoading', 'hyper_feedback.dart', '局部加载状态与自动清理的全局任务遮罩。', {
         propsDocs: [
           { name: 'label', description: '加载提示文字' },
-          { name: 'size', description: '加载图标大小，默认 24' },
         ],
         preview: demo('component-loading', 'HyperLoading 加载', 'component_feedback_examples.dart', 420, '局部加载（尺寸与文案）与全局任务遮罩。', 'LoadingComponentExample'),
       }),
@@ -722,17 +704,26 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '体验多项导航、独立圆形入口和左侧通知入口组合示例。', 'TabBarComponentExample'),
       }),
-      component('HyperTabs', 'hyper_navigation.dart', '与 HyperTabView 共享控制器的玻璃标签栏。', {
+      component('HyperTabs / HyperTabsItem', 'hyper_tabs.dart', '受控分段选择，等宽选中底板平滑移动，非等宽选项使用背景色过渡。', {
         propsDocs: [
-          { name: 'tabs', description: '标签组件列表' },
-          { name: 'pages', description: '可选页面组件列表；提供后自动管理页面切换' },
-          { name: 'pageHeight', description: '页面区域高度，默认 180' },
-          { name: 'initialIndex', description: '初始标签索引，默认 0' },
-          { name: 'selectedIndex', description: '受控标签索引' },
-          { name: 'scrollable', description: '标签是否可滚动，默认 false' },
-          { name: 'onChanged', description: '标签变化回调' },
+          { name: 'enabled', description: '是否允许操作，默认 true' },
+          { name: 'tabs', description: '选项列表' },
+          { name: 'selectedIndex', description: '当前选中索引，从 0 开始' },
+          { name: 'onChanged', description: '选中变化回调' },
+          { name: 'equalWidth', description: '是否等宽，默认 true' },
         ],
-        preview: demo('component-tabs', 'HyperTabs 标签页', 'component_navigation_examples.dart', 350, '点击标签或横向滑动页面。', 'TabsComponentExample'),
+        preview: demo('component-tabs', 'HyperTabs 分段切换', 'component_form_examples.dart', 500, '受控切换、非等宽布局、图标选项与禁用项。', 'TabsComponentExample'),
+      }),
+      component('HyperFilterBar', 'hyper_filter_bar.dart', '最小高度 32dp 的横向分类筛选栏，标签按内容宽度排列。', {
+        propsDocs: [
+          { name: 'items', description: '分类数据列表，不能为空' },
+          { name: 'selectedIndex', description: '当前选中索引，从 0 开始' },
+          { name: 'onChanged', description: '选择其他可用项时通知业务' },
+          { name: 'itemBuilder', description: '构建分类内容，接收数据、选中态和可用态' },
+          { name: 'enabled', description: '整栏是否可用，默认 true' },
+          { name: 'itemEnabled', description: '单项可用性，默认全部可用' },
+        ],
+        preview: demo('component-filter-bar', 'HyperFilterBar 分类筛选', 'component_navigation_examples.dart', 220, '横向滚动、整栏及单项禁用，外部索引切换时显示选中项。', 'FilterBarComponentExample'),
       }),
       component('HyperCarousel', 'hyper_carousel.dart', '支持滑动、可选自动播放和页码回调的紧凑轮播。', {
         propsDocs: [
@@ -765,7 +756,6 @@ export const componentGroups: ComponentGroup[] = [
         propsDocs: [
           { name: 'value', description: '进度值 0–1；有限越界值收敛，null 或非有限值显示不定进度。线性进度平滑过渡，支持 RTL 和减少动画' },
           { name: 'type', description: '进度形态：linear / circular，默认 linear' },
-          { name: 'size', description: '尺寸：small / default / large，默认 default' },
           { name: 'showLabel', description: '是否显示百分比文字，默认 true；向下取整，避免四舍五入导致提前显示 100%' },
           { name: 'color', description: '进度颜色' },
           { name: 'backgroundColor', description: '轨道颜色' },

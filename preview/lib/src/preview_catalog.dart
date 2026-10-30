@@ -261,12 +261,11 @@ class PreviewCatalog {
           example_component_form_examples.TextFieldComponentExample(),
     ),
     PreviewItem(
-      id: 'component-segmented-control',
-      title: 'HyperSegmentedControl',
+      id: 'component-tabs',
+      title: 'HyperTabs',
       description: '受控分段选择。',
       loadLibrary: () => example_component_form_examples.loadLibrary(),
-      builder: (_) =>
-          example_component_form_examples.SegmentedControlComponentExample(),
+      builder: (_) => example_component_form_examples.TabsComponentExample(),
     ),
     PreviewItem(
       id: 'component-dropdown',
@@ -570,11 +569,11 @@ class PreviewCatalog {
       (_) => example_component_feedback_examples.NoticeBarComponentExample(),
     ),
     _componentPreview(
-      'component-tabs',
-      'HyperTabs',
-      '标签与页面联动。',
+      'component-filter-bar',
+      'HyperFilterBar',
+      '紧凑横向分类筛选。',
       () => example_component_navigation_examples.loadLibrary(),
-      (_) => example_component_navigation_examples.TabsComponentExample(),
+      (_) => example_component_navigation_examples.FilterBarComponentExample(),
     ),
     _componentPreview(
       'component-carousel',

@@ -63,7 +63,6 @@ class _PickerContentState<T> extends State<_PickerContent<T>> {
       const SizedBox(height: HyperUiSpacing.sm),
       HyperButton(
         label: '确定',
-        size: 'large',
         expanded: true,
         onPressed: () => Navigator.pop(context, widget.options[_index].value),
         colorStyle: 'primary',

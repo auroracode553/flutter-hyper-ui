@@ -9,13 +9,13 @@ import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_pressable.dart';
 
-class HyperSegmentOption<T> {
+class HyperTabsItem<T> {
   final T value;
   final String label;
   final IconData? icon;
   final bool enabled;
 
-  const HyperSegmentOption({
+  const HyperTabsItem({
     required this.value,
     required this.label,
     this.icon,
@@ -23,29 +23,35 @@ class HyperSegmentOption<T> {
   });
 }
 
-class HyperSegmentedControl<T> extends StatelessWidget {
-  final List<HyperSegmentOption<T>> options;
-  final T selectedValue;
-  final ValueChanged<T> onChanged;
+class HyperTabs<T> extends StatelessWidget {
+  final List<HyperTabsItem<T>> tabs;
+  final int selectedIndex;
+  final ValueChanged<int> onChanged;
   final bool equalWidth;
   final bool enabled;
 
-  const HyperSegmentedControl({
+  const HyperTabs({
     super.key,
-    required this.options,
-    required this.selectedValue,
+    required this.tabs,
+    required this.selectedIndex,
     required this.onChanged,
     this.equalWidth = true,
     this.enabled = true,
-  });
+  }) : assert(selectedIndex >= 0 && selectedIndex < tabs.length);
 
   @override
   Widget build(BuildContext context) {
-    final children = options.map((option) {
-      final item = _HyperSegmentItem<T>(
+    final children = tabs.asMap().entries.map((entry) {
+      final index = entry.key;
+      final option = entry.value;
+      final item = _HyperTabsItem<T>(
         option: option,
-        selected: option.value == selectedValue,
-        onSelected: enabled ? onChanged : null,
+        selected: index == selectedIndex,
+        onSelected: enabled
+            ? (_) {
+                if (index != selectedIndex) onChanged(index);
+              }
+            : null,
         constrainLabel: equalWidth,
         paintSelection: !equalWidth,
       );
@@ -56,7 +62,7 @@ class HyperSegmentedControl<T> extends StatelessWidget {
       radius: 18,
       type: 'subtle',
       padding: const EdgeInsets.all(4),
-      child: equalWidth && options.isNotEmpty
+      child: equalWidth && tabs.isNotEmpty
           ? _buildEqualWidth(context, children)
           : Row(
               mainAxisSize: equalWidth ? MainAxisSize.max : MainAxisSize.min,
@@ -68,12 +74,10 @@ class HyperSegmentedControl<T> extends StatelessWidget {
   Widget _buildEqualWidth(BuildContext context, List<Widget> children) =>
       LayoutBuilder(
         builder: (context, constraints) {
-          final selected = options.indexWhere(
-            (option) => option.value == selectedValue,
-          );
+          final selected = selectedIndex;
           final rtl = Directionality.of(context) == TextDirection.rtl;
-          final visualIndex = rtl ? options.length - selected - 1 : selected;
-          final cellWidth = constraints.maxWidth / options.length;
+          final visualIndex = rtl ? tabs.length - selected - 1 : selected;
+          final cellWidth = constraints.maxWidth / tabs.length;
           return Stack(
             children: [
               if (selected >= 0)
@@ -114,14 +118,14 @@ class HyperSegmentedControl<T> extends StatelessWidget {
       );
 }
 
-class _HyperSegmentItem<T> extends StatelessWidget {
-  final HyperSegmentOption<T> option;
+class _HyperTabsItem<T> extends StatelessWidget {
+  final HyperTabsItem<T> option;
   final bool selected;
   final ValueChanged<T>? onSelected;
   final bool constrainLabel;
   final bool paintSelection;
 
-  const _HyperSegmentItem({
+  const _HyperTabsItem({
     required this.option,
     required this.selected,
     required this.onSelected,

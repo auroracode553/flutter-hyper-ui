@@ -116,7 +116,7 @@ class ListTileComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -149,7 +149,7 @@ class ListTileComponentExample extends StatelessWidget {
         const HyperListTile(
           title: '项目成员',
           subtitle: '头部与尾部都是任意 Widget',
-          leading: HyperAvatar(size: 'small'),
+          leading: HyperAvatar(),
           trailing: HyperBadge(type: 'tag', label: '管理员'),
           showChevron: false,
         ),
@@ -223,31 +223,50 @@ class SlideMenuComponentExample extends StatelessWidget {
 }
 // end-doc-region SlideMenuComponentExample
 
-// doc-region TabsComponentExample
-class TabsComponentExample extends StatelessWidget {
-  const TabsComponentExample({super.key});
-
+// doc-region FilterBarComponentExample
+class FilterBarComponentExample extends StatefulWidget {
+  const FilterBarComponentExample({super.key});
   @override
-  Widget build(BuildContext context) => HyperTabs(
-    tabs: const [Text('概览'), Text('动态'), Text('成员')],
-    pages: [
-      Center(
-        child: Text(
-          '项目概览',
-          style: TextStyle(
-            color: HyperUiThemeTokens.of(context).foreground,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+  State<FilterBarComponentExample> createState() =>
+      _FilterBarComponentExampleState();
+}
+
+class _FilterBarComponentExampleState extends State<FilterBarComponentExample> {
+  int _selected = 0;
+  bool _enabled = true;
+  static const _categories = [
+    '全部',
+    'PDF',
+    'Word',
+    '文本',
+    'Markdown',
+    '表格',
+    '演示文稿',
+  ];
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      HyperSwitch(
+        value: _enabled,
+        onChanged: (value) => setState(() => _enabled = value),
+        label: '允许筛选',
       ),
-      const Center(child: Text('最近没有新动态')),
-      const Center(child: Text('共有 8 位成员')),
+      const SizedBox(height: 12),
+      HyperFilterBar<String>(
+        items: _categories,
+        selectedIndex: _selected,
+        onChanged: (value) => setState(() => _selected = value),
+        enabled: _enabled,
+        itemEnabled: (item) => item != '演示文稿',
+        itemBuilder: (item, selected, enabled) => HyperText(item, maxLines: 1),
+      ),
+      const SizedBox(height: 12),
+      HyperText('当前选中：${_categories[_selected]}'),
     ],
-    pageHeight: 150,
   );
 }
-// end-doc-region TabsComponentExample
+// end-doc-region FilterBarComponentExample
 
 // doc-region StepsComponentExample
 class StepsComponentExample extends StatefulWidget {
@@ -262,7 +281,7 @@ class _StepsComponentExampleState extends State<StepsComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -306,12 +325,12 @@ class ProgressComponentExample extends StatelessWidget {
     spacing: 12,
     children: [
       HyperProgress(value: .68),
-      HyperProgress(value: .72, size: 'small', showLabel: false),
-      HyperProgress(value: .45, size: 'large', showLabel: false),
+      HyperProgress(value: .72, showLabel: false),
+      HyperProgress(value: .45, showLabel: false),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          HyperProgress(type: 'circular', value: .42, size: 'small'),
+          HyperProgress(type: 'circular', value: .42),
           HyperProgress(type: 'circular', showLabel: false),
         ],
       ),

@@ -199,7 +199,6 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             HyperNavBarTypes.edit => HyperButton(
               label: '保存',
-              size: 'small',
               onPressed: onSavePressed ?? () {},
             ),
             _ => null,

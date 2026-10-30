@@ -6,7 +6,7 @@ import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_action_sheet.dart';
 import 'hyper_button.dart';
 import 'hyper_calendar_month.dart';
-import 'hyper_segmented_control.dart';
+import 'hyper_tabs.dart';
 import 'hyper_wheel_picker.dart';
 
 @immutable
@@ -135,7 +135,6 @@ class _DatePanelState extends State<_DatePanel> {
       const SizedBox(height: HyperUiSpacing.sm),
       HyperButton(
         label: '确定',
-        size: 'large',
         expanded: true,
         onPressed: () => Navigator.pop(context, _selected),
         colorStyle: 'primary',
@@ -204,7 +203,6 @@ class _TimePanelState extends State<_TimePanel> {
       const SizedBox(height: HyperUiSpacing.sm),
       HyperButton(
         label: '确定',
-        size: 'large',
         expanded: true,
         onPressed: () => Navigator.pop(
           context,
@@ -243,13 +241,13 @@ class _DateRangePanelState extends State<_DateRangePanel> {
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      HyperSegmentedControl<bool>(
-        options: const [
-          HyperSegmentOption(value: true, label: '开始日期'),
-          HyperSegmentOption(value: false, label: '结束日期'),
+      HyperTabs<bool>(
+        tabs: const [
+          HyperTabsItem(value: true, label: '开始日期'),
+          HyperTabsItem(value: false, label: '结束日期'),
         ],
-        selectedValue: _editingStart,
-        onChanged: (value) => setState(() => _editingStart = value),
+        selectedIndex: _editingStart ? 0 : 1,
+        onChanged: (value) => setState(() => _editingStart = value == 0),
       ),
       const SizedBox(height: HyperUiSpacing.xs),
       Text(
@@ -284,7 +282,6 @@ class _DateRangePanelState extends State<_DateRangePanel> {
       const SizedBox(height: HyperUiSpacing.sm),
       HyperButton(
         label: '确定',
-        size: 'large',
         expanded: true,
         onPressed: () =>
             Navigator.pop(context, HyperDateRange(start: _start, end: _end)),
@@ -361,7 +358,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               type: 'icon',
               icon: LucideIcons.chevronLeft,
               tooltip: '上个月',
-              size: 'small',
               onPressed:
                   _monthAvailable(
                     DateTime(_visibleMonth.year, _visibleMonth.month - 1),
@@ -382,7 +378,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               type: 'icon',
               icon: LucideIcons.chevronRight,
               tooltip: '下个月',
-              size: 'small',
               onPressed:
                   _monthAvailable(
                     DateTime(_visibleMonth.year, _visibleMonth.month + 1),
@@ -407,7 +402,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
           children: [
             HyperButton(
               label: '−10 年',
-              size: 'small',
               onPressed: year - 10 >= widget.first.year
                   ? () => _changeYear(-10)
                   : null,
@@ -416,7 +410,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               type: 'icon',
               icon: LucideIcons.chevronLeft,
               tooltip: '上一年',
-              size: 'small',
               onPressed: year > widget.first.year
                   ? () => _changeYear(-1)
                   : null,
@@ -432,12 +425,10 @@ class _CalendarMonthState extends State<_CalendarMonth> {
               type: 'icon',
               icon: LucideIcons.chevronRight,
               tooltip: '下一年',
-              size: 'small',
               onPressed: year < widget.last.year ? () => _changeYear(1) : null,
             ),
             HyperButton(
               label: '+10 年',
-              size: 'small',
               onPressed: year + 10 <= widget.last.year
                   ? () => _changeYear(10)
                   : null,
@@ -465,7 +456,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                       return month == _visibleMonth.month
                           ? HyperButton(
                               label: '$month 月',
-                              size: 'large',
                               expanded: true,
                               onPressed: onPressed,
                               colorStyle: 'primary',
@@ -473,7 +463,6 @@ class _CalendarMonthState extends State<_CalendarMonth> {
                             )
                           : HyperButton(
                               label: '$month 月',
-                              size: 'large',
                               expanded: true,
                               onPressed: onPressed,
                             );

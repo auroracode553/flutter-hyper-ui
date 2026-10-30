@@ -26,8 +26,8 @@ class _HomeHeroExampleState extends State<HomeHeroExample> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // 品牌与定位
-          const HyperText('HYPER UI · FLUTTER', size: 'small'),
-          const HyperText('Hyper UI 组件库', size: 'large'),
+          const HyperText('HYPER UI · FLUTTER'),
+          const HyperText('Hyper UI 组件库'),
           const SizedBox(height: 2),
 
           // 库数据
@@ -112,8 +112,8 @@ class _HeroStat extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        HyperText(value, size: 'default'),
-        HyperText(label, size: 'small'),
+        HyperText(value),
+        HyperText(label),
       ],
     );
   }

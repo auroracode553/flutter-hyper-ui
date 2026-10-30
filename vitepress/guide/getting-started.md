@@ -84,12 +84,13 @@ Future<void> main() async {
 | 进度与步骤 | `HyperProgress(type: 'circular')`、`HyperSteps(type: 'vertical', steps: steps, current: 1)` |
 | 分隔与骨架 | `HyperDivider(type: 'dashed')`、`HyperSkeleton(type: 'card')` |
 | 列表表面 | `HyperListTile(type: 'plain', title: '设置')` |
-| 标签与页面 | `HyperTabs(tabs: [...], pages: [...])` |
-| 文字尺寸与颜色 | `HyperText('标题', size: 'large', color: brandColor)` |
-| 常用尺寸 | `HyperButton(label: '保存', size: 'small', onPressed: save)`、`HyperAvatar(size: 'large')`、`HyperProgress(type: 'circular', size: 'large')` |
+| 固定分段 | `HyperTabs(tabs: [...], selectedIndex: selected, onChanged: select)` |
+| 横向分类 | `HyperFilterBar(items: categories, selectedIndex: selected, onChanged: select, itemBuilder: (item, selected, enabled) => HyperText(item))` |
+| 文字尺寸与颜色 | `HyperText('标题', color: brandColor)` |
+| 默认规格 | `HyperButton(label: '保存', onPressed: save)`、`HyperAvatar()`、`HyperProgress(type: 'circular')` |
 | 操作列表弹层 | `HyperActionSheet.choose(context, actions: [...])` |
 
-文字、按钮、输入框、图标、头像、加载提示与进度统一使用 `small`、`default`、`large` 三档尺寸，并从主题读取默认颜色。`color` 接受 Flutter `Color`，覆盖组件的主要颜色；`backgroundColor` 等带限定词的参数只覆盖对应部位。按钮的 `content`、输入框的 `prefix` / `suffix`、卡片与导航栏的内容插槽仍接受自定义 Widget。
+每类组件只保留一套默认规格，文字和图标继承宿主样式，并从主题读取默认颜色。`color` 接受 Flutter `Color`，覆盖组件的主要颜色；`backgroundColor` 等带限定词的参数只覆盖对应部位。按钮的 `content`、输入框的 `prefix` / `suffix`、卡片与导航栏的内容插槽仍接受自定义 Widget。
 表面材质由主题统一配置；`HyperUploader` 的文件选择与上传回调继续由应用注入。
 
 `type` 只用于同一组件内的形态或视觉层级。日期、时间和区间选择返回不同的 Dart 类型，继续使用 `HyperDatePicker.date/time/range`；自定义弹层和操作列表需要不同的必填参数，继续使用 `HyperActionSheet.show/choose`。独立开关选项保持布尔参数。

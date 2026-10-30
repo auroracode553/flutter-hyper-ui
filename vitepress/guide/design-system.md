@@ -27,7 +27,7 @@ Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一�
 | vitepress/.vitepress/catalog.ts | 组件路由、说明、参数说明与示例引用 | 与公开源码和组件页同步 |
 | vitepress/components/ | 组件 API 与使用说明 | 保留完整签名和参数表，不能用本文替代 |
 
-内部共用关系：HyperGlass 负责材质与裁切；HyperPressable 负责按压；hyper_progress_painters.dart 负责加载环与轨道；hyper_modal.dart 负责模态路由；hyper_anchored_surface.dart 与 hyper_anchored_layout.dart 负责锚定浮层；hyper_selection_field.dart 供 Select 与 Dropdown 共用字段；hyper_tab_controller.dart 连接 Tabs 与内容区。不要在每个组件中复制这些实现。
+内部共用关系：HyperGlass 负责材质与裁切；HyperPressable 负责按压；hyper_progress_painters.dart 负责加载环与轨道；hyper_modal.dart 负责模态路由；hyper_anchored_surface.dart 与 hyper_anchored_layout.dart 负责锚定浮层；hyper_selection_field.dart 供 Select 与 Dropdown 共用字段；HyperTabs 受控切换固定分段，HyperFilterBar 管理横向分类可见位置。不要在每个组件中复制这些实现。
 
 ## 设计目标
 
@@ -103,7 +103,7 @@ Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、H
 | 用途 | 共用入口或规则 | 适用组件 |
 | --- | --- | --- |
 | 正文内容卡片 | 内部 HyperGlass.card，双层柔阴影，普通状态无描边 | HyperCard、HyperMenuGroup、独立 HyperListTile、HyperCollapse、HyperSlideMenu 的 decorateChild |
-| 操作与输入 | 原有控件表面、状态色与识别边界 | Button、TextField、Select、Stepper、SegmentedControl、Uploader；不自动改为卡片样式 |
+| 操作与输入 | 原有控件表面、状态色与识别边界 | Button、TextField、Select、Stepper、Tabs、Uploader；不自动改为卡片样式 |
 | 导航与浮层 | 原有导航材质或 surfaceShadows | NavBar、TabBar、Popover、Dropdown、PopupMenu、Dialog、BottomSheet、ActionSheet、Tooltip；不受内容卡片入口影响 |
 | 状态与提示 | 原有语义色和专用图标表面 | NoticeBar、EmptyState、Badge；不抹去提示或状态差异 |
 
@@ -129,7 +129,7 @@ Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、H
 | Dropdown 箭头 | 开合时旋转半圈 | 180ms |
 | Tooltip | 从靠近锚点的一侧以 0.97 倍缩放淡入淡出；键盘聚焦即时显示 | 125ms |
 | Checkbox / Radio / Switch | 勾选标记淡入、单选圆环渐变、开关滑动与颜色过渡 | 160ms |
-| SegmentedControl | 等宽时平移同一选中底板；非等宽时过渡选中背景色 | 260ms / 160ms |
+| Tabs | 等宽时平移同一选中底板；非等宽时过渡选中背景色 | 260ms / 160ms |
 | Collapse | 内容高度与透明度同步变化，箭头同步旋转 | 200ms |
 | Dialog | 居中轻缩放淡入淡出，遮罩同步变化 | 250ms |
 | ActionSheet / Select / Picker / DatePicker | 底部面板沿竖直方向短距离滑入滑出，遮罩同步变化 | 250ms |
@@ -177,20 +177,22 @@ SlideMenu 的速度投影时间为 0.09 秒，展开判断使用操作区宽度�
 
 ### 紧凑组件的尺寸
 
+每类组件只保留一套默认规格，不提供 small/default/large 参数或兼容入口。按钮高 38、输入字号 16、导航操作行高 44、HyperTabs 高 40；HyperFilterBar 单项最小高 32，文字缩放可自然撑开。固定分段使用 HyperTabs，可左右滑动的分类使用 HyperFilterBar，选中索引由业务持有。
+
 移动端表单中的计数器和选择项应优先保持内容所需宽度。小控件使用 `subtle` 表面，嵌入卡片或菜单组时由外层统一绘制玻璃材质，避免每一行叠一张卡片。
 
 HyperCheckbox、HyperRadio、HyperSwitch 的标签行统一使用 plain，不自动附带卡片背景、外框或阴影；基础组件预览和组件总览的选择控件分组也不加 HyperCard。保留标签、整行点击、控件自身轮廓、选中与禁用状态。
 
 | 组件 | 默认视觉尺寸 | 使用建议 |
 | --- | ---: | --- |
-| HyperNumberStepper | 按钮 32、默认整体高 38 | 数值区按内容增长；边界沿用按钮默认禁用态 |
+| HyperNumberStepper | 按钮 38、默认整体高 44 | 数值区按内容增长；边界沿用按钮默认禁用态 |
 | HyperEmptyState | 图标容器 56 | 使用精简的图标、标题与说明间距 |
 
-尺寸只约束视觉，不应通过固定高度裁切放大的文字。业务需要更醒目的入口时，使用组件已有尺寸参数或在外层提供空间。
+尺寸只约束视觉，不应通过固定高度裁切放大的文字。业务需要更醒目的入口时，通过外层布局提供空间，不增加组件尺寸档位。
 
 ## 排版
 
-`HyperText` 只有 small / default / large 三档，独立使用的基准字号为 12 / 14 / 18、行高 1.4。default 在按钮、导航等插槽中继承宿主的字号、行高、字重与颜色；显式 color、fontWeight 优先。small 保留 12、w400、mutedForeground，large 保留 18、w700、foreground。HyperIcon 基准尺寸为 18 / 24 / 32，default 继承宿主图标尺寸，各档未显式指定 color 时继承宿主图标颜色。字号变化时布局应跟随 `MediaQuery.textScalerOf(context)`，不要用固定高度裁切正文。
+HyperText 独立使用为 14、行高 1.4；在按钮、导航等插槽中继承宿主字号、行高、字重与颜色，显式 color、fontWeight 优先。HyperIcon 独立基准为 24，插槽内继承宿主图标尺寸和颜色。两者不提供尺寸档位。文字布局跟随 MediaQuery.textScalerOf(context)，不能用固定高度裁切正文。
 
 Flutter 图形直接使用 lucide_icons_flutter，Android 与 Preview 直接使用 Lucide Compose 图标库，选择相同语义的图标。不在项目内复制字体轮廓、SVG 路径或维护图标别名表。
 
@@ -226,15 +228,13 @@ Flutter 图形直接使用 lucide_icons_flutter，Android 与 Preview 直接使�
 | 圆角 | 按钮高度的一半，不能改用统一方形圆角 |
 | backgroundColor | 覆盖默认背景并关闭背景渐变；仅保留有明确用途的调用 |
 
-| size | 高度 | 最小文字按钮宽度 | 水平内边距 | 字号 | 纯图标尺寸 | 带文字图标尺寸 |
-| --- | --- | --- | --- | --- | --- | --- |
-| small | 32 | 53 | 10 | 12 | 18 | 16 |
-| default | 38 | 68 | 14 | 13 | 20 | 17 |
-| large | 44 | 83 | 18 | 14 | 22 | 18 |
+| 高度 | 最小宽 | 水平内边距 | 字号 | 纯图标 | 文字旁图标 |
+| --- | --- | --- | --- | --- | --- |
+| 38 | 68 | 14 | 13 | 20 | 17 |
 
 普通取消、关闭和次级操作保持默认描边；主操作在现有调用中显式使用 filled 与 primary；危险确认使用 filled 与 danger。这些预设表达操作用途，不属于待清理的灰色覆盖。
 
-HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定图标、small 尺寸及可用回调，使用 HyperButton 默认外观；只读与边界由回调为空触发按钮默认禁用态，不额外指定 color 或 backgroundColor。不要恢复 selection 灰底或重复计算正常／禁用颜色。
+HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定图标及可用回调，使用 HyperButton 默认外观；只读与边界由回调为空触发按钮默认禁用态，不额外指定 color 或 backgroundColor。不要恢复 selection 灰底或重复计算正常／禁用颜色。
 
 ## 各组件的样式与功能基线
 
@@ -244,10 +244,10 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 
 | 组件与文档 | 实现文件 | 当前样式与功能 |
 | --- | --- | --- |
-| [HyperText / HyperIcon / HyperIcons](../components/text.md) | hyper_typography.dart | 三档文字和图标，常用图标映射 Lucide；不要改成任意 size 字符串 |
+| [HyperText / HyperIcon / HyperIcons](../components/text.md) | hyper_typography.dart | 文字和图标继承宿主样式，独立基准 14 / 24；图标直接使用 Lucide |
 | [HyperPressable](../components/pressable.md) | hyper_pressable.dart | 统一即时按压及长按反馈，本身不绘制背景、描边或文字 |
 | [HyperImage](../components/image.md) | hyper_image.dart | provider / network / asset 三种来源；默认 cover、圆角 16；加载与错误占位；可选全屏缩放预览，范围 0.5–5；仅使用 Flutter ImageCache，不内置持久缓存 |
-| [HyperAvatar](../components/avatar.md) | hyper_image.dart | 尺寸 32 / 40 / 56，默认圆形；图片失败使用文字或用户图标占位，文字最多两个字符 |
+| [HyperAvatar](../components/avatar.md) | hyper_image.dart | 尺寸 40，默认圆形；图片失败使用文字或用户图标占位，文字最多两个字符 |
 | [HyperBadge](../components/badge.md) | hyper_badge.dart | status / tag / count；tag 支持选中、点击和关闭；count 依附 child，可用 dot、max、showZero，默认 max 99 |
 | [HyperDivider](../components/divider.md) | hyper_layout.dart | solid / dashed，水平或垂直，保留方向和两端缩进 |
 | [HyperCard](../components/card.md) | hyper_card.dart | 默认圆角 24、内边距 12；可组合标题、说明、leading、actions、footer；footer 前使用 HyperDivider；selected 使用较实表面和主题色边框 |
@@ -261,19 +261,19 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 
 | 组件与文档 | 实现文件 | 当前样式与功能 |
 | --- | --- | --- |
-| [HyperTextField](../components/text-field.md) | hyper_text_field.dart | EditableText 加自绘表面，圆角 20；字号 14 / 16 / 18；横向边距 14 / 18 / 20，纵向 7 / 9 / 11，textarea 纵向再加 3；保留错误、聚焦和禁用边框逻辑 |
+| [HyperTextField](../components/text-field.md) | hyper_text_field.dart | EditableText 加自绘表面，圆角 20；字号 16；横向边距 18、纵向 9，textarea 纵向再加 3；保留错误、聚焦和禁用边框逻辑 |
 | [HyperFormField](../components/form-field.md) | hyper_form_field.dart | label、必填星号、trailing、child、helperText、errorText；错误优先于说明，不代管输入值和表单提交 |
 | [HyperCheckbox](../components/checkbox.md) | hyper_selection_controls.dart | 21 方框、圆角 7、1.5 描边；支持 tristate；无标签交互区 44，有标签由无卡片的 plain 列表行处理点击 |
 | [HyperRadio](../components/radio.md) | hyper_selection_controls.dart | 21 圆环，未选描边 1.5、选中描边 6；value / groupValue；有标签由整行点击，无标签独立可交互时保留 44 触摸区 |
 | [HyperSwitch](../components/switch.md) | hyper_selection_controls.dart | 52×32 轨道，自绘滑块；关闭背景由 controlTrack 合成；标签行与独立控件分别处理交互，不能把关闭色当按钮覆盖删除 |
 | [HyperSlider](../components/slider.md) | hyper_selection_controls.dart | 6 高轨道、20 滑块、44 交互高度；默认范围 0–100；divisions 控制离散取值；点击及拖拽保留开始、变化、结束回调；RTL 反转方向 |
-| [HyperNumberStepper](../components/number-stepper.md) | hyper_number_stepper.dart | 受控整数，默认 min 0、max 99、step 1；圆角 16、subtle 表面、内边距 3、数值区最小宽 36；加减使用默认 small 图标按钮，结果收敛至上下限 |
-| [HyperSegmentedControl](../components/segmented-control.md) | hyper_segmented_control.dart | 默认等宽；外圆角 18、内边距 4、项高 32；等宽平移一个选中底板，非等宽过渡背景；单项与整组禁用分别保留 |
+| [HyperNumberStepper](../components/number-stepper.md) | hyper_number_stepper.dart | 受控整数，默认 min 0、max 99、step 1；圆角 16、subtle 表面、内边距 3、数值区最小宽 36；加减使用默认图标按钮，结果收敛至上下限 |
+| [HyperTabs](../components/tabs.md) | hyper_tabs.dart | 默认等宽；外圆角 18、内边距 4、项高 32；等宽平移一个选中底板，非等宽过渡背景；单项与整组禁用分别保留 |
 | [HyperSelect](../components/select.md) | hyper_select.dart | single / multiple；字段与 Dropdown 共用；底部选项行最小高 52，保留单选圆点／多选勾选；单选点选返回，多选按确定提交 |
 | [HyperDropdown](../components/dropdown.md) | hyper_dropdown.dart | 锚定菜单；自动按最长文字加占位测宽，默认限制 160–240 并服从父级；菜单匹配字段宽，默认最大高 320；选项复用 HyperListTile |
 | [HyperPicker](../components/picker.md) | hyper_picker.dart、hyper_wheel_picker.dart | 底部滚轮，筛除禁用项；默认初始索引 0，面板内滚轮高 200、项高 40；按确定返回，控制器随面板释放 |
 | [HyperDatePicker](../components/date-picker.md) | hyper_date_picker.dart | date / time / range；默认日期范围 1900-01-01 至 2100-12-31；日期和区间用月历，时间用滚轮，底部宿主为 ActionSheet；临时选择按确定后返回 |
-| [HyperCalendarDay / HyperCalendarItem](../components/calendar-day.md) | hyper_calendar_day.dart | 选中实心圆、今日描边、相邻月和禁用弱化、区间背景；小／默认／大基础行高 20 / 42 / 48，并按字体放大扩展；附属条目最多三行，溢出数量单独占最后一行 |
+| [HyperCalendarDay / HyperCalendarItem](../components/calendar-day.md) | hyper_calendar_day.dart | 选中实心圆、今日描边、相邻月和禁用弱化、区间背景；基础行高 42，并按字体放大扩展；附属条目最多三行，溢出数量单独占最后一行 |
 | [HyperCalendarMonth](../components/calendar-month.md) | hyper_calendar_month.dart | 固定六行七列，默认周一开始；复用日期格，支持起止日期、范围、强调日期和点击；readOnly 使用 CustomPainter 合并绘制整月，仍保留选中及今日样式 |
 | [HyperUploader](../components/uploader.md) | hyper_uploader.dart | 内部管理文件项与请求生命周期；默认最多 9 个、每个 10MiB；外部注入 pick / upload；缩略项宽 104、图片 90×72，添加格 104×136；保留取消、重试和错误展示 |
 
@@ -282,9 +282,9 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | 组件与文档 | 实现文件 | 当前样式与功能 |
 | --- | --- | --- |
 | [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart 及同名前缀 part 文件 | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
-| [HyperTabs](../components/tabs.md) | hyper_navigation.dart、hyper_tab_controller.dart | 默认项区高 48，加表面内边距后为 54；胶囊选中块，支持 scrollable 和页面联动；pages 默认高 180；外部 selectedIndex 与初始索引的职责分开 |
+| [HyperFilterBar](../components/filter-bar.md) | hyper_filter_bar.dart | 横向分类筛选；独立选中胶囊，周围透明；单项最小高 32、宽 48，内边距 12×6、间距 6；业务持有 selectedIndex，内部滚动保持选中项可见 |
 | [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | single / multiple，默认 multiple，高 56；floating 默认 true 保留悬浮，false 为全宽平直贴底、总高 60（含安全区）与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
-| [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认 small 图标按钮，数字项保留专用选中态 |
+| [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认图标按钮，数字项保留专用选中态 |
 | [HyperSlideMenu](../components/slide-menu.md) | hyper_slide_menu.dart | 逻辑 start / end 操作区，默认每项宽 64、圆角 18；保留跟手、越界阻尼、速度投影与弹簧；展开时屏蔽正文操作，点击操作先收起再通知调用方 |
 | [HyperActionSheet](../components/action-sheet.md) | hyper_action_sheet.dart | show 展示自定义内容，choose 展示 HyperAction 列表；圆角 30、内边距 16、最大高为键盘避让后可用高度的 85%；选中、禁用、危险色和取消按钮分别保留 |
 | [HyperDrawer](../components/drawer.md) | hyper_drawer.dart、hyper_drawer_surface.dart | show 为模态入口，退出动画完成后返回结果，正文 contentBuilder；默认 start、宽 320，窄屏最大窗口宽减 56；贴边全高、实色背景，无外侧留白／圆角／描边／卡片阴影；正文默认零间距，安全区在背景内部；固定标题／页脚、滑动关闭；自带滚动内容设 scrollable: false |
@@ -298,8 +298,8 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | --- | --- | --- |
 | [HyperToast](../components/toast.md) | hyper_feedback.dart | root Overlay，默认显示 2 秒、距底 96、宽 180–420、圆角 18；色调对应图标／边缘；动作先关闭提示再回调，内部防止重复移除 |
 | [HyperDialog](../components/dialog.md) | hyper_feedback.dart | confirm 返回 bool?；两侧留白 24、最大宽 420、圆角 26、内边距 18；canConfirm 为 false 保持打开；取消默认按钮，确认按普通／危险语义配色 |
-| [HyperLoading](../components/loading.md) | hyper_feedback.dart | 小／默认／大加载环尺寸 18 / 24 / 32；during 通过遮罩等待外部任务，在 finally 中移除浮层，不能吞掉任务结果或异常 |
-| [HyperProgress](../components/progress.md) | hyper_navigation.dart、hyper_progress_painters.dart | linear / circular；轨道高 4 / 6 / 12，圆形尺寸 48 / 64 / 80；确定进度归一化至 0–1，不定进度不显示百分比；与按钮共用自绘环／轨道 |
+| [HyperLoading](../components/loading.md) | hyper_feedback.dart | 加载环尺寸 24；during 通过遮罩等待外部任务，在 finally 中移除浮层，不能吞掉任务结果或异常 |
+| [HyperProgress](../components/progress.md) | hyper_navigation.dart、hyper_progress_painters.dart | linear / circular；轨道高 6，圆形尺寸 64、线宽 6；确定进度归一化至 0–1，不定进度不显示百分比；与按钮共用自绘环／轨道 |
 | [HyperTooltip](../components/tooltip.md) | hyper_tooltip.dart | 默认 hoverDelay 500ms、maxWidth 240、圆角 12；保留悬停、聚焦、触摸长按与退出生命周期，不在调用方重新写一套浮层 |
 | [HyperNoticeBar](../components/notice-bar.md) | hyper_notice_bar.dart | 圆角 16、主题色浅底和边框；默认速度 28；短文字静止，长文字循环，按住或减少动画时暂停；关闭按钮保留透明底和主题色 |
 | [HyperUpdateDialog](../components/update-dialog.md) | hyper_update_dialog.dart、hyper_update_dialog_content.dart、hyper_update_models.dart | 受控更新状态；最大宽 420、外边距 20、圆角 28、内边距 24；正文滚动、底部操作固定；关闭、取消、稍后使用默认按钮，主操作遵循当前状态 |
@@ -309,7 +309,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 
 ### 工具与数据模型
 
-HyperOption / HyperSegmentOption / HyperAction / HyperSlideAction 分别描述选项与操作；不内置业务请求。HyperUiTone 的公开值为 neutral / primary / success / warning / error / info，HyperUiToneResolver.color(tokens) 将其映射为主题色；不要与 HyperButton 的 colorStyle 值混用。
+HyperOption / HyperTabsItem / HyperAction / HyperSlideAction 分别描述选项与操作；不内置业务请求。HyperUiTone 的公开值为 neutral / primary / success / warning / error / info，HyperUiToneResolver.color(tokens) 将其映射为主题色；不要与 HyperButton 的 colorStyle 值混用。
 
 HyperTimeOfDay 表示小时与分钟并提供 HH:mm 格式化；HyperDateRange 表示起止日期；HyperCalendarItem 只包含展示文字与可选颜色。HyperUpdateRelease / HyperUpdateDownloadProgress 是纯展示模型；后者总大小未知时 fraction 为 null，大小、速度和剩余时间由共用格式工具计算。
 
@@ -335,19 +335,19 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 | 位置 | 当前独立样式或组合 | 修改边界 |
 | --- | --- | --- |
 | HyperNavBar 返回、更多按钮 | HyperButton 加 surfaceStrong 背景，用于固定导航样式与两端对齐 | 用户已明确要求保留 |
-| HyperNoticeBar 关闭按钮 | small 图标按钮，透明背景、主题色前景 | 用户已明确要求保留；不随普通按钮一起清理 |
+| HyperNoticeBar 关闭按钮 | 默认图标按钮，透明背景、主题色前景 | 用户已明确要求保留；不随普通按钮一起清理 |
 | HyperTextField._AffixButton | HyperPressable、6 内边距、18 图标；清空与密码可见性切换 | 用户已要求保留；直接改默认按钮会改变输入框内部布局与描边 |
 | HyperToast 的 actionLabel | HyperPressable 加文字，继承提示色调 | 用户已要求保留；改默认按钮会新增背景、边框和尺寸约束 |
-| HyperBadge 的关闭区 | 20 方形点击区、14 图标，跟随标签前景色 | 用户已要求保留；默认 small 图标按钮为 32，会改变标签尺寸 |
+| HyperBadge 的关闭区 | 20 方形点击区、14 图标，跟随标签前景色 | 用户已要求保留；默认图标按钮为 38，会改变标签尺寸 |
 | HyperPagination 数字页码 | 最小宽 32、高 32、圆角 11，当前页使用 selection 和主题色 | 用户已要求保留；当前页是选中展示，不等价于普通按钮禁用态 |
 | HyperImage 预览关闭按钮 | HyperButton 加 foreground 与 surfaceStrong，位于图片预览上方 | 当前保留；移除背景和颜色覆盖前确认 |
-| HyperUploader 删除按钮 | small 图标按钮加 surfaceStrong，叠在缩略图右上方 | 当前保留；移除背景前确认 |
+| HyperUploader 删除按钮 | 默认图标按钮加 surfaceStrong，叠在缩略图右上方 | 当前保留；移除背景前确认 |
 | HyperSelect 选项行与标记 | 自绘行、单选圆点和多选方框，非 HyperRadio / HyperCheckbox 的整项复用 | 复用候选，尚未批准替换；需要核对尺寸、点击区域与选中行为 |
 | HyperUploader 添加文件格 | 104×136 HyperGlass 点击格，包含图标和文字 | 是上传网格入口；替换成按钮会改变网格，先确认 |
 | HyperTabBar single 入口 | 56 的自绘浮动入口，加角标与自身安全区 | 属于底栏组件形态；不能仅因外形圆形就替换为默认图标按钮 |
 | HyperCalendarDay 角标和条目 | 紧凑文字角标、最多三行条目及溢出行；条目 10 号字、1.2 行高、垂直内边距合计 2、行间距 2 | 日历布局专用；改为 HyperBadge 等组件需先确认空间与文本规则；宿主以 minimumHeight 预留容量 |
 | HyperSlideMenu 操作区 | 填满侧滑区的文字／图标、危险或自定义操作色 | 不是独立胶囊按钮，不能替换导致露出背景或改变操作区宽高 |
-| Tabs、SegmentedControl、PageIndicator、Slider、选择控件 | 自绘选中块、轨道、圆环、圆点和标记 | 属于组件核心视觉，按各自状态规则保留 |
+| Tabs、Tabs、PageIndicator、Slider、选择控件 | 自绘选中块、轨道、圆环、圆点和标记 | 属于组件核心视觉，按各自状态规则保留 |
 | 按钮预览中的自定义 color | buttons_example.dart 的“自定义颜色覆盖”示例 | 用于演示公开 API，不当作组件内部多余覆盖删除 |
 
 ## 状态与生命周期不能随样式整理改变

@@ -24,7 +24,7 @@ class HyperCalendarDay extends StatelessWidget {
     this.adjacent = false,
     this.emphasized = false,
     this.inRange = false,
-    this.size = 'default',
+
     this.expanded = false,
     this.subtitle,
     this.subtitleColor,
@@ -36,12 +36,11 @@ class HyperCalendarDay extends StatelessWidget {
     this.onLongPressed,
     this.onItemsPressed,
   }) : assert(day >= 1 && day <= 31),
-       assert(size == 'small' || size == 'default' || size == 'large'),
        assert(itemCount == null || itemCount >= items.length);
 
   final int day;
   final bool selected, today, enabled, adjacent, emphasized, inRange, expanded;
-  final String size;
+
   final String? subtitle, badge;
   final Color? subtitleColor, badgeColor;
   final List<HyperCalendarItem> items;
@@ -51,26 +50,18 @@ class HyperCalendarDay extends StatelessWidget {
   /// 宿主可复用最小行高，展开和裁剪时无需复制组件内的字号与间距。
   static double minimumHeight(
     TextScaler textScaler, {
-    String size = 'default',
+
     bool hasSubtitle = false,
     int itemRows = 0,
   }) {
     assert(itemRows >= 0 && itemRows <= 3);
-    final font = size == 'small'
-        ? 10.0
-        : size == 'large'
-        ? 17.0
-        : 14.0;
-    final base = size == 'small'
-        ? 20.0
-        : size == 'large'
-        ? 48.0
-        : 42.0;
+    final font = 14.0;
+    final base = 42.0;
     return math.max(
           base,
           textScaler.scale(font) * 1.2 +
               (hasSubtitle ? textScaler.scale(9) * 1.2 + 2 : 0) +
-              (size == 'small' ? 6 : 12),
+              12,
         ) +
         itemRows * (textScaler.scale(10) * 1.2 + 4);
   }
@@ -81,7 +72,6 @@ class HyperCalendarDay extends StatelessWidget {
     final scaler = MediaQuery.textScalerOf(context);
     final baseHeight = minimumHeight(
       scaler,
-      size: size,
       hasSubtitle: subtitle != null,
     );
     final foreground = selected
@@ -92,11 +82,7 @@ class HyperCalendarDay extends StatelessWidget {
         ? tokens.primary
         : tokens.foreground;
     final count = itemCount ?? items.length;
-    final font = size == 'small'
-        ? 10.0
-        : size == 'large'
-        ? 17.0
-        : 14.0;
+    final font = 14.0;
     // 紧凑条目保留完整字高，避免三行标签撑出手机月盘的可用高度。
     final labelHeight = scaler.scale(10) * 1.2 + 2;
 

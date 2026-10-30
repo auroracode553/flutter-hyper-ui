@@ -10,7 +10,7 @@ class InputsExample extends StatefulWidget {
 }
 
 class _InputsExampleState extends State<InputsExample> {
-  String _type = 'all';
+  int _type = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -18,25 +18,17 @@ class _InputsExampleState extends State<InputsExample> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        HyperSegmentedControl<String>(
-          selectedValue: _type,
+        HyperTabs<String>(
+          selectedIndex: _type,
           onChanged: (value) => setState(() => _type = value),
-          options: const [
-            HyperSegmentOption(
-              value: 'all',
-              label: '全部',
-              icon: LucideIcons.inbox,
-            ),
-            HyperSegmentOption(
+          tabs: const [
+            HyperTabsItem(value: 'all', label: '全部', icon: LucideIcons.inbox),
+            HyperTabsItem(
               value: 'note',
               label: '文档',
               icon: LucideIcons.fileText,
             ),
-            HyperSegmentOption(
-              value: 'sheet',
-              label: '表格',
-              icon: LucideIcons.table,
-            ),
+            HyperTabsItem(value: 'sheet', label: '表格', icon: LucideIcons.table),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.md),

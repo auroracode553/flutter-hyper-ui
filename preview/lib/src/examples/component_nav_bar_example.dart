@@ -156,7 +156,6 @@ class _NavBarControls extends StatelessWidget {
               .map(
                 (value) => HyperButton(
                   type: value == selected ? null : null,
-                  size: 'small',
                   label: value.label,
                   onPressed: () => onChanged(value),
                 ),
@@ -164,9 +163,9 @@ class _NavBarControls extends StatelessWidget {
               .toList(),
         ),
         const SizedBox(height: 12),
-        HyperText(feedback, size: 'small'),
+        HyperText(feedback),
         const SizedBox(height: 6),
-        const HyperText('向上滚动显示向下渐隐的毛玻璃，回到顶部恢复透明。', size: 'small'),
+        const HyperText('向上滚动显示向下渐隐的毛玻璃，回到顶部恢复透明。'),
       ],
     ),
   );
@@ -196,7 +195,7 @@ class _InspirationHeader extends StatelessWidget {
         children: <Widget>[
           Icon(LucideIcons.sparkles, size: 28),
           SizedBox(height: 28),
-          HyperText('让内容自然流动', size: 'large'),
+          HyperText('让内容自然流动'),
           SizedBox(height: 12),
           HyperText('向上滚动，观察导航栏保持固定。'),
         ],
@@ -224,9 +223,9 @@ class _InspirationItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          HyperText('灵感 ${index.toString().padLeft(2, '0')}', size: 'small'),
+          HyperText('灵感 ${index.toString().padLeft(2, '0')}'),
           const SizedBox(height: 18),
-          HyperText(titles[(index - 1) % titles.length], size: 'large'),
+          HyperText(titles[(index - 1) % titles.length]),
           const SizedBox(height: 8),
           const HyperText('模糊和底色向下淡出到透明，标题与按钮保持清晰。'),
         ],

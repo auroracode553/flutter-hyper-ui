@@ -41,7 +41,6 @@ class HyperNumberStepper extends StatelessWidget {
           HyperButton(
             type: 'icon',
             icon: LucideIcons.minus,
-            size: 'small',
             onPressed: canDecrease
                 ? () => onChanged!((value - step).clamp(min, max).toInt())
                 : null,
@@ -67,7 +66,6 @@ class HyperNumberStepper extends StatelessWidget {
           HyperButton(
             type: 'icon',
             icon: LucideIcons.plus,
-            size: 'small',
             onPressed: canIncrease
                 ? () => onChanged!((value + step).clamp(min, max).toInt())
                 : null,

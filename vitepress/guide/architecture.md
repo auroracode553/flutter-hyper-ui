@@ -48,7 +48,7 @@ Hyper UI 由四层组成，依赖只允许从上向下：
 - `components/hyper_glass.dart` 是仅供组件内部复用的表面绘制层，不从公开入口导出。
 - `components/hyper_progress_painters.dart` 提供自绘加载环与进度轨道，供按钮、导航、上传和反馈组件复用。
 - `components/hyper_modal.dart` 提供浮层路由，供操作面板、对话框与图片预览复用；`hyper_anchored_surface.dart` 提供下拉菜单和气泡菜单的锚定浮层。
-- `components/hyper_tab_controller.dart` 连接标签栏与内容区；`hyper_wheel_picker.dart` 提供选择器的通用滚轮。
+- `components/hyper_tabs.dart` 提供受控分段切换，`hyper_filter_bar.dart` 管理横向分类滚动；`hyper_wheel_picker.dart` 提供选择器的通用滚轮。
 
 单个源码文件应保持明确职责；高阶组件通过组合基础组件实现，不复制材质和状态逻辑。
 

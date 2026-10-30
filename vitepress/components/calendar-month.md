@@ -26,7 +26,6 @@ SizedBox(
   child: HyperCalendarMonth(
     month: focusedMonth,
     showWeekdays: false,
-    size: 'small',
     readOnly: true,
     expanded: true,
   ),

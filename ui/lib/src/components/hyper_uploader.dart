@@ -303,7 +303,6 @@ class _UploadItemTile extends StatelessWidget {
                     child: HyperButton(
                       type: 'icon',
                       icon: LucideIcons.x,
-                      size: 'small',
                       tooltip: '删除 ${item.file.name}',
                       onPressed: onRemove,
                       backgroundColor: glass.surfaceStrong,
@@ -326,7 +325,6 @@ class _UploadItemTile extends StatelessWidget {
             if (item.status == HyperUploadStatus.uploading)
               HyperProgress(
                 value: item.progress,
-                size: 'small',
                 showLabel: false,
               )
             else if (item.status == HyperUploadStatus.success)
@@ -334,7 +332,6 @@ class _UploadItemTile extends StatelessWidget {
             else
               HyperButton(
                 label: item.status == HyperUploadStatus.error ? '重试' : '上传',
-                size: 'small',
                 expanded: true,
                 onPressed: enabled ? onRetry : null,
               ),

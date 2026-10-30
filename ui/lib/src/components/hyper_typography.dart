@@ -2,23 +2,19 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
-import '../theme/hyper_ui_size.dart';
 
 class HyperText extends StatelessWidget {
   const HyperText(
     this.text, {
     super.key,
-    this.size = 'default',
+
     this.color,
     this.fontWeight,
     this.maxLines,
     this.textAlign,
-  }) : assert(
-         size == 'large' || size == 'default' || size == 'small',
-         'HyperText.size must be large, default, or small.',
-       );
+  });
   final String text;
-  final String size;
+
   final Color? color;
   final FontWeight? fontWeight;
   final int? maxLines;
@@ -30,13 +26,7 @@ class HyperText extends StatelessWidget {
     final inheritedStyle = context
         .dependOnInheritedWidgetOfExactType<DefaultTextStyle>()
         ?.style;
-    final useHostStyle = size == 'default';
-    final fontSize = hyperUiSizeValue(
-      size,
-      small: 12,
-      normal: inheritedStyle?.fontSize ?? 14,
-      large: 18,
-    );
+    final fontSize = inheritedStyle?.fontSize ?? 14;
     return Text(
       text,
       maxLines: maxLines,
@@ -44,15 +34,9 @@ class HyperText extends StatelessWidget {
       overflow: maxLines == null ? null : TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: fontSize,
-        height: useHostStyle ? inheritedStyle?.height ?? 1.4 : 1.4,
-        fontWeight:
-            fontWeight ??
-            (useHostStyle ? inheritedStyle?.fontWeight : null) ??
-            (size == 'large' ? FontWeight.w700 : FontWeight.w400),
-        color:
-            color ??
-            (useHostStyle ? inheritedStyle?.color : null) ??
-            (size == 'small' ? tokens.mutedForeground : tokens.foreground),
+        height: inheritedStyle?.height ?? 1.4,
+        fontWeight: fontWeight ?? inheritedStyle?.fontWeight ?? FontWeight.w400,
+        color: color ?? inheritedStyle?.color ?? tokens.foreground,
       ),
     );
   }
@@ -72,9 +56,9 @@ abstract final class HyperIcons {
 }
 
 class HyperIcon extends StatelessWidget {
-  const HyperIcon(this.icon, {super.key, this.size = 'default', this.color});
+  const HyperIcon(this.icon, {super.key, this.color});
   final IconData icon;
-  final String size;
+
   final Color? color;
   @override
   Widget build(BuildContext context) {
@@ -83,12 +67,7 @@ class HyperIcon extends StatelessWidget {
         ?.data;
     return Icon(
       icon,
-      size: hyperUiSizeValue(
-        size,
-        small: 18,
-        normal: inheritedTheme?.size ?? 24,
-        large: 32,
-      ),
+      size: inheritedTheme?.size ?? 24,
       color:
           color ??
           inheritedTheme?.color ??

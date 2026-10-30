@@ -4,7 +4,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme.dart';
-import '../theme/hyper_ui_size.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
 import 'hyper_tooltip.dart';
@@ -14,7 +13,7 @@ class HyperTextField extends StatefulWidget {
   const HyperTextField({
     super.key,
     this.type = 'text',
-    this.size = 'default',
+
     this.color,
     this.rows = 3,
     this.clearable = false,
@@ -50,14 +49,13 @@ class HyperTextField extends StatefulWidget {
              type == 'tel',
          'type must be text, search, password, textarea, email, url, number, or tel.',
        ),
-       assert(size == 'small' || size == 'default' || size == 'large'),
        assert(value == null || (controller == null && initialValue == null)),
        assert(rows > 0),
        assert(maxLength == null || maxLength > 0);
 
   /// 输入形态；textarea 使用多行编辑，其余值使用单行编辑。
   final String type;
-  final String size;
+
   final Color? color;
   final int rows;
   final bool clearable;
@@ -203,24 +201,9 @@ class _HyperTextFieldState extends State<HyperTextField>
     final active = widget.enabled && !effectiveReadOnly;
     final multiline = widget._isTextarea;
     final password = widget._isPassword;
-    final fontSize = hyperUiSizeValue(
-      widget.size,
-      small: 14,
-      normal: 16,
-      large: 18,
-    );
-    final horizontalPadding = hyperUiSizeValue(
-      widget.size,
-      small: 14,
-      normal: 18,
-      large: 20,
-    );
-    final verticalPadding = hyperUiSizeValue(
-      widget.size,
-      small: 7,
-      normal: 9,
-      large: 11,
-    );
+    final fontSize = 16.0;
+    final horizontalPadding = 18.0;
+    final verticalPadding = 9.0;
     final borderColor = error != null
         ? tokens.error
         : _focusNode.hasFocus

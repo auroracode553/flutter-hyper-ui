@@ -11,7 +11,7 @@ description: HyperIcon 组件、图标体系与 Lucide 图标集合
 
 ## 在 Hyper 组件中使用
 
-独立使用时 small / default / large 的基准尺寸为 18 / 24 / 32。default 在插槽中继承宿主的图标尺寸；各档颜色默认继承宿主 IconTheme，显式 color 优先。
+独立使用基准为 24，在插槽中继承宿主图标尺寸与 IconTheme 颜色，显式 color 优先，不提供尺寸档位。
 
 ```dart
 HyperButton(

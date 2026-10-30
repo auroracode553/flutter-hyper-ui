@@ -6,7 +6,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../theme/hyper_ui_theme.dart';
-import '../theme/hyper_ui_size.dart';
 import 'hyper_button.dart';
 import 'hyper_glass.dart';
 import 'hyper_modal.dart';
@@ -234,12 +233,12 @@ class HyperLoading extends StatelessWidget {
   const HyperLoading({
     super.key,
     this.label,
-    this.size = 'default',
+
     this.color,
   });
 
   final String? label;
-  final String size;
+
   final Color? color;
 
   @override
@@ -248,7 +247,7 @@ class HyperLoading extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SizedBox.square(
-          dimension: hyperUiSizeValue(size, small: 18, normal: 24, large: 32),
+          dimension: 24,
           child: HyperSpinner(strokeWidth: 2.5, color: color),
         ),
         if (label != null)

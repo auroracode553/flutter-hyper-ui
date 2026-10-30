@@ -8,7 +8,7 @@ class ToastComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -136,7 +136,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -153,7 +153,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
           type: 'filled',
         ),
         const SizedBox(height: HyperUiSpacing.sm),
-        HyperText('返回结果：$_result', size: 'small'),
+        HyperText('返回结果：$_result'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('左侧抽屉与底部操作区'),
@@ -170,7 +170,7 @@ class SkeletonComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -197,7 +197,7 @@ class DialogComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -265,7 +265,7 @@ class LoadingComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -284,7 +284,7 @@ class LoadingComponentExample extends StatelessWidget {
             SizedBox(width: HyperUiSpacing.md),
             HyperLoading(label: '同步中'),
             SizedBox(width: HyperUiSpacing.md),
-            HyperLoading(label: '上传', size: 'large'),
+            HyperLoading(label: '上传'),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.lg),
@@ -310,7 +310,7 @@ class ActionSheetComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -541,7 +541,7 @@ class _NoticeBarComponentExampleState extends State<NoticeBarComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override

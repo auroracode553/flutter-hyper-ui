@@ -239,7 +239,6 @@ class HyperUpdateDialog extends StatelessWidget {
                           if (!_locked && onClose != null)
                             HyperButton(
                               type: 'icon',
-                              size: 'small',
                               icon: LucideIcons.x,
                               tooltip: '关闭',
                               onPressed: onClose,

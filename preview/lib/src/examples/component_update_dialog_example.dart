@@ -76,7 +76,7 @@ class _UpdateDialogComponentExampleState
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        const HyperText('更新流程', size: 'small'),
+        const HyperText('更新流程'),
         const SizedBox(height: HyperUiSpacing.xs),
         Wrap(
           spacing: HyperUiSpacing.xs,
@@ -110,13 +110,12 @@ class _UpdateDialogComponentExampleState
           const SizedBox(height: HyperUiSpacing.sm),
           HyperProgress(value: _controller.downloadProgress.fraction),
           const SizedBox(height: HyperUiSpacing.xs),
-          HyperText(_controller.downloadProgress.sizeLabel, size: 'small'),
+          HyperText(_controller.downloadProgress.sizeLabel),
         ],
         const SizedBox(height: HyperUiSpacing.lg),
-        const HyperText('状态预览', size: 'small'),
+        const HyperText('状态预览'),
         const HyperText(
           '检查中隐藏版本；其他版本信息不套卡片。标识块 40、图标 20、加载环 30；错误仅保留原因与操作，次操作使用默认描边按钮。',
-          size: 'small',
         ),
         const SizedBox(height: HyperUiSpacing.xs),
         Wrap(
@@ -156,7 +155,6 @@ class _UpdateDialogComponentExampleState
         const SizedBox(height: HyperUiSpacing.sm),
         const HyperText(
           '示例任务由页面持有。关闭弹窗后下载继续，重新打开可查看进度；取消按钮终止下载。',
-          size: 'small',
         ),
       ],
     ),

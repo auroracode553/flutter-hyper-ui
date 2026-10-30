@@ -16,19 +16,18 @@ class HyperCalendarMonth extends StatelessWidget {
     this.firstDate,
     this.lastDate,
     this.weekStart = DateTime.monday,
-    this.size = 'default',
+
     this.showWeekdays = true,
     this.readOnly = false,
     this.expanded = false,
     this.emphasizedDays = const {},
     this.onChanged,
-  }) : assert(weekStart >= 1 && weekStart <= 7),
-       assert(size == 'small' || size == 'default' || size == 'large');
+  }) : assert(weekStart >= 1 && weekStart <= 7);
 
   final DateTime month;
   final DateTime? selectedDate, endDate, firstDate, lastDate;
   final int weekStart;
-  final String size;
+
   final bool showWeekdays, readOnly, expanded;
 
   /// 当前月份中使用主题色的日期数字，含义由调用方决定。
@@ -47,7 +46,6 @@ class HyperCalendarMonth extends StatelessWidget {
     final offset = (start.weekday - weekStart + 7) % 7;
     final rowHeight = HyperCalendarDay.minimumHeight(
       MediaQuery.textScalerOf(context),
-      size: size,
     );
     final today = _day(DateTime.now());
     final selected = selectedDate == null ? null : _day(selectedDate!);
@@ -68,8 +66,7 @@ class HyperCalendarMonth extends StatelessWidget {
                 tokens: tokens,
                 textScaler: MediaQuery.textScalerOf(context),
                 direction: Directionality.of(context),
-                size: size,
-                emphasizedDays: emphasizedDays,
+                          emphasizedDays: emphasizedDays,
               ),
               child: const SizedBox.expand(),
             ),
@@ -94,8 +91,7 @@ class HyperCalendarMonth extends StatelessWidget {
                               );
                               return HyperCalendarDay(
                                 day: day,
-                                size: size,
-                                expanded: true,
+                                                          expanded: true,
                                 selected: date == selected || date == end,
                                 today: date == today,
                                 enabled: _enabled(date),
@@ -164,7 +160,6 @@ class _CalendarMonthPainter extends CustomPainter {
     required this.tokens,
     required this.textScaler,
     required this.direction,
-    required this.size,
     required this.emphasizedDays,
   });
   final DateTime month, today;
@@ -173,7 +168,7 @@ class _CalendarMonthPainter extends CustomPainter {
   final HyperUiThemeTokens tokens;
   final TextScaler textScaler;
   final TextDirection direction;
-  final String size;
+
   final Set<int> emphasizedDays;
 
   @override
@@ -185,7 +180,7 @@ class _CalendarMonthPainter extends CustomPainter {
       math.min(
         width,
         math.min(
-          HyperCalendarDay.minimumHeight(textScaler, size: size) - 6,
+          HyperCalendarDay.minimumHeight(textScaler) - 6,
           height - 6,
         ),
       ),
@@ -228,11 +223,7 @@ class _CalendarMonthPainter extends CustomPainter {
       text.text = TextSpan(
         text: '$day',
         style: TextStyle(
-          fontSize: size == 'small'
-              ? 10
-              : size == 'large'
-              ? 17
-              : 14,
+          fontSize: 14,
           height: 1.2,
           color: active
               ? tokens.primaryForeground
@@ -263,6 +254,5 @@ class _CalendarMonthPainter extends CustomPainter {
       tokens != old.tokens ||
       textScaler != old.textScaler ||
       direction != old.direction ||
-      !setEquals(emphasizedDays, old.emphasizedDays) ||
-      size != old.size;
+      !setEquals(emphasizedDays, old.emphasizedDays);
 }

@@ -7,7 +7,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../theme/hyper_glass_theme.dart';
-import '../theme/hyper_ui_size.dart';
 import 'hyper_button.dart';
 
 /// 使用 Flutter ImageCache 的内存缓存；持久缓存可通过 ImageProvider 注入。
@@ -123,20 +122,20 @@ class HyperAvatar extends StatelessWidget {
     super.key,
     this.image,
     this.text,
-    this.size = 'default',
+
     this.radius,
     this.color,
     this.backgroundColor,
   });
   final ImageProvider? image;
   final String? text;
-  final String size;
+
   final double? radius;
   final Color? color;
   final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
-    final dimension = hyperUiSizeValue(size, small: 32, normal: 40, large: 56);
+    final dimension = 40.0;
     final tokens = HyperUiThemeTokens.of(context);
     final surface =
         backgroundColor ??

@@ -10,7 +10,7 @@ class TextFieldComponentExample extends StatelessWidget {
   // 字段标题写在输入框外部：输入组件本身不携带标题与说明。
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -74,24 +74,22 @@ class TextFieldComponentExample extends StatelessWidget {
 }
 // end-doc-region TextFieldComponentExample
 
-// doc-region SegmentedControlComponentExample
-class SegmentedControlComponentExample extends StatefulWidget {
-  const SegmentedControlComponentExample({super.key});
+// doc-region TabsComponentExample
+class TabsComponentExample extends StatefulWidget {
+  const TabsComponentExample({super.key});
 
   @override
-  State<SegmentedControlComponentExample> createState() =>
-      _SegmentedControlComponentExampleState();
+  State<TabsComponentExample> createState() => _TabsComponentExampleState();
 }
 
-class _SegmentedControlComponentExampleState
-    extends State<SegmentedControlComponentExample> {
-  String _value = 'day';
-  String _scope = 'all';
-  String _view = 'list';
+class _TabsComponentExampleState extends State<TabsComponentExample> {
+  int _value = 0;
+  int _scope = 0;
+  int _view = 0;
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -101,49 +99,45 @@ class _SegmentedControlComponentExampleState
       mainAxisSize: MainAxisSize.min,
       children: [
         _label('受控切换 · 连续点击观察选中底板移动'),
-        HyperSegmentedControl<String>(
-          selectedValue: _value,
+        HyperTabs<String>(
+          selectedIndex: _value,
           onChanged: (value) => setState(() => _value = value),
-          options: const [
-            HyperSegmentOption(value: 'day', label: '日'),
-            HyperSegmentOption(value: 'week', label: '周'),
-            HyperSegmentOption(value: 'month', label: '月'),
+          tabs: const [
+            HyperTabsItem(value: 'day', label: '日'),
+            HyperTabsItem(value: 'week', label: '周'),
+            HyperTabsItem(value: 'month', label: '月'),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.sm),
-        HyperText('当前值：$_value', size: 'small'),
+        HyperText('当前值：${['日', '周', '月'][_value]}'),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('非等宽布局'),
-        HyperSegmentedControl<String>(
+        HyperTabs<String>(
           equalWidth: false,
-          selectedValue: _scope,
+          selectedIndex: _scope,
           onChanged: (value) => setState(() => _scope = value),
-          options: const [
-            HyperSegmentOption(value: 'all', label: '全部'),
-            HyperSegmentOption(value: 'todo', label: '待办'),
-            HyperSegmentOption(value: 'done', label: '已完成'),
-            HyperSegmentOption(value: 'draft', label: '草稿箱'),
+          tabs: const [
+            HyperTabsItem(value: 'all', label: '全部'),
+            HyperTabsItem(value: 'todo', label: '待办'),
+            HyperTabsItem(value: 'done', label: '已完成'),
+            HyperTabsItem(value: 'draft', label: '草稿箱'),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.lg),
 
         _label('图标与禁用项'),
-        HyperSegmentedControl<String>(
-          selectedValue: _view,
+        HyperTabs<String>(
+          selectedIndex: _view,
           onChanged: (value) => setState(() => _view = value),
-          options: const [
-            HyperSegmentOption(
-              value: 'list',
-              label: '列表',
-              icon: LucideIcons.list,
-            ),
-            HyperSegmentOption(
+          tabs: const [
+            HyperTabsItem(value: 'list', label: '列表', icon: LucideIcons.list),
+            HyperTabsItem(
               value: 'chart',
               label: '图表',
               icon: LucideIcons.trendingUp,
             ),
-            HyperSegmentOption(
+            HyperTabsItem(
               value: 'board',
               label: '看板（未开放）',
               icon: LucideIcons.layoutDashboard,
@@ -155,7 +149,7 @@ class _SegmentedControlComponentExampleState
     );
   }
 }
-// end-doc-region SegmentedControlComponentExample
+// end-doc-region TabsComponentExample
 
 // doc-region DropdownComponentExample
 class DropdownComponentExample extends StatefulWidget {
@@ -261,7 +255,7 @@ class _CheckboxComponentExampleState extends State<CheckboxComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -326,7 +320,7 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -355,7 +349,7 @@ class _RadioComponentExampleState extends State<RadioComponentExample> {
                 : (value) => setState(() => _value = value),
           ),
         const SizedBox(height: HyperUiSpacing.sm),
-        HyperText('当前值：$_value', size: 'small'),
+        HyperText('当前值：$_value'),
         const SizedBox(height: HyperUiSpacing.lg),
         _label('纯控件（无标签）'),
         Row(
@@ -395,7 +389,7 @@ class _SwitchComponentExampleState extends State<SwitchComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -451,7 +445,7 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
@@ -490,7 +484,6 @@ class _SliderComponentExampleState extends State<SliderComponentExample> {
         const SizedBox(height: HyperUiSpacing.sm),
         HyperText(
           '当前：${_age.toInt()} 岁${_committedAge == null ? '' : ' · $_committedAge'}',
-          size: 'small',
         ),
       ],
     );
@@ -571,7 +564,7 @@ class _PickerComponentExampleState extends State<PickerComponentExample> {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   Future<void> _pick() async {
@@ -650,7 +643,7 @@ class _DatePickerComponentExampleState
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   Future<void> _pickDate() async {

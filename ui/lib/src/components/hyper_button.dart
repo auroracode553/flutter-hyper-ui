@@ -6,7 +6,6 @@ import 'hyper_progress_painters.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
-import '../theme/hyper_ui_size.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
@@ -21,7 +20,7 @@ class HyperButton extends StatelessWidget {
     this.label,
     this.content,
     this.onPressed,
-    this.size = 'default',
+
     this.icon,
     this.trailingIcon,
     this.enabled = true,
@@ -57,7 +56,7 @@ class HyperButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? type;
   final String? colorStyle;
-  final String size;
+
   final IconData? icon;
   final IconData? trailingIcon;
   final bool enabled;
@@ -89,7 +88,7 @@ class HyperButton extends StatelessWidget {
     final glass = HyperGlassTheme.of(context);
     final disabled = !enabled || onPressed == null;
     final blocked = disabled || loading;
-    final metrics = _HyperButtonMetrics.fromSize(size);
+    final metrics = _HyperButtonMetrics.standard;
     final hasLabel = label != null && label!.isNotEmpty;
     final isIconOnly =
         type == 'icon' ||
@@ -244,19 +243,10 @@ class _HyperButtonMetrics {
   /// 带文字时前置/后置图标的默认尺寸，随字号联动。
   final double labelIconSize;
 
-  /// A single size choice controls height, text, icon, and padding together.
-  static _HyperButtonMetrics fromSize(String size) {
-    final height = hyperUiSizeValue(size, small: 32, normal: 38, large: 44);
-    final d = height - 38;
-    return _HyperButtonMetrics(
-      height: height,
-      minWidth: 68 + d * 2.5,
-      horizontal: 14 + d * 2 / 3,
-      fontSize: 13 + d / 6,
-      iconOnlyIconSize: 20 + d / 3,
-      labelIconSize: 17 + d / 6,
-    );
-  }
+  static const standard = _HyperButtonMetrics(
+    height: 38, minWidth: 68, horizontal: 14, fontSize: 13,
+    iconOnlyIconSize: 20, labelIconSize: 17,
+  );
 }
 
 class _HyperButtonVisual {

@@ -17,8 +17,8 @@ class _AtomsExampleState extends State<AtomsExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('轻盈，也清晰。', size: 'large'),
-      const HyperText('HYPER UI / SOFT GLASS', size: 'small'),
+      const HyperText('轻盈，也清晰。'),
+      const HyperText('HYPER UI / SOFT GLASS'),
       HyperCard(
         title: '文字与图标',
         subtitle: '统一层级，保留呼吸感',
@@ -26,11 +26,11 @@ class _AtomsExampleState extends State<AtomsExample> {
           mainAxisSize: MainAxisSize.min,
           spacing: 12,
           children: [
-            HyperText('柔光玻璃', size: 'large'),
-            HyperText('为日常体验设计', size: 'large'),
+            HyperText('柔光玻璃'),
+            HyperText('为日常体验设计'),
             HyperText('清晰的正文与安静的辅助信息。'),
-            HyperText('辅助说明 · 13 pt', size: 'small'),
-            HyperText('提示信息 · 12 pt', size: 'small'),
+            HyperText('辅助说明 · 13 pt'),
+            HyperText('提示信息 · 12 pt'),
             Row(
               mainAxisSize: MainAxisSize.min,
               spacing: 12,
@@ -50,9 +50,9 @@ class _AtomsExampleState extends State<AtomsExample> {
           runSpacing: 8,
           spacing: 24,
           children: [
-            HyperAvatar(text: '林', size: 'large'),
-            HyperAvatar(text: 'UI', size: 'large', radius: 18),
-            HyperAvatar(size: 'large'),
+            HyperAvatar(text: '林'),
+            HyperAvatar(text: 'UI', radius: 18),
+            HyperAvatar(),
             HyperBadge(
               type: 'count',
               count: 128,
@@ -125,10 +125,10 @@ class LayoutExample extends StatelessWidget {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('有序的空间', size: 'large'),
+      const HyperText('有序的空间'),
       HyperCard(
         title: '常用入口 · Grid',
-        footer: const HyperText('统一 12 dp 间距', size: 'small'),
+        footer: const HyperText('统一 12 dp 间距'),
         child: GridView.count(
           crossAxisCount: 3,
           shrinkWrap: true,
@@ -237,7 +237,7 @@ class _FormsExampleState extends State<FormsExample> {
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('每一次输入，都从容', size: 'large'),
+      const HyperText('每一次输入，都从容'),
       HyperCard(
         title: '输入与校验',
         child: Form(
@@ -410,14 +410,14 @@ class FullNavigationExample extends StatefulWidget {
 }
 
 class _FullNavigationExampleState extends State<FullNavigationExample> {
-  int _tab = 0, _step = 1;
+  int _tab = 0, _step = 1, _contentTab = 0;
   @override
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     spacing: 12,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const HyperText('流动的秩序', size: 'large'),
+      const HyperText('流动的秩序'),
       HyperCard(
         title: '悬浮导航',
         subtitle: '柔光胶囊 · 选中状态随页面同步',
@@ -451,14 +451,24 @@ class _FullNavigationExampleState extends State<FullNavigationExample> {
         title: '标签与联动页面',
         child: SizedBox(
           height: 220,
-          child: HyperTabs(
-            tabs: [Text('推荐'), Text('关注'), Text('收藏')],
-            pages: [
-              Center(child: Text('为你推荐')),
-              Center(child: Text('你关注的内容')),
-              Center(child: Text('收藏的灵感')),
+          child: Column(
+            children: [
+              HyperTabs<String>(
+                tabs: const [
+                  HyperTabsItem(value: 'recommended', label: '推荐'),
+                  HyperTabsItem(value: 'following', label: '关注'),
+                  HyperTabsItem(value: 'saved', label: '收藏'),
+                ],
+                selectedIndex: _contentTab,
+                onChanged: (index) => setState(() => _contentTab = index),
+              ),
+              SizedBox(
+                height: 160,
+                child: Center(
+                  child: Text(['为你推荐', '你关注的内容', '收藏的灵感'][_contentTab]),
+                ),
+              ),
             ],
-            pageHeight: 160,
           ),
         ),
       ),

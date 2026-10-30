@@ -164,7 +164,6 @@ class _HyperSelectionPanelState<T> extends State<_HyperSelectionPanel<T>> {
             padding: const EdgeInsets.only(top: HyperUiSpacing.xs),
             child: HyperButton(
               label: selected.isEmpty ? '确定' : '确定（${selected.length}）',
-              size: 'large',
               expanded: true,
               onPressed: () => Navigator.pop(context, List<T>.of(selected)),
               colorStyle: 'primary',

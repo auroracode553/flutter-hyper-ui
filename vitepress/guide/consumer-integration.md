@@ -53,7 +53,7 @@ Hyper UI 仓库自己的 `AGENTS.md` 用来约束库内开发。业务项目仅�
 ## UI 组件
 
 - 本项目使用 flutter_hyper_ui。新增或修改标准控件必须使用 Hyper UI 或项目已有的 Hyper UI 封装。
-- 底部导航使用 HyperTabBar，分段切换使用 HyperSegmentedControl，顶部导航使用 HyperNavBar，按钮使用 HyperButton，标准弹窗使用 HyperDialog。
+- 底部导航使用 HyperTabBar，分段切换使用 HyperTabs，顶部导航使用 HyperNavBar，按钮使用 HyperButton，标准弹窗使用 HyperDialog。
 - 禁止用 Container、InkWell、GestureDetector、AnimatedContainer 等重复实现库中已有控件，禁止用 Material/Cupertino 控件替代已有 Hyper UI 控件。
 - Scaffold 等页面机制、基础布局、文本、图标和业务专用绘制可以使用 Flutter 基础组件；外观差异通过公开参数、插槽、HyperUiTheme 和主题 tokens 配置。
 - 修改前查阅当前依赖版本的组件接口和示例，不凭组件名猜测默认安全区、边距或高度。

@@ -38,7 +38,7 @@ Flutter 的标准表单弹窗使用 HyperDialog.confirm，通过 canConfirm 校�
 
 内嵌月历使用 [HyperCalendarMonth](vitepress/components/calendar-month.md)，复用日期选择器原有六行网格；需要辅助文字、角标及附属条目时组合 [HyperCalendarDay](vitepress/components/calendar-day.md)。紧凑只读模式合并绘制整月，业务历法与日程仍由调用方处理。
 
-内嵌月历可传 emphasizedDays 使用现有主题色强调日期；日期格的条目最多占三行，溢出数量单独占最后一行，宿主可用 minimumHeight 的 itemRows 预留空间。条目保留完整字高并使用紧凑留白，默认缩放下 large 的三行最小高度为 96。
+内嵌月历可传 emphasizedDays 使用现有主题色强调日期；日期格的条目最多占三行，溢出数量单独占最后一行，宿主可用 minimumHeight 的 itemRows 预留空间。条目保留完整字高并使用紧凑留白，默认规格按实际文字行高预留条目容量。
 
 ## 设计系统
 
@@ -56,7 +56,7 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 `HyperDrawer.show` 打开贴边、全高的模态抽屉；默认 start，正文使用 contentBuilder、默认零内边距。遮罩、返回键和横向滑动可分别控制关闭，标题及页脚固定；完整 API 见[抽屉文档](vitepress/components/drawer.md)。
 
 `HyperNavBar.scrolledUnder` 默认 false，优先使用库内显式作用域，否则自动接入最近 Scaffold 的观察者；没有任何状态来源时透明，true 仅用于强制显示。导航用 160ms 过渡显示覆盖状态栏的渐隐毛玻璃，在状态栏顶部至导航底部的范围内渐隐至透明，不绘制底部分隔线。背景采样与底色一起淡出，前景操作独立保持清晰；材质层不占位、不拦截触摸，导航底部之外不绘制。返回顶部自动恢复透明，页面无需再包背景或模糊层，高对比和关闭动画适配由组件处理。Flutter 与 Compose 保持相同默认视觉规则，滚动状态使用各框架的宿主 API 接入。
-- 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperSegmentedControl`。
+- 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperFilterBar`。
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
 
 - 数据与菜单：`HyperBadge`（type 为 status/tag/count）、`HyperProgress`、`HyperListTile`、`HyperMenuGroup`、`HyperCard`。
@@ -184,3 +184,5 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 - [组件文档](vitepress/components/catalog.md)
 
 本地脚本必须由使用者显式启动；watcher 启动后可以自动热重载，但所有脚本都不会部署。
+
+分段切换使用 [HyperTabs](vitepress/components/tabs.md)，横向分类筛选使用最小高度 32 的 [HyperFilterBar](vitepress/components/filter-bar.md)。每类组件只保留一套默认规格，不提供尺寸档位。

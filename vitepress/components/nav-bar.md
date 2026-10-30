@@ -212,7 +212,7 @@ HyperNavBar(
 HyperNavBar(
   height: 56,
   type: HyperNavBarTypes.custom,
-  leading: const HyperAvatar(text: '林', size: 'small'),
+  leading: const HyperAvatar(text: '林'),
   title: const Row(
     mainAxisSize: MainAxisSize.min,
     children: [

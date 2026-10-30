@@ -39,13 +39,11 @@ class _CalendarDayComponentExampleState
         width: 100,
         height: HyperCalendarDay.minimumHeight(
           MediaQuery.textScalerOf(context),
-          size: 'large',
           hasSubtitle: true,
           itemRows: 3,
         ),
         child: HyperCalendarDay(
           day: 11,
-          size: 'large',
           expanded: true,
           subtitle: '辅助说明',
           badge: '待',
@@ -61,7 +59,7 @@ class _CalendarDayComponentExampleState
         ),
       ),
       const SizedBox(height: 16),
-      HyperText(_feedback, size: 'small'),
+      HyperText(_feedback),
     ],
   );
 }
@@ -80,7 +78,7 @@ class _CalendarMonthComponentExampleState
     extends State<CalendarMonthComponentExample> {
   DateTime _month = DateTime(2026, 10);
   DateTime _selected = DateTime(2026, 10, 21);
-  bool _sunday = false, _compact = false, _readOnly = false, _emphasized = true;
+  bool _sunday = false, _readOnly = false, _emphasized = true;
   void _move(int offset) =>
       setState(() => _month = DateTime(_month.year, _month.month + offset));
   @override
@@ -114,25 +112,16 @@ class _CalendarMonthComponentExampleState
         firstDate: DateTime(1900),
         lastDate: DateTime(2100, 12, 31),
         weekStart: _sunday ? 7 : 1,
-        size: _compact ? 'small' : 'default',
         readOnly: _readOnly,
         emphasizedDays: _emphasized ? const {1, 2, 3, 4, 5, 6, 7} : const {},
         onChanged: (date) => setState(() => _selected = date),
       ),
       const SizedBox(height: 16),
-      HyperText(
-        '已选：${_selected.year}-${_selected.month}-${_selected.day}',
-        size: 'small',
-      ),
+      HyperText('已选：${_selected.year}-${_selected.month}-${_selected.day}'),
       HyperSwitch(
         label: '周日开始',
         value: _sunday,
         onChanged: (value) => setState(() => _sunday = value),
-      ),
-      HyperSwitch(
-        label: '紧凑尺寸',
-        value: _compact,
-        onChanged: (value) => setState(() => _compact = value),
       ),
       HyperSwitch(
         label: '只读展示',

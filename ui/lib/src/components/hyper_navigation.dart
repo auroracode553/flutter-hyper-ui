@@ -1,259 +1,19 @@
 import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
-import 'dart:math' as math;
+
 
 import 'package:flutter/widgets.dart';
+
 import 'hyper_progress_painters.dart';
-import 'package:flutter/services.dart';
+
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_effects.dart';
-import '../theme/hyper_ui_size.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../utils/hyper_progress_value.dart';
-import 'hyper_glass.dart';
 import 'hyper_layout.dart';
-import 'hyper_pressable.dart';
-import 'hyper_tab_controller.dart';
 
 export 'hyper_tab_bar.dart';
-
-/// 顶部或内容区使用的玻璃胶囊标签栏。
-class HyperTabs extends StatelessWidget implements PreferredSizeWidget {
-  const HyperTabs({
-    super.key,
-    required this.tabs,
-    this.pages,
-    this.pageHeight = 180,
-    this.initialIndex = 0,
-    this.selectedIndex,
-    this.onChanged,
-    this.scrollable = false,
-  }) : _barOnly = false;
-
-  const HyperTabs._bar({required this.tabs, required this.scrollable})
-    : pages = null,
-      pageHeight = 0,
-      initialIndex = 0,
-      selectedIndex = null,
-      onChanged = null,
-      _barOnly = true;
-
-  final List<Widget> tabs;
-  final List<Widget>? pages;
-  final double pageHeight;
-  final int initialIndex;
-  final int? selectedIndex;
-  final ValueChanged<int>? onChanged;
-  final bool scrollable;
-  final bool _barOnly;
-
-  @override
-  Size get preferredSize => Size.fromHeight(_tabHeight + 6);
-
-  double get _tabHeight {
-    var height = 48.0;
-    for (final tab in tabs) {
-      if (tab is PreferredSizeWidget) {
-        height = math.max(height, tab.preferredSize.height);
-      }
-    }
-    return height;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_barOnly) {
-      assert(pages == null || tabs.length == pages!.length);
-      return HyperTabHost(
-        length: tabs.length,
-        initialIndex: initialIndex,
-        selectedIndex: selectedIndex,
-        onChanged: onChanged,
-        child: pages == null
-            ? HyperTabs._bar(tabs: tabs, scrollable: scrollable)
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  HyperTabs._bar(tabs: tabs, scrollable: scrollable),
-                  SizedBox(
-                    height: pageHeight,
-                    child: HyperTabView(children: pages!),
-                  ),
-                ],
-              ),
-      );
-    }
-    final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
-    final tabController = HyperTabHost.of(context);
-    assert(tabController.length == tabs.length);
-    final tabHeight = _tabHeight;
-    if (tabs.isEmpty) {
-      return HyperGlass(
-        radius: preferredSize.height / 2,
-        type: 'subtle',
-        child: SizedBox(height: tabHeight),
-      );
-    }
-    return HyperGlass(
-      radius: preferredSize.height / 2,
-      type: 'subtle',
-      padding: const EdgeInsets.all(3),
-      child: SizedBox(
-        height: tabHeight,
-        child: AnimatedBuilder(
-          animation: tabController,
-          builder: (context, _) {
-            final position = tabController.index.toDouble().clamp(
-              0.0,
-              (tabs.length - 1).toDouble(),
-            );
-            if (scrollable) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: <Widget>[
-                    for (var index = 0; index < tabs.length; index++)
-                      _buildItem(
-                        context,
-                        tabController,
-                        tokens,
-                        index,
-                        position,
-                        tabHeight,
-                        showSelection: true,
-                      ),
-                  ],
-                ),
-              );
-            }
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                final itemWidth = constraints.maxWidth / tabs.length;
-                return Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    // 指示器只画一次，跟随控制器位置，不叠加旧标签的背景。
-                    Positioned(
-                      left: itemWidth * position + 2,
-                      top: 2,
-                      width: math.max(0, itemWidth - 4),
-                      height: tabHeight - 4,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: glass.selection,
-                          borderRadius: BorderRadius.circular(tabHeight / 2),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        for (var index = 0; index < tabs.length; index++)
-                          Expanded(
-                            child: _buildItem(
-                              context,
-                              tabController,
-                              tokens,
-                              index,
-                              position,
-                              tabHeight,
-                              showSelection: false,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildItem(
-    BuildContext context,
-    HyperTabController tabController,
-    HyperUiThemeTokens tokens,
-    int index,
-    double position,
-    double tabHeight, {
-    required bool showSelection,
-  }) {
-    final selected = tabController.index == index;
-    final strength = (1 - (position - index).abs()).clamp(0.0, 1.0);
-    final foreground = Color.lerp(
-      tokens.mutedForeground,
-      tokens.foreground,
-      strength,
-    )!;
-    final reduceMotion =
-        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
-    void selectTab() {
-      tabController.animateTo(
-        index,
-        duration: reduceMotion ? Duration.zero : null,
-      );
-    }
-
-    return FocusableActionDetector(
-      shortcuts: const <ShortcutActivator, Intent>{
-        SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
-        SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),
-      },
-      actions: <Type, Action<Intent>>{
-        ActivateIntent: CallbackAction<ActivateIntent>(
-          onInvoke: (_) {
-            selectTab();
-            return null;
-          },
-        ),
-      },
-      child: HyperPressable(
-        onPressed: selectTab,
-        pressedScale: 0.985,
-        borderRadius: BorderRadius.circular(tabHeight / 2),
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: AnimatedContainer(
-            duration: reduceMotion
-                ? Duration.zero
-                : const Duration(milliseconds: 160),
-            curve: Curves.easeOutCubic,
-            height: tabHeight - 4,
-            constraints: showSelection
-                ? const BoxConstraints(minWidth: 72)
-                : null,
-            padding: EdgeInsets.symmetric(horizontal: showSelection ? 16 : 4),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: showSelection && selected
-                  ? HyperGlassTheme.of(context).selection
-                  : HyperPalette.transparent,
-              borderRadius: BorderRadius.circular(tabHeight / 2),
-            ),
-            child: DefaultTextStyle.merge(
-              style: TextStyle(
-                color: foreground,
-                fontWeight: FontWeight.lerp(
-                  FontWeight.w500,
-                  FontWeight.w600,
-                  strength,
-                ),
-              ),
-              child: IconTheme.merge(
-                data: IconThemeData(color: foreground),
-                child: tabs[index],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class HyperStep {
   const HyperStep(this.title, {this.subtitle});
@@ -381,7 +141,7 @@ class HyperProgress extends StatelessWidget {
     this.type = 'linear',
     this.value,
     this.showLabel = true,
-    this.size = 'default',
+
     this.color,
     this.backgroundColor,
   }) : assert(
@@ -392,7 +152,7 @@ class HyperProgress extends StatelessWidget {
   final String type;
   final double? value;
   final bool showLabel;
-  final String size;
+
   final Color? color;
   final Color? backgroundColor;
 
@@ -406,19 +166,14 @@ class HyperProgress extends StatelessWidget {
     final glass = HyperGlassTheme.of(context);
     if (type == 'circular') {
       return SizedBox.square(
-        dimension: hyperUiSizeValue(size, small: 48, normal: 64, large: 80),
+        dimension: 64,
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             SizedBox.expand(
               child: HyperSpinner(
                 value: amount,
-                strokeWidth: hyperUiSizeValue(
-                  size,
-                  small: 4,
-                  normal: 6,
-                  large: 8,
-                ),
+                strokeWidth: 6,
                 backgroundColor: backgroundColor ?? glass.controlTrack,
                 color: color,
               ),
@@ -436,7 +191,7 @@ class HyperProgress extends StatelessWidget {
             borderRadius: BorderRadius.circular(99),
             child: HyperProgressTrack(
               value: amount,
-              height: hyperUiSizeValue(size, small: 4, normal: 6, large: 12),
+              height: 6,
               backgroundColor: backgroundColor ?? glass.controlTrack,
               color: color,
             ),

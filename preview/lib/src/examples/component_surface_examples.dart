@@ -9,7 +9,7 @@ class CardComponentExample extends StatelessWidget {
 
   Widget _label(String text) => Padding(
     padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text, size: 'small'),
+    child: HyperText(text),
   );
 
   @override
