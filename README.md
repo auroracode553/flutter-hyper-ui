@@ -1,5 +1,7 @@
 # Hyper UI · Flutter Hyper UI
 
+设置菜单使用 HyperMenuGroup + HyperListTile 的默认字号、卡片留白和开关样式；独立标题使用 [HyperSectionTitle](vitepress/components/section-title.md)。页面垂直留白与完整分组间距读取 HyperUiSpacing.pageVertical / sectionVertical（12 / 16），不在各应用复制菜单皮肤。
+
 开发文档通过一个 watcher 同时运行 Flutter Web 预览与 VitePress HMR，不需要手动编译或复制预览产物。完整说明见 `vitepress/guide/getting-started.md`。
 
 面向移动端的柔光玻璃 Flutter 组件库。组件使用 `Hyper` 前缀，通过 `package:flutter_hyper_ui/hyper_ui.dart` 引用。
@@ -77,6 +79,8 @@ Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实�
 `HyperDialog` 两端共用窗口两侧各 24 的留白、420 的面板宽度上限、圆角 26 和内容内边距 18；窄屏按实际可用宽度收敛。
 
 `HyperRadio` 的标签行统一处理点击，默认最小高度 46；只展示的圆环占 21，不额外撑高列表行。无标签独立交互控件保留 44 的触摸区。两端预览直接展示单选行，不叠加行间距。
+
+三选项主题设置使用 [HyperThemeModeDialog](vitepress/components/theme-mode-dialog.md)：36 最小行高、4 垂直内边距，选择后请求关闭。value 为 null / false / true，表示跟随系统 / 浅色 / 深色；应用负责保存与应用主题。
 
 对应组件的预览以本项目为视觉基准，同步手机外框、白色背景、安全区、示例分组、文案、图标、尺寸、间距和展示状态；按钮页不添加额外分组标题、开关或点击计数。
 
@@ -186,3 +190,16 @@ Dart 必须先通过 Flutter 编译。构建后的 JavaScript、CanvasKit Wasm�
 本地脚本必须由使用者显式启动；watcher 启动后可以自动热重载，但所有脚本都不会部署。
 
 分段切换使用 [HyperTabs](vitepress/components/tabs.md)，横向分类筛选使用最小高度 32 的 [HyperFilterBar](vitepress/components/filter-bar.md)。每类组件只保留一套默认规格，不提供尺寸档位。
+
+## 构建性能配置
+
+组件库及 Web 预览复用 Flutter 自身的增量编译缓存。日常预览沿用现有常驻开发服务，通过热重启/热重载更新，不重复生成 release；正式文档构建和开发服务均先检查已准备的依赖，再使用 --no-pub，避免每次重复解析或下载依赖。文档发布 JavaScript 预览，关闭 Flutter 默认额外执行的 Wasm 兼容性试编译，不改变 JavaScript 的发布优化级别。
+
+依赖、SDK 与平台构建资源由使用者先行准备；首次构建需要填充缓存。常规迭代保留 build、.dart_tool 和 Gradle 缓存，不把 flutter clean 作为固定构建步骤。不同 Flutter 工程逐个构建，工程内部按任务依赖并行。
+
+HyperTabBar 各形态统一默认内容高度 56，悬浮多项默认顶部间距 8、底部间距 20。页面不覆写底栏高度；与 Compose 端相同，字体扩展在组件内部处理，并排动作在共同 Row 中保持等高。
+
+按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
+
+
+列表水平留白由调用方页面统一提供一次。plain 行默认水平留白为 0；HyperMenuGroup 和独立 glass 行保留水平 14dp 的卡片内边距；列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留垂直 4dp。

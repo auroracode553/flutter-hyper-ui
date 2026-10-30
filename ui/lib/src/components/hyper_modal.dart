@@ -25,6 +25,7 @@ Future<T?> showHyperModal<T>(
       data: theme,
       child: Stack(
         children: <Widget>[
+          // 遮罩保持全视口；系统栏与键盘的避让只属于面板，不包裹这一层。
           Positioned.fill(
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,

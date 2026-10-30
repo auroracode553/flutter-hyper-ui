@@ -67,7 +67,8 @@ class HyperListTile extends StatelessWidget {
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
       constraints: const BoxConstraints(minHeight: 46),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      // plain 共享父级留白，独立卡片仍保护内部内容。
+      padding: EdgeInsets.symmetric(horizontal: plain ? 0 : 14, vertical: 8),
       decoration: BoxDecoration(
         color: selected ? glass.selection : HyperPalette.transparent,
         borderRadius: radius,
@@ -152,7 +153,7 @@ class HyperListTile extends StatelessWidget {
     return HyperGlass.card(
       radius: 18,
       showBorder: selected,
-      padding: const EdgeInsets.all(3),
+      padding: const EdgeInsets.symmetric(vertical: 3),
       onPressed: enabled ? onPressed : null,
       color: selected ? glass.surfaceStrong : null,
       borderColor: selected ? tokens.primary.withAlpha(90) : null,

@@ -1,5 +1,9 @@
 # UI 样式与功能实现基线
 
+普通设置菜单使用 HyperMenuGroup + HyperListTile 默认样式；独立分组标题使用 HyperSectionTitle，与菜单组 title 共用 14 字号、w700 排版。页面垂直留白 12、完整分组间距 16，分别读取 HyperUiSpacing.pageVertical / sectionVertical。业务预览与功能绘制独立保留。
+
+三选项主题设置统一使用 HyperThemeModeDialog：跟随系统、浅色、深色，36 最小行高、4 垂直内边距、21 圆环，无额外行间距或关闭按钮；普通 Radio 标签行与菜单行高保持独立。
+
 Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一组同时约束材质、层级、触控反馈、运动和排版的规则。
 
 本文依据当前 ui/lib/src/ 实现整理，基线日期为 2026-10-21。它同时约束默认视觉、功能行为和组件复用边界，供维护者及 AI 修改前阅读。完整公开签名与参数表仍由[各组件页](../components/catalog.md)维护，本文不替代参数文档。
@@ -84,6 +88,8 @@ HyperUiTheme.app(
 ```
 
 ## 空间层级
+
+模态遮罩由根层 Positioned.fill 覆盖完整视口，不放在 SafeArea 内。Android 对应的 Dialog 窗口同样固定全面屏透明；系统栏与键盘的避让属于内容面板，不能裁短遮罩。两端继续使用现有 scrim 令牌与退出动画，不额外添加系统 dim。
 
 页面从后向前分为四层：
 
@@ -283,7 +289,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | --- | --- | --- |
 | [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart 及同名前缀 part 文件 | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
 | [HyperFilterBar](../components/filter-bar.md) | hyper_filter_bar.dart | 横向分类筛选；独立选中胶囊，周围透明；单项最小高 32、宽 48，内边距 12×6、间距 6；业务持有 selectedIndex，内部滚动保持选中项可见 |
-| [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | single / multiple，默认 multiple，高 56；floating 默认 true 保留悬浮，false 为全宽平直贴底、总高 60（含安全区）与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
+| [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | single / multiple，默认 multiple，高 56；floating 默认 true 保留悬浮，false 为全宽平直贴底、默认内容高 56 与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
 | [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认图标按钮，数字项保留专用选中态 |
 | [HyperSlideMenu](../components/slide-menu.md) | hyper_slide_menu.dart | 逻辑 start / end 操作区，默认每项宽 64、圆角 18；保留跟手、越界阻尼、速度投影与弹簧；展开时屏蔽正文操作，点击操作先收起再通知调用方 |
 | [HyperActionSheet](../components/action-sheet.md) | hyper_action_sheet.dart | show 展示自定义内容，choose 展示 HyperAction 列表；圆角 30、内边距 16、最大高为键盘避让后可用高度的 85%；选中、禁用、危险色和取消按钮分别保留 |
@@ -375,3 +381,10 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 预览以本仓库为视觉基准：手机外框、背景、安全区、分组顺序、文案、图标、尺寸、间距和状态一致，不额外加标题、控制项或计数。完整页面的底栏使用 Scaffold.extendBody 与 bottomNavigationBar，正文 SafeArea 显式 bottom: false；底栏边距与安全区交给 HyperTabBar，滚动末尾只取一次 Scaffold 注入的 bottom padding。示例参见[共用悬浮宿主](../components/tab-bar.md#悬浮页面宿主)与[业务接入规则](./consumer-integration.md)。
 
 完成修改后，核对默认、禁用、只读、选中、加载、边界和取消行为中实际受影响的部分。按现有环境执行格式检查与必要静态分析；不新增单元测试或一次性报告，不自动安装依赖、启动部署或保留临时验证产物。组件页保留完整参数表，公开 API 变化同步 catalog.ts、公开入口、真实示例和本文。不能只修改预览制造“已经修复”的外观。
+
+HyperTabBar 各形态统一默认内容高度 56，悬浮多项默认顶部间距 8、底部间距 20。页面不覆写底栏高度；与 Compose 端相同，字体扩展在组件内部处理，并排动作在共同 Row 中保持等高。
+
+按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
+
+
+列表水平留白由调用方页面统一提供一次。plain 行默认水平留白为 0；HyperMenuGroup 和独立 glass 行保留水平 14dp 的卡片内边距；列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留垂直 4dp。

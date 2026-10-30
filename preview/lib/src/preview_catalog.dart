@@ -1,4 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'examples/component_section_title_example.dart' deferred as example_section_title;
+import 'examples/component_theme_mode_dialog_example.dart'
+    deferred as example_theme_mode_dialog;
+import 'examples/component_safe_area_example.dart'
+    deferred as example_component_safe_area;
 
 import 'examples/actions_example.dart' deferred as example_actions_example;
 import 'examples/buttons_example.dart' deferred as example_buttons_example;
@@ -291,6 +296,19 @@ class PreviewCatalog {
       builder: (_) => example_component_form_examples.RadioComponentExample(),
     ),
     PreviewItem(
+      id: 'component-theme-mode-dialog',
+      title: 'HyperThemeModeDialog',
+      description: '36dp 紧凑三选项，选择后关闭。',
+      loadLibrary: () => example_theme_mode_dialog.loadLibrary(),
+      builder: (_) => example_theme_mode_dialog.ThemeModeDialogComponentExample(),
+    ),
+    PreviewItem(
+      id: 'component-section-title', title: 'HyperSectionTitle',
+      description: '独立标题与菜单组共用默认排版。',
+      loadLibrary: () => example_section_title.loadLibrary(),
+      builder: (_) => example_section_title.SectionTitleComponentExample(),
+    ),
+    PreviewItem(
       id: 'component-switch',
       title: 'HyperSwitch',
       description: '开启、关闭与禁用状态。',
@@ -352,6 +370,13 @@ class PreviewCatalog {
           example_component_nav_bar_example.NavBarComponentExample(),
     ),
     PreviewItem(
+      id: 'component-safe-area',
+      title: 'HyperSafeArea',
+      description: '方向、系统区与嵌套单次消费。',
+      loadLibrary: () => example_component_safe_area.loadLibrary(),
+      builder: (_) => example_component_safe_area.SafeAreaComponentExample(),
+    ),
+    PreviewItem(
       id: 'component-tab-bar',
       title: 'HyperTabBar',
       description: '多项导航、独立通知入口与左侧通知入口组合示例。',
@@ -362,7 +387,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-list-tile',
       title: 'HyperListTile',
-      description: '列表项的常见状态。',
+      description: '列表项的常见状态，水平留白由预览宿主统一提供。',
       loadLibrary: () => example_component_navigation_examples.loadLibrary(),
       builder: (_) =>
           example_component_navigation_examples.ListTileComponentExample(),
@@ -370,7 +395,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-menu-group',
       title: 'HyperMenuGroup',
-      description: '设置页式分组菜单。',
+      description: '设置页式分组菜单，标题和行不叠加水平缩进。',
       loadLibrary: () => example_component_navigation_examples.loadLibrary(),
       builder: (_) =>
           example_component_navigation_examples.MenuGroupComponentExample(),

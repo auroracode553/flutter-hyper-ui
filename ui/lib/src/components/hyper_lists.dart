@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_layout.dart';
+import 'hyper_section_title.dart';
 
 class HyperMenuGroup extends StatelessWidget {
   const HyperMenuGroup({
@@ -29,21 +30,11 @@ class HyperMenuGroup extends StatelessWidget {
       spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        if (title != null)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 8),
-            child: Text(
-              title!,
-              style: TextStyle(
-                color: tokens.cardForeground,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
+        if (title != null) HyperSectionTitle(title!),
         HyperGlass.card(
           radius: 18,
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          // 标题、分隔线和条目共享调用方的一层水平留白。
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
           child: _HyperMenuGroupScope(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -53,7 +44,7 @@ class HyperMenuGroup extends StatelessWidget {
                   index < children.length;
                   index++
                 ) ...<Widget>[
-                  if (index > 0) const HyperDivider(indent: 14, endIndent: 14),
+                  if (index > 0) const HyperDivider(),
                   children[index],
                 ],
               ],
@@ -61,15 +52,12 @@ class HyperMenuGroup extends StatelessWidget {
           ),
         ),
         if (subtitle != null)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 8, end: 8),
-            child: Text(
-              subtitle!,
-              style: TextStyle(
-                color: tokens.mutedForeground,
-                fontSize: 12,
-                height: 1.35,
-              ),
+          Text(
+            subtitle!,
+            style: TextStyle(
+              color: tokens.mutedForeground,
+              fontSize: 12,
+              height: 1.35,
             ),
           ),
       ],

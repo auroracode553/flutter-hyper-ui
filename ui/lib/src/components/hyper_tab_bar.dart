@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_badge.dart';
+import 'hyper_safe_area.dart';
 import 'hyper_glass.dart';
 import 'hyper_pressable.dart';
 
@@ -42,10 +43,14 @@ class HyperTabBar extends StatefulWidget {
            margin ??
            (!floating || type == 'single'
                ? EdgeInsets.zero
-               : const EdgeInsets.fromLTRB(20, 8, 20, 0));
+               : const EdgeInsets.fromLTRB(
+                   20,
+                   8,
+                   20,
+                   HyperSafeAreaDefaults.minimumBottomSpacing,
+                 ));
 
   static const double height = 56;
-  static const double dockedHeight = 60;
   final List<HyperTabItem> items;
   final int? selectedIndex;
   final ValueChanged<int> onChanged;
@@ -101,6 +106,9 @@ class _HyperTabBarState extends State<HyperTabBar> {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final activeColor = widget.color ?? tokens.primary;
+    // 单动作、悬浮与贴底共用默认高度；字体适配留在组件内部。
+    final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
+    final barHeight = math.max(HyperTabBar.height, textHeight + 36);
     Widget bar;
     if (widget.type == 'single') {
       bar = HyperBadge(
@@ -110,12 +118,12 @@ class _HyperTabBarState extends State<HyperTabBar> {
           opacity: _enabled(0) ? 1 : 0.4,
           child: HyperPressable(
             enabled: _enabled(0),
-            borderRadius: BorderRadius.circular(height / 2),
+            borderRadius: BorderRadius.circular(barHeight / 2),
             onPressed: () => widget.onChanged(0),
             child: HyperGlass(
-              radius: height / 2,
+              radius: barHeight / 2,
               child: SizedBox.square(
-                dimension: height,
+                dimension: barHeight,
                 child: Icon(
                   widget.items.single.icon,
                   size: 22,
@@ -140,17 +148,6 @@ class _HyperTabBarState extends State<HyperTabBar> {
         itemWidth = math.max(itemWidth, label.width + 32);
         label.dispose();
       }
-      final bottomInset = widget.safeArea
-          ? MediaQuery.paddingOf(context).bottom
-          : 0.0;
-      final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
-      // 贴底总高度包含安全区，保持普通手势导航下的紧凑尺寸。
-      final barHeight = widget.floating
-          ? math.max(height, textHeight + 36)
-          : math.max(
-              math.max(HyperTabBar.dockedHeight - bottomInset, 40.0),
-              textHeight + 26,
-            );
       bar = SizedBox(
         width: widget.floating
             ? itemWidth * widget.items.length + 2 * _inset
@@ -263,8 +260,6 @@ class _HyperTabBarState extends State<HyperTabBar> {
         ? bar
         : ColoredBox(color: tokens.background, child: bar);
   }
-
-  static const double height = HyperTabBar.height;
 }
 
 /// 仅悬浮形态绘制玻璃胶囊，贴底形态直接使用外层页面表面。

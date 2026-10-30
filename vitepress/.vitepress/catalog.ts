@@ -239,6 +239,13 @@ export const componentGroups: ComponentGroup[] = [
       demo('layout', '布局容器与占位状态', 'complete_examples.dart', 740),
     ],
     components: [
+      component('HyperSafeArea / HyperSafeAreaEdge / HyperSafeAreaDefaults', 'hyper_safe_area.dart', '按需保护顶部或底部，统一底部最小 20，并避免嵌套重复留白。', {
+        propsDocs: [
+          { name: 'edge', description: 'Top / Bottom，默认 bottom，不包含 IME Insets' },
+          { name: 'child', description: '需要保护的内容，不改变自身业务高度' },
+        ],
+        preview: demo('component-safe-area', 'HyperSafeArea', 'component_safe_area_example.dart', 440, '方向、系统区与嵌套交互。', 'SafeAreaComponentExample'),
+      }),
       component('HyperPageContentSliver', 'hyper_page_content.dart', '页面内容 sliver：统一内容边距，宽屏（桌面/平板）下居中限宽，手机端占满。可放入 CustomScrollView。', {
         propsDocs: [
           { name: 'child', description: '页面内容' },
@@ -524,6 +531,19 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-dialog', 'HyperDialog 对话框', 'component_feedback_examples.dart', 420, '标准确认、危险操作、仅确认按钮与自定义正文。', 'DialogComponentExample'),
       }),
+      component('HyperSectionTitle', 'hyper_section_title.dart', '与菜单分组共用的 14 字号、w700 独立标题。', {
+        propsDocs: [{ name: 'text', description: '分组标题；页面负责外部留白' }],
+        preview: demo('component-section-title', 'HyperSectionTitle', 'component_section_title_example.dart', 420, '独立标题与菜单组共用默认排版。', 'SectionTitleComponentExample'),
+      }),
+      component('HyperThemeModeDialog', 'hyper_theme_mode_dialog.dart', '跟随系统、浅色、深色三选项；36dp 紧凑行，选择后请求关闭。', {
+        propsDocs: [
+          { name: 'value', description: 'null 跟随系统，false 浅色，true 深色' },
+          { name: 'onChanged', description: '选择后通知保存与应用主题' },
+          { name: 'onClose', description: '选择后请求关闭面板' },
+          { name: 'title', description: '面板标题，默认主题设置' },
+        ],
+        preview: demo('component-theme-mode-dialog', 'HyperThemeModeDialog', 'component_theme_mode_dialog_example.dart', 420, '紧凑三选项、当前值与关闭行为。', 'ThemeModeDialogComponentExample'),
+      }),
       component('HyperUpdateDialog', 'hyper_update_dialog.dart', '沿用 Hyper 柔光玻璃风格的完整更新对话框，覆盖检查、版本日志、下载、安装、完成与失败重试。', {
         propsDocs: [
           { name: 'status', description: '受控更新状态，默认 HyperUpdateStatus.idle；状态由业务层切换' },
@@ -700,7 +720,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'floating', description: '默认 true 保留悬浮；false 为 multiple 全宽平直贴底，默认零边距' },
           { name: 'itemEnabled', description: '各项可用性，默认全部可用；禁用项停止点击和拖动提交' },
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
-          { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 20、顶部 8' },
+          { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 20、顶部 8、底部 20' },
         ],
         preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '体验多项导航、独立圆形入口和左侧通知入口组合示例。', 'TabBarComponentExample'),
       }),
@@ -762,7 +782,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-progress', 'HyperProgress 进度', 'component_navigation_examples.dart', 360, '线性粗细、环形和不定进度。', 'ProgressComponentExample'),
       }),
-      component('HyperListTile', 'hyper_list_tile.dart', '支持图标、头像、标签、元信息和自定义尾部的列表项。', {
+      component('HyperListTile', 'hyper_list_tile.dart', '支持图标、头像、标签、元信息和自定义尾部；默认无水平留白。', {
         propsDocs: [
           { name: 'type', description: '表面类型：auto / plain / glass，默认 auto' },
           { name: 'title', description: '标题' },
@@ -779,7 +799,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-list-tile', 'HyperListTile 列表项', 'component_navigation_examples.dart', 400, '基础、选中/禁用与自定义插槽（showChevron）。', 'ListTileComponentExample'),
       }),
-      component('HyperMenuGroup', 'hyper_lists.dart', '设置页、个人中心和详情页通用的玻璃分组菜单。', {
+      component('HyperMenuGroup', 'hyper_lists.dart', '设置页、个人中心和详情页通用的玻璃分组菜单，水平留白由调用方统一提供。', {
         propsDocs: [
           { name: 'children', description: 'HyperListTile 等分组内容' },
           { name: 'title', description: '分组标题' },
