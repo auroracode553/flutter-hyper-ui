@@ -64,7 +64,7 @@ HyperNavBar.scrolledUnder 默认 false，优先使用显式主滚动作用域，
 - 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
 
 - 数据与菜单：`HyperBadge`（type 为 status/tag/count）、`HyperProgress`、`HyperListTile`、`HyperMenuGroup`、`HyperCard`。
-- 反馈：`HyperToast`、`HyperDialog`、`HyperLoading`、`HyperSkeleton`。
+- 反馈：`HyperToast`、`HyperDialog`、`HyperLoading`（type 选择十款原生动画，默认随机，固定 2× 节奏）、`HyperSkeleton`。
 
 `HyperCheckbox`、`HyperRadio`、`HyperSwitch` 默认直接展示控件；带 label 时使用 plain 标签行，不自动附带卡片背景、描边或阴影。
 

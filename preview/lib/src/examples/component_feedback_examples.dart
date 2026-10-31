@@ -259,51 +259,6 @@ class DialogComponentExample extends StatelessWidget {
 }
 // end-doc-region DialogComponentExample
 
-// doc-region LoadingComponentExample
-class LoadingComponentExample extends StatelessWidget {
-  const LoadingComponentExample({super.key});
-
-  Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _label('局部加载'),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 12,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            HyperLoading(),
-            SizedBox(width: HyperUiSpacing.md),
-            HyperLoading(label: '同步中'),
-            SizedBox(width: HyperUiSpacing.md),
-            HyperLoading(label: '上传'),
-          ],
-        ),
-        const SizedBox(height: HyperUiSpacing.lg),
-
-        _label('全局任务遮罩'),
-        HyperButton(
-          label: '预览全局加载',
-          onPressed: () => HyperLoading.during<void>(
-            context,
-            () => Future<void>.delayed(const Duration(milliseconds: 900)),
-            label: '正在保存',
-          ),
-        ),
-      ],
-    );
-  }
-}
-// end-doc-region LoadingComponentExample
-
 // doc-region ActionSheetComponentExample
 class ActionSheetComponentExample extends StatelessWidget {
   const ActionSheetComponentExample({super.key});

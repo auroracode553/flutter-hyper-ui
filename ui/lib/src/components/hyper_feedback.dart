@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-import 'hyper_progress_painters.dart';
-
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -226,68 +224,5 @@ abstract final class HyperDialog {
         ),
       ),
     );
-  }
-}
-
-class HyperLoading extends StatelessWidget {
-  const HyperLoading({
-    super.key,
-    this.label,
-
-    this.color,
-  });
-
-  final String? label;
-
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SizedBox.square(
-          dimension: 24,
-          child: HyperSpinner(strokeWidth: 2.5, color: color),
-        ),
-        if (label != null)
-          Padding(padding: const EdgeInsets.only(top: 12), child: Text(label!)),
-      ],
-    );
-  }
-
-  /// 任务结束时只移除自己的浮层，不操作业务路由。
-  static Future<T> during<T>(
-    BuildContext context,
-    Future<T> Function() task, {
-    String label = '请稍候',
-  }) async {
-    final theme = HyperUiTheme.of(context);
-    late final OverlayEntry entry;
-    entry = OverlayEntry(
-      builder: (_) => HyperUiTheme(
-        data: theme,
-        child: Stack(
-          children: <Widget>[
-            ModalBarrier(dismissible: false, color: theme.glass.scrim),
-            Center(
-              child: HyperGlass(
-                radius: 24,
-                type: 'prominent',
-                padding: const EdgeInsets.all(20),
-                child: HyperLoading(label: label),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-    Overlay.of(context, rootOverlay: true).insert(entry);
-    try {
-      return await task();
-    } finally {
-      entry.remove();
-      entry.dispose();
-    }
   }
 }

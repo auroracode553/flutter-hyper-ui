@@ -116,16 +116,6 @@ class _OverlayExampleState extends State<OverlayExample> {
                 }
               },
             ),
-            HyperButton(
-              label: '全局加载',
-              onPressed: () async {
-                await HyperLoading.during(
-                  context,
-                  () => Future<void>.delayed(const Duration(seconds: 2)),
-                );
-                if (context.mounted) HyperToast.show(context, '加载完成');
-              },
-            ),
             HyperPopover(
               visible: _popoverOpen,
               onClose: () => setState(() => _popoverOpen = false),

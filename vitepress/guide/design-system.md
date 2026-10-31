@@ -305,7 +305,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | --- | --- | --- |
 | [HyperToast](../components/toast.md) | hyper_feedback.dart | root Overlay，默认显示 2 秒、距底 96、宽 180–420、圆角 18；色调对应图标／边缘；动作先关闭提示再回调，内部防止重复移除 |
 | [HyperDialog](../components/dialog.md) | hyper_feedback.dart | confirm 返回 bool?；两侧留白 24、最大宽 420、圆角 26、内边距 18；canConfirm 为 false 保持打开；取消默认按钮，确认按普通／危险语义配色 |
-| [HyperLoading](../components/loading.md) | hyper_feedback.dart | 加载环尺寸 24；during 通过遮罩等待外部任务，在 finally 中移除浮层，不能吞掉任务结果或异常 |
+| [HyperLoading](../components/loading.md) | hyper_loading.dart、loading/ | type 默认 null，在十款原生动画中为每个实例随机选择，重建保持稳定；显式 type 固定样式，各自固定规格与原始配色，固定 2× 节奏；宿主控制显示和移除 |
 | [HyperProgress](../components/progress.md) | hyper_navigation.dart、hyper_progress_painters.dart | linear / circular；轨道高 6，圆形尺寸 64、线宽 6；确定进度归一化至 0–1，不定进度不显示百分比；与按钮共用自绘环／轨道 |
 | [HyperTooltip](../components/tooltip.md) | hyper_tooltip.dart | 默认 hoverDelay 500ms、maxWidth 240、圆角 12；保留悬停、聚焦、触摸长按与退出生命周期，不在调用方重新写一套浮层 |
 | [HyperNoticeBar](../components/notice-bar.md) | hyper_notice_bar.dart | 圆角 16、主题色浅底和边框；默认速度 28；短文字静止，长文字循环，按住或减少动画时暂停；关闭按钮保留透明底和主题色 |

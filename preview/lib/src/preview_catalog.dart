@@ -15,6 +15,8 @@ import 'examples/component_carousel_example.dart'
     deferred as example_component_carousel_example;
 import 'examples/component_composite_examples.dart'
     deferred as example_component_composite_examples;
+import 'examples/component_loading_example.dart'
+    deferred as example_component_loading;
 import 'examples/component_feedback_examples.dart'
     deferred as example_component_feedback_examples;
 import 'examples/component_update_dialog_example.dart'
@@ -540,9 +542,9 @@ class PreviewCatalog {
     _componentPreview(
       'component-loading',
       'HyperLoading',
-      '局部与全局加载状态。',
-      () => example_component_feedback_examples.loadLibrary(),
-      (_) => example_component_feedback_examples.LoadingComponentExample(),
+      '默认随机与十款原生动画，固定 2× 节奏。',
+      () => example_component_loading.loadLibrary(),
+      (_) => example_component_loading.LoadingComponentExample(),
     ),
     _componentPreview(
       'component-update-dialog',

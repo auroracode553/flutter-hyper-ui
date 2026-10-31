@@ -595,11 +595,12 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-update-download-progress', '更新字节进度', 'component_update_dialog_example.dart', 1100, '选择下载中，切换总大小未知以查看确定与不定进度。', 'UpdateDialogComponentExample'),
       }),
-      component('HyperLoading', 'hyper_feedback.dart', '局部加载状态与自动清理的全局任务遮罩。', {
+      component('HyperLoading', 'hyper_loading.dart', '通过 type 选择十款原生加载动画，默认随机，固定 2× 节奏。', {
         propsDocs: [
-          { name: 'label', description: '加载提示文字' },
+          { name: 'type', description: 'HyperLoadingType?，默认 null；每个实例从十款动画中随机选择，重建保持稳定，指定值则固定样式' },
+          { name: 'label', description: '可选加载提示，距图形 12；默认 null' },
         ],
-        preview: demo('component-loading', 'HyperLoading 加载', 'component_feedback_examples.dart', 420, '局部加载（尺寸与文案）与全局任务遮罩。', 'LoadingComponentExample'),
+        preview: demo('component-loading', 'HyperLoading 加载', 'component_loading_example.dart', 1120, '默认随机与十款原生加载动画，固定 2× 节奏。', 'LoadingComponentExample'),
       }),
       component('HyperDrawer / HyperDrawerPlacement', 'hyper_drawer.dart', '贴边全高的模态抽屉，支持双侧展开、RTL、固定页脚、滑动关闭与返回结果。', {
         propsDocs: [

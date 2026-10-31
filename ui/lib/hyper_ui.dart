@@ -18,6 +18,7 @@ export 'src/components/hyper_uploader.dart';
 export 'src/components/hyper_action_sheet.dart';
 export 'src/components/hyper_drawer.dart';
 export 'src/components/hyper_feedback.dart';
+export 'src/components/hyper_loading.dart';
 export 'src/components/hyper_theme_mode_dialog.dart';
 export 'src/components/hyper_update_dialog.dart';
 export 'src/components/hyper_update_models.dart';
