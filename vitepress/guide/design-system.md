@@ -290,7 +290,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | [HyperScrollGradient](../components/scroll-gradient.md) | hyper_scroll_gradient.dart、hyper_scroll_gradient_surface.dart、hyper_nav_bar_scroll_scope.dart、hyper_nav_bar_scroll_observer.dart | 与 Navbar 共用 160ms 主题渐变；读取已有主滚动来源，不采样正文，不增加栏高与安全区 |
 | [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart，材质与滚动状态复用 HyperScrollGradient | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
 | [HyperFilterBar](../components/filter-bar.md) | hyper_filter_bar.dart | 横向分类筛选；普通项浅底与 1dp 弱边线，选中 8% 主题色底、18% 主题色细线与主题色文字，无阴影，整栏周围透明；单项最小高 32、宽 48，内边距 12×6、间距 6；业务持有 selectedIndex，内部滚动保持选中项可见 |
-| [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | single / multiple，默认 multiple，高 56；floating 默认 true 保留悬浮，false 为全宽平直贴底、默认内容高 56 与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
+| [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | 默认 multiple，悬浮 / 贴底按钮组默认高 56，仅按钮组按标签字体扩展；single 独立入口固定直径 48；floating 默认 true，false 为全宽平直贴底与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
 | [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认图标按钮，数字项保留专用选中态 |
 | [HyperSlideMenu](../components/slide-menu.md) | hyper_slide_menu.dart | 逻辑 start / end 操作区，默认每项宽 64、圆角 18；保留跟手、越界阻尼、速度投影与弹簧；展开时屏蔽正文操作，点击操作先收起再通知调用方 |
 | [HyperActionSheet](../components/action-sheet.md) | hyper_action_sheet.dart | show 展示自定义内容，choose 展示 HyperAction 列表；圆角 30、内边距 16、最大高为键盘避让后可用高度的 85%；选中、禁用、危险色和取消按钮分别保留 |
@@ -351,7 +351,7 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 | HyperUploader 删除按钮 | 默认图标按钮加 surfaceStrong，叠在缩略图右上方 | 当前保留；移除背景前确认 |
 | HyperSelect 选项行与标记 | 自绘行、单选圆点和多选方框，非 HyperRadio / HyperCheckbox 的整项复用 | 复用候选，尚未批准替换；需要核对尺寸、点击区域与选中行为 |
 | HyperUploader 添加文件格 | 104×136 HyperGlass 点击格，包含图标和文字 | 是上传网格入口；替换成按钮会改变网格，先确认 |
-| HyperTabBar single 入口 | 56 的自绘浮动入口，加角标与自身安全区 | 属于底栏组件形态；不能仅因外形圆形就替换为默认图标按钮 |
+| HyperTabBar single 入口 | 固定直径 48 的自绘圆形入口，加角标与自身安全区 | 与默认高 56 的按钮组并排居中，禁止改成等高入口；不能仅因外形圆形就替换为默认图标按钮 |
 | HyperCalendarDay 角标和条目 | 紧凑文字角标、最多三行条目及溢出行；条目 10 号字、1.2 行高、垂直内边距合计 2、行间距 2 | 日历布局专用；改为 HyperBadge 等组件需先确认空间与文本规则；宿主以 minimumHeight 预留容量 |
 | HyperSlideMenu 操作区 | 填满侧滑区的文字／图标、危险或自定义操作色 | 不是独立胶囊按钮，不能替换导致露出背景或改变操作区宽高 |
 | Tabs、Tabs、PageIndicator、Slider、选择控件 | 自绘选中块、轨道、圆环、圆点和标记 | 属于组件核心视觉，按各自状态规则保留 |
@@ -383,7 +383,7 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 
 完成修改后，核对默认、禁用、只读、选中、加载、边界和取消行为中实际受影响的部分。按现有环境执行格式检查与必要静态分析；不新增单元测试或一次性报告，不自动安装依赖、启动部署或保留临时验证产物。组件页保留完整参数表，公开 API 变化同步 catalog.ts、公开入口、真实示例和本文。不能只修改预览制造“已经修复”的外观。
 
-HyperTabBar 各形态统一默认内容高度 56，悬浮多项默认顶部间距 8、底部间距 20。页面不覆写底栏高度；与 Compose 端相同，字体扩展在组件内部处理，并排动作在共同 Row 中保持等高。
+HyperTabBar 尺寸由库按形态管理：`type: 'single'` 是固定直径 48 逻辑像素的独立圆形动作入口；`type: 'multiple'` 的按钮组（悬浮或贴底）默认内容高度 56，仅按钮组按标签字体在库内扩展。单独入口必须比按钮组小，禁止为“统一高度”将 single 改成 56，也禁止业务页面通过 SizedBox、约束或缩放实现 48。与 Compose 端保持一致，并排时在共同 Row 中垂直居中，保留各自默认尺寸；悬浮多项默认顶部间距 8、底部间距 20。正文使用宿主实测底部净空，不按默认尺寸估算占位。
 
 按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
 

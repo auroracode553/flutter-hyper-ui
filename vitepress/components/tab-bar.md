@@ -9,7 +9,7 @@ description: HyperTabBar 组件与公开 API
 
 ## 非悬浮动作栏
 
-`floating: false` 使用库内全宽平直表面，没有悬浮胶囊、圆角、外侧留白或浮层阴影；默认 margin 为零，safeArea 默认 true。与悬浮和单动作共用默认内容高度 56，字体扩展仅在组件内部处理；安全区位于内容高度之外。放入 Scaffold.bottomNavigationBar 时采用普通正文避让，不叠加底板、额外 SafeArea 或固定底栏高度。
+`floating: false` 使用库内全宽平直表面，没有悬浮胶囊、圆角、外侧留白或浮层阴影；默认 margin 为零，safeArea 默认 true。与悬浮多项按钮组共用默认内容高度 56，仅按钮组按标签字体在库内扩展；single 独立入口固定直径 48。安全区位于内容尺寸之外。放入 Scaffold.bottomNavigationBar 时采用普通正文避让，不叠加底板、额外 SafeArea 或固定底栏高度。
 
 ```dart
 HyperTabBar(
@@ -25,7 +25,7 @@ HyperTabBar(
 
 ## 单项入口
 
-`type: 'single'` 用于与底部导航并排的独立操作入口，例如通知。它绘制 56px 的圆形图标按钮，并可显示数量角标；点击时始终通过 `onChanged(0)` 通知调用方。`badgeCount` 为 0 时隐藏角标，超过 99 时显示 `99+`。
+`type: 'single'` 用于与底部导航并排的独立操作入口，例如通知。它在库内固定为直径 48 逻辑像素的圆形图标按钮，不随按钮组高度或标签字体放大，并可显示数量角标；点击时始终通过 `onChanged(0)` 通知调用方。`badgeCount` 为 0 时隐藏角标，超过 99 时显示 `99+`。
 
 ```dart
 HyperTabBar(
@@ -113,4 +113,9 @@ class AppPageScrollEnd extends StatelessWidget {
 
 ## 默认尺寸与并排操作
 
-所有形态共用 HyperTabBar.height = 56，不由业务设置固定高度或 SizedBox.square 限制尺寸。悬浮多项默认 margin 为 (20, 8, 20, 20)，并排入口由共同 Row 处理一次边距。右侧 single 操作入口与主导航使用相同默认高度；预览支持点击和切换观察。
+single 使用库内 HyperTabBar.singleDiameter = 48 的固定直径，multiple 悬浮 / 贴底按钮组使用 HyperTabBar.height = 56 的默认内容高度，仅按钮组按标签字体在库内扩展。单独按钮必须比按钮组小，禁止为并排等高将 single 改为 56；业务不得设置固定高度、SizedBox.square、额外约束或缩放来实现 48。悬浮多项默认 margin 为 (20, 8, 20, 20)，并排入口由共同 Row 处理一次边距并使用 CrossAxisAlignment.center，保留各自默认尺寸；预览支持点击和切换观察。
+
+| 默认值 | 类型 | 必填 | 值 | 作用 |
+| --- | --- | --- | --- | --- |
+| HyperTabBar.singleDiameter | double | 否 | 48 | single 独立圆形入口的固定直径，单位为逻辑像素 |
+| HyperTabBar.height | double | 否 | 56 | multiple 悬浮 / 贴底按钮组默认内容高度，单位为逻辑像素；字体扩展由库内部处理 |

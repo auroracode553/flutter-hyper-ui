@@ -50,6 +50,10 @@ class HyperTabBar extends StatefulWidget {
                    HyperSafeAreaDefaults.minimumBottomSpacing,
                  ));
 
+  /// 单独动作入口的固定直径，不与多项按钮组等高。
+  static const double singleDiameter = 48;
+
+  /// 悬浮和贴底多项按钮组的默认内容高度，组件内可随字体扩展。
   static const double height = 56;
   final List<HyperTabItem> items;
   final int? selectedIndex;
@@ -106,9 +110,11 @@ class _HyperTabBarState extends State<HyperTabBar> {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperGlassTheme.of(context);
     final activeColor = widget.color ?? tokens.primary;
-    // 单动作、悬浮与贴底共用默认高度；字体适配留在组件内部。
+    // 单动作固定为 48 圆形入口；只有多项按钮组按标签字体扩展默认高度。
     final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
-    final barHeight = math.max(HyperTabBar.height, textHeight + 36);
+    final barHeight = widget.type == 'single'
+        ? HyperTabBar.singleDiameter
+        : math.max(HyperTabBar.height, textHeight + 36);
     Widget bar;
     if (widget.type == 'single') {
       bar = HyperBadge(

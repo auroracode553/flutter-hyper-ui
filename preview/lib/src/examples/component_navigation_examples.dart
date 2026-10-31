@@ -38,7 +38,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
           ],
         ),
         const SizedBox(height: 20),
-        const Text('单项入口：通知角标与独立点击'),
+        const Text('48 直径单项入口：通知角标与独立点击'),
         const SizedBox(height: 12),
         Center(
           child: HyperTabBar(
@@ -67,7 +67,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
           ],
         ),
         const SizedBox(height: 24),
-        Text('右侧独立入口：已触发 $_actionCount 次，均使用默认高度'),
+        Text('56 高导航与 48 直径入口：已触发 $_actionCount 次'),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
           child: Row(

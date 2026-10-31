@@ -391,7 +391,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-tab-bar',
       title: 'HyperTabBar',
-      description: '多项导航、独立通知入口与左侧通知入口组合示例。',
+      description: '默认高 56 的多项导航、固定直径 48 的独立通知入口与居中组合示例。',
       loadLibrary: () => example_component_navigation_examples.loadLibrary(),
       builder: (_) =>
           example_component_navigation_examples.TabBarComponentExample(),

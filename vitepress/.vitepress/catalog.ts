@@ -724,7 +724,7 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '悬浮或全宽贴底底栏，支持可重复动作、单项禁用与独立角标入口。', {
         propsDocs: [
-          { name: 'type', description: "'multiple' 多项导航（默认）或 'single' 独立圆形入口" },
+          { name: 'type', description: "'multiple' 多项按钮组默认高 56（默认）或 'single' 固定直径 48 的独立圆形入口，单位为逻辑像素" },
           { name: 'items', description: '多项模式至少 2 项；单项模式恰好 1 项，仅显示图标' },
           { name: 'selectedIndex', description: '当前选中索引；null 为无选中块、可重复点击且不响应拖动的动作模式' },
           { name: 'onChanged', description: '点击回调；单项模式传入索引 0' },
@@ -735,7 +735,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
           { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 20、顶部 8、底部 20' },
         ],
-        preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '体验多项导航、独立圆形入口和左侧通知入口组合示例。', 'TabBarComponentExample'),
+        preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '体验默认高 56 的多项导航、固定直径 48 的独立圆形入口及居中组合示例。', 'TabBarComponentExample'),
       }),
       component('HyperTabs / HyperTabsItem', 'hyper_tabs.dart', '受控分段选择，等宽选中底板平滑移动，非等宽选项使用背景色过渡。', {
         propsDocs: [
