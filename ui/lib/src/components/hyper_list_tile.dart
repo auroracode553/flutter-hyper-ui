@@ -7,7 +7,7 @@ import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_lists.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 import 'hyper_surface_scope.dart';
 
 /// 通用列表/设置菜单行。
@@ -142,7 +142,7 @@ class HyperListTile extends StatelessWidget {
     );
 
     if (plain) {
-      return HyperPressable(
+      return PressFeedback(
         onPressed: enabled ? onPressed : null,
         enabled: enabled,
         pressedScale: 0.992,

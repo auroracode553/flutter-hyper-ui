@@ -4,7 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../theme/hyper_ui_effects.dart';
 import 'hyper_glass.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 
 class HyperCollapse extends StatefulWidget {
   const HyperCollapse({
@@ -69,7 +69,7 @@ class _HyperCollapseState extends State<HyperCollapse>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          HyperPressable(
+          PressFeedback(
             onPressed: _toggle,
             child: Padding(
               padding: const EdgeInsets.all(16),

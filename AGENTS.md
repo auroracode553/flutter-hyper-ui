@@ -1,6 +1,8 @@
 # 项目协作规则
 
-- 全局主题不提供材质档位，普通组件保持实色；Button、TabBar、Slider、Switch、Dialog 在组件内部固定使用参考项目的玻璃绘制。不得因删除全局配置而删除组件玻璃效果；保留品牌色、字体与深浅色，尺寸和布局不因材质改变。
+- 预览手机样式是固定验收基线：保留原有 48px 圆角、外框、350×680 默认屏幕、灵动岛、摄像头、底部指示条、背景及安全区。未经用户明确要求，禁止随组件美化、重构、适配或响应式调整修改手机外观；窄窗口也不得把手机圆角改为小圆角或直角。组件改动只作用于屏幕内目标组件。
+
+- 全局主题不提供材质档位，普通组件保持实色；Button、TabBar、Slider、Switch、Dialog、Checkbox、Radio、DatePicker、Tabs、Drawer、Dropdown、Toast、Progress、UpdateDialog 在组件内部固定使用参考项目的玻璃绘制。不得因删除全局配置而删除组件玻璃效果；保留品牌色、字体与深浅色，尺寸和布局不因材质改变。
 
 ## UI 库维护与业务页面开发必读
 
@@ -71,7 +73,7 @@
 本组件库为 Flutter 自绘玻璃拟态风格（Hyper* 组件），与 Material Design 视觉语言不一致，**禁止在 ui 库与 preview 示例中使用 Material 视觉组件**：
 
 - 禁止使用：`ListTile`、`TextButton`、`IconButton`、`Material` + `InkWell/InkResponse`、`CheckboxListTile`、`SwitchListTile`、`RadioListTile`、`CircleAvatar`、`Card`、`Divider`、`Badge` 等任何自带 Material 外观的组件。
-- 统一改用 Hyper 组件：`HyperListTile`、`HyperButton`（图标按钮使用 `type: 'icon'`）、`HyperPressable`、`HyperDivider`、`HyperCard`、`HyperBadge` 等；列表项、按钮、图标按钮一律从 `ui/lib/src/components/` 的 Hyper 自绘组件选取。
+- 统一改用 Hyper 组件：`HyperListTile`、`HyperButton`（图标按钮使用 `type: 'icon'`）、`HyperDivider`、`HyperCard`、`HyperBadge` 等；列表项、按钮、图标按钮一律从 `ui/lib/src/components/` 的 Hyper 自绘组件选取。共享按压反馈属于库内实现，不从公开入口导出。
 - 允许保留（属机制基础设施，非视觉组件）：弹层宿主（`showDialog` / `Dialog` / `showModalBottomSheet` / `SnackBar` 容器与 `ScaffoldMessenger`）、控件绘制基底（`Checkbox` / `Radio` / `Switch` / `Slider`、`CircularProgressIndicator` / `LinearProgressIndicator`）、滑动与弹层物理（`TabBar` / `TabBarView`、`MenuAnchor` / `MenuController`）、页面宿主（`Scaffold` / `AppBar`）以及 `Icon` / `Text` / `TextField` 等基础 Widget。
 - 新增公开组件必须是 `Hyper` 前缀的自绘组件，并同步登记到 vitepress 组件目录（`vitepress/.vitepress/catalog.ts`、`preview_catalog.dart`、示例源文件与文档页），否则 vitepress 启动契约校验会失败。
 

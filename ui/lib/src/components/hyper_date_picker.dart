@@ -3,7 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_action_sheet.dart';
+import 'hyper_sheet_route.dart';
 import 'hyper_button.dart';
 import 'hyper_calendar_month.dart';
 import 'hyper_tabs.dart';
@@ -35,7 +35,7 @@ class HyperDateRange {
   final DateTime end;
 }
 
-/// 日期与区间使用月历，时间使用滚轮，弹层共用 HyperActionSheet。
+/// 日期与区间使用月历，时间使用滚轮，弹层复用内部底部面板路由。
 abstract final class HyperDatePicker {
   static Future<DateTime?> date(
     BuildContext context, {
@@ -47,8 +47,9 @@ abstract final class HyperDatePicker {
     final last = _dateOnly(lastDate ?? DateTime(2100, 12, 31));
     assert(!last.isBefore(first));
     final initial = _clampDate(initialDate ?? DateTime.now(), first, last);
-    return HyperActionSheet.show<DateTime>(
+    return showHySheet<DateTime>(
       context,
+      fixedGlass: true,
       title: '选择日期',
       builder: (_) => _DatePanel(initial: initial, first: first, last: last),
     );
@@ -57,8 +58,9 @@ abstract final class HyperDatePicker {
   static Future<HyperTimeOfDay?> time(
     BuildContext context, {
     HyperTimeOfDay? initialTime,
-  }) => HyperActionSheet.show<HyperTimeOfDay>(
+  }) => showHySheet<HyperTimeOfDay>(
     context,
+    fixedGlass: true,
     title: '选择时间',
     builder: (_) => _TimePanel(initial: initialTime ?? HyperTimeOfDay.now()),
   );
@@ -78,8 +80,9 @@ abstract final class HyperDatePicker {
       last,
     );
     final end = _clampDate(initialRange?.end ?? start, start, last);
-    return HyperActionSheet.show<HyperDateRange>(
+    return showHySheet<HyperDateRange>(
       context,
+      fixedGlass: true,
       title: '选择日期区间',
       builder: (_) => _DateRangePanel(
         initialStart: start,

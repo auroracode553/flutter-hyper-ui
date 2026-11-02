@@ -1,6 +1,5 @@
 import 'examples/component_tab_bar_examples.dart' deferred as example_tab_bar;
 import 'package:flutter/widgets.dart';
-import 'examples/component_section_title_example.dart' deferred as example_section_title;
 import 'examples/component_theme_mode_dialog_example.dart'
     deferred as example_theme_mode_dialog;
 import 'examples/component_safe_area_example.dart'
@@ -10,8 +9,6 @@ import 'examples/actions_example.dart' deferred as example_actions_example;
 import 'examples/buttons_example.dart' deferred as example_buttons_example;
 import 'examples/calendar_examples.dart' deferred as example_calendar_examples;
 import 'examples/cards_example.dart' deferred as example_cards_example;
-import 'examples/component_action_examples.dart'
-    deferred as example_component_action_examples;
 import 'examples/component_carousel_example.dart'
     deferred as example_component_carousel_example;
 import 'examples/component_composite_examples.dart'
@@ -264,14 +261,14 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-tabs',
       title: 'HyperTabs',
-      description: '受控分段选择。',
+      description: '40 共享玻璃，等宽底板采用临界阻尼弹簧',
       loadLibrary: () => example_component_form_examples.loadLibrary(),
       builder: (_) => example_component_form_examples.TabsComponentExample(),
     ),
     PreviewItem(
       id: 'component-dropdown',
       title: 'HyperDropdown',
-      description: '锚定式下拉选择。',
+      description: '字段与锚点菜单分别复用 Field/Panel 玻璃',
       loadLibrary: () => example_component_form_examples.loadLibrary(),
       builder: (_) =>
           example_component_form_examples.DropdownComponentExample(),
@@ -279,7 +276,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-checkbox',
       title: 'HyperCheckbox',
-      description: '受控复选状态。',
+      description: '21 玻璃方框，保留三态、状态边框与禁用展示',
       loadLibrary: () => example_component_form_examples.loadLibrary(),
       builder: (_) =>
           example_component_form_examples.CheckboxComponentExample(),
@@ -287,7 +284,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-radio',
       title: 'HyperRadio',
-      description: '互斥单选与禁用项；标签行不叠加圆环触摸留白。',
+      description: '21 玻璃圆环，保留 1.5→6 轮廓过渡',
       loadLibrary: () => example_component_form_examples.loadLibrary(),
       builder: (_) => example_component_form_examples.RadioComponentExample(),
     ),
@@ -299,15 +296,10 @@ class PreviewCatalog {
       builder: (_) => example_theme_mode_dialog.ThemeModeDialogComponentExample(),
     ),
     PreviewItem(
-      id: 'component-section-title', title: 'HyperSectionTitle',
-      description: '独立标题与菜单组共用默认排版。',
-      loadLibrary: () => example_section_title.loadLibrary(),
-      builder: (_) => example_section_title.SectionTitleComponentExample(),
-    ),
-    PreviewItem(
       id: 'component-switch',
       title: 'HyperSwitch',
-      description: '开启、关闭与禁用状态。',
+      description: '参考 Toggle 的弹性、Ambient 与横向拖动；保留开启、关闭及禁用。',
+      fullScreen: true,
       loadLibrary: () => example_component_form_examples.loadLibrary(),
       builder: (_) => example_component_form_examples.SwitchComponentExample(),
     ),
@@ -343,7 +335,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-toast',
       title: 'HyperToast',
-      description: '语义轻提示与操作。',
+      description: '语义色玻璃；125ms 进入与退出后移除',
       loadLibrary: () => example_component_feedback_examples.loadLibrary(),
       builder: (_) =>
           example_component_feedback_examples.ToastComponentExample(),
@@ -351,7 +343,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-drawer',
       title: 'HyperDrawer',
-      description: '抽屉打开、关闭与返回值。',
+      description: '贴边全高模糊玻璃，不增加圆角或卡片阴影',
       loadLibrary: () => example_component_feedback_examples.loadLibrary(),
       builder: (_) =>
           example_component_feedback_examples.DrawerComponentExample(),
@@ -475,13 +467,6 @@ class PreviewCatalog {
       (_) => example_component_foundation_examples.ToneComponentExample(),
     ),
     _componentPreview(
-      'component-pressable',
-      'HyperPressable',
-      '即时按压反馈。',
-      () => example_component_action_examples.loadLibrary(),
-      (_) => example_component_action_examples.PressableComponentExample(),
-    ),
-    _componentPreview(
       'component-divider',
       'HyperDivider',
       '横纵与虚实分割线。',
@@ -533,7 +518,7 @@ class PreviewCatalog {
     _componentPreview(
       'component-date-picker',
       'HyperDatePicker',
-      '月历选择日期与区间。',
+      'Dialog 固定玻璃面板，日期选择在退出后返回。',
       () => example_component_form_examples.loadLibrary(),
       (_) => example_component_form_examples.DatePickerComponentExample(),
     ),
@@ -561,7 +546,7 @@ class PreviewCatalog {
     _componentPreview(
       'component-update-dialog',
       'HyperUpdateDialog',
-      '检查更新、版本日志、下载、安装与失败重试。',
+      'Dialog 固定玻璃面板与受控更新状态。',
       () => example_component_update_dialog_example.loadLibrary(),
       (_) =>
           example_component_update_dialog_example.UpdateDialogComponentExample(),
@@ -648,7 +633,7 @@ class PreviewCatalog {
     _componentPreview(
       'component-progress',
       'HyperProgress',
-      '线性与环形进度。',
+      '玻璃轨道与空心圆环，点击增减查看弹簧跟随。',
       () => example_component_navigation_examples.loadLibrary(),
       (_) => example_component_navigation_examples.ProgressComponentExample(),
     ),

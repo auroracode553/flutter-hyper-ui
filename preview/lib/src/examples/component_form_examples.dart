@@ -384,18 +384,24 @@ class SwitchComponentExample extends StatefulWidget {
 }
 
 class _SwitchComponentExampleState extends State<SwitchComponentExample> {
-  // 复用正式开关的材质与弹簧；标签行和纯控件继续由示例持有受控值。
+  // 正式 Switch 共用 28 滑块和 2 内侧留白，支持长按扩张、Ambient 与横向拖动。
   bool _enabled = true;
   bool _plain = false;
 
   Widget _label(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: HyperUiSpacing.xs),
-    child: HyperText(text),
+    padding: const EdgeInsets.only(bottom: 14),
+    child: DefaultTextStyle.merge(
+      style: TextStyle(
+        fontSize: 12,
+        color: HyperUiThemeTokens.of(context).mutedForeground,
+      ),
+      child: HyperText(text),
+    ),
   );
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -405,13 +411,13 @@ class _SwitchComponentExampleState extends State<SwitchComponentExample> {
           label: '接收消息通知',
           onChanged: (value) => setState(() => _enabled = value),
         ),
-        const SizedBox(height: HyperUiSpacing.lg),
+        const SizedBox(height: 24),
 
         _label('禁用状态'),
         const HyperSwitch(value: true, label: '禁用 · 开启'),
-        const SizedBox(height: HyperUiSpacing.sm),
+        const SizedBox(height: 14),
         const HyperSwitch(value: false, label: '禁用 · 关闭'),
-        const SizedBox(height: HyperUiSpacing.lg),
+        const SizedBox(height: 24),
 
         _label('纯控件（无标签）'),
         Row(
@@ -425,6 +431,13 @@ class _SwitchComponentExampleState extends State<SwitchComponentExample> {
           ],
         ),
       ],
+    );
+    return Padding(
+      padding: const EdgeInsets.only(top: 52),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: content,
+      ),
     );
   }
 }
@@ -672,7 +685,7 @@ class _DatePickerComponentExampleState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _label('月历选择日期'),
+        _label('月历选择日期 · 玻璃面板'),
         Row(
           children: [
             HyperButton(

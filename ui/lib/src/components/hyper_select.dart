@@ -7,7 +7,7 @@ import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_action_sheet.dart';
 import 'hyper_button.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 import 'hyper_selection_field.dart';
 
 class HyperOption<T> {
@@ -193,7 +193,7 @@ class _HyperSelectOptionRow<T> extends StatelessWidget {
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperSurfaceTheme.of(context);
     final indicatorRadius = BorderRadius.circular(multiple ? 6 : 10);
-    return HyperPressable(
+    return PressFeedback(
       onPressed: option.enabled ? onPressed : null,
       borderRadius: BorderRadius.circular(14),
       child: Container(

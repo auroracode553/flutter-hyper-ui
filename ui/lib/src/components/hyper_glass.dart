@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 import 'hyper_surface_scope.dart';
 
 /// 内部实色表面绘制层，统一边缘、阴影和触控反馈。
@@ -98,7 +98,7 @@ class HyperGlass extends StatelessWidget {
     );
 
     if (onPressed != null) {
-      result = HyperPressable(
+      result = PressFeedback(
         onPressed: onPressed,
         borderRadius: shape,
         child: result,

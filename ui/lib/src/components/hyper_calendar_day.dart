@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 
 /// 日期格的附属条目；仅接收展示数据，不持有业务对象。
 @immutable
@@ -190,7 +190,7 @@ class HyperCalendarDay extends StatelessWidget {
           children: [
             date,
             if (rows > 0 || overflow)
-              HyperPressable(
+              PressFeedback(
                 onPressed: enabled ? onItemsPressed ?? onPressed : null,
                 child: Column(
                   children: [
@@ -236,7 +236,7 @@ class HyperCalendarDay extends StatelessWidget {
       child: content,
     );
     if (onPressed == null && onLongPressed == null) return surface;
-    return HyperPressable(
+    return PressFeedback(
       enabled: enabled,
       onPressed: enabled ? onPressed : null,
       onLongPressed: enabled ? onLongPressed : null,

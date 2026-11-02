@@ -46,12 +46,10 @@ Future<T?> showHyperModal<T>(
               // 底部选择器沿竖直方向进退，对话框保持居中轻缩放。
               beginScale: alignment.y == 0 ? 0.96 : 1,
               offset: Offset(0, alignment.y * 24),
-              child: glassSource == null
-                  ? Builder(builder: builder)
-                  : HyperGlassSourceScope(
-                      source: glassSource,
-                      child: Builder(builder: builder),
-                    ),
+              child: withHyperGlassSource(
+                glassSource,
+                child: Builder(builder: builder),
+              ),
             ),
           ),
         ],

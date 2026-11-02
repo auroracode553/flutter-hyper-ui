@@ -13,8 +13,9 @@ visible、onClose、child 和 content 必填。调用方持有 visible；onClose
 HyperPopover(
   visible: visible,
   onClose: () => setState(() => visible = false),
-  child: HyperPressable(
-    onPressed: () => setState(() => visible = !visible),
+  child: GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onTap: () => setState(() => visible = !visible),
     child: const HyperText('查看说明'),
   ),
   content: const HyperText('补充内容'),

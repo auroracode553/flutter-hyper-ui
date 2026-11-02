@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_badge.dart';
 import 'hyper_safe_area.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 import 'hyper_control_surface.dart';
 import 'hyper_glass_source.dart';
 import 'hyper_tab_bar_motion.dart';
@@ -158,7 +158,7 @@ class _HyperTabBarState extends State<HyperTabBar> {
         count: widget.badgeCount,
         child: Opacity(
           opacity: _enabled(0) ? 1 : 0.4,
-          child: HyperPressable(
+          child: PressFeedback(
             enabled: _enabled(0),
             borderRadius: BorderRadius.circular(barHeight / 2),
             onPressed: () => widget.onChanged(0),
@@ -307,7 +307,7 @@ class _HyperTabBarState extends State<HyperTabBar> {
                                                       _enabled(_logical(index))
                                                       ? 1
                                                       : 0.4,
-                                                  child: HyperPressable(
+                                                  child: PressFeedback(
                                                     enabled: _enabled(
                                                       _logical(index),
                                                     ),

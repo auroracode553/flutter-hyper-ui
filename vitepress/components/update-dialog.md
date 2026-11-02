@@ -64,3 +64,7 @@ downloadProgress 在 downloadQueued / downloading 阶段使用，并优先于 pr
 与系统下载管理器接入时，将已下载字节与总字节映射到 downloadProgress；下载完成再切换到 readyToInstall。Android 通过系统下载列表安装 APK 时，可将 primaryLabel 设置为“打开系统下载”，onInstall 打开系统下载列表，并覆盖 message 提示用户点击 APK。仅在业务确认安装开始或版本已更新后切换 installing / completed，组件不假定系统安装已经完成。
 
 版本状态与数据字段见 [HyperUpdateStatus / HyperUpdateRelease](./update-status)，字节快照见 [HyperUpdateDownloadProgress](./update-download-progress)。本次功能无需新增依赖。
+
+## 固定玻璃与动效
+
+面板复用 Dialog 固定玻璃：浅/深色模糊 16/8 逻辑像素、折射边缘/位移 24/48 逻辑像素、阴影 16 逻辑像素。保留 28 逻辑像素 圆角、420 逻辑像素 最大宽、24 逻辑像素 内边距、250ms 模态进入和原有状态/关闭限制。内嵌与模态预览共用表面；状态切换不改变业务检查、下载、安装或错误重试时机。

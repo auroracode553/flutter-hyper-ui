@@ -6,7 +6,7 @@ import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_radii.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 import 'hyper_tone.dart';
 import 'hyper_tooltip.dart';
 
@@ -120,7 +120,7 @@ class HyperBadge extends StatelessWidget {
           if (onClose != null)
             HyperTooltip(
               message: '移除 $label',
-              child: HyperPressable(
+              child: PressFeedback(
                 onPressed: onClose,
                 borderRadius: BorderRadius.circular(HyperUiRadii.full),
                 child: SizedBox.square(
@@ -133,7 +133,7 @@ class HyperBadge extends StatelessWidget {
       ),
     );
     if (!isTag) return pill;
-    return HyperPressable(onPressed: onPressed, borderRadius: radius, child: pill);
+    return PressFeedback(onPressed: onPressed, borderRadius: radius, child: pill);
   }
 
   Widget _buildCount(BuildContext context) {

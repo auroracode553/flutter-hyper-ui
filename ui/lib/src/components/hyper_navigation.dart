@@ -1,6 +1,5 @@
 import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 
-
 import 'package:flutter/widgets.dart';
 
 import 'hyper_progress_painters.dart';
@@ -163,7 +162,6 @@ class HyperProgress extends StatelessWidget {
     }
     final amount = normalizeHyperProgress(value);
     final label = amount == null ? null : '${hyperProgressPercentage(amount)}%';
-    final glass = HyperSurfaceTheme.of(context);
     if (type == 'circular') {
       return SizedBox.square(
         dimension: 64,
@@ -172,9 +170,10 @@ class HyperProgress extends StatelessWidget {
           children: <Widget>[
             SizedBox.expand(
               child: HyperSpinner(
+                glass: true,
                 value: amount,
                 strokeWidth: 6,
-                backgroundColor: backgroundColor ?? glass.controlTrack,
+                backgroundColor: backgroundColor,
                 color: color,
               ),
             ),
@@ -190,9 +189,10 @@ class HyperProgress extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(99),
             child: HyperProgressTrack(
+              glass: true,
               value: amount,
               height: 6,
-              backgroundColor: backgroundColor ?? glass.controlTrack,
+              backgroundColor: backgroundColor,
               color: color,
             ),
           ),

@@ -216,23 +216,72 @@ class _StepsComponentExampleState extends State<StepsComponentExample> {
 // end-doc-region StepsComponentExample
 
 // doc-region ProgressComponentExample
-class ProgressComponentExample extends StatelessWidget {
+class ProgressComponentExample extends StatefulWidget {
   const ProgressComponentExample({super.key});
-
   @override
-  Widget build(BuildContext context) => const Column(
+  State<ProgressComponentExample> createState() =>
+      _ProgressComponentExampleState();
+}
+
+class _ProgressComponentExampleState extends State<ProgressComponentExample> {
+  double _progress = .42;
+  @override
+  Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
-    spacing: 12,
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      HyperProgress(value: .68),
-      HyperProgress(value: .72, showLabel: false),
-      HyperProgress(value: .45, showLabel: false),
       Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          HyperProgress(type: 'circular', value: .42),
-          HyperProgress(type: 'circular', showLabel: false),
+          const Text(
+            '确定进度 · 玻璃轨道',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          Text(
+            '${(_progress * 100).toInt()}%',
+            style: const TextStyle(fontSize: 13),
+          ),
         ],
+      ),
+      const SizedBox(height: 10),
+      HyperProgress(value: _progress),
+      const SizedBox(height: 10),
+      HyperProgress(value: _progress),
+      const SizedBox(height: 10),
+      Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          HyperProgress(type: 'circular', value: _progress),
+          const HyperProgress(type: 'circular'),
+          HyperButton(
+            label: '减少',
+            onPressed: () =>
+                setState(() => _progress = (_progress - .1).clamp(0, 1)),
+          ),
+          HyperButton(
+            label: '增加',
+            type: 'filled',
+            colorStyle: 'primary',
+            onPressed: () =>
+                setState(() => _progress = (_progress + .1).clamp(0, 1)),
+          ),
+        ],
+      ),
+      const SizedBox(height: 16),
+      const Text(
+        '自定义颜色',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
+      const SizedBox(height: 10),
+      const HyperProgress(value: .7, color: Color.fromRGBO(31, 128, 255, 1)),
+      const SizedBox(height: 10),
+      const HyperProgress(color: Color.fromRGBO(8, 194, 97, 1)),
+      const SizedBox(height: 10),
+      const SizedBox.square(
+        dimension: 24,
+        child: HyperProgress(type: 'circular'),
       ),
     ],
   );

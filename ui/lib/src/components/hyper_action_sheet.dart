@@ -1,12 +1,10 @@
 import 'package:flutter/widgets.dart';
 
-import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_button.dart';
-import 'hyper_glass.dart';
 import 'hyper_list_tile.dart';
-import 'hyper_modal.dart';
+import 'hyper_sheet_route.dart';
 
 class HyperAction<T> {
   const HyperAction({
@@ -41,7 +39,7 @@ abstract final class HyperActionSheet {
     required WidgetBuilder builder,
     String? title,
     bool dismissible = true,
-  }) => _show<T>(
+  }) => showHySheet<T>(
     context,
     builder: builder,
     title: title,
@@ -54,88 +52,13 @@ abstract final class HyperActionSheet {
     String? title,
     bool dismissible = true,
     String cancelLabel = '取消',
-  }) => _show<T>(
+  }) => showHySheet<T>(
     context,
     title: title,
     dismissible: dismissible,
     builder: (_) =>
         _HyperActionList<T>(actions: actions, cancelLabel: cancelLabel),
   );
-
-  static Future<T?> _show<T>(
-    BuildContext context, {
-    required WidgetBuilder builder,
-    String? title,
-    required bool dismissible,
-  }) {
-    final glass = HyperSurfaceTheme.of(context);
-    return showHyperModal<T>(
-      context,
-      alignment: Alignment.bottomCenter,
-      dismissible: dismissible,
-      scrim: glass.scrim,
-      builder: (sheetContext) {
-        final tokens = HyperUiThemeTokens.of(sheetContext);
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
-            final availableHeight = (constraints.maxHeight - keyboardInset)
-                .clamp(0.0, constraints.maxHeight);
-            return Padding(
-              padding: EdgeInsets.only(bottom: keyboardInset),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: availableHeight * .85),
-                child: HyperGlass(
-                  radius: 30,
-                  type: 'prominent',
-                  padding: const EdgeInsets.all(HyperUiSpacing.md),
-                  child: SafeArea(
-                    top: false,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Center(
-                            child: Container(
-                              width: 32,
-                              height: 4,
-                              margin: const EdgeInsets.only(
-                                bottom: HyperUiSpacing.md,
-                              ),
-                              decoration: BoxDecoration(
-                                color: tokens.border,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                          ),
-                          if (title != null)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: HyperUiSpacing.md,
-                              ),
-                              child: Text(
-                                title,
-                                style: TextStyle(
-                                  color: tokens.foreground,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          builder(sheetContext),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
 }
 
 class _HyperActionList<T> extends StatelessWidget {

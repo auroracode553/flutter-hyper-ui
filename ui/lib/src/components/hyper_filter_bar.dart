@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 
 /// 紧凑横向分类筛选栏。业务持有选中索引，组件只管理横向可见位置。
 class HyperFilterBar<T> extends StatefulWidget {
@@ -129,7 +129,7 @@ class _HyperFilterBarState<T> extends State<HyperFilterBar<T>> {
                     : tokens.border.withValues(alpha: tokens.border.a * .55);
                 return Opacity(
                   opacity: enabled ? 1 : .4,
-                  child: HyperPressable(
+                  child: PressFeedback(
                     onPressed: enabled
                         ? () {
                             if (!selected) widget.onChanged(index);

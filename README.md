@@ -2,7 +2,9 @@
 
 [Button](vitepress/components/button.md)、[TabBar](vitepress/components/tab-bar.md)、[Slider](vitepress/components/slider.md)、[Switch](vitepress/components/switch.md) 与 [Dialog](vitepress/components/dialog.md) 内置固定玻璃表面，TabBar 支持整栏按压舒展、镜片弹性回弹与拖动偏移回正，仅变换绘制层。TabBar 栏内限制 2–5 项，栏外最多另放一个独立入口；两端示例以 Kotlin 文档为基准，默认左右留白 12、镜片默认可见高 48；TabBar 外缘使用与 Kotlin 相同的 0.5 描边和高光；保持 48/56 的底栏规格、20 的滑块直径与现有弹窗尺寸。
 
-设置菜单使用 HyperMenuGroup + HyperListTile 的默认字号、卡片留白和开关样式；独立标题使用 [HyperSectionTitle](vitepress/components/section-title.md)。页面垂直留白与完整分组间距读取 HyperUiSpacing.pageVertical / sectionVertical（12 / 16），不在各应用复制菜单皮肤。
+Switch 保留 52×32 轨道与 28 静止滑块，轨道采用 Button 共用的主题色/中性玻璃、滑块轻透白色；保留 1.5 倍弹性扩张、速度形变、Ambient 与横向拖动吸附。
+
+设置菜单使用 HyperMenuGroup + HyperListTile 的默认字号、卡片留白和开关样式；独立文字标题由 Text 组合。页面垂直留白与完整分组间距读取 HyperUiSpacing.pageVertical / sectionVertical（12 / 16），不在各应用复制菜单皮肤。
 
 开发文档通过一个 watcher 同时运行 Flutter Web 预览与 VitePress HMR，不需要手动编译或复制预览产物。完整说明见 `vitepress/guide/getting-started.md`。
 
@@ -36,7 +38,7 @@ Compose 与 Flutter 对应组件使用相同的业务参数名称和默认语义
 
 业务参数和回调保持同名。框架布局与宿主参数使用原生类型：Compose 的 Modifier、Composable、Dp、Float，与 Flutter 的 key、Widget、double、Duration；Flutter 的 controller 和 Navigator 弹层宿主、Compose 的受控 visible/open 与内容 DSL 按框架保留。组件特有参数以源码签名和完整参数表为准。
 
-Flutter 的标准表单弹窗使用 HyperDialog.confirm，通过 canConfirm 校验提交；HyperPressable 提供 onLongPressed 长按回调；HyperPopupMenu 通过 enabled 控制打开能力，HyperAction.selected 展示当前选择。完整签名和参数表见对应组件文档。
+Flutter 的标准表单弹窗使用 HyperDialog.confirm，通过 canConfirm 校验提交；HyperPopupMenu 通过 enabled 控制打开能力，HyperAction.selected 展示当前选择。完整签名和参数表见对应组件文档。
 
 默认按钮省略 type 和 colorStyle，显示白色描边；显式 type 仅 filled、icon，colorStyle 为 primary、success、info、warning、danger。
 
@@ -49,7 +51,7 @@ Flutter 的标准表单弹窗使用 HyperDialog.confirm，通过 canConfirm 校�
 Hyper UI 是独立、无业务依赖的通用组件库。普通组件表面使用实色，TabBar、Slider、Switch、Dialog 使用组件内固定玻璃，并使用细边缘、低对比阴影和胶囊选中态；交互遵循按下即响应、拖拽 1:1 跟手、释放速度继承、边界柔性阻尼和减少动画适配。
 
 - `HyperUiThemeTokens`：背景、文字、品牌色和状态色等语义令牌。
-- `HyperPressable`：按钮、卡片和菜单行共享的即时按压反馈，不包含业务行为。
+- 按钮、卡片和菜单行在内部共享即时按压反馈，不包含业务行为。
 
 独立顶部渐变使用 [HyperScrollGradient](vitepress/components/scroll-gradient.md)，Navbar 共用同一实现和主滚动作用域，不采样正文。HyperNavBar.type 仅区分 standard（标准操作行）和 simple（真实状态栏/挖孔，无标题与操作行）；standard 的内容布局由 layout 选择。首屏净空只进入滚动内容，不增加永久占位。
 
@@ -68,7 +70,7 @@ HyperNavBar.scrolledUnder 默认 false，优先使用显式主滚动作用域，
 
 `HyperCheckbox`、`HyperRadio`、`HyperSwitch` 默认直接展示控件；带 label 时使用 plain 标签行，不自动附带卡片背景、描边或阴影。
 
-[HyperSwitch](vitepress/components/switch.md) 保留 52×32 轨道和 22 的可见圆形滑块，使用内部源码实现按压高光、高光与临界阻尼弹簧切换；标签行、独立控件和禁用态共用原有点击规则，不引入外部玻璃库。
+[HyperSwitch](vitepress/components/switch.md) 保留 52×32 轨道和 28 的可见圆形滑块，使用内部源码实现按压高光、高光与临界阻尼弹簧切换；标签行、独立控件和禁用态共用原有点击规则，不引入外部玻璃库。
 
 所有组件均为受控或回调驱动，不读取业务状态、不内置路由名称、不依赖第三方状态管理方案。
 
@@ -207,3 +209,5 @@ HyperTabBar 尺寸由库按形态管理：single 独立入口固定直径 48 逻
 
 
 页面水平外边距由调用方统一提供。独立 plain 行和独立 glass 行保留左右各 14dp 的行内留白；仅在 HyperMenuGroup 或已有表面作用域中复用父表面的 plain 行不叠加水平留白。列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留水平 14dp、垂直 4dp。
+
+Checkbox、Radio、DatePicker、Tabs、Drawer、Dropdown、Toast、Progress 与 UpdateDialog 按角色复用内部固定玻璃，尺寸与状态归属保持稳定；Tabs 与确定进度采用临界阻尼弹簧，Toast 保留退出绘制。参数与平台回退见各组件页。

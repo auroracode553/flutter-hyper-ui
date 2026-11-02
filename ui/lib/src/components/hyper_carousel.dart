@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 
 /// 可独立使用的页码指示器，也可由 [HyperCarousel] 自动驱动。
 class HyperPageIndicator extends StatelessWidget {
@@ -28,7 +28,7 @@ class HyperPageIndicator extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: <Widget>[
         for (var page = 0; page < count; page++)
-          HyperPressable(
+          PressFeedback(
             onPressed: onChanged == null ? null : () => onChanged!(page),
             child: SizedBox(
               width: 24,

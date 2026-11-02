@@ -103,9 +103,14 @@ class HyperGlassSourceScope extends InheritedWidget {
     required super.child,
   });
   final HyperGlassSourceController source;
-  static HyperGlassSourceController? maybeOf(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<HyperGlassSourceScope>()
-      ?.source;
+  static HyperGlassSourceController? maybeOf(BuildContext context) {
+    final source = context
+        .dependOnInheritedWidgetOfExactType<HyperGlassSourceScope>()
+        ?.source;
+    // Toast 可晚于发起页面退出；不能向已释放的录制器重新订阅。
+    return source != null && !source._disposed ? source : null;
+  }
+
   @override
   bool updateShouldNotify(HyperGlassSourceScope oldWidget) =>
       source != oldWidget.source;
@@ -149,3 +154,11 @@ class _HyperBackdropState extends State<HyperBackdrop> {
     ),
   );
 }
+
+/// 将发起位置的独立背景带入根 Overlay/Route，不录制浮层自身。
+Widget withHyperGlassSource(
+  HyperGlassSourceController? source, {
+  required Widget child,
+}) => source == null || source._disposed
+    ? child
+    : HyperGlassSourceScope(source: source, child: child);

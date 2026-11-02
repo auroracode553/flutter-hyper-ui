@@ -120,8 +120,9 @@ class _OverlayExampleState extends State<OverlayExample> {
               visible: _popoverOpen,
               onClose: () => setState(() => _popoverOpen = false),
               content: const Text('玻璃浮层承载补充信息，点击外部即可关闭。'),
-              child: HyperPressable(
-                onPressed: () => setState(() => _popoverOpen = !_popoverOpen),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => setState(() => _popoverOpen = !_popoverOpen),
                 child: const Text('气泡说明'),
               ),
             ),

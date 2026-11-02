@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_layout.dart';
-import 'hyper_section_title.dart';
 
 class HyperMenuGroup extends StatelessWidget {
   const HyperMenuGroup({
@@ -17,7 +16,7 @@ class HyperMenuGroup extends StatelessWidget {
   final String? title;
   final String? subtitle;
 
-  /// Tiles inside this group share its glass surface automatically.
+  /// Tiles inside this group share its card surface automatically.
   static bool contains(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<_HyperMenuGroupScope>() !=
       null;
@@ -30,7 +29,11 @@ class HyperMenuGroup extends StatelessWidget {
       spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        if (title != null) HyperSectionTitle(title!),
+        if (title != null)
+          Text(
+            title!,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+          ),
         HyperGlass.card(
           radius: 18,
           // 标题、分隔线和条目共享调用方的一层水平留白。

@@ -215,18 +215,6 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-card', 'HyperCard 结构', 'component_surface_examples.dart', 560, '完整结构、选中态与无标题纯内容。', 'CardComponentExample'),
       }),
-      component('HyperPressable', 'hyper_pressable.dart', '按下即响应、可适配减少动画的通用触控反馈层。', {
-        propsDocs: [
-          { name: 'child', description: '子组件' },
-          { name: 'onPressed', description: '点击回调' },
-          { name: 'onLongPressed', description: '长按回调；与点击共用 enabled 和按压反馈，默认 null' },
-          { name: 'enabled', description: '是否启用，默认 true' },
-          { name: 'pressedScale', description: '按下时缩放比例，默认 0.975' },
-          { name: 'pressedOpacity', description: '按下时透明度，默认 0.92' },
-          { name: 'borderRadius', description: '圆角' },
-        ],
-        preview: demo('component-pressable', 'HyperPressable 按压反馈', 'component_action_examples.dart', 280, '按住表面感受即时缩放与透明度反馈。', 'PressableComponentExample'),
-      }),
     ],
   },
   {
@@ -345,7 +333,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-select', 'HyperSelect 底部选择', 'component_form_examples.dart', 480, '单选、多选、禁用项与占位文案。', 'SelectComponentExample'),
       }),
-      component('HyperDropdown', 'hyper_dropdown.dart', '锚定触发器缩放淡入淡出的泛型下拉，箭头同步旋转，支持快速反向操作。', {
+      component('HyperDropdown', 'hyper_dropdown.dart', '字段与锚点菜单分别复用 Field/Panel 玻璃', {
         propsDocs: [
           { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'options', description: '选项列表' },
@@ -358,7 +346,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-dropdown', 'HyperDropdown 下拉菜单', 'component_form_examples.dart', 740, '160–240 自动宽度、220 显式宽度、长文案、占位、空列表与禁用项。', 'DropdownComponentExample'),
       }),
-      component('HyperCheckbox', 'hyper_selection_controls.dart', '支持三态与禁用的受控复选；标签行不附带卡片，勾选标记轻缩放淡入淡出。', {
+      component('HyperCheckbox', 'hyper_selection_controls.dart', '21 玻璃方框，保留三态、状态边框与禁用展示', {
         propsDocs: [
           { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '是否选中' },
@@ -368,7 +356,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-checkbox', 'HyperCheckbox 复选框', 'component_form_examples.dart', 520, '受控复选、三态、禁用与无标签纯控件。', 'CheckboxComponentExample'),
       }),
-      component('HyperRadio', 'hyper_selection_controls.dart', '泛型值受控单选，选中圆环平滑过渡。', {
+      component('HyperRadio', 'hyper_selection_controls.dart', '21 玻璃圆环，保留 1.5→6 轮廓过渡', {
         propsDocs: [
           { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '当前选项值' },
@@ -378,14 +366,14 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-radio', 'HyperRadio 单选框', 'component_form_examples.dart', 420, '互斥单选组与禁用项；标签行不叠加触摸留白。', 'RadioComponentExample'),
       }),
-      component('HyperSwitch', 'hyper_selection_controls.dart', '52×32 受控开关、22 可见玻璃滑块，按压高光，位置与颜色共用弹簧，支持 RTL。', {
+      component('HyperSwitch', 'hyper_switch.dart', '52×32 轨道、28 滑块与 2 内侧留白；Button 共用玻璃轨道、轻透滑块、弹性扩张、速度形变、Ambient 和持续拖动。', {
         propsDocs: [
           { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '是否开启' },
           { name: 'onChanged', description: '状态变化回调' },
           { name: 'label', description: '标签文字；使用无卡片背景、描边或阴影的 plain 行' },
         ],
-        preview: demo('component-switch', 'HyperSwitch 开关', 'component_form_examples.dart', 500, '固定尺寸的按压高光与弹簧切换，展示受控标签行、禁用和无标签控件。', 'SwitchComponentExample'),
+        preview: { ...demo('component-switch', 'HyperSwitch 开关', 'component_form_examples.dart', 680, '长按查看弹性与 Ambient，横向拖动松手吸附；展示受控标签行、禁用和无标签控件。', 'SwitchComponentExample'), fullScreen: true },
       }),
       component('HyperSlider', 'hyper_selection_controls.dart', '范围、分段和结束回调可配置的滑块。', {
         propsDocs: [
@@ -508,7 +496,7 @@ export const componentGroups: ComponentGroup[] = [
       demo('drawer', '抽屉交互', 'drawer_example.dart', 620, '检查左右抽屉、固定底部操作和返回值。'),
     ],
     components: [
-      component('HyperToast', 'hyper_feedback.dart', '支持语义色和可选撤销动作的玻璃轻提示。', {
+      component('HyperToast', 'hyper_feedback.dart', '语义色玻璃；125ms 进入与退出后移除', {
         propsDocs: [
           { name: 'type', description: '状态类型：neutral / primary / success / warning / error / info，默认 neutral' },
           { name: 'color', description: '覆盖提示颜色' },
@@ -531,10 +519,6 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-dialog', 'HyperDialog 对话框', 'component_feedback_examples.dart', 420, '标准确认、危险操作、仅确认按钮与自定义正文。', 'DialogComponentExample'),
       }),
-      component('HyperSectionTitle', 'hyper_section_title.dart', '与菜单分组共用的 14 字号、w700 独立标题。', {
-        propsDocs: [{ name: 'text', description: '分组标题；页面负责外部留白' }],
-        preview: demo('component-section-title', 'HyperSectionTitle', 'component_section_title_example.dart', 420, '独立标题与菜单组共用默认排版。', 'SectionTitleComponentExample'),
-      }),
       component('HyperThemeDialog', 'hyper_theme_dialog.dart', '跟随系统、浅色、深色三选项；36dp 紧凑行，选择后请求关闭。', {
         propsDocs: [
           { name: 'value', description: 'null 跟随系统，false 浅色，true 深色' },
@@ -544,7 +528,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-theme-dialog', 'HyperThemeDialog', 'component_theme_mode_dialog_example.dart', 420, '紧凑三选项、当前值与关闭行为。', 'ThemeModeDialogComponentExample'),
       }),
-      component('HyperUpdateDialog', 'hyper_update_dialog.dart', '沿用 Hyper 柔光玻璃风格的完整更新对话框，覆盖检查、版本日志、下载、安装、完成与失败重试。', {
+      component('HyperUpdateDialog', 'hyper_update_dialog.dart', 'Dialog 玻璃面板，保留更新状态与关闭限制', {
         propsDocs: [
           { name: 'status', description: '受控更新状态，默认 HyperUpdateStatus.idle；状态由业务层切换' },
           { name: 'currentVersion', description: '当前安装版本；未提供、checking 或 error 时隐藏，其他状态直接排版不套卡片' },
@@ -785,7 +769,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-steps', 'HyperSteps 步骤', 'component_navigation_examples.dart', 420, '水平受控步骤与纵向步骤（可带副标题）。', 'StepsComponentExample'),
       }),
-      component('HyperProgress', 'hyper_navigation.dart', '线性、环形、确定或不定进度。', {
+      component('HyperProgress', 'hyper_navigation.dart', '6 玻璃轨道与空心圆环，确定值弹簧跟随', {
         propsDocs: [
           { name: 'value', description: '进度值 0–1；有限越界值收敛，null 或非有限值显示不定进度。线性进度平滑过渡，支持 RTL 和减少动画' },
           { name: 'type', description: '进度形态：linear / circular，默认 linear' },
@@ -901,7 +885,7 @@ export const componentEntries: ComponentDocumentEntry[] = componentGroups.flatMa
 const listComponentIds = new Set([
   'list-tile', 'list', 'menu-list', 'slide-menu',
 ]);
-const actionComponentIds = new Set(['button', 'pressable']);
+const actionComponentIds = new Set(['button']);
 
 /** 侧栏只展示分类标题和组件叶子项，不再链接分类聚合页。 */
 export const componentSidebarSections: ComponentSidebarSection[] = componentGroups.flatMap((group) => {

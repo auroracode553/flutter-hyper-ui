@@ -2,12 +2,12 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_ui_effects.dart';
 
-/// 为触控组件提供统一的即时按压反馈。
+/// 仅供库内组件复用的即时按压反馈，不从公开入口导出。
 ///
 /// 按下时立即响应，松开与取消时从当前展示状态恢复。组件只处理交互状态，
 /// 不决定颜色或业务行为，因此可安全复用于按钮、菜单行与卡片。
-class HyperPressable extends StatefulWidget {
-  const HyperPressable({
+class PressFeedback extends StatefulWidget {
+  const PressFeedback({
     super.key,
     required this.child,
     this.onPressed,
@@ -29,10 +29,10 @@ class HyperPressable extends StatefulWidget {
   final BorderRadiusGeometry? borderRadius;
 
   @override
-  State<HyperPressable> createState() => _HyperPressableState();
+  State<PressFeedback> createState() => _PressFeedbackState();
 }
 
-class _HyperPressableState extends State<HyperPressable> {
+class _PressFeedbackState extends State<PressFeedback> {
   bool _pressed = false;
 
   bool get _interactive =>
@@ -45,7 +45,7 @@ class _HyperPressableState extends State<HyperPressable> {
   }
 
   @override
-  void didUpdateWidget(HyperPressable oldWidget) {
+  void didUpdateWidget(PressFeedback oldWidget) {
     super.didUpdateWidget(oldWidget);
     // 业务可能在按住期间禁用按钮，及时恢复视觉状态。
     if (!_interactive) _pressed = false;

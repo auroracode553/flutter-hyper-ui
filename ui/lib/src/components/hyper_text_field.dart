@@ -5,7 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 import 'hyper_tooltip.dart';
 
 /// Hyper's own text field surface around Flutter's text editing engine.
@@ -390,7 +390,7 @@ class _AffixButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => HyperTooltip(
     message: tooltip,
-    child: HyperPressable(
+    child: PressFeedback(
       onPressed: onPressed,
       borderRadius: BorderRadius.circular(18),
       child: Padding(

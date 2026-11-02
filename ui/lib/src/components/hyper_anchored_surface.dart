@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../utils/hyper_overlay_motion.dart';
 import 'hyper_glass.dart';
+import 'hyper_control_surface.dart';
+import 'hyper_surface_scope.dart';
 import 'hyper_anchored_layout.dart';
 
 /// Controls a Hyper anchored surface without a platform menu widget.
@@ -43,6 +45,7 @@ Widget buildHyAnchoredSurface({
   bool? visible,
   VoidCallback? onClose,
   bool scrollable = true,
+  bool fixedGlass = false,
 }) => _HyperAnchoredSurface(
   width: width,
   maxHeight: maxHeight,
@@ -52,6 +55,7 @@ Widget buildHyAnchoredSurface({
   visible: visible,
   onClose: onClose,
   scrollable: scrollable,
+  fixedGlass: fixedGlass,
 );
 
 class _HyperAnchoredSurface extends StatefulWidget {
@@ -64,6 +68,7 @@ class _HyperAnchoredSurface extends StatefulWidget {
     this.visible,
     this.onClose,
     this.scrollable = true,
+    this.fixedGlass = false,
   });
 
   final double width;
@@ -73,7 +78,7 @@ class _HyperAnchoredSurface extends StatefulWidget {
   final Widget Function(BuildContext, HyperMenuController) triggerBuilder;
   final bool? visible;
   final VoidCallback? onClose;
-  final bool scrollable;
+  final bool scrollable, fixedGlass;
 
   @override
   State<_HyperAnchoredSurface> createState() => _HyperAnchoredSurfaceState();
@@ -152,6 +157,21 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
     return anchor.localToGlobal(Offset.zero, ancestor: overlay) & anchor.size;
   }
 
+  Widget _surface(Widget child) => widget.fixedGlass
+      ? HyperSurfaceScope(
+          child: HyperControlSurface(
+            radius: 18,
+            role: HyperControlSurfaceRole.panel,
+            child: Padding(padding: widget.padding, child: child),
+          ),
+        )
+      : HyperGlass(
+          radius: 18,
+          type: 'prominent',
+          padding: widget.padding,
+          child: child,
+        );
+
   @override
   Widget build(BuildContext context) => PopScope<Object?>(
     canPop: !_motion.isOpen,
@@ -195,11 +215,8 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
                       controller: _controller,
                       child: SizedBox(
                         width: widget.width,
-                        child: HyperGlass(
-                          radius: 18,
-                          type: 'prominent',
-                          padding: widget.padding,
-                          child: ConstrainedBox(
+                        child: _surface(
+                          ConstrainedBox(
                             constraints: BoxConstraints(
                               maxHeight: widget.maxHeight,
                             ),

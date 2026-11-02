@@ -8,6 +8,8 @@ import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_button.dart';
+import 'hyper_control_surface.dart';
+import 'hyper_glass_source.dart';
 import 'hyper_layout.dart';
 import 'hyper_surface_scope.dart';
 
@@ -36,6 +38,7 @@ abstract final class HyperDrawer {
     }
     final direction = Directionality.of(context);
     final theme = HyperUiTheme.of(context);
+    final glassSource = HyperGlassSourceScope.maybeOf(context);
     final navigator = Navigator.of(context, rootNavigator: true);
     final themes = InheritedTheme.capture(from: context, to: navigator.context);
     final route = RawDialogRoute<T>(
@@ -50,18 +53,21 @@ abstract final class HyperDrawer {
             child: themes.wrap(
               Directionality(
                 textDirection: direction,
-                child: _DrawerSurface(
-                  animation: animation,
-                  placement: placement,
-                  width: width,
-                  contentPadding: contentPadding,
-                  scrollable: scrollable,
-                  dismissOnClickOutside: dismissOnClickOutside,
-                  dismissOnBackPress: dismissOnBackPress,
-                  gesturesEnabled: gesturesEnabled,
-                  title: title,
-                  contentBuilder: contentBuilder,
-                  footerBuilder: footerBuilder,
+                child: withHyperGlassSource(
+                  glassSource,
+                  child: _DrawerSurface(
+                    animation: animation,
+                    placement: placement,
+                    width: width,
+                    contentPadding: contentPadding,
+                    scrollable: scrollable,
+                    dismissOnClickOutside: dismissOnClickOutside,
+                    dismissOnBackPress: dismissOnBackPress,
+                    gesturesEnabled: gesturesEnabled,
+                    title: title,
+                    contentBuilder: contentBuilder,
+                    footerBuilder: footerBuilder,
+                  ),
                 ),
               ),
             ),

@@ -9,7 +9,7 @@ import '../theme/hyper_ui_theme_tokens.dart';
 import '../theme/hyper_surface_theme.dart';
 import 'hyper_glass.dart';
 import 'hyper_button.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 
 /// 适合明确跳页场景的受控分页导航；页码从 1 开始。
 class HyperPagination extends StatelessWidget {
@@ -88,7 +88,7 @@ class HyperPagination extends StatelessWidget {
                           style: TextStyle(color: tokens.mutedForeground),
                         ),
                       )
-                    : HyperPressable(
+                    : PressFeedback(
                         onPressed: onChanged == null || number == page
                             ? null
                             : () => onChanged!(number),

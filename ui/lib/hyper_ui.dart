@@ -1,11 +1,11 @@
 library hyper_ui;
 
-export 'src/components/hyper_pressable.dart';
 export 'src/components/hyper_typography.dart';
 export 'src/components/hyper_image.dart';
 export 'src/components/hyper_layout.dart';
 export 'src/components/hyper_safe_area.dart';
 export 'src/components/hyper_selection_controls.dart';
+export 'src/components/hyper_switch.dart';
 export 'src/components/hyper_dropdown.dart';
 export 'src/components/hyper_slide_menu.dart';
 export 'src/components/hyper_select.dart';
@@ -25,7 +25,6 @@ export 'src/components/hyper_popover.dart';
 export 'src/components/hyper_navigation.dart';
 export 'src/components/hyper_tab_bar.dart';
 export 'src/components/hyper_lists.dart';
-export 'src/components/hyper_section_title.dart';
 export 'src/components/hyper_business.dart';
 export 'src/components/hyper_notice_bar.dart';
 export 'src/utils/hyper_utils.dart' hide HyperSafeArea;

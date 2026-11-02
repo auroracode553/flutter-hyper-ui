@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
 import 'hyper_modal.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 import 'hyper_selection_controls.dart';
 
 /// 三选项主题面板；null 跟随系统，false 浅色，true 深色。
@@ -40,7 +40,7 @@ class HyperThemeDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    Widget option(String label, bool? mode) => HyperPressable(
+    Widget option(String label, bool? mode) => PressFeedback(
       onPressed: () {
         onChanged(mode);
         onClose();

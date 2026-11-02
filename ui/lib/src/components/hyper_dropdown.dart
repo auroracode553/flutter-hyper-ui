@@ -47,11 +47,18 @@ class HyperDropdown<T> extends StatelessWidget {
     final tokens = HyperUiThemeTokens.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
-        final preferredWidth = width ?? measureHyperMenuWidth(
-          context,
-          labels: <String>[placeholder, for (final option in options) option.label],
-        );
-        final triggerWidth = preferredWidth.clamp(0.0, constraints.maxWidth).toDouble();
+        final preferredWidth =
+            width ??
+            measureHyperMenuWidth(
+              context,
+              labels: <String>[
+                placeholder,
+                for (final option in options) option.label,
+              ],
+            );
+        final triggerWidth = preferredWidth
+            .clamp(0.0, constraints.maxWidth)
+            .toDouble();
         // 父容器可拉伸外层布局，但默认字段保持紧凑；显式 width 用于宽表单。
         return Align(
           alignment: AlignmentDirectional.topStart,
@@ -61,6 +68,7 @@ class HyperDropdown<T> extends StatelessWidget {
             width: triggerWidth,
             child: buildHyAnchoredSurface(
               width: triggerWidth,
+              fixedGlass: true,
               maxHeight: menuMaxHeight,
               padding: const EdgeInsets.all(5),
               contentBuilder: (menuContext) => options.isEmpty
@@ -105,6 +113,7 @@ class HyperDropdown<T> extends StatelessWidget {
                     isPlaceholder: _selected == null,
                     label: label,
                     expanded: controller.isOpen,
+                    fixedGlass: true,
                     onTap: !enabled || onChanged == null
                         ? null
                         : () => controller.isOpen

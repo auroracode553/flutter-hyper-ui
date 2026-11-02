@@ -6,8 +6,9 @@ import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_glass.dart';
-import 'hyper_pressable.dart';
+import 'hyper_control_surface.dart';
+import '../utils/hyper_spring_motion.dart';
+import '../interaction/press_feedback.dart';
 
 class HyperTabsItem<T> {
   final T value;
@@ -58,22 +59,25 @@ class HyperTabs<T> extends StatelessWidget {
       return equalWidth ? Expanded(child: item) : item;
     }).toList();
 
-    return HyperGlass(
+    return HyperControlSurface(
       radius: 18,
-      type: 'subtle',
-      padding: const EdgeInsets.all(4),
-      child: equalWidth && tabs.isNotEmpty
-          ? _buildEqualWidth(context, children)
-          : Row(
-              mainAxisSize: equalWidth ? MainAxisSize.max : MainAxisSize.min,
-              children: children,
-            ),
+      role: HyperControlSurfaceRole.field,
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: equalWidth && tabs.isNotEmpty
+            ? _buildEqualWidth(context, children)
+            : Row(
+                mainAxisSize: equalWidth ? MainAxisSize.max : MainAxisSize.min,
+                children: children,
+              ),
+      ),
     );
   }
 
   Widget _buildEqualWidth(BuildContext context, List<Widget> children) =>
       LayoutBuilder(
         builder: (context, constraints) {
+          final selection = HyperSurfaceTheme.of(context).selection;
           final selected = selectedIndex;
           final rtl = Directionality.of(context) == TextDirection.rtl;
           final visualIndex = rtl ? tabs.length - selected - 1 : selected;
@@ -85,29 +89,19 @@ class HyperTabs<T> extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     // 仅平移选中底板，标签保持稳定，快速切换沿用当前位置。
-                    child: TweenAnimationBuilder<double>(
-                      tween: Tween<double>(
-                        begin: visualIndex.toDouble(),
-                        end: visualIndex.toDouble(),
-                      ),
-                      duration:
-                          MediaQuery.maybeOf(context)?.disableAnimations == true
-                          ? Duration.zero
-                          : HyperUiEffects.selectionDuration,
-                      curve: HyperUiEffects.selectionCurve,
-                      child: Container(
-                        width: cellWidth,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: HyperSurfaceTheme.of(context).selection,
-                          borderRadius: BorderRadius.circular(HyperUiRadii.sm),
+                    child: HyperSpringMotion(
+                      value: visualIndex.toDouble(),
+                      builder: (context, position) => Transform.translate(
+                        offset: Offset(position * cellWidth, 0),
+                        child: HyperControlSurface(
+                          radius: 16,
+                          role: HyperControlSurfaceRole.compact,
+                          color: selection.withValues(
+                            alpha: selection.a * 0.75,
+                          ),
+                          child: SizedBox(width: cellWidth, height: 32),
                         ),
                       ),
-                      builder: (context, position, child) =>
-                          Transform.translate(
-                            offset: Offset(position * cellWidth, 0),
-                            child: child,
-                          ),
                     ),
                   ),
                 ),
@@ -141,44 +135,78 @@ class _HyperTabsItem<T> extends StatelessWidget {
         : option.enabled && onSelected != null
         ? tokens.foreground
         : tokens.mutedForeground;
-    final background = selected && paintSelection
-        ? HyperSurfaceTheme.of(context).selection
-        : HyperPalette.transparent;
 
-    return HyperPressable(
+    return PressFeedback(
       onPressed: option.enabled && onSelected != null
           ? () => onSelected!(option.value)
           : null,
       borderRadius: BorderRadius.circular(HyperUiRadii.sm),
-      child: AnimatedContainer(
-        duration: HyperUiEffects.durationOf(
-          context,
-          HyperUiEffects.stateDuration,
-        ),
-        curve: HyperUiEffects.selectionCurve,
-        height: 32,
-        padding: const EdgeInsets.symmetric(horizontal: HyperUiSpacing.sm),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(HyperUiRadii.sm),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (option.icon != null) ...[
-              Icon(option.icon, size: 16, color: foreground),
-              const SizedBox(width: HyperUiSpacing.xs),
+      child: _selectionSurface(
+        context,
+        AnimatedContainer(
+          duration: HyperUiEffects.durationOf(
+            context,
+            HyperUiEffects.stateDuration,
+          ),
+          curve: HyperUiEffects.selectionCurve,
+          height: 32,
+          padding: const EdgeInsets.symmetric(horizontal: HyperUiSpacing.sm),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: HyperPalette.transparent,
+            borderRadius: BorderRadius.circular(HyperUiRadii.sm),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (option.icon != null) ...[
+                Icon(option.icon, size: 16, color: foreground),
+                const SizedBox(width: HyperUiSpacing.xs),
+              ],
+              if (constrainLabel)
+                Flexible(child: _buildLabel(foreground))
+              else
+                _buildLabel(foreground),
             ],
-            if (constrainLabel)
-              Flexible(child: _buildLabel(foreground))
-            else
-              _buildLabel(foreground),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _selectionSurface(BuildContext context, Widget child) {
+    final selection = HyperSurfaceTheme.of(context).selection;
+    return paintSelection
+        ? Stack(
+            children: [
+              Positioned.fill(
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(end: selected ? 1 : 0),
+                  duration: HyperUiEffects.durationOf(
+                    context,
+                    HyperUiEffects.stateDuration,
+                  ),
+                  curve: HyperUiEffects.selectionCurve,
+                  builder: (context, progress, _) => progress <= 0
+                      ? const SizedBox.shrink()
+                      : Opacity(
+                          opacity: progress,
+                          child: HyperControlSurface(
+                            radius: 16,
+                            role: HyperControlSurfaceRole.compact,
+                            color: selection.withValues(
+                              alpha: selection.a * 0.75,
+                            ),
+                            child: const SizedBox.expand(),
+                          ),
+                        ),
+                ),
+              ),
+              child,
+            ],
+          )
+        : child;
   }
 
   Widget _buildLabel(Color foreground) {

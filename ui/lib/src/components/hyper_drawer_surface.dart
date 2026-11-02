@@ -69,8 +69,9 @@ class _DrawerSurfaceState extends State<_DrawerSurface>
             math.max(0.0, constraints.maxWidth - 56),
           );
           final body = HyperSurfaceScope(
-            child: ColoredBox(
-              color: tokens.card,
+            child: HyperControlSurface(
+              radius: 0,
+              role: HyperControlSurfaceRole.drawer,
               child: Padding(
                 padding: MediaQuery.viewInsetsOf(context),
                 child: SafeArea(
@@ -147,7 +148,8 @@ class _DrawerSurfaceState extends State<_DrawerSurface>
                       child: ColoredBox(
                         color: HyperSurfaceTheme.of(context).scrim.withValues(
                           alpha:
-                              HyperSurfaceTheme.of(context).scrim.a * visibility,
+                              HyperSurfaceTheme.of(context).scrim.a *
+                              visibility,
                         ),
                       ),
                     ),

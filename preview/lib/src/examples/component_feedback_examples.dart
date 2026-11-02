@@ -377,8 +377,9 @@ class _PopoverComponentExampleState extends State<PopoverComponentExample> {
         visible: _hintOpen,
         onClose: () => setState(() => _hintOpen = false),
         content: const Text('Popover 保持页面上下文，适合展示简短补充说明。'),
-        child: HyperPressable(
-          onPressed: () => setState(() => _hintOpen = !_hintOpen),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => setState(() => _hintOpen = !_hintOpen),
           child: const Text('点击查看说明'),
         ),
       ),
@@ -386,8 +387,9 @@ class _PopoverComponentExampleState extends State<PopoverComponentExample> {
       HyperPopover(
         visible: _menuOpen,
         onClose: () => setState(() => _menuOpen = false),
-        child: HyperPressable(
-          onPressed: () => setState(() => _menuOpen = !_menuOpen),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => setState(() => _menuOpen = !_menuOpen),
           child: const Text('文件夹操作'),
         ),
         content: Column(
@@ -416,8 +418,9 @@ class _PopoverComponentExampleState extends State<PopoverComponentExample> {
         onClose: () => setState(() => _wideOpen = false),
         width: 240,
         scrollable: false,
-        child: HyperPressable(
-          onPressed: () => setState(() => _wideOpen = !_wideOpen),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => setState(() => _wideOpen = !_wideOpen),
           child: const Text('查看较宽内容'),
         ),
         content: Column(

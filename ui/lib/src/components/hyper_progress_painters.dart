@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../utils/hyper_progress_value.dart';
+import '../utils/hyper_spring_motion.dart';
+import 'hyper_control_surface.dart';
 
 /// Draws a Hyper progress arc without a platform visual control.
 class HyperSpinner extends StatefulWidget {
@@ -14,12 +16,14 @@ class HyperSpinner extends StatefulWidget {
     this.strokeWidth = 2,
     this.color,
     this.backgroundColor,
+    this.glass = false,
   });
 
   final double? value;
   final double strokeWidth;
   final Color? color;
   final Color? backgroundColor;
+  final bool glass;
 
   @override
   State<HyperSpinner> createState() => _HyperSpinnerState();
@@ -66,19 +70,38 @@ class _HyperSpinnerState extends State<HyperSpinner>
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperSurfaceTheme.of(context);
     final amount = normalizeHyperProgress(widget.value);
-    return AnimatedBuilder(
+    final content = AnimatedBuilder(
       animation: _rotation,
-      builder: (context, child) => CustomPaint(
-        painter: _ArcPainter(
-          amount: amount ?? .72,
-          rotation: amount == null ? _rotation.value : 0,
-          strokeWidth: widget.strokeWidth,
-          foreground: widget.color ?? tokens.primary,
-          background: widget.backgroundColor ?? glass.controlTrack,
+      builder: (context, child) => HyperSpringMotion(
+        value: amount ?? 0,
+        builder: (context, position) => CustomPaint(
+          painter: _ArcPainter(
+            amount: amount == null ? .72 : position.clamp(0.0, 1.0),
+            rotation: amount == null ? _rotation.value : 0,
+            strokeWidth: widget.strokeWidth,
+            foreground: widget.color ?? tokens.primary,
+            background: widget.backgroundColor ?? glass.controlTrack,
+            glass: widget.glass,
+          ),
+          child: child,
         ),
-        child: child,
       ),
       child: const SizedBox.expand(),
+    );
+    if (!widget.glass) return content;
+    // 只裁出空心轨道，不为环形进度新增圆盘背景。
+    return ClipPath(
+      clipper: _ProgressRingClipper(widget.strokeWidth),
+      child: LayoutBuilder(
+        builder: (context, constraints) => HyperControlSurface(
+          radius: constraints.biggest.shortestSide / 2,
+          role: HyperControlSurfaceRole.track,
+          color:
+              widget.backgroundColor ??
+              glass.controlTrack.withValues(alpha: glass.controlTrack.a * 0.65),
+          child: content,
+        ),
+      ),
     );
   }
 }
@@ -90,6 +113,7 @@ class _ArcPainter extends CustomPainter {
     required this.strokeWidth,
     required this.foreground,
     required this.background,
+    this.glass = false,
   });
 
   final double amount;
@@ -97,6 +121,7 @@ class _ArcPainter extends CustomPainter {
   final double strokeWidth;
   final Color foreground;
   final Color background;
+  final bool glass;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -111,7 +136,8 @@ class _ArcPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
-    canvas.drawArc(arcRect, 0, math.pi * 2, false, track);
+    if (!glass) canvas.drawArc(arcRect, 0, math.pi * 2, false, track);
+    if (glass) active.shader = _progressGradient(foreground).createShader(rect);
     canvas.drawArc(
       arcRect,
       -math.pi / 2 + rotation * math.pi * 2,
@@ -127,7 +153,8 @@ class _ArcPainter extends CustomPainter {
       oldDelegate.rotation != rotation ||
       oldDelegate.strokeWidth != strokeWidth ||
       oldDelegate.foreground != foreground ||
-      oldDelegate.background != background;
+      oldDelegate.background != background ||
+      oldDelegate.glass != glass;
 }
 
 /// Draws a rounded progress track using Hyper tokens.
@@ -138,12 +165,14 @@ class HyperProgressTrack extends StatefulWidget {
     this.height = 6,
     this.color,
     this.backgroundColor,
+    this.glass = false,
   });
 
   final double? value;
   final double height;
   final Color? color;
   final Color? backgroundColor;
+  final bool glass;
 
   @override
   State<HyperProgressTrack> createState() => _HyperProgressTrackState();
@@ -185,6 +214,22 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
     super.dispose();
   }
 
+  Widget _trackSurface(BuildContext context, Widget child) => widget.glass
+      ? HyperControlSurface(
+          radius: widget.height / 2,
+          role: HyperControlSurfaceRole.track,
+          color:
+              widget.backgroundColor ??
+              HyperSurfaceTheme.of(context).controlTrack.withValues(
+                alpha: HyperSurfaceTheme.of(context).controlTrack.a * 0.65,
+              ),
+          child: child,
+        )
+      : ClipRRect(
+          borderRadius: BorderRadius.circular(widget.height / 2),
+          child: child,
+        );
+
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
@@ -194,9 +239,9 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     return SizedBox(
       height: widget.height,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(widget.height / 2),
-        child: LayoutBuilder(
+      child: _trackSurface(
+        context,
+        LayoutBuilder(
           builder: (context, constraints) {
             final trackWidth = constraints.maxWidth;
             Widget segments(double? value, double phase) {
@@ -209,7 +254,9 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
               return Stack(
                 children: <Widget>[
                   ColoredBox(
-                    color: widget.backgroundColor ?? glass.controlTrack,
+                    color: widget.glass
+                        ? const Color.fromRGBO(0, 0, 0, 0)
+                        : widget.backgroundColor ?? glass.controlTrack,
                     child: const SizedBox.expand(),
                   ),
                   PositionedDirectional(
@@ -217,7 +264,20 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
                     width: segmentWidth,
                     top: 0,
                     bottom: 0,
-                    child: ColoredBox(color: widget.color ?? tokens.primary),
+                    child: widget.glass
+                        ? HyperControlSurface(
+                            radius: widget.height / 2,
+                            role: HyperControlSurfaceRole.track,
+                            color: widget.color ?? tokens.primary,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: _progressGradient(
+                                  widget.color ?? tokens.primary,
+                                ),
+                              ),
+                            ),
+                          )
+                        : ColoredBox(color: widget.color ?? tokens.primary),
                   ),
                 ],
               );
@@ -232,17 +292,41 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
               );
             }
             // 下载快照通常间隔数百毫秒到达，使用短过渡避免进度条跳变。
-            return TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: amount, end: amount),
-              duration: reduceMotion
-                  ? Duration.zero
-                  : const Duration(milliseconds: 220),
-              curve: Curves.easeOutCubic,
-              builder: (_, value, _) => segments(value, 0),
+            return HyperSpringMotion(
+              value: amount,
+              builder: (_, value) => segments(value.clamp(0.0, 1.0), 0),
             );
           },
         ),
       ),
     );
   }
+}
+
+LinearGradient _progressGradient(Color color) => LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors: [
+    Color.alphaBlend(const Color.fromRGBO(255, 255, 255, 0.24), color),
+    color,
+    color,
+  ],
+);
+
+class _ProgressRingClipper extends CustomClipper<Path> {
+  const _ProgressRingClipper(this.stroke);
+  final double stroke;
+  @override
+  Path getClip(Size size) {
+    final rect = Offset.zero & size;
+    final inset = stroke.clamp(0.0, size.shortestSide / 2);
+    return Path()
+      ..fillType = PathFillType.evenOdd
+      ..addOval(rect)
+      ..addOval(rect.deflate(inset));
+  }
+
+  @override
+  bool shouldReclip(_ProgressRingClipper oldClipper) =>
+      oldClipper.stroke != stroke;
 }

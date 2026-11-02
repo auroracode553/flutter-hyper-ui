@@ -7,7 +7,7 @@ import '../theme/hyper_ui_spacing.dart';
 import '../utils/hyper_progress_value.dart';
 import 'hyper_badge.dart';
 import 'hyper_button.dart';
-import 'hyper_glass.dart';
+import 'hyper_control_surface.dart';
 import 'hyper_layout.dart';
 import 'hyper_modal.dart';
 import 'hyper_navigation.dart';
@@ -208,8 +208,8 @@ class HyperUpdateDialog extends StatelessWidget {
       canPop: !_locked,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
-        child: HyperGlass(
-          type: 'prominent',
+        child: HyperControlSurface(
+          role: HyperControlSurfaceRole.dialog,
           radius: HyperUiRadii.lg,
           child: Column(
             mainAxisSize: MainAxisSize.min,

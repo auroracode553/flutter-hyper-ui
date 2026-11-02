@@ -1,6 +1,6 @@
 # UI 样式与功能实现基线
 
-普通设置菜单使用 HyperMenuGroup + HyperListTile 默认样式；独立分组标题使用 HyperSectionTitle，与菜单组 title 共用 14 字号、w700 排版。页面垂直留白 12、完整分组间距 16，分别读取 HyperUiSpacing.pageVertical / sectionVertical。业务预览与功能绘制独立保留。
+普通设置菜单使用 HyperMenuGroup + HyperListTile 默认样式；独立文字标题由 Text 组合，菜单组 title 保持 14 字号、w700 排版。页面垂直留白 12、完整分组间距 16，分别读取 HyperUiSpacing.pageVertical / sectionVertical。业务预览与功能绘制独立保留。
 
 三选项主题设置统一使用 HyperThemeDialog：跟随系统、浅色、深色，36 最小行高、4 垂直内边距、21 圆环，无额外行间距或关闭按钮；普通 Radio 标签行与菜单行高保持独立。
 
@@ -25,13 +25,14 @@ Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一�
 | ui/lib/hyper_ui.dart | 对外导出入口 | 消费项目从这里导入；内部绘制工具不随意增加为公开 API |
 | ui/lib/src/theme/ | 语义颜色、材质、间距、圆角、动效 | 主题令牌集中维护；修改会影响多个组件 |
 | ui/lib/src/components/ | 基础控件及组合组件 | 状态和回调通过入参传递，不读业务服务或全局业务变量 |
+| ui/lib/src/interaction/ | 库内共享按压反馈 | 供组件内部复用，不从 hyper_ui.dart 导出 |
 | ui/lib/src/utils/ | 菜单测量、进度归一化、传输格式和浮层动效 | 供组件复用，不复制到各调用方 |
 | preview/lib/src/examples/ | 真实可交互调用和示例状态 | 修改组件后核对现有示例，不额外加控制项或计数 |
 | preview/lib/src/preview_catalog.dart | 示例 ID 与延迟加载映射 | 与目录中的 Preview ID 对齐 |
 | vitepress/.vitepress/catalog.ts | 组件路由、说明、参数说明与示例引用 | 与公开源码和组件页同步 |
 | vitepress/components/ | 组件 API 与使用说明 | 保留完整签名和参数表，不能用本文替代 |
 
-内部共用关系：HyperGlass 负责材质与裁切；HyperPressable 负责按压；hyper_progress_painters.dart 负责加载环与轨道；hyper_modal.dart 负责模态路由；hyper_anchored_surface.dart 与 hyper_anchored_layout.dart 负责锚定浮层；hyper_selection_field.dart 供 Select 与 Dropdown 共用字段；HyperTabs 受控切换固定分段，HyperFilterBar 管理横向分类可见位置。不要在每个组件中复制这些实现。
+内部共用关系：HyperGlass 负责材质与裁切；interaction/press_feedback.dart 负责按压；hyper_progress_painters.dart 负责加载环与轨道；hyper_modal.dart 负责模态路由；hyper_sheet_route.dart 复用底部面板尺寸、滚动、IME 与退出生命周期，ActionSheet 使用原表面，DatePicker 内部选择固定玻璃，不新增公开材质参数；hyper_anchored_surface.dart 与 hyper_anchored_layout.dart 负责锚定浮层；hyper_selection_field.dart 供 Select 与 Dropdown 共用字段；HyperTabs 受控切换固定分段，HyperFilterBar 管理横向分类可见位置。不要在每个组件中复制这些实现。
 
 ## 设计目标
 
@@ -49,7 +50,7 @@ Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一�
 
 ## 表面材质
 
-普通组件表面固定为实色，Button、TabBar、Slider、Switch、Dialog 内置固定玻璃，库内按用途保留轻量、常规和浮层深度。HyperUiTheme 仅配置品牌色、深浅色与字体。
+普通组件表面固定为实色，Button、TabBar、Slider、Switch、Dialog、Checkbox、Radio、DatePicker、Tabs、Drawer、Dropdown、Toast、Progress、UpdateDialog 内置固定玻璃，库内按用途保留轻量、常规和浮层深度。HyperUiTheme 仅配置品牌色、深浅色与字体。
 
 `HyperMenuGroup` 绘制一次外层表面，内部 `HyperListTile` 自动只绘制状态；其他分组表面内可用 `HyperListTile(type: 'plain', ...)`。
 
@@ -79,6 +80,10 @@ HyperUiTheme.app(
   home: const AppHome(),
 )
 ```
+
+固定玻璃按组件用途复用内部 HyperControlSurface，不提供全局材质档位。小型选择标记使用 2 逻辑像素 模糊、3/4 逻辑像素 折射；字段与 Tabs 轨道使用 8 逻辑像素 模糊、8/12 逻辑像素 折射且无外阴影；进度轨道使用 2 逻辑像素 模糊、2/3 逻辑像素 折射且无外阴影；浮层使用 8 逻辑像素 模糊、12/18 逻辑像素 折射、8 逻辑像素 阴影。日期与更新面板复用 Dialog 的浅/深色 16/8 逻辑像素 模糊、24/48 逻辑像素 折射与 16 逻辑像素 阴影。抽屉只模糊背景，浅/深色 16/8 逻辑像素；白色底面 alpha 0.85/0.28，不增加圆角、透镜边缘、描边或阴影。默认白色底面、清晰前景与语义状态边界独立绘制；显式颜色和边框保持调用方值。
+
+确定进度 和等宽 Tabs 的位置采用 stiffness=1000、dampingRatio=1、阈值 0.001 的临界阻尼弹簧，快速更新从当前值继续；显示值不反向写入业务状态。Toast 使用 125ms、0.97→1 缩放淡入，关闭时保留绘制直到退出完成，duration=0 不自动关闭。选择颜色与圆环粗细仍为 160ms；日期、抽屉与更新路由沿用既有时长及关闭语义。缺少独立背景源或平台着色器不支持时保留材质底面、轮廓与交互，不宣称已执行完整折射。
 
 ## 空间层级
 
@@ -112,7 +117,7 @@ Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、H
 
 ### 按压
 
-`HyperPressable` 在触摸按下时立即缩放和降低少量不透明度，松开或取消时恢复。组件不会在动画期间锁定输入。
+库内共享按压反馈在触摸按下时立即缩放和降低少量不透明度，松开或取消时恢复。组件不会在动画期间锁定输入。
 
 默认 pressedScale 为 0.975，pressedOpacity 为 0.92，按下 85ms、恢复 180ms；enabled 为 false 或点击与长按回调均为空时不可交互。按住过程中被禁用会恢复按压状态。
 
@@ -213,7 +218,7 @@ Flutter 图形直接使用 lucide_icons_flutter，Android 与 Preview 直接使�
 
 ## HyperButton 默认样式与复用规则
 
-源码：components/hyper_button.dart；hyper_button_surface.dart 负责瞬时按压及颜色适配，共用 hyper_glass_style.dart 参数和 hyper_control_surface.dart 绘制。常规动作使用 HyperButton；图标按钮使用 type: 'icon'。HyperPressable 只提供交互反馈，不自动拥有按钮外观。
+源码：components/hyper_button.dart；hyper_button_surface.dart 负责瞬时按压及颜色适配，共用 hyper_glass_style.dart 参数和 hyper_control_surface.dart 绘制。常规动作使用 HyperButton；图标按钮使用 type: 'icon'。内部共享按压层只提供交互反馈，不决定按钮外观。
 
 | 项目 | 当前规则 |
 | --- | --- |
@@ -247,7 +252,6 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | 组件与文档 | 实现文件 | 当前样式与功能 |
 | --- | --- | --- |
 | [HyperText / HyperIcon / HyperIcons](../components/text.md) | hyper_typography.dart | 文字和图标继承宿主样式，独立基准 14 / 24；图标直接使用 Lucide |
-| [HyperPressable](../components/pressable.md) | hyper_pressable.dart | 统一即时按压及长按反馈，本身不绘制背景、描边或文字 |
 | [HyperImage](../components/image.md) | hyper_image.dart | provider / network / asset 三种来源；默认 cover、圆角 16；加载与错误占位；可选全屏缩放预览，范围 0.5–5；仅使用 Flutter ImageCache，不内置持久缓存 |
 | [HyperAvatar](../components/avatar.md) | hyper_image.dart | 尺寸 40，默认圆形；图片失败使用文字或用户图标占位，文字最多两个字符 |
 | [HyperBadge](../components/badge.md) | hyper_badge.dart | status / tag / count；tag 支持选中、点击和关闭；count 依附 child，可用 dot、max、showZero，默认 max 99 |
@@ -267,7 +271,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | [HyperFormField](../components/form-field.md) | hyper_form_field.dart | label、必填星号、trailing、child、helperText、errorText；错误优先于说明，不代管输入值和表单提交 |
 | [HyperCheckbox](../components/checkbox.md) | hyper_selection_controls.dart | 21 方框、圆角 7、1.5 描边；支持 tristate；无标签交互区 44，有标签由无卡片的 plain 列表行处理点击 |
 | [HyperRadio](../components/radio.md) | hyper_selection_controls.dart | 21 圆环，未选描边 1.5、选中描边 6；value / groupValue；有标签由整行点击，无标签独立可交互时保留 44 触摸区 |
-| [HyperSwitch](../components/switch.md) | hyper_selection_controls.dart | 保留 52×32 轨道、原滑块约束盒和 22 可见圆形；关闭背景由 controlTrack 合成；标签行与独立控件共用液态按压和弹簧切换，点击释放时提交一次 |
+| [HyperSwitch](../components/switch.md) | hyper_switch.dart / hyper_switch_motion.dart | 保留 52×32/28、内侧留白 2，轨道复用 Button 的主题色/中性玻璃，轻透白色滑块；双轴目标 1.5、0.6/0.7 阻尼回弹、速度形变、Ambient、七波段折射；20 行程拖动松手按 0.5 提交 |
 | [HyperSlider](../components/slider.md) | hyper_selection_controls.dart | 6 高轨道、20 滑块、44 交互高度；默认范围 0–100；divisions 控制离散取值；点击及拖拽保留开始、变化、结束回调；RTL 反转方向 |
 | [HyperNumberStepper](../components/number-stepper.md) | hyper_number_stepper.dart | 受控整数，默认 min 0、max 99、step 1；圆角 16、subtle 表面、内边距 3、数值区最小宽 36；加减使用默认图标按钮，结果收敛至上下限 |
 | [HyperTabs](../components/tabs.md) | hyper_tabs.dart | 默认等宽；外圆角 18、内边距 4、项高 32；等宽平移一个选中底板，非等宽过渡背景；单项与整组禁用分别保留 |
@@ -339,8 +343,8 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 | --- | --- | --- |
 | HyperNavBar 返回、更多按钮 | HyperButton 加 surfaceStrong 背景，用于固定导航样式与两端对齐 | 用户已明确要求保留 |
 | HyperNoticeBar 关闭按钮 | 默认图标按钮，透明背景、主题色前景 | 用户已明确要求保留；不随普通按钮一起清理 |
-| HyperTextField._AffixButton | HyperPressable、6 内边距、18 图标；清空与密码可见性切换 | 用户已要求保留；直接改默认按钮会改变输入框内部布局与描边 |
-| HyperToast 的 actionLabel | HyperPressable 加文字，继承提示色调 | 用户已要求保留；改默认按钮会新增背景、边框和尺寸约束 |
+| HyperTextField._AffixButton | 内部按压层、6 内边距、18 图标；清空与密码可见性切换 | 用户已要求保留；直接改默认按钮会改变输入框内部布局与描边 |
+| HyperToast 的 actionLabel | 内部按压层加文字，继承提示色调 | 用户已要求保留；改默认按钮会新增背景、边框和尺寸约束 |
 | HyperBadge 的关闭区 | 20 方形点击区、14 图标，跟随标签前景色 | 用户已要求保留；默认图标按钮为 38，会改变标签尺寸 |
 | HyperPagination 数字页码 | 最小宽 32、高 32、圆角 11，当前页使用 selection 和主题色 | 用户已要求保留；当前页是选中展示，不等价于普通按钮禁用态 |
 | HyperImage 预览关闭按钮 | HyperButton 加 foreground 与 surfaceStrong，位于图片预览上方 | 当前保留；移除背景和颜色覆盖前确认 |
@@ -369,7 +373,7 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 - NavBarScrollScope 对普通列表跟踪 depth=0 的竖向主视口，scrollKey 变化时重置通知状态；分页或嵌套页面使用其 source 构造绑定已有主 ScrollController 和 active，订阅、位置恢复、指标变化及清理统一由库处理。存在显式来源时不使用其他视口通知，非活动来源不贡献状态。超过 0.5 判为滚入，帧尾合并且仅通知依赖的导航，不重建整页；不改变视口约束、偏移、physics、边距或安全区。NavBar 将显式 scrolledUnder 与作用域状态合并，160ms 显示背景，在状态栏顶部至导航底部以内渐隐，不越界、不占位、不拦截触摸；高对比时改为不延伸的实底，减少动画时直接切换。
 - 没有显式作用域的普通 Scaffold，由 Navbar 内部订阅最近的 ScrollNotificationObserver，框架将初始/恢复/尺寸指标通知转换成滚动通知；仅处理 depth=0 的竖向视口。显式作用域与 source 优先，不重复订阅；绑定变化时清理旧观察者，帧尾合并状态，只重建导航。WebView 的滚动不属于该通道，不擅自添加业务 Bridge 监听。自动感知不新增渲染盒，不改正文或底栏布局。
 - 两端导航背景均从屏幕顶部覆盖状态栏，安全区在背景内部，只有标题与按钮避让。Android 文档预览注入模拟系统 Insets，导航与正文共用同一来源；不得把模拟留白放到整个导航栏外部，也不得在正文重复累加。
-- 保留现有 RTL、字体缩放、键盘焦点及减少动画处理；不为统一外观删掉这些分支。仅交互用途的 HyperPressable 不等价于自定义按钮样式。
+- 保留现有 RTL、字体缩放、键盘焦点及减少动画处理；不为统一外观删掉这些分支。内部共享按压反馈不决定组件外观。
 
 ## 两端对齐与维护验证
 

@@ -8,7 +8,7 @@ import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import 'hyper_pressable.dart';
+import '../interaction/press_feedback.dart';
 import 'hyper_button_surface.dart';
 import 'hyper_tooltip.dart';
 
@@ -176,7 +176,7 @@ class HyperButton extends StatelessWidget {
           border: visual.border == null
               ? null
               : Border.all(color: visual.border!, width: disabled ? 1 : 0.5),
-          child: HyperPressable(
+          child: PressFeedback(
             onPressed: blocked ? null : onPressed,
             enabled: !blocked,
             pressedScale: 1,
