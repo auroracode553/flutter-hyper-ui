@@ -2,12 +2,19 @@ import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class ButtonsExample extends StatelessWidget {
+class ButtonsExample extends StatefulWidget {
   const ButtonsExample({super.key});
 
   @override
+  State<ButtonsExample> createState() => _ButtonsExampleState();
+}
+
+class _ButtonsExampleState extends State<ButtonsExample> {
+  bool _processing = true;
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
+    final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -17,8 +24,15 @@ class ButtonsExample extends StatelessWidget {
           runSpacing: HyperUiSpacing.xs,
           children: [
             // 默认档文字由按钮提供字号、字重与颜色。
-            HyperButton(onPressed: _noop, content: const HyperText('默认按钮')),
-            HyperButton(label: '处理中', loading: true, onPressed: _noop),
+            HyperButton(
+              onPressed: () => setState(() => _processing = !_processing),
+              content: const HyperText('默认按钮'),
+            ),
+            HyperButton(
+              label: '处理中',
+              loading: _processing,
+              onPressed: () => setState(() => _processing = true),
+            ),
           ],
         ),
         const SizedBox(height: HyperUiSpacing.md),
@@ -139,7 +153,7 @@ class ButtonsExample extends StatelessWidget {
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,
           children: [
-            HyperButton(colorStyle: 'success', label: '默认描边', onPressed: _noop),
+            HyperButton(colorStyle: 'success', label: '默认玻璃', onPressed: _noop),
             HyperButton(
               type: 'filled',
               colorStyle: 'success',
@@ -171,6 +185,14 @@ class ButtonsExample extends StatelessWidget {
           type: 'filled',
         ),
       ],
+    );
+    // 与 Kotlin 文档同一完整背景与滚动视口：顶部 52，内容 padding 16，正文组间距不变。
+    return Padding(
+      padding: const EdgeInsets.only(top: 52),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: content,
+      ),
     );
   }
 }

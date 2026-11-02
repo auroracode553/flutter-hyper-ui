@@ -3,10 +3,12 @@ import 'package:flutter/widgets.dart';
 import '../theme/hyper_ui_theme.dart';
 import 'hyper_glass_source.dart';
 import 'hyper_glass_painter.dart';
+import 'hyper_glass_style.dart';
 
 /// 固定组件玻璃，不提供全局材质档位；绘制与子组件布局独立。
 enum HyperControlSurfaceRole {
   navigation,
+  button,
   selection,
   thumb,
   switchThumb,
@@ -26,6 +28,7 @@ class HyperControlSurface extends StatefulWidget {
     this.tint,
     this.scaleSource,
     this.sourceScale = const Offset(1, 1),
+    this.border,
   });
   final double radius, progress;
   final HyperControlSurfaceRole role;
@@ -34,6 +37,7 @@ class HyperControlSurface extends StatefulWidget {
   final List<HyperGlassSourceController>? sources;
   final HyperGlassSourceController? tintSource, scaleSource;
   final Offset sourceScale;
+  final Border? border;
   @override
   State<HyperControlSurface> createState() => _HyperControlSurfaceState();
 }
@@ -77,11 +81,15 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
         role == HyperControlSurfaceRole.thumb ||
         role == HyperControlSurfaceRole.switchThumb;
     final strength = interactive ? pressed : 1.0;
+    final controlStyle = role == HyperControlSurfaceRole.button
+        ? HyperGlassStyle.button(pressed)
+        : HyperGlassStyle.navigation;
     const white = Color.fromRGBO(255, 255, 255, 1),
         black = Color.fromRGBO(0, 0, 0, 1);
     final tint = light ? white : white.withValues(alpha: 0.34);
     final blur = switch (role) {
-      HyperControlSurfaceRole.navigation => 8.0,
+      HyperControlSurfaceRole.navigation ||
+      HyperControlSurfaceRole.button => controlStyle.blur,
       HyperControlSurfaceRole.selection => 0.0,
       HyperControlSurfaceRole.thumb ||
       HyperControlSurfaceRole.switchThumb => 8 * (1 - pressed),
@@ -89,12 +97,14 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
     };
     final edge = switch (role) {
       HyperControlSurfaceRole.navigation ||
+      HyperControlSurfaceRole.button => controlStyle.edge,
       HyperControlSurfaceRole.dialog => 24.0 * strength,
       HyperControlSurfaceRole.switchThumb => 5.0 * strength,
       _ => 10.0 * strength,
     };
     final amount = switch (role) {
-      HyperControlSurfaceRole.navigation => 24.0 * strength,
+      HyperControlSurfaceRole.navigation ||
+      HyperControlSurfaceRole.button => controlStyle.amount,
       HyperControlSurfaceRole.dialog => 48.0 * strength,
       HyperControlSurfaceRole.switchThumb => 10.0 * strength,
       _ => 14.0 * strength,
@@ -103,6 +113,8 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
       HyperControlSurfaceRole.navigation => (widget.color ?? tint).withValues(
         alpha: (widget.color ?? tint).a * 0.4,
       ),
+      HyperControlSurfaceRole.button =>
+        widget.color ?? tint.withValues(alpha: tint.a * 0.4),
       HyperControlSurfaceRole.selection => (light ? black : white).withValues(
         alpha: 0.1 * (1 - pressed),
       ),
@@ -128,7 +140,9 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
       depth: role == HyperControlSurfaceRole.dialog ? 1 : 0,
       saturation: role == HyperControlSurfaceRole.dialog ? 1.5 : 1,
       brightness: role == HyperControlSurfaceRole.dialog && light ? 0.2 : 0,
-      highlight: strength,
+      highlight: role == HyperControlSurfaceRole.button
+          ? controlStyle.highlight * 2
+          : strength,
       baseColor: theme.tokens.background,
       tintSource: widget.tintSource,
       tint: widget.tint,
@@ -144,7 +158,9 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
           if (lift > 0)
             BoxShadow(
               color: black.withValues(alpha: (light ? 0.08 : 0.18) * lift),
-              blurRadius: role == HyperControlSurfaceRole.dialog
+              blurRadius: role == HyperControlSurfaceRole.button
+                  ? controlStyle.shadow
+                  : role == HyperControlSurfaceRole.dialog
                   ? 16
                   : role == HyperControlSurfaceRole.selection
                   ? 8
@@ -161,13 +177,26 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
           painter: _painter,
           foregroundPainter: _ControlEdgePainter(
             radius: widget.radius,
-            strength: interactive ? pressed : 0.5,
-            navigation: role == HyperControlSurfaceRole.navigation,
+            strength: role == HyperControlSurfaceRole.button
+                ? (widget.border == null ? controlStyle.highlight : 0)
+                : interactive
+                ? pressed
+                : 0.5,
+            navigation:
+                role == HyperControlSurfaceRole.navigation ||
+                role == HyperControlSurfaceRole.button,
             innerRadius: interactive
                 ? (role == HyperControlSurfaceRole.selection ? 8 : 4)
                 : 0,
           ),
-          child: ColoredBox(color: fill, child: widget.child),
+          child: DecoratedBox(
+            position: DecorationPosition.foreground,
+            decoration: BoxDecoration(
+              borderRadius: shape,
+              border: widget.border,
+            ),
+            child: ColoredBox(color: fill, child: widget.child),
+          ),
         ),
       ),
     );

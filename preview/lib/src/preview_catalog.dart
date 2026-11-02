@@ -190,7 +190,7 @@ class PreviewCatalog {
       builder: (_) => example_overview_example.OverviewExample(),
     ),
     PreviewItem(
-      id: 'buttons',
+      id: 'buttons', fullScreen: true,
       title: 'Button 按钮',
       description: '用于明确动作、弱动作与危险动作。',
       loadLibrary: () => example_buttons_example.loadLibrary(),
@@ -232,9 +232,9 @@ class PreviewCatalog {
       builder: (_) => example_navigation_example.NavigationExample(),
     ),
     PreviewItem(
-      id: 'component-button',
+      id: 'component-button', fullScreen: true,
       title: 'HyperButton',
-      description: '按钮层级、尺寸与状态。',
+      description: '38 高的共用玻璃按钮；按压反馈与加载拦截以 Kotlin 文档示例为准。',
       loadLibrary: () => example_buttons_example.loadLibrary(),
       builder: (_) => example_buttons_example.ButtonsExample(),
     ),

@@ -49,11 +49,11 @@ Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一�
 
 ## 表面材质
 
-普通组件表面固定为实色，TabBar、Slider、Switch、Dialog 内置固定玻璃，库内按用途保留轻量、常规和浮层深度。HyperUiTheme 仅配置品牌色、深浅色与字体。
+普通组件表面固定为实色，Button、TabBar、Slider、Switch、Dialog 内置固定玻璃，库内按用途保留轻量、常规和浮层深度。HyperUiTheme 仅配置品牌色、深浅色与字体。
 
 `HyperMenuGroup` 绘制一次外层表面，内部 `HyperListTile` 自动只绘制状态；其他分组表面内可用 `HyperListTile(type: 'plain', ...)`。
 
-实色表面来自内部 theme/hyper_surface_theme.dart：surface、surfaceStrong、surfaceSubtle 均不透明；没有全局材质档位或表面透明度配置。四类控件的固定玻璃独立于普通表面令牌。语义颜色来自 HyperUiThemeTokens，表面层级不承担业务含义。
+实色表面来自内部 theme/hyper_surface_theme.dart：surface、surfaceStrong、surfaceSubtle 均不透明；没有全局材质档位或表面透明度配置。Button 等指定控件的固定玻璃独立于普通表面令牌。语义颜色来自 HyperUiThemeTokens，表面层级不承担业务含义。
 
 HyperUiTheme.app 默认跟随系统亮暗，基准文字为 14、行高 1.4，基准图标为 24。内部表面层级仅控制实色层次与阴影，默认圆角为 24；subtle 不带默认阴影，高对比时强化边框。
 
@@ -213,28 +213,28 @@ Flutter 图形直接使用 lucide_icons_flutter，Android 与 Preview 直接使�
 
 ## HyperButton 默认样式与复用规则
 
-源码：components/hyper_button.dart。常规动作使用 HyperButton；图标按钮使用 type: 'icon'。HyperPressable 只提供交互反馈，不自动拥有按钮外观。
+源码：components/hyper_button.dart；hyper_button_surface.dart 负责瞬时按压及颜色适配，共用 hyper_glass_style.dart 参数和 hyper_control_surface.dart 绘制。常规动作使用 HyperButton；图标按钮使用 type: 'icon'。HyperPressable 只提供交互反馈，不自动拥有按钮外观。
 
 | 项目 | 当前规则 |
 | --- | --- |
-| type | 省略为默认描边按钮；显式值仅 filled、icon |
+| type | 省略为默认玻璃按钮；显式值仅 filled、icon |
 | colorStyle | primary / success / info / warning / danger；省略时使用默认配色 |
 | color | 自定义配色，优先于 colorStyle；不是普通文字颜色参数，也会影响描边 |
-| 默认描边按钮 | surfaceSubtle 背景、foreground 前景、border 描边；亮色 solid 下为白底 |
-| 默认图标按钮 | surface 背景、foreground 前景、edgeHighlight 描边，圆形 |
-| filled | 基色渐变、淡描边和阴影；前景按是否指定色调与亮度计算 |
+| 默认玻璃按钮 | 中性半透明底面、foreground 前景与共用 0.5 高光轮廓；语义色仅补单层 0.5 色调线框 |
+| 默认图标按钮 | 与默认按钮共用中性玻璃绘制，foreground 前景，圆形 |
+| filled | 原基色 alpha ×0.9 与共用折射、高光及阴影；前景按原亮度规则计算 |
 | 禁用 | enabled 为 false 或 onPressed 为空；controlTrack 背景、mutedForeground 的 alpha 150、border 的 alpha 110 |
 | 加载 | 阻止重复点击；图标按钮用加载环替代图标，文字按钮保留内容并显示加载环；不自动切换为禁用配色 |
 | 内容 | label 与 content 互斥；type 为 icon 时不能传 label；tooltip 由 HyperTooltip 提供 |
 | 宽度 | 默认随内容收缩；expanded 才通栏；图标按钮宽高相同 |
 | 圆角 | 按钮高度的一半，不能改用统一方形圆角 |
-| backgroundColor | 覆盖默认背景并关闭背景渐变；仅保留有明确用途的调用 |
+| backgroundColor | 覆盖默认玻璃底面，保留显式背景及其透明度 |
 
 | 高度 | 最小宽 | 水平内边距 | 字号 | 纯图标 | 文字旁图标 |
 | --- | --- | --- | --- | --- | --- |
 | 38 | 68 | 14 | 13 | 20 | 17 |
 
-普通取消、关闭和次级操作保持默认描边；主操作在现有调用中显式使用 filled 与 primary；危险确认使用 filled 与 danger。这些预设表达操作用途，不属于待清理的灰色覆盖。
+普通取消、关闭和次级操作使用默认玻璃；主操作在现有调用中显式使用 filled 与 primary；危险确认使用 filled 与 danger。这些预设表达操作用途，不属于待清理的灰色覆盖。
 
 HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定图标及可用回调，使用 HyperButton 默认外观；只读与边界由回调为空触发按钮默认禁用态，不额外指定 color 或 backgroundColor。不要恢复 selection 灰底或重复计算正常／禁用颜色。
 

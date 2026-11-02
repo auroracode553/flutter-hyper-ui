@@ -9,6 +9,7 @@ import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
+import 'hyper_button_surface.dart';
 import 'hyper_tooltip.dart';
 
 /// Self-drawn button with a small default API and an optional content slot.
@@ -123,15 +124,6 @@ class HyperButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(
         horizontal: isIconOnly ? 0 : metrics.horizontal,
       ),
-      decoration: BoxDecoration(
-        color: backgroundColor != null || visual.gradient == null
-            ? background
-            : null,
-        gradient: backgroundColor != null ? null : visual.gradient,
-        borderRadius: borderRadius,
-        border: Border.all(color: visual.border),
-        boxShadow: visual.shadows,
-      ),
       child: Align(
         alignment: Alignment.center,
         // widthFactor: 1 让宽度跟随内容收缩（等价 inline-block），
@@ -171,11 +163,27 @@ class HyperButton extends StatelessWidget {
       child: SizedBox(
         // 默认按内容收缩（inline-block）；仅 expanded 时铺满。
         width: isSquare ? metrics.height : (expanded ? double.infinity : null),
-        child: HyperPressable(
-          onPressed: blocked ? null : onPressed,
-          enabled: !blocked,
-          borderRadius: borderRadius,
-          child: buttonBody,
+        child: HyperButtonSurface(
+          enabled: !disabled,
+          interactive: !blocked,
+          radius: metrics.height / 2,
+          color: disabled
+              ? background
+              : backgroundColor ??
+                    (variant == _ButtonVariant.filled
+                        ? background.withValues(alpha: background.a * 0.9)
+                        : null),
+          border: visual.border == null
+              ? null
+              : Border.all(color: visual.border!, width: disabled ? 1 : 0.5),
+          child: HyperPressable(
+            onPressed: blocked ? null : onPressed,
+            enabled: !blocked,
+            pressedScale: 1,
+            pressedOpacity: 1,
+            borderRadius: borderRadius,
+            child: buttonBody,
+          ),
         ),
       ),
     );
@@ -244,8 +252,12 @@ class _HyperButtonMetrics {
   final double labelIconSize;
 
   static const standard = _HyperButtonMetrics(
-    height: 38, minWidth: 68, horizontal: 14, fontSize: 13,
-    iconOnlyIconSize: 20, labelIconSize: 17,
+    height: 38,
+    minWidth: 68,
+    horizontal: 14,
+    fontSize: 13,
+    iconOnlyIconSize: 20,
+    labelIconSize: 17,
   );
 }
 
@@ -254,15 +266,11 @@ class _HyperButtonVisual {
     required this.background,
     required this.foreground,
     required this.border,
-    this.gradient,
-    this.shadows = const <BoxShadow>[],
   });
 
   final Color background;
   final Color foreground;
-  final Color border;
-  final Gradient? gradient;
-  final List<BoxShadow> shadows;
+  final Color? border;
 
   static _HyperButtonVisual resolve({
     required HyperUiThemeTokens tokens,
@@ -303,23 +311,7 @@ class _HyperButtonVisual {
         foreground: !hasTone || base.computeLuminance() > 0.5
             ? tokens.foreground
             : tokens.primaryForeground,
-        border: tokens.primaryForeground.withAlpha(45),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[
-            Color.lerp(base, tokens.primaryForeground, 0.10)!,
-            base,
-          ],
-        ),
-        shadows: <BoxShadow>[
-          BoxShadow(
-            color: base.withAlpha(50),
-            blurRadius: 16,
-            spreadRadius: -5,
-            offset: const Offset(0, 7),
-          ),
-        ],
+        border: null,
       );
     }
 
@@ -327,13 +319,13 @@ class _HyperButtonVisual {
       _ButtonVariant.standard => _HyperButtonVisual(
         background: glass.surfaceSubtle,
         foreground: hasTone ? base : tokens.foreground,
-        // 默认按钮采用描边外观，与 Compose 的无 type 调用保持一致。
-        border: hasTone ? base.withValues(alpha: 0.35) : tokens.border,
+        // 默认按钮的中性玻璃外缘由共用绘制器提供，语义配色仅补单层色调轮廓。
+        border: hasTone ? base.withValues(alpha: 0.35) : null,
       ),
       _ButtonVariant.icon => _HyperButtonVisual(
         background: glass.surface,
         foreground: hasTone ? base : tokens.foreground,
-        border: hasTone ? base.withValues(alpha: 0.35) : glass.edgeHighlight,
+        border: hasTone ? base.withValues(alpha: 0.35) : null,
       ),
       _ => throw StateError('Unexpected button variant'),
     };

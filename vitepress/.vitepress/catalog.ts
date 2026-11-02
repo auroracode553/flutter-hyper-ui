@@ -199,7 +199,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'color', description: '自定义基色，优先于 colorStyle；随 type 应用于填充、文字和轮廓' },
           { name: 'backgroundColor', description: '覆盖按钮背景色，图标按钮默认使用玻璃表面' },
         ],
-        preview: demo('component-button', 'HyperButton 状态', 'buttons_example.dart', 360, '展示按钮层级、尺寸、加载、图标和宽度表现；禁用态保留单个按钮示例。'),
+        preview: { ...demo('component-button', 'HyperButton 交互预览', 'buttons_example.dart', 680, '共用玻璃表面与按压反馈，默认按钮切换加载态；保持 38 高及 Kotlin 示例分组。'), fullScreen: true },
       }),
       component('HyperCard', 'hyper_card.dart', '默认无描边、使用双层柔阴影，具有标题、操作区、正文、底部和选中态的内容容器。', {
         propsDocs: [
