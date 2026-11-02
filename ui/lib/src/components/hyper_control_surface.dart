@@ -162,6 +162,7 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
           foregroundPainter: _ControlEdgePainter(
             radius: widget.radius,
             strength: interactive ? pressed : 0.5,
+            navigation: role == HyperControlSurfaceRole.navigation,
             innerRadius: interactive
                 ? (role == HyperControlSurfaceRole.selection ? 8 : 4)
                 : 0,
@@ -178,15 +179,21 @@ class _ControlEdgePainter extends CustomPainter {
     required this.radius,
     required this.strength,
     this.innerRadius = 0,
+    this.navigation = false,
   });
   final double radius;
   final double strength;
   final double innerRadius;
+  final bool navigation;
 
   @override
   void paint(Canvas canvas, Size size) {
     if (strength <= 0 || size.isEmpty) return;
-    final rect = (Offset.zero & size).deflate(0.5);
+    // 导航轮廓与 Compose 一致：沿实际外缘画 0.5 描边，由父级圆角裁掉外半边。
+    // 不以更粗的内缩亮边扩大单入口的视觉重量，布局与命中尺寸仍为原值。
+    final rect = navigation
+        ? Offset.zero & size
+        : (Offset.zero & size).deflate(0.5);
     final edge = RRect.fromRectAndRadius(rect, Radius.circular(radius));
     if (innerRadius > 0) {
       canvas.drawRRect(
@@ -203,16 +210,16 @@ class _ControlEdgePainter extends CustomPainter {
     }
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.75
+      ..strokeWidth = navigation ? 0.5 : 0.75
       ..shader = LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color.fromRGBO(255, 255, 255, 0.8 * strength),
-          Color.fromRGBO(255, 255, 255, 0.08 * strength),
-          Color.fromRGBO(255, 255, 255, 0.55 * strength),
+          Color.fromRGBO(255, 255, 255, (navigation ? 0.6 : 0.8) * strength),
+          Color.fromRGBO(255, 255, 255, (navigation ? 0.04 : 0.08) * strength),
+          Color.fromRGBO(255, 255, 255, (navigation ? 0.5 : 0.55) * strength),
         ],
-        stops: const [0, 0.55, 1],
+        stops: navigation ? const [0, 0.5, 1] : const [0, 0.55, 1],
       ).createShader(rect);
     canvas.drawRRect(edge, paint);
   }
@@ -220,6 +227,7 @@ class _ControlEdgePainter extends CustomPainter {
   @override
   bool shouldRepaint(_ControlEdgePainter oldDelegate) =>
       radius != oldDelegate.radius ||
+      navigation != oldDelegate.navigation ||
       strength != oldDelegate.strength ||
       innerRadius != oldDelegate.innerRadius;
 }

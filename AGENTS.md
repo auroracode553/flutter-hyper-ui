@@ -33,7 +33,7 @@
 
 ## 二、代码架构规范（低耦合强制要求）
 
-- 本项目的组件预览是与 `D:/my_project/android_project/hyper-ui` 对齐的视觉基准；两端手机外框、背景、安全区、分组顺序、文案、图标、尺寸、间距与状态展示保持一致，不在另一端额外添加标题、控制项或计数。
+- Kotlin 与 Flutter 的组件示例统一以 `D:/my_project/android_project/hyper-ui/vitepress/docs/` 的文档示例及对应 Compose Preview 为视觉基准；两端手机外框、背景、安全区、分组顺序、文案、图标、尺寸、间距与状态展示保持一致。不得反过来用 Flutter 示例覆盖 Kotlin 示例，也不得自行增删入口或改变选中块尺寸。
 
 - 本项目与 `D:/my_project/android_project/hyper-ui` 的对应组件保持默认 UI 一致。修改默认布局、尺寸、按钮类型或状态展示规则时，同时更新另一端的实现、文档与预览示例；框架 API 差异不能导致默认视觉规则分叉。
 

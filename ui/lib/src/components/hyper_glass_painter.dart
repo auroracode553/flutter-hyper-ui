@@ -49,7 +49,6 @@ class HyperGlassPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final target = targetKey.currentContext?.findRenderObject();
     if (target is! RenderBox || !target.attached || size.isEmpty) return;
-    final origin = target.localToGlobal(Offset.zero);
     final padding = (blur * 3 + edge).ceilToDouble();
     final extent = Size(size.width + padding * 2, size.height + padding * 2);
     final recording = ui.PictureRecorder();
@@ -70,10 +69,6 @@ class HyperGlassPainter extends CustomPainter {
           !boundary.attached ||
           !boundary.hasSize)
         continue;
-      final local =
-          boundary.localToGlobal(Offset.zero) -
-          origin +
-          Offset(padding, padding);
       final paint = Paint()..filterQuality = FilterQuality.medium;
       if (source == tintSource && tint != null)
         paint.colorFilter = ColorFilter.mode(tint!, BlendMode.srcIn);
@@ -83,10 +78,13 @@ class HyperGlassPainter extends CustomPainter {
         sampleCanvas.scale(sourceScale.dx, sourceScale.dy);
         sampleCanvas.translate(-extent.width / 2, -extent.height / 2);
       }
+      // 同时抵消镜片自身缩放并应用图像源的变换，弹性运动时标签仍与底层对齐。
+      sampleCanvas.translate(padding, padding);
+      sampleCanvas.transform(boundary.getTransformTo(target).storage);
       sampleCanvas.drawImageRect(
         image,
         Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
-        local & boundary.size,
+        Offset.zero & boundary.size,
         paint,
       );
       sampleCanvas.restore();

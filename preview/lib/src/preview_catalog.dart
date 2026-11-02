@@ -1,3 +1,4 @@
+import 'examples/component_tab_bar_examples.dart' deferred as example_tab_bar;
 import 'package:flutter/widgets.dart';
 import 'examples/component_section_title_example.dart' deferred as example_section_title;
 import 'examples/component_theme_mode_dialog_example.dart'
@@ -380,12 +381,32 @@ class PreviewCatalog {
       builder: (_) => example_component_safe_area.SafeAreaComponentExample(),
     ),
     PreviewItem(
-      id: 'component-tab-bar',
-      title: 'HyperTabBar',
-      description: '默认高 56 的多项导航、固定直径 48 的独立通知入口与居中组合示例。',
-      loadLibrary: () => example_component_navigation_examples.loadLibrary(),
-      builder: (_) =>
-          example_component_navigation_examples.TabBarComponentExample(),
+      id: 'component-tab-bar', fullScreen: true,
+      title: 'HyperTabBar 交互预览',
+      description: '与 Kotlin 文档示例一致；栏内最多五项，栏外一个 48 独立入口；轮廓与高光遵循 Kotlin，保留原选中块高度。',
+      loadLibrary: () => example_tab_bar.loadLibrary(),
+      builder: (_) => example_tab_bar.TabBarComponentExample(),
+    ),
+    PreviewItem(
+      id: 'component-tab-bar-docked', fullScreen: true,
+      title: '非悬浮动作栏：重复点击与禁用项',
+      description: '与 Kotlin 文档示例一致；栏内最多五项，栏外一个 48 独立入口；轮廓与高光遵循 Kotlin，保留原选中块高度。',
+      loadLibrary: () => example_tab_bar.loadLibrary(),
+      builder: (_) => example_tab_bar.DockedTabBarComponentExample(),
+    ),
+    PreviewItem(
+      id: 'component-tab-bar-single', fullScreen: true,
+      title: '单动作与角标',
+      description: '与 Kotlin 文档示例一致；栏内最多五项，栏外一个 48 独立入口；轮廓与高光遵循 Kotlin，保留原选中块高度。',
+      loadLibrary: () => example_tab_bar.loadLibrary(),
+      builder: (_) => example_tab_bar.SingleTabBarComponentExample(),
+    ),
+    PreviewItem(
+      id: 'component-tab-bar-trailing', fullScreen: true,
+      title: '56dp 主导航与 48dp 独立操作居中并排',
+      description: '与 Kotlin 文档示例一致；栏内最多五项，栏外一个 48 独立入口；轮廓与高光遵循 Kotlin，保留原选中块高度。',
+      loadLibrary: () => example_tab_bar.loadLibrary(),
+      builder: (_) => example_tab_bar.TrailingTabBarComponentExample(),
     ),
     PreviewItem(
       id: 'component-list-tile',

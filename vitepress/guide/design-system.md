@@ -151,9 +151,9 @@ Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、H
 
 拖过边界时使用渐进阻力而非硬停止。系统启用“减少动态效果”后，弹簧与位移动画会直接收敛到目标状态。
 
-SlideMenu 的速度投影时间为 0.09 秒，展开判断使用操作区宽度的 35%，吸附弹簧 mass / stiffness / damping 为 1 / 470 / 42。HyperTabBar 连续预览手指位置，松手通过 onChanged 提交；选中块使用 mass / stiffness / damping 为 1 / 1000 / 63.2455532 的临界阻尼弹簧定位，不预测业务选中值。Slider 点击和外部更新共用同一弹簧，拖动直接跟手。减少动态效果时直接定位，不放大容器或滑块。
+SlideMenu 的速度投影时间为 0.09 秒，展开判断使用操作区宽度的 35%，吸附弹簧 mass / stiffness / damping 为 1 / 470 / 42。HyperTabBar 连续预览手指位置，松手通过 onChanged 提交；选中块使用 mass / stiffness / damping 为 1 / 1000 / 63.2455532 的临界阻尼弹簧定位，不预测业务选中值。Slider 点击和外部更新共用同一弹簧，拖动直接跟手。TabBar 有效按下及切换途中，悬浮 Bar 仅在绘制层按 1 + 16 / 栏宽 × 进度舒展，镜片以 78/56 为缩放目标、横纵 dampingRatio 0.6/0.7、stiffness 250 回弹；接近目标后释放。拖动整栏最多偏移 ±4，松手用 1/300 弹簧回正。贴底栏不做整栏变换，Slider 不放大；静态尺寸、点击区及布局不变。减少动态效果时直接定位并关闭舒展与偏移。
 
-TabBar、Slider、Switch、Dialog 的固定玻璃位于 hyper_control_surface.dart，hyper_glass_source.dart 管理独立图像源，hyper_glass_painter.dart 合成图像并执行 shaders/hyper_glass.frag 的圆角折射与色散；hyper_spring_motion.dart 仅管理视觉值。保留原有尺寸、点击范围、外边距、安全区、按压高光与弹簧动效。Slider 保持 20 的滑块和无默认品牌描边；Dialog 保持 250ms 过渡。
+TabBar、Slider、Switch、Dialog 的固定玻璃位于 hyper_control_surface.dart，hyper_glass_source.dart 管理独立图像源，hyper_glass_painter.dart 合成图像并执行 shaders/hyper_glass.frag 的圆角折射与色散；hyper_spring_motion.dart 管理通用视觉值，hyper_tab_bar_motion.dart 管理底栏的舒展、速度形变与回正。保留原有尺寸、点击范围、外边距、安全区、按压高光与弹簧动效。Slider 保持 20 的滑块和无默认品牌描边；Dialog 保持 250ms 过渡。
 
 ### 空间一致性
 
@@ -375,11 +375,11 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 
 对应 Compose 仓库当前实际目录为 D:/my_project/android_project/hyper-ui。按对应组件同步默认布局、尺寸、按钮类型、状态展示、业务参数及回调语义；找不到对应组件时先说明，不能自动新增整套另一端实现。
 
-预览以本仓库为视觉基准：手机外框、背景、安全区、分组顺序、文案、图标、尺寸、间距和状态一致，不额外加标题、控制项或计数。完整页面的底栏使用 Scaffold.extendBody 与 bottomNavigationBar，正文 SafeArea 显式 bottom: false；底栏边距与安全区交给 HyperTabBar，滚动末尾只取一次 Scaffold 注入的 bottom padding。示例参见[共用悬浮宿主](../components/tab-bar.md#悬浮页面宿主)与[业务接入规则](./consumer-integration.md)。
+两端预览统一以 D:/my_project/android_project/hyper-ui/vitepress/docs/ 的 Kotlin 文档示例及对应 Compose Preview 为视觉基准：手机外框、背景、安全区、分组顺序、文案、图标、尺寸、间距和状态一致，不额外加标题、控制项或计数。完整页面的底栏使用 Scaffold.extendBody 与 bottomNavigationBar，正文 SafeArea 显式 bottom: false；底栏边距与安全区交给 HyperTabBar，滚动末尾只取一次 Scaffold 注入的 bottom padding。示例参见[共用悬浮宿主](../components/tab-bar.md#悬浮页面宿主)与[业务接入规则](./consumer-integration.md)。
 
 完成修改后，核对默认、禁用、只读、选中、加载、边界和取消行为中实际受影响的部分。按现有环境执行格式检查与必要静态分析；不新增单元测试或一次性报告，不自动安装依赖、启动部署或保留临时验证产物。组件页保留完整参数表，公开 API 变化同步 catalog.ts、公开入口、真实示例和本文。不能只修改预览制造“已经修复”的外观。
 
-HyperTabBar 尺寸由库按形态管理：`type: 'single'` 是固定直径 48 逻辑像素的独立圆形动作入口；`type: 'multiple'` 的按钮组（悬浮或贴底）默认内容高度 56，仅按钮组按标签字体在库内扩展。单独入口必须比按钮组小，禁止为“统一高度”将 single 改成 56，也禁止业务页面通过 SizedBox、约束或缩放实现 48。与 Compose 端保持一致，并排时在共同 Row 中垂直居中，保留各自默认尺寸；悬浮多项默认顶部间距 8、底部间距 20。正文使用宿主实测底部净空，不按默认尺寸估算占位。
+HyperTabBar 独立入口与导航的外缘使用与 Kotlin 相同的 0.5 描边及高光透明度，描边沿真实轮廓并裁去外半边；不以内缩粗亮边增加视觉重量。HyperTabBar 多项支持 2–5 项，默认左右外边距为 12；选中镜片可见高度为按钮组内容高度减 8，默认 48、上下各 4，点击区域覆盖整项；组合入口间距为 8，栏外最多另放 1 个独立入口，与内部最多 5 项分别计数，不删减导航项。HyperTabBar 尺寸由库按形态管理：`type: 'single'` 是固定直径 48 逻辑像素的独立圆形动作入口；`type: 'multiple'` 的按钮组（悬浮或贴底）默认内容高度 56，仅按钮组按标签字体在库内扩展。单独入口必须比按钮组小，禁止为“统一高度”将 single 改成 56，也禁止业务页面通过 SizedBox、约束或缩放实现 48。与 Compose 端保持一致，并排时在共同 Row 中垂直居中，保留各自默认尺寸；悬浮多项默认顶部间距 8、底部间距 20。正文使用宿主实测底部净空，不按默认尺寸估算占位。
 
 按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
 

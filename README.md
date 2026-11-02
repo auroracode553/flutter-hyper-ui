@@ -1,6 +1,6 @@
 # Hyper UI · Flutter Hyper UI
 
-[TabBar](vitepress/components/tab-bar.md)、[Slider](vitepress/components/slider.md)、[Switch](vitepress/components/switch.md) 与 [Dialog](vitepress/components/dialog.md) 内置固定玻璃表面，保留按压高光和弹簧动效。保持 48/56 的底栏规格、20 的滑块直径与现有弹窗尺寸。
+[TabBar](vitepress/components/tab-bar.md)、[Slider](vitepress/components/slider.md)、[Switch](vitepress/components/switch.md) 与 [Dialog](vitepress/components/dialog.md) 内置固定玻璃表面，TabBar 支持整栏按压舒展、镜片弹性回弹与拖动偏移回正，仅变换绘制层。TabBar 栏内限制 2–5 项，栏外最多另放一个独立入口；两端示例以 Kotlin 文档为基准，默认左右留白 12、镜片默认可见高 48；TabBar 外缘使用与 Kotlin 相同的 0.5 描边和高光；保持 48/56 的底栏规格、20 的滑块直径与现有弹窗尺寸。
 
 设置菜单使用 HyperMenuGroup + HyperListTile 的默认字号、卡片留白和开关样式；独立标题使用 [HyperSectionTitle](vitepress/components/section-title.md)。页面垂直留白与完整分组间距读取 HyperUiSpacing.pageVertical / sectionVertical（12 / 16），不在各应用复制菜单皮肤。
 

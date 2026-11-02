@@ -725,7 +725,7 @@ export const componentGroups: ComponentGroup[] = [
       component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '悬浮或全宽贴底底栏，支持可重复动作、单项禁用与独立角标入口。', {
         propsDocs: [
           { name: 'type', description: "'multiple' 多项按钮组默认高 56（默认）或 'single' 固定直径 48 的独立圆形入口，单位为逻辑像素" },
-          { name: 'items', description: '多项模式至少 2 项；单项模式恰好 1 项，仅显示图标' },
+          { name: 'items', description: '多项模式只接受 2–5 项；单项模式恰好 1 项，仅显示图标' },
           { name: 'selectedIndex', description: '当前选中索引；null 为无选中块、可重复点击且不响应拖动的动作模式' },
           { name: 'onChanged', description: '点击回调；单项模式传入索引 0' },
           { name: 'badgeCount', description: '单项模式的数量角标，默认 0 不显示，超过 99 显示 99+' },
@@ -733,9 +733,9 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'floating', description: '默认 true 保留悬浮；false 为 multiple 全宽平直贴底，默认零边距' },
           { name: 'itemEnabled', description: '各项可用性，默认全部可用；禁用项停止点击和拖动提交' },
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
-          { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 20、顶部 8、底部 20' },
+          { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 12、顶部 8、底部 20' },
         ],
-        preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '固定玻璃、连续跟手和弹簧吸附；保持 56 高按钮组与 48 直径独立入口。', 'TabBarComponentExample'),
+        preview: { ...demo('component-tab-bar', 'HyperTabBar 交互预览', 'component_tab_bar_examples.dart', 680, '栏内最多五项，栏外最多一个独立消息入口；示例以 Kotlin 文档为准，保持选中块原高度。', 'TabBarComponentExample'), fullScreen: true },
       }),
       component('HyperTabs / HyperTabsItem', 'hyper_tabs.dart', '受控分段选择，等宽选中底板平滑移动，非等宽选项使用背景色过渡。', {
         propsDocs: [

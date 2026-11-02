@@ -3,13 +3,23 @@ title: HyperTabBar
 description: HyperTabBar 组件与公开 API
 ---
 
+<script setup>
+import { exampleSourceFor } from '../.vitepress/theme/example-source';
+</script>
+
 <ComponentDoc component-id="tab-bar" />
 
-底栏默认悬浮；floating=false 为全宽贴底的 multiple 形态。itemEnabled 控制单项禁用；选择模式支持点击与横向拖动，selectedIndex=null 则为可重复触发且不响应拖动的动作模式。
+<DemoBlock component="component-tab-bar-docked" title="非悬浮动作栏：重复点击与禁用项" :height="680" :full-screen="true" :code="exampleSourceFor('component_tab_bar_examples.dart', 'DockedTabBarComponentExample')" />
+
+<DemoBlock component="component-tab-bar-single" title="单动作与角标" :height="680" :full-screen="true" :code="exampleSourceFor('component_tab_bar_examples.dart', 'SingleTabBarComponentExample')" />
+
+多项模式只接受 2–5 项，超过 5 项在构建时抛出 ArgumentError，不静默截断。底栏默认悬浮；floating=false 为全宽贴底的 multiple 形态。itemEnabled 控制单项禁用；选择模式支持点击与横向拖动，selectedIndex=null 则为可重复触发且不响应拖动的动作模式。
 
 ## 固定玻璃与吸附
 
-悬浮胶囊固定使用 8 的背景模糊、24/24 的边缘深度与折射位移；选中镜片合成独立录制的容器和主题色标签，按下时边缘/位移从 0 过渡到 10/14，带七波段色散、方向性高光和内阴影。拖动按手指位置连续预览，点击和松手通过临界阻尼弹簧（mass 1、stiffness 1000、damping 63.2455532）定位；取消恢复受控值，松手才提交 onChanged。容器、选中块、宽度测量、48/56 规格、外边距、安全区及正文滚动范围保持不变，不做整体放大。减少动态效果时直接定位。
+独立入口和悬浮胶囊的外缘与 Kotlin 一致：沿实际轮廓绘制 0.5 逻辑像素描边，由圆角裁切保留内侧半边；静止高光透明度依次为 0.3/0.02/0.25、渐变位置 0/0.5/1。描边不参与测量，独立入口保持 48×48、图标 22。悬浮胶囊固定使用 8 的背景模糊、24/24 的边缘深度与折射位移；选中镜片合成独立录制的容器和主题色标签，按下时边缘/位移从 0 过渡到 10/14，带七波段色散、方向性高光和内阴影。拖动按手指位置连续预览，点击和松手通过临界阻尼弹簧（mass 1、stiffness 1000、damping 63.2455532）定位；取消恢复受控值，松手才提交 onChanged。有效按下及切换途中，悬浮 Bar 在绘制层按 1 + 16 / 栏宽 × 按压进度舒展；镜片以 78/56 为按压缩放目标，横纵弹簧 dampingRatio 分别为 0.6/0.7、stiffness 250，随速度横向拉伸、纵向压缩。距目标小于总行程 2.5% 后释放并回弹。
+
+横向拖动按累计位移 / 栏宽经 EaseOut 缓动映射到最多 ±4 逻辑像素，松手或取消使用 dampingRatio 1、stiffness 300 回正；柔和高光跟随镜片中心。贴底形态不舒展或偏移整条栏。以上只改变瞬时绘制，容器及选中块的静态测量、48/56 规格、外边距、安全区、点击区域和正文滚动范围保持不变。禁用项不触发按压动效，减少动态效果时直接定位并关闭舒展与偏移。
 
 ## 非悬浮动作栏
 
@@ -47,7 +57,7 @@ HyperTabBar(
 
 ## 多项布局
 
-多项底栏按内容收缩，外部使用 Align 或 Center 居中。每项默认占宽 76 逻辑像素，长标签和大字体按文字宽度加 32 逻辑像素留白扩展；总宽超出父级时服从可用宽度。底栏高度至少 56 逻辑像素，内边距为 4，选中区域随所在项宽度变化。两个短标签的底栏内容宽度为 160 逻辑像素，不再横向铺满手机屏幕。
+多项底栏按内容收缩，外部使用 Align 或 Center 居中。每项默认占宽 76 逻辑像素，长标签和大字体按文字宽度加 32 逻辑像素留白扩展；总宽超出父级时服从可用宽度。底栏高度至少 56 逻辑像素，水平内边距为 4；选中镜片保持按钮组内容高度减 8，默认可见高 48、上下各 4；宽度随所在项变化，点击区域覆盖整项，不单独压缩镜片高度。两个短标签的底栏内容宽度为 160 逻辑像素，不再横向铺满手机屏幕。两端 TabBar 示例统一使用 Kotlin 文档的完整手机场景、文案、图标和展示状态；预览不叠加水平页面 padding，组件及组合只消费一次边距。
 
 ## 悬浮页面宿主
 
@@ -117,7 +127,9 @@ class AppPageScrollEnd extends StatelessWidget {
 
 ## 默认尺寸与并排操作
 
-single 使用库内 HyperTabBar.singleDiameter = 48 的固定直径，multiple 悬浮 / 贴底按钮组使用 HyperTabBar.height = 56 的默认内容高度，仅按钮组按标签字体在库内扩展。单独按钮必须比按钮组小，禁止为并排等高将 single 改为 56；业务不得设置固定高度、SizedBox.square、额外约束或缩放来实现 48。悬浮多项默认 margin 为 (20, 8, 20, 20)，并排入口由共同 Row 处理一次边距并使用 CrossAxisAlignment.center，保留各自默认尺寸；预览支持点击和切换观察。
+<DemoBlock component="component-tab-bar-trailing" title="56dp 主导航与 48dp 独立操作居中并排" :height="680" :full-screen="true" :code="exampleSourceFor('component_tab_bar_examples.dart', 'TrailingTabBarComponentExample')" />
+
+single 使用库内 HyperTabBar.singleDiameter = 48 的固定直径，multiple 悬浮 / 贴底按钮组使用 HyperTabBar.height = 56 的默认内容高度，仅按钮组按标签字体在库内扩展。单独按钮必须比按钮组小，禁止为并排等高将 single 改为 56；业务不得设置固定高度、SizedBox.square、额外约束或缩放来实现 48。悬浮多项默认 margin 为 (12, 8, 12, 20)，并排入口由共同 Row 处理一次边距并使用 CrossAxisAlignment.center，保留各自默认尺寸；独立入口与导航间距 8，组合示例左右留白 12。胶囊内部最多 5 项，胶囊外最多另放 1 个独立入口，两者分别计数；消息入口位于胶囊外，不删减导航项。预览支持点击、按住与横拖观察。
 
 | 默认值 | 类型 | 必填 | 值 | 作用 |
 | --- | --- | --- | --- | --- |
