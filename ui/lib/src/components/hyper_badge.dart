@@ -2,7 +2,7 @@ import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_radii.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -68,7 +68,7 @@ class HyperBadge extends StatelessWidget {
     }
     if (type == 'count') return _buildCount(context);
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final toneColor = color ?? tone.color(tokens);
     final isTag = type == 'tag';
     final strong = isTag ? selected : !subtle;

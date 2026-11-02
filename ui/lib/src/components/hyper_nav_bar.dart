@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_button.dart';
 import 'hyper_typography.dart';
@@ -192,7 +192,7 @@ class HyperNavBar extends StatelessWidget implements PreferredSizeWidget {
               type: 'icon',
               icon: LucideIcons.ellipsis,
               tooltip: '更多',
-              backgroundColor: HyperGlassTheme.of(context).surfaceStrong,
+              backgroundColor: HyperSurfaceTheme.of(context).surfaceStrong,
               onPressed: onMorePressed ?? () {},
             ),
             HyperNavBarLayouts.edit => HyperButton(
@@ -305,7 +305,7 @@ class _BackButton extends StatelessWidget {
     type: 'icon',
     icon: HyperIcons.back,
     tooltip: '返回',
-    backgroundColor: HyperGlassTheme.of(context).surfaceStrong,
+    backgroundColor: HyperSurfaceTheme.of(context).surfaceStrong,
     onPressed: onPressed ?? () => Navigator.maybePop(context),
   );
 }

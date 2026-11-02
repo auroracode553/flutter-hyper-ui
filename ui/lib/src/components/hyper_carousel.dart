@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
 
@@ -23,7 +23,7 @@ class HyperPageIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     return Wrap(
       alignment: WrapAlignment.center,
       children: <Widget>[

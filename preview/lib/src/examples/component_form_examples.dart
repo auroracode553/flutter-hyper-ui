@@ -384,6 +384,7 @@ class SwitchComponentExample extends StatefulWidget {
 }
 
 class _SwitchComponentExampleState extends State<SwitchComponentExample> {
+  // 复用正式开关的材质与弹簧；标签行和纯控件继续由示例持有受控值。
   bool _enabled = true;
   bool _plain = false;
 
@@ -438,6 +439,7 @@ class SliderComponentExample extends StatefulWidget {
 }
 
 class _SliderComponentExampleState extends State<SliderComponentExample> {
+  // 点击弹簧定位、按压高光和拖动提交均复用正式滑块。
   double _continuous = 42;
   double _discrete = 3;
   double _age = 26;

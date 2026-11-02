@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import 'hyper_progress_painters.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
@@ -85,7 +85,7 @@ class HyperButton extends StatelessWidget {
       _ => throw ArgumentError.value(type, 'type', 'Invalid button type'),
     };
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final disabled = !enabled || onPressed == null;
     final blocked = disabled || loading;
     final metrics = _HyperButtonMetrics.standard;
@@ -266,7 +266,7 @@ class _HyperButtonVisual {
 
   static _HyperButtonVisual resolve({
     required HyperUiThemeTokens tokens,
-    required HyperGlassTheme glass,
+    required HyperSurfaceTheme glass,
     required _ButtonVariant variant,
     required bool disabled,
     required Color? color,

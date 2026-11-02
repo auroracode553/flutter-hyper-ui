@@ -72,7 +72,6 @@ export default defineConfig({
         items: [
           { text: '快速开始', link: '/guide/getting-started' },
           { text: '业务接入与 AGENTS.md', link: '/guide/consumer-integration' },
-          { text: '主题配置', link: '/guide/theming' },
           { text: '样式与功能基线', link: '/guide/design-system' },
         ],
       },

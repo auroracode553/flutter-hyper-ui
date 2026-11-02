@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'hyper_glass_source.dart';
 
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_effects.dart';
@@ -13,7 +14,8 @@ Future<T?> showHyperModal<T>(
   Color? scrim,
 }) async {
   final theme = HyperUiTheme.of(context);
-  final barrier = scrim ?? theme.glass.scrim;
+  final glassSource = HyperGlassSourceScope.maybeOf(context);
+  final barrier = scrim ?? theme.surfaces.scrim;
   final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
   final route = RawDialogRoute<T>(
     barrierDismissible: false,
@@ -44,7 +46,12 @@ Future<T?> showHyperModal<T>(
               // 底部选择器沿竖直方向进退，对话框保持居中轻缩放。
               beginScale: alignment.y == 0 ? 0.96 : 1,
               offset: Offset(0, alignment.y * 24),
-              child: Builder(builder: builder),
+              child: glassSource == null
+                  ? Builder(builder: builder)
+                  : HyperGlassSourceScope(
+                      source: glassSource,
+                      child: Builder(builder: builder),
+                    ),
             ),
           ),
         ],

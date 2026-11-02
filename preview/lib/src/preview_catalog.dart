@@ -41,8 +41,6 @@ import 'examples/component_pagination_example.dart'
     deferred as example_component_pagination_example;
 import 'examples/component_surface_examples.dart'
     deferred as example_component_surface_examples;
-import 'examples/material_theme_example.dart'
-    deferred as example_material_theme_example;
 import 'examples/component_tooltip_example.dart'
     deferred as example_component_tooltip_example;
 import 'examples/data_example.dart' deferred as example_data_example;
@@ -247,13 +245,6 @@ class PreviewCatalog {
       builder: (_) => example_component_surface_examples.CardComponentExample(),
     ),
     PreviewItem(
-      id: 'theme-material',
-      title: '材质主题',
-      description: '实色、柔和与清透材质切换。',
-      loadLibrary: () => example_material_theme_example.loadLibrary(),
-      builder: (_) => example_material_theme_example.MaterialThemeExample(),
-    ),
-    PreviewItem(
       id: 'component-skeleton',
       title: 'HyperSkeleton',
       description: '加载占位状态。',
@@ -300,8 +291,8 @@ class PreviewCatalog {
       builder: (_) => example_component_form_examples.RadioComponentExample(),
     ),
     PreviewItem(
-      id: 'component-theme-mode-dialog',
-      title: 'HyperThemeModeDialog',
+      id: 'component-theme-dialog',
+      title: 'HyperThemeDialog',
       description: '36dp 紧凑三选项，选择后关闭。',
       loadLibrary: () => example_theme_mode_dialog.loadLibrary(),
       builder: (_) => example_theme_mode_dialog.ThemeModeDialogComponentExample(),

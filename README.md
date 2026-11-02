@@ -1,5 +1,7 @@
 # Hyper UI · Flutter Hyper UI
 
+[TabBar](vitepress/components/tab-bar.md)、[Slider](vitepress/components/slider.md)、[Switch](vitepress/components/switch.md) 与 [Dialog](vitepress/components/dialog.md) 内置固定玻璃表面，保留按压高光和弹簧动效。保持 48/56 的底栏规格、20 的滑块直径与现有弹窗尺寸。
+
 设置菜单使用 HyperMenuGroup + HyperListTile 的默认字号、卡片留白和开关样式；独立标题使用 [HyperSectionTitle](vitepress/components/section-title.md)。页面垂直留白与完整分组间距读取 HyperUiSpacing.pageVertical / sectionVertical（12 / 16），不在各应用复制菜单皮肤。
 
 开发文档通过一个 watcher 同时运行 Flutter Web 预览与 VitePress HMR，不需要手动编译或复制预览产物。完整说明见 `vitepress/guide/getting-started.md`。
@@ -44,11 +46,9 @@ Flutter 的标准表单弹窗使用 HyperDialog.confirm，通过 canConfirm 校�
 
 ## 设计系统
 
-Hyper UI 是独立、无业务依赖的通用组件库。视觉语言提供实色、柔和及清透三档表面材质，并使用细边缘、低对比阴影和胶囊选中态；交互遵循按下即响应、拖拽 1:1 跟手、释放速度继承、边界柔性阻尼和减少动画适配。
+Hyper UI 是独立、无业务依赖的通用组件库。普通组件表面使用实色，TabBar、Slider、Switch、Dialog 使用组件内固定玻璃，并使用细边缘、低对比阴影和胶囊选中态；交互遵循按下即响应、拖拽 1:1 跟手、释放速度继承、边界柔性阻尼和减少动画适配。
 
 - `HyperUiThemeTokens`：背景、文字、品牌色和状态色等语义令牌。
-- `HyperGlassTheme`：玻璃表面、边缘、阴影、控件轨道、选中态和遮罩令牌，可由应用通过 `HyperUiThemeData.copyWith` 覆盖。
-- `HyperMaterial`：通过 `HyperUiTheme.app(material: ...)` 在 `solid / soft / clear` 间切换全应用材质，局部子树可用 `copyWith(material: ...)` 覆盖。
 - `HyperPressable`：按钮、卡片和菜单行共享的即时按压反馈，不包含业务行为。
 
 独立顶部渐变使用 [HyperScrollGradient](vitepress/components/scroll-gradient.md)，Navbar 共用同一实现和主滚动作用域，不采样正文。HyperNavBar.type 仅区分 standard（标准操作行）和 simple（真实状态栏/挖孔，无标题与操作行）；standard 的内容布局由 layout 选择。首屏净空只进入滚动内容，不增加永久占位。
@@ -68,6 +68,8 @@ HyperNavBar.scrolledUnder 默认 false，优先使用显式主滚动作用域，
 
 `HyperCheckbox`、`HyperRadio`、`HyperSwitch` 默认直接展示控件；带 label 时使用 plain 标签行，不自动附带卡片背景、描边或阴影。
 
+[HyperSwitch](vitepress/components/switch.md) 保留 52×32 轨道和 22 的可见圆形滑块，使用内部源码实现按压高光、高光与临界阻尼弹簧切换；标签行、独立控件和禁用态共用原有点击规则，不引入外部玻璃库。
+
 所有组件均为受控或回调驱动，不读取业务状态、不内置路由名称、不依赖第三方状态管理方案。
 
 ## 与 Compose 的样式同步
@@ -82,7 +84,7 @@ HyperNavBar.scrolledUnder 默认 false，优先使用显式主滚动作用域，
 
 `HyperRadio` 的标签行统一处理点击，默认最小高度 46；只展示的圆环占 21，不额外撑高列表行。无标签独立交互控件保留 44 的触摸区。两端预览直接展示单选行，不叠加行间距。
 
-三选项主题设置使用 [HyperThemeModeDialog](vitepress/components/theme-mode-dialog.md)：36 最小行高、4 垂直内边距，选择后请求关闭。value 为 null / false / true，表示跟随系统 / 浅色 / 深色；应用负责保存与应用主题。
+三选项主题设置使用 [HyperThemeDialog](vitepress/components/theme-dialog.md)：36 最小行高、4 垂直内边距，选择后请求关闭。value 为 null / false / true，表示跟随系统 / 浅色 / 深色；应用负责保存与应用主题。
 
 对应组件的预览以本项目为视觉基准，同步手机外框、白色背景、安全区、示例分组、文案、图标、尺寸、间距和展示状态；按钮页不添加额外分组标题、开关或点击计数。
 

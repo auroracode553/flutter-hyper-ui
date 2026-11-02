@@ -22,8 +22,8 @@ class _UpdateEmblem extends StatelessWidget {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: <Color>[
-          Color.alphaBlend(color.withAlpha(28), context.hyperGlass.surface),
-          Color.alphaBlend(color.withAlpha(10), context.hyperGlass.surface),
+          Color.alphaBlend(color.withAlpha(28), context.hyperSurfaces.surface),
+          Color.alphaBlend(color.withAlpha(10), context.hyperSurfaces.surface),
         ],
       ),
       border: Border.all(color: color.withAlpha(35)),

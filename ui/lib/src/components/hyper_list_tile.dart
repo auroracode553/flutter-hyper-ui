@@ -2,7 +2,7 @@ import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
@@ -59,7 +59,7 @@ class HyperListTile extends StatelessWidget {
         HyperMenuGroup.contains(context) || HyperSurfaceScope.contains(context);
     final plain = type == 'plain' || (type == 'auto' && hasParentSurface);
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final radius = BorderRadius.circular(plain ? 12 : 15);
     final row = AnimatedContainer(
       duration: const Duration(milliseconds: 180),
@@ -162,7 +162,7 @@ class HyperListTile extends StatelessWidget {
     );
   }
 
-  Widget _buildLeading(HyperUiThemeTokens tokens, HyperGlassTheme glass) {
+  Widget _buildLeading(HyperUiThemeTokens tokens, HyperSurfaceTheme glass) {
     if (leading != null) return leading!;
     final color = leadingColor ?? tokens.primary;
     return Container(

@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'preview_catalog.dart';
 import 'preview_deferred_content.dart';
+import 'preview_glass_background.dart';
 
 class PreviewShell extends StatelessWidget {
   final String componentId;
@@ -77,11 +78,12 @@ class _PreviewContent extends StatelessWidget {
       onReady: onReady,
       onError: onError,
     );
-    if (item.fullScreen) return content;
-    return SingleChildScrollView(
+    final viewport = item.fullScreen ? content : SingleChildScrollView(
       padding: const EdgeInsets.all(HyperUiSpacing.pagePadding),
       child: content,
     );
+    final glassScene = const {'component-tab-bar','component-slider','component-switch','component-dialog'}.contains(item.id);
+    return glassScene ? PreviewGlassBackground(child:viewport) : viewport;
   }
 }
 

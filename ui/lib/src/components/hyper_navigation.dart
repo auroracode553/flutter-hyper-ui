@@ -7,7 +7,7 @@ import 'hyper_progress_painters.dart';
 
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../utils/hyper_progress_value.dart';
@@ -41,7 +41,7 @@ class HyperSteps extends StatelessWidget {
       throw ArgumentError.value(type, 'type', 'Invalid steps type');
     }
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
 
     Widget indicator(int index) => AnimatedContainer(
       duration: HyperUiEffects.selectionDuration,
@@ -163,7 +163,7 @@ class HyperProgress extends StatelessWidget {
     }
     final amount = normalizeHyperProgress(value);
     final label = amount == null ? null : '${hyperProgressPercentage(amount)}%';
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     if (type == 'circular') {
       return SizedBox.square(
         dimension: 64,

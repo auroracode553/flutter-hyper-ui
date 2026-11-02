@@ -6,7 +6,7 @@ import 'hyper_progress_painters.dart';
 
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_action_sheet.dart';
 import 'hyper_badge.dart';
@@ -266,7 +266,7 @@ class _UploadItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     return SizedBox(
       width: 104,
       child: HyperGlass(

@@ -3,12 +3,13 @@ import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 
-import '../theme/hyper_glass_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_badge.dart';
 import 'hyper_safe_area.dart';
-import 'hyper_glass.dart';
 import 'hyper_pressable.dart';
+import 'hyper_control_surface.dart';
+import 'hyper_glass_source.dart';
+import '../utils/hyper_spring_motion.dart';
 
 /// 底栏中的导航项；页面与图标含义由调用方决定。
 class HyperTabItem {
@@ -71,8 +72,18 @@ class HyperTabBar extends StatefulWidget {
 }
 
 class _HyperTabBarState extends State<HyperTabBar> {
+  final _panelSource = HyperGlassSourceController();
+  final _labelsSource = HyperGlassSourceController();
+  @override
+  void dispose() {
+    _panelSource.dispose();
+    _labelsSource.dispose();
+    super.dispose();
+  }
+
   double get _inset => widget.floating ? 4 : 0;
-  int? _dragIndex;
+  double? _dragPosition;
+  bool _pressed = false;
 
   bool get _rtl => Directionality.of(context) == TextDirection.rtl;
   int _visual(int logical) =>
@@ -89,10 +100,14 @@ class _HyperTabBarState extends State<HyperTabBar> {
       widget.itemEnabled?.call(widget.items[index]) ?? true;
 
   void _drag(double x, double width) {
-    final index = ((x - _inset) / (width - 2 * _inset) * widget.items.length)
-        .floor()
-        .clamp(0, widget.items.length - 1);
-    if (_dragIndex != index) setState(() => _dragIndex = index);
+    final position =
+        ((x - _inset) / (width - 2 * _inset) * widget.items.length - 0.5).clamp(
+          0.0,
+          widget.items.length - 1.0,
+        );
+    if (_enabled(_logical(position.round())) && _dragPosition != position) {
+      setState(() => _dragPosition = position);
+    }
   }
 
   @override
@@ -101,14 +116,13 @@ class _HyperTabBarState extends State<HyperTabBar> {
     if (oldWidget.items.length != widget.items.length ||
         oldWidget.floating != widget.floating ||
         (oldWidget.selectedIndex == null) != (widget.selectedIndex == null)) {
-      _dragIndex = null;
+      _dragPosition = null;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
     final activeColor = widget.color ?? tokens.primary;
     // 单动作固定为 48 圆形入口；只有多项按钮组按标签字体扩展默认高度。
     final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
@@ -126,8 +140,9 @@ class _HyperTabBarState extends State<HyperTabBar> {
             enabled: _enabled(0),
             borderRadius: BorderRadius.circular(barHeight / 2),
             onPressed: () => widget.onChanged(0),
-            child: HyperGlass(
+            child: HyperControlSurface(
               radius: barHeight / 2,
+              role: HyperControlSurfaceRole.navigation,
               child: SizedBox.square(
                 dimension: barHeight,
                 child: Icon(
@@ -168,88 +183,120 @@ class _HyperTabBarState extends State<HyperTabBar> {
             }
             final cellWidth = (width - 2 * _inset) / widget.items.length;
             final selected =
-                _dragIndex ??
+                _dragPosition ??
                 (widget.selectedIndex == null
                     ? null
-                    : _visual(widget.selectedIndex!));
+                    : _visual(widget.selectedIndex!).toDouble());
             final selectionMode = widget.selectedIndex != null;
-            return RepaintBoundary(
-              child: GestureDetector(
-                onHorizontalDragStart: selectionMode
-                    ? (details) => _drag(details.localPosition.dx, width)
-                    : null,
-                onHorizontalDragUpdate: selectionMode
-                    ? (details) => _drag(details.localPosition.dx, width)
-                    : null,
-                onHorizontalDragCancel: selectionMode
-                    ? () => setState(() => _dragIndex = null)
-                    : null,
-                onHorizontalDragEnd: selectionMode
-                    ? (_) {
-                        final index = _dragIndex;
-                        setState(() => _dragIndex = null);
-                        if (index != null) _select(_logical(index));
-                      }
-                    : null,
-                child: _TabBarSurface(
-                  floating: widget.floating,
-                  height: barHeight,
+            return Listener(
+              onPointerDown: (_) => setState(() => _pressed = true),
+              onPointerUp: (_) => setState(() => _pressed = false),
+              onPointerCancel: (_) => setState(() => _pressed = false),
+              child: RepaintBoundary(
+                child: GestureDetector(
+                  onHorizontalDragStart: selectionMode
+                      ? (details) => _drag(details.localPosition.dx, width)
+                      : null,
+                  onHorizontalDragUpdate: selectionMode
+                      ? (details) => _drag(details.localPosition.dx, width)
+                      : null,
+                  onHorizontalDragCancel: selectionMode
+                      ? () => setState(() => _dragPosition = null)
+                      : null,
+                  onHorizontalDragEnd: selectionMode
+                      ? (_) {
+                          final index = _dragPosition?.round();
+                          setState(() => _dragPosition = null);
+                          if (index != null) _select(_logical(index));
+                        }
+                      : null,
                   child: Stack(
                     children: [
-                      // 只移动一个选中块，不再逐帧重建文字或执行矩阵折射滤镜。
+                      Positioned.fill(
+                        child: HyperGlassSource(
+                          controller: _panelSource,
+                          child: _TabBarSurface(
+                            floating: widget.floating,
+                            height: barHeight,
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  left: _inset,
+                                  right: _inset,
+                                  child: HyperGlassSource(
+                                    controller: _labelsSource,
+                                    child: Row(
+                                      textDirection: TextDirection.ltr,
+                                      children: [
+                                        for (
+                                          var index = 0;
+                                          index < widget.items.length;
+                                          index++
+                                        )
+                                          Expanded(
+                                            child: Opacity(
+                                              opacity: _enabled(_logical(index))
+                                                  ? 1
+                                                  : 0.4,
+                                              child: HyperPressable(
+                                                enabled: _enabled(
+                                                  _logical(index),
+                                                ),
+                                                pressedScale: 1,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      barHeight / 2,
+                                                    ),
+                                                onPressed: () =>
+                                                    _select(_logical(index)),
+                                                child: _TabLabel(
+                                                  item: widget
+                                                      .items[_logical(index)],
+                                                  selected:
+                                                      index ==
+                                                      selected?.round(),
+                                                  color:
+                                                      index == selected?.round()
+                                                      ? activeColor
+                                                      : tokens.foreground,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      // 连续预览位置，释放后由同一弹簧回到受控选中值。
                       if (selected != null)
-                        AnimatedPositioned(
-                          duration: MediaQuery.disableAnimationsOf(context)
-                              ? Duration.zero
-                              : const Duration(milliseconds: 160),
-                          curve: Curves.easeOutCubic,
-                          left: _inset + selected * cellWidth + 1,
-                          top: _inset,
-                          width: cellWidth - 2,
-                          height: barHeight - 2 * _inset,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: glass.selection,
-                              borderRadius: BorderRadius.circular(
-                                barHeight / 2,
+                        HyperSpringMotion(
+                          value: selected,
+                          builder: (context, position) => Positioned(
+                            left: _inset + position * cellWidth + 1,
+                            top: _inset,
+                            width: cellWidth - 2,
+                            height: barHeight - 2 * _inset,
+                            child: HyperSpringMotion(
+                              value: _pressed ? 1 : 0,
+                              builder: (context, progress) => IgnorePointer(
+                                child: HyperControlSurface(
+                                  radius: barHeight / 2,
+                                  role: HyperControlSurfaceRole.selection,
+                                  progress: progress,
+                                  sources: [_panelSource, _labelsSource],
+                                  tintSource: _labelsSource,
+                                  tint: activeColor,
+                                  child: const SizedBox.expand(),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      Positioned.fill(
-                        left: _inset,
-                        right: _inset,
-                        child: Row(
-                          textDirection: TextDirection.ltr,
-                          children: [
-                            for (
-                              var index = 0;
-                              index < widget.items.length;
-                              index++
-                            )
-                              Expanded(
-                                child: Opacity(
-                                  opacity: _enabled(_logical(index)) ? 1 : 0.4,
-                                  child: HyperPressable(
-                                    enabled: _enabled(_logical(index)),
-                                    pressedScale: 1,
-                                    borderRadius: BorderRadius.circular(
-                                      barHeight / 2,
-                                    ),
-                                    onPressed: () => _select(_logical(index)),
-                                    child: _TabLabel(
-                                      item: widget.items[_logical(index)],
-                                      selected: index == selected,
-                                      color: index == selected
-                                          ? activeColor
-                                          : tokens.foreground,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -281,7 +328,11 @@ class _TabBarSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => floating
-      ? HyperGlass(radius: height / 2, type: 'prominent', child: child)
+      ? HyperControlSurface(
+          radius: height / 2,
+          role: HyperControlSurfaceRole.navigation,
+          child: child,
+        )
       : child;
 }
 

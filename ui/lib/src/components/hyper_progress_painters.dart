@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import '../utils/hyper_progress_value.dart';
 
@@ -64,7 +64,7 @@ class _HyperSpinnerState extends State<HyperSpinner>
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final amount = normalizeHyperProgress(widget.value);
     return AnimatedBuilder(
       animation: _rotation,
@@ -188,7 +188,7 @@ class _HyperProgressTrackState extends State<HyperProgressTrack>
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final amount = normalizeHyperProgress(widget.value);
     final reduceMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;

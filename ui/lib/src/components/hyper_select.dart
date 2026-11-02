@@ -2,7 +2,7 @@ import 'package:flutter_hyper_ui/src/theme/hyper_palette.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_action_sheet.dart';
@@ -191,7 +191,7 @@ class _HyperSelectOptionRow<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final indicatorRadius = BorderRadius.circular(multiple ? 6 : 10);
     return HyperPressable(
       onPressed: option.enabled ? onPressed : null,

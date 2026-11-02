@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
@@ -194,7 +194,7 @@ class _HyperTextFieldState extends State<HyperTextField>
 
   Widget _buildSurface(BuildContext context, FormFieldState<String> field) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final error = widget.errorText ?? field.errorText;
     final effectiveReadOnly =
         widget.readOnly || (widget.value != null && widget.onChanged == null);

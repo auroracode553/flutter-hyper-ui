@@ -1,16 +1,16 @@
 ---
-title: HyperThemeModeDialog
+title: HyperThemeDialog
 description: 跟随系统、浅色、深色三选项的紧凑主题弹窗。
 ---
 
-<ComponentDoc component-id="theme-mode-dialog" />
+<ComponentDoc component-id="theme-dialog" />
 
 ## 默认布局与状态
 
 选项最小行高 36、垂直内边距 4、圆环 21，无额外行间距或关闭按钮。大字体自然增高，正文可滚动。null 表示跟随系统、false 浅色、true 深色。选择后先通知 onChanged，再调用 onClose；组件不存储偏好或修改全局主题。
 
 ```dart
-HyperThemeModeDialog.show(context,
+HyperThemeDialog.show(context,
   value: darkTheme,
   onChanged: (value) => setState(() => darkTheme = value),
 );
@@ -19,7 +19,7 @@ HyperThemeModeDialog.show(context,
 ## 公开 API
 
 ```dart
-const HyperThemeModeDialog({
+const HyperThemeDialog({
   super.key,
   required bool? value,
   required ValueChanged<bool?> onChanged,

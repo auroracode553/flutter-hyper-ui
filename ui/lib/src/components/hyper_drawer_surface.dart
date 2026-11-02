@@ -145,9 +145,9 @@ class _DrawerSurfaceState extends State<_DrawerSurface>
                       behavior: HitTestBehavior.opaque,
                       onTap: widget.dismissOnClickOutside ? _close : null,
                       child: ColoredBox(
-                        color: HyperGlassTheme.of(context).scrim.withValues(
+                        color: HyperSurfaceTheme.of(context).scrim.withValues(
                           alpha:
-                              HyperGlassTheme.of(context).scrim.a * visibility,
+                              HyperSurfaceTheme.of(context).scrim.a * visibility,
                         ),
                       ),
                     ),

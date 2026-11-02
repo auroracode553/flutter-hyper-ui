@@ -6,7 +6,7 @@ import 'hyper_modal.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import 'hyper_button.dart';
 
 /// 使用 Flutter ImageCache 的内存缓存；持久缓存可通过 ImageProvider 注入。
@@ -65,7 +65,7 @@ class HyperImage extends StatelessWidget {
       onTap: preview
           ? () => showHyperModal<void>(
               context,
-              scrim: HyperGlassTheme.of(context).scrim,
+              scrim: HyperSurfaceTheme.of(context).scrim,
               builder: (dialogContext) => SizedBox.expand(
                 child: Stack(
                   children: [
@@ -88,7 +88,7 @@ class HyperImage extends StatelessWidget {
                           icon: LucideIcons.x,
                           tooltip: '关闭预览',
                           color: HyperUiThemeTokens.of(context).foreground,
-                          backgroundColor: HyperGlassTheme.of(context)
+                          backgroundColor: HyperSurfaceTheme.of(context)
                               .surfaceStrong,
                           onPressed: () => Navigator.pop(dialogContext),
                         ),
@@ -141,7 +141,7 @@ class HyperAvatar extends StatelessWidget {
         backgroundColor ??
         Color.alphaBlend(
           tokens.primary.withAlpha(25),
-          HyperGlassTheme.of(context).surfaceSubtle,
+          HyperSurfaceTheme.of(context).surfaceSubtle,
         );
     final foreground =
         color ??

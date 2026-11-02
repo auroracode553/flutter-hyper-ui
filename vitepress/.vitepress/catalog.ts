@@ -378,14 +378,14 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-radio', 'HyperRadio 单选框', 'component_form_examples.dart', 420, '互斥单选组与禁用项；标签行不叠加触摸留白。', 'RadioComponentExample'),
       }),
-      component('HyperSwitch', 'hyper_selection_controls.dart', '布尔值受控开关，滑块与轨道颜色同步过渡，支持 RTL。', {
+      component('HyperSwitch', 'hyper_selection_controls.dart', '52×32 受控开关、22 可见玻璃滑块，按压高光，位置与颜色共用弹簧，支持 RTL。', {
         propsDocs: [
           { name: 'enabled', description: '是否允许操作，默认 true' },
           { name: 'value', description: '是否开启' },
           { name: 'onChanged', description: '状态变化回调' },
           { name: 'label', description: '标签文字；使用无卡片背景、描边或阴影的 plain 行' },
         ],
-        preview: demo('component-switch', 'HyperSwitch 开关', 'component_form_examples.dart', 500, '受控开关、禁用与无标签纯控件。', 'SwitchComponentExample'),
+        preview: demo('component-switch', 'HyperSwitch 开关', 'component_form_examples.dart', 500, '固定尺寸的按压高光与弹簧切换，展示受控标签行、禁用和无标签控件。', 'SwitchComponentExample'),
       }),
       component('HyperSlider', 'hyper_selection_controls.dart', '范围、分段和结束回调可配置的滑块。', {
         propsDocs: [
@@ -400,7 +400,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'divisions', description: '分段数' },
           { name: 'showValue', description: '是否显示当前值，默认 true' },
         ],
-        preview: demo('component-slider', 'HyperSlider 滑块', 'component_form_examples.dart', 560, '连续取值、离散分段、自定义范围与提交回调。', 'SliderComponentExample'),
+        preview: demo('component-slider', 'HyperSlider 滑块', 'component_form_examples.dart', 560, '20 直径玻璃滑块、连续取值、离散吸附与提交回调。', 'SliderComponentExample'),
       }),
       component('HyperNumberStepper', 'hyper_number_stepper.dart', '用于整数数量的紧凑受控增减器，加减操作沿用 HyperButton 默认图标按钮样式，支持上下限和步长。', {
         propsDocs: [
@@ -518,7 +518,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-toast', 'HyperToast 轻提示', 'component_feedback_examples.dart', 380, '四种语义色调、操作按钮与显示时长。', 'ToastComponentExample'),
       }),
-      component('HyperDialog', 'hyper_feedback.dart', '居中轻缩放淡入淡出的对话框，窗口两侧各留 24，面板最大宽 420。', {
+      component('HyperDialog', 'hyper_feedback.dart', '固定玻璃面板与居中轻缩放过渡，窗口两侧各留 24，面板最大宽 420。', {
         propsDocs: [
           { name: 'title', description: '标题' },
           { name: 'message', description: '提示文字' },
@@ -535,14 +535,14 @@ export const componentGroups: ComponentGroup[] = [
         propsDocs: [{ name: 'text', description: '分组标题；页面负责外部留白' }],
         preview: demo('component-section-title', 'HyperSectionTitle', 'component_section_title_example.dart', 420, '独立标题与菜单组共用默认排版。', 'SectionTitleComponentExample'),
       }),
-      component('HyperThemeModeDialog', 'hyper_theme_mode_dialog.dart', '跟随系统、浅色、深色三选项；36dp 紧凑行，选择后请求关闭。', {
+      component('HyperThemeDialog', 'hyper_theme_dialog.dart', '跟随系统、浅色、深色三选项；36dp 紧凑行，选择后请求关闭。', {
         propsDocs: [
           { name: 'value', description: 'null 跟随系统，false 浅色，true 深色' },
           { name: 'onChanged', description: '选择后通知保存与应用主题' },
           { name: 'onClose', description: '选择后请求关闭面板' },
           { name: 'title', description: '面板标题，默认主题设置' },
         ],
-        preview: demo('component-theme-mode-dialog', 'HyperThemeModeDialog', 'component_theme_mode_dialog_example.dart', 420, '紧凑三选项、当前值与关闭行为。', 'ThemeModeDialogComponentExample'),
+        preview: demo('component-theme-dialog', 'HyperThemeDialog', 'component_theme_mode_dialog_example.dart', 420, '紧凑三选项、当前值与关闭行为。', 'ThemeModeDialogComponentExample'),
       }),
       component('HyperUpdateDialog', 'hyper_update_dialog.dart', '沿用 Hyper 柔光玻璃风格的完整更新对话框，覆盖检查、版本日志、下载、安装、完成与失败重试。', {
         propsDocs: [
@@ -735,7 +735,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
           { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 20、顶部 8、底部 20' },
         ],
-        preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '体验默认高 56 的多项导航、固定直径 48 的独立圆形入口及居中组合示例。', 'TabBarComponentExample'),
+        preview: demo('component-tab-bar', 'HyperTabBar 底部导航', 'component_navigation_examples.dart', 520, '固定玻璃、连续跟手和弹簧吸附；保持 56 高按钮组与 48 直径独立入口。', 'TabBarComponentExample'),
       }),
       component('HyperTabs / HyperTabsItem', 'hyper_tabs.dart', '受控分段选择，等宽选中底板平滑移动，非等宽选项使用背景色过渡。', {
         propsDocs: [

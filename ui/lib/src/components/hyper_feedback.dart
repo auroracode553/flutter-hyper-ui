@@ -6,6 +6,7 @@ import '../theme/hyper_ui_theme_tokens.dart';
 import '../theme/hyper_ui_theme.dart';
 import 'hyper_button.dart';
 import 'hyper_glass.dart';
+import 'hyper_control_surface.dart';
 import 'hyper_modal.dart';
 import 'hyper_pressable.dart';
 import 'hyper_tone.dart';
@@ -67,7 +68,7 @@ abstract final class HyperToast {
                 type: 'prominent',
                 color: Color.alphaBlend(
                   toneColor.withAlpha(10),
-                  theme.glass.surfaceStrong,
+                  theme.surfaces.surfaceStrong,
                 ),
                 borderColor: toneColor.withAlpha(105),
                 padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
@@ -168,56 +169,59 @@ abstract final class HyperDialog {
         padding: const EdgeInsets.all(24),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
-          child: HyperGlass(
+          child: HyperControlSurface(
             radius: 26,
-            type: 'prominent',
-            padding: const EdgeInsets.all(18),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Text(
-                    title,
-                    style: TextStyle(
-                      // 弹窗可能晚于发起页面关闭，使用仍挂载的弹窗上下文。
-                      color: HyperUiThemeTokens.of(dialogContext).foreground,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+            role: HyperControlSurfaceRole.dialog,
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Text(
+                      title,
+                      style: TextStyle(
+                        // 弹窗可能晚于发起页面关闭，使用仍挂载的弹窗上下文。
+                        color: HyperUiThemeTokens.of(dialogContext).foreground,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  if (content != null ||
-                      (message?.isNotEmpty ?? false)) ...<Widget>[
-                    const SizedBox(height: 10),
-                    content ?? Text(message!),
-                  ],
-                  const SizedBox(height: 18),
-                  Wrap(
-                    alignment: WrapAlignment.end,
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: <Widget>[
-                      if (showCancel)
-                        HyperButton(
-                          label: cancelLabel,
-                          onPressed: () => Navigator.pop(dialogContext, false),
-                        ),
-                      type == 'danger'
-                          ? HyperButton(
-                              colorStyle: 'danger',
-                              type: 'filled',
-                              label: confirmLabel,
-                              onPressed: () => confirm(dialogContext),
-                            )
-                          : HyperButton(
-                              label: confirmLabel,
-                              onPressed: () => confirm(dialogContext),
-                              colorStyle: 'primary',
-                              type: 'filled',
-                            ),
+                    if (content != null ||
+                        (message?.isNotEmpty ?? false)) ...<Widget>[
+                      const SizedBox(height: 10),
+                      content ?? Text(message!),
                     ],
-                  ),
-                ],
+                    const SizedBox(height: 18),
+                    Wrap(
+                      alignment: WrapAlignment.end,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: <Widget>[
+                        if (showCancel)
+                          HyperButton(
+                            label: cancelLabel,
+                            onPressed: () =>
+                                Navigator.pop(dialogContext, false),
+                          ),
+                        type == 'danger'
+                            ? HyperButton(
+                                colorStyle: 'danger',
+                                type: 'filled',
+                                label: confirmLabel,
+                                onPressed: () => confirm(dialogContext),
+                              )
+                            : HyperButton(
+                                label: confirmLabel,
+                                onPressed: () => confirm(dialogContext),
+                                colorStyle: 'primary',
+                                type: 'filled',
+                              ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

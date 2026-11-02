@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_button.dart';
@@ -68,7 +68,7 @@ abstract final class HyperActionSheet {
     String? title,
     required bool dismissible,
   }) {
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     return showHyperModal<T>(
       context,
       alignment: Alignment.bottomCenter,

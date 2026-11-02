@@ -12,3 +12,7 @@ dependencies:
     sdk: flutter
   lucide_icons_flutter: ^3.1.20
 
+
+flutter:
+  shaders:
+    - shaders/hyper_glass.frag

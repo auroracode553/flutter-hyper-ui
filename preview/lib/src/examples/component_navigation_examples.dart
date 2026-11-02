@@ -18,6 +18,7 @@ class _TabBarComponentExampleState extends State<TabBarComponentExample> {
 
   @override
   Widget build(BuildContext context) {
+    // 使用正式 TabBar 的固定玻璃、连续跟手与弹簧吸附，不在示例覆盖尺寸或动画。
     return Column(
       children: [
         SizedBox(

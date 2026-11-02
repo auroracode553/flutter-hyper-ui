@@ -7,6 +7,10 @@ description: HyperTabBar 组件与公开 API
 
 底栏默认悬浮；floating=false 为全宽贴底的 multiple 形态。itemEnabled 控制单项禁用；选择模式支持点击与横向拖动，selectedIndex=null 则为可重复触发且不响应拖动的动作模式。
 
+## 固定玻璃与吸附
+
+悬浮胶囊固定使用 8 的背景模糊、24/24 的边缘深度与折射位移；选中镜片合成独立录制的容器和主题色标签，按下时边缘/位移从 0 过渡到 10/14，带七波段色散、方向性高光和内阴影。拖动按手指位置连续预览，点击和松手通过临界阻尼弹簧（mass 1、stiffness 1000、damping 63.2455532）定位；取消恢复受控值，松手才提交 onChanged。容器、选中块、宽度测量、48/56 规格、外边距、安全区及正文滚动范围保持不变，不做整体放大。减少动态效果时直接定位。
+
 ## 非悬浮动作栏
 
 `floating: false` 使用库内全宽平直表面，没有悬浮胶囊、圆角、外侧留白或浮层阴影；默认 margin 为零，safeArea 默认 true。与悬浮多项按钮组共用默认内容高度 56，仅按钮组按标签字体在库内扩展；single 独立入口固定直径 48。安全区位于内容尺寸之外。放入 Scaffold.bottomNavigationBar 时采用普通正文避让，不叠加底板、额外 SafeArea 或固定底栏高度。
@@ -39,7 +43,7 @@ HyperTabBar(
 )
 ```
 
-单项模式仅显示 `icon`，`label` 保留为导航项定义。多项模式使用默认的 `type: 'multiple'`，支持点击和横向拖动选择。选中块以 160 毫秒移动到目标项；不执行水珠膨胀、弹簧回弹或矩阵折射绘制。
+单项模式仅显示 `icon`，`label` 保留为导航项定义。多项模式使用默认的 `type: 'multiple'`，支持点击和横向拖动选择。选中块使用临界阻尼弹簧移动到目标项。
 
 ## 多项布局
 
@@ -119,3 +123,5 @@ single 使用库内 HyperTabBar.singleDiameter = 48 的固定直径，multiple �
 | --- | --- | --- | --- | --- |
 | HyperTabBar.singleDiameter | double | 否 | 48 | single 独立圆形入口的固定直径，单位为逻辑像素 |
 | HyperTabBar.height | double | 否 | 56 | multiple 悬浮 / 贴底按钮组默认内容高度，单位为逻辑像素；字体扩展由库内部处理 |
+
+HyperBackdrop(background: 背景, child: 组件) 定义独立取样来源，不是材质档位。组件自身固定使用玻璃；背景、容器、标签与镜片分开录制，镜片不进入自己的背景。

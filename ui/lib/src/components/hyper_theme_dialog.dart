@@ -7,8 +7,8 @@ import 'hyper_pressable.dart';
 import 'hyper_selection_controls.dart';
 
 /// 三选项主题面板；null 跟随系统，false 浅色，true 深色。
-class HyperThemeModeDialog extends StatelessWidget {
-  const HyperThemeModeDialog({
+class HyperThemeDialog extends StatelessWidget {
+  const HyperThemeDialog({
     super.key,
     required this.value,
     required this.onChanged,
@@ -29,7 +29,7 @@ class HyperThemeModeDialog extends StatelessWidget {
     String title = '主题设置',
   }) => showHyperModal<void>(
     context,
-    builder: (dialogContext) => HyperThemeModeDialog(
+    builder: (dialogContext) => HyperThemeDialog(
       value: value,
       onChanged: onChanged,
       onClose: () => Navigator.pop(dialogContext),

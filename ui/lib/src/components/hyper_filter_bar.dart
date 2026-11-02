@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_pressable.dart';
@@ -99,7 +99,7 @@ class _HyperFilterBarState<T> extends State<HyperFilterBar<T>> {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     return SingleChildScrollView(
       key: _viewportKey,
       controller: _scrollController,

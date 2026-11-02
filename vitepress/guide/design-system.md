@@ -2,7 +2,7 @@
 
 普通设置菜单使用 HyperMenuGroup + HyperListTile 默认样式；独立分组标题使用 HyperSectionTitle，与菜单组 title 共用 14 字号、w700 排版。页面垂直留白 12、完整分组间距 16，分别读取 HyperUiSpacing.pageVertical / sectionVertical。业务预览与功能绘制独立保留。
 
-三选项主题设置统一使用 HyperThemeModeDialog：跟随系统、浅色、深色，36 最小行高、4 垂直内边距、21 圆环，无额外行间距或关闭按钮；普通 Radio 标签行与菜单行高保持独立。
+三选项主题设置统一使用 HyperThemeDialog：跟随系统、浅色、深色，36 最小行高、4 垂直内边距、21 圆环，无额外行间距或关闭按钮；普通 Radio 标签行与菜单行高保持独立。
 
 Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一组同时约束材质、层级、触控反馈、运动和排版的规则。
 
@@ -49,19 +49,13 @@ Hyper UI 的“柔性玻璃”不是统一透明度的卡片皮肤，而是一�
 
 ## 表面材质
 
-`HyperUiTheme` 在主题层选择 `solid`、`soft` 或 `clear`。组件内部按用途区分轻量、常规和浮层表面，这些层级在三种材质下保持一致：
-
-| 材质 | 行为 |
-| --- | --- |
-| solid | 默认值；实色背景，不执行背景模糊 |
-| soft | 柔和半透明表面，使用标准模糊 |
-| clear | 更清透的表面，使用更强模糊 |
+普通组件表面固定为实色，TabBar、Slider、Switch、Dialog 内置固定玻璃，库内按用途保留轻量、常规和浮层深度。HyperUiTheme 仅配置品牌色、深浅色与字体。
 
 `HyperMenuGroup` 绘制一次外层表面，内部 `HyperListTile` 自动只绘制状态；其他分组表面内可用 `HyperListTile(type: 'plain', ...)`。
 
-材质来自 theme/hyper_glass_theme.dart：solid 的 surface、surfaceStrong、surfaceSubtle 不透明，blur 与 blurStrong 为 0；soft 使用对应亮暗基础令牌，模糊为 20 / 28；clear 三档表面的 alpha 为 118 / 153 / 77，模糊为 32 / 40。语义颜色来自 HyperUiThemeTokens，材质层级不承担业务含义。
+实色表面来自内部 theme/hyper_surface_theme.dart：surface、surfaceStrong、surfaceSubtle 均不透明；没有全局材质档位或表面透明度配置。四类控件的固定玻璃独立于普通表面令牌。语义颜色来自 HyperUiThemeTokens，表面层级不承担业务含义。
 
-HyperUiTheme.app 默认跟随系统亮暗，material 默认 solid，基准文字为 14、行高 1.4，基准图标为 24。HyperGlass 的 subtle / regular / prominent / solid 是组件表面层级，不能当作应用材质枚举替换；其默认圆角为 24，subtle 不带默认阴影。高对比时该表面停用模糊并强化边框。导航栏滚动背景有独立实现，不能据此推断所有背景都使用 HyperGlass。
+HyperUiTheme.app 默认跟随系统亮暗，基准文字为 14、行高 1.4，基准图标为 24。内部表面层级仅控制实色层次与阴影，默认圆角为 24；subtle 不带默认阴影，高对比时强化边框。
 
 默认语义色如下，取自 HyperUiColors 与 HyperUiThemeTokens；表中为 ARGB 色值。业务换肤通过主题传入或 copyWith 覆盖，不修改组件内部常量。
 
@@ -78,11 +72,10 @@ HyperUiTheme.app 默认跟随系统亮暗，material 默认 solid，基准文字
 | success / warning | 0xFF22C55E / 0xFFF59E0B | 同亮色 |
 | error / info | 0xFFEF4444 / 0xFF3B82F6 | 同亮色 |
 
-HyperUiBuildContext 的 hyperUi / hyperGlass 只提供主题读取快捷入口；HyperPalette 保存绘制用中性色。selectionBackground 是语义范围底色，HyperGlassTheme.selection 是材质选中底色，不能仅凭名字相似互换。预览手机的白色正文背景也不能用于推断主题 background 必须改为白色。
+HyperUiBuildContext 的 hyperUi / hyperSurfaces 只提供主题读取快捷入口；HyperPalette 保存绘制用中性色。selectionBackground 是语义范围底色，HyperSurfaceTheme.selection 是材质选中底色，不能仅凭名字相似互换。预览手机的白色正文背景也不能用于推断主题 background 必须改为白色。
 
 ```dart
 HyperUiTheme.app(
-  material: HyperMaterial.soft,
   home: const AppHome(),
 )
 ```
@@ -104,7 +97,7 @@ Flutter 导航栏以 background 画布色绘制滚动渐变，不使用 card 色
 
 维护库或开发业务页面前先读[使用规则与页面开发规范](./consumer-integration.md)，再核对组件 API。应用入口全局开启 edge-to-edge，独立入口共用透明系统栏配置；页面正文延伸到手势区，不用整页底部 SafeArea 或固定空白裁短正文。导航栏保留原有滚动渐变与渐显/渐隐，禁止添加实色底板或业务宿主裁切来遮住效果。TabBar 保持悬浮，正文滚入其后方；未经明确布局要求，配色和阴影调整不得改变底栏高度、占位、边距、安全区、正文视口或滚动范围。具体控件或滚动末尾的必要避让只处理一次，键盘仍可缩小表单视口。
 
-Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、HyperCollapse 和 HyperSlideMenu 的内容装饰共用内部 HyperGlass.card 入口。默认常规表面、无普通描边与 cardShadows 在此集中维护，不在调用组件重复指定；圆角、间距和选择状态仍由各组件保留。cardShadows 的环境阴影使用主题 shadow 的 75% alpha、模糊 18、扩散 -4、向下偏移 4；接触阴影使用 40% alpha、模糊 4、扩散 -1、向下偏移 1。选中态主题色边框与高对比模式的识别边界保留。页面使用 background，不将画布覆盖为卡片色：浅色默认画布 #F1F3F7、实色卡片 #FFFFFF，深色默认画布 #111318、实色卡片 #1B1F27；软材质和清透材质继续使用同档位的库内卡片表面。
+Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、HyperCollapse 和 HyperSlideMenu 的内容装饰共用内部 HyperGlass.card 入口。默认常规表面、无普通描边与 cardShadows 在此集中维护，不在调用组件重复指定；圆角、间距和选择状态仍由各组件保留。cardShadows 的环境阴影使用主题 shadow 的 75% alpha、模糊 18、扩散 -4、向下偏移 4；接触阴影使用 40% alpha、模糊 4、扩散 -1、向下偏移 1。选中态主题色边框与高对比模式的识别边界保留。页面使用 background，不将画布覆盖为卡片色：浅色默认画布 #F1F3F7、实色卡片 #FFFFFF，深色默认画布 #111318、实色卡片 #1B1F27。
 
 | 用途 | 共用入口或规则 | 适用组件 |
 | --- | --- | --- |
@@ -134,7 +127,8 @@ Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、H
 | Dropdown / Popover / PopupMenu | 从触发器一侧以 0.96 倍缩放淡入，沿同一路径收起 | 180ms |
 | Dropdown 箭头 | 开合时旋转半圈 | 180ms |
 | Tooltip | 从靠近锚点的一侧以 0.97 倍缩放淡入淡出；键盘聚焦即时显示 | 125ms |
-| Checkbox / Radio / Switch | 勾选标记淡入、单选圆环渐变、开关滑动与颜色过渡 | 160ms |
+| Checkbox / Radio | 勾选标记淡入、单选圆环渐变 | 160ms |
+| Switch | 位置和颜色共用临界阻尼弹簧，按压时滑块显示高光 | mass 1 / stiffness 1000 / damping 63.2455532 |
 | Tabs | 等宽时平移同一选中底板；非等宽时过渡选中背景色 | 260ms / 160ms |
 | Collapse | 内容高度与透明度同步变化，箭头同步旋转 | 200ms |
 | Dialog | 居中轻缩放淡入淡出，遮罩同步变化 | 250ms |
@@ -157,7 +151,9 @@ Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、H
 
 拖过边界时使用渐进阻力而非硬停止。系统启用“减少动态效果”后，弹簧与位移动画会直接收敛到目标状态。
 
-SlideMenu 的速度投影时间为 0.09 秒，展开判断使用操作区宽度的 35%，吸附弹簧 mass / stiffness / damping 为 1 / 470 / 42。HyperTabBar 使用拖动位置计算临时索引，松手通过 onChanged 提交；单个选中块以 160ms 过渡，不能擅自给它增加速度投影或弹簧行为。
+SlideMenu 的速度投影时间为 0.09 秒，展开判断使用操作区宽度的 35%，吸附弹簧 mass / stiffness / damping 为 1 / 470 / 42。HyperTabBar 连续预览手指位置，松手通过 onChanged 提交；选中块使用 mass / stiffness / damping 为 1 / 1000 / 63.2455532 的临界阻尼弹簧定位，不预测业务选中值。Slider 点击和外部更新共用同一弹簧，拖动直接跟手。减少动态效果时直接定位，不放大容器或滑块。
+
+TabBar、Slider、Switch、Dialog 的固定玻璃位于 hyper_control_surface.dart，hyper_glass_source.dart 管理独立图像源，hyper_glass_painter.dart 合成图像并执行 shaders/hyper_glass.frag 的圆角折射与色散；hyper_spring_motion.dart 仅管理视觉值。保留原有尺寸、点击范围、外边距、安全区、按压高光与弹簧动效。Slider 保持 20 的滑块和无默认品牌描边；Dialog 保持 250ms 过渡。
 
 ### 空间一致性
 
@@ -271,7 +267,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | [HyperFormField](../components/form-field.md) | hyper_form_field.dart | label、必填星号、trailing、child、helperText、errorText；错误优先于说明，不代管输入值和表单提交 |
 | [HyperCheckbox](../components/checkbox.md) | hyper_selection_controls.dart | 21 方框、圆角 7、1.5 描边；支持 tristate；无标签交互区 44，有标签由无卡片的 plain 列表行处理点击 |
 | [HyperRadio](../components/radio.md) | hyper_selection_controls.dart | 21 圆环，未选描边 1.5、选中描边 6；value / groupValue；有标签由整行点击，无标签独立可交互时保留 44 触摸区 |
-| [HyperSwitch](../components/switch.md) | hyper_selection_controls.dart | 52×32 轨道，自绘滑块；关闭背景由 controlTrack 合成；标签行与独立控件分别处理交互，不能把关闭色当按钮覆盖删除 |
+| [HyperSwitch](../components/switch.md) | hyper_selection_controls.dart | 保留 52×32 轨道、原滑块约束盒和 22 可见圆形；关闭背景由 controlTrack 合成；标签行与独立控件共用液态按压和弹簧切换，点击释放时提交一次 |
 | [HyperSlider](../components/slider.md) | hyper_selection_controls.dart | 6 高轨道、20 滑块、44 交互高度；默认范围 0–100；divisions 控制离散取值；点击及拖拽保留开始、变化、结束回调；RTL 反转方向 |
 | [HyperNumberStepper](../components/number-stepper.md) | hyper_number_stepper.dart | 受控整数，默认 min 0、max 99、step 1；圆角 16、subtle 表面、内边距 3、数值区最小宽 36；加减使用默认图标按钮，结果收敛至上下限 |
 | [HyperTabs](../components/tabs.md) | hyper_tabs.dart | 默认等宽；外圆角 18、内边距 4、项高 32；等宽平移一个选中底板，非等宽过渡背景；单项与整组禁用分别保留 |
@@ -389,3 +385,5 @@ HyperTabBar 尺寸由库按形态管理：`type: 'single'` 是固定直径 48 �
 
 
 页面水平外边距由调用方统一提供。独立 plain 行和独立 glass 行保留左右各 14dp 的行内留白；仅在 HyperMenuGroup 或已有表面作用域中复用父表面的 plain 行不叠加水平留白。列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留水平 14dp、垂直 4dp。
+
+固定玻璃的取样宿主为 HyperBackdrop。背景源在绘制后的帧尾录制，节点重绘时更新，销毁后释放图像；镜片不包含在源内，避免递归。原生与 Web 使用 Flutter FragmentProgram 执行同一圆弧折射和七波段色散。若着色器加载失败，保留取样图像、表面与交互。录制与镜片参数均不改变布局、命中或回调。

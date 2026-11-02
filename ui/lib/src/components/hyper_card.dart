@@ -5,7 +5,7 @@ import 'hyper_layout.dart';
 
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 
 class HyperCard extends StatelessWidget {
   final Widget? child;
@@ -41,7 +41,7 @@ class HyperCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final content = Padding(
       padding: padding,
       child: Column(

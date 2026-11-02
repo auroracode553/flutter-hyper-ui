@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:flutter/physics.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
@@ -106,7 +106,7 @@ class _HyperSlideMenuState extends State<HyperSlideMenu>
             children: <Widget>[
               Positioned.fill(
                 child: ColoredBox(
-                  color: HyperGlassTheme.of(context).controlTrack,
+                  color: HyperSurfaceTheme.of(context).controlTrack,
                   child: Stack(
                     children: <Widget>[
                       if (widget.startActions.isNotEmpty)

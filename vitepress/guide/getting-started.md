@@ -30,9 +30,9 @@ import 'package:flutter_hyper_ui/hyper_ui.dart';
 HyperUiTheme.app(home: const AppHome());
 ```
 
-默认跟随系统明暗模式，材质默认为 `HyperMaterial.solid`。需要固定模式时传 `brightness: Brightness.light` 或 `Brightness.dark`；品牌色用 `primary`。通过 `material: HyperMaterial.soft` 或 `HyperMaterial.clear` 切换全应用材质。局部覆盖使用 `HyperUiTheme(data: ..., child: ...)`。
+默认跟随系统明暗模式，普通组件固定使用实色表面，四类控件内置固定玻璃。需要固定模式时传 brightness: Brightness.light 或 Brightness.dark；品牌色使用 primary，局部颜色与排版通过 HyperUiTheme(data: ..., child: ...) 设置。
 
-完整配置与运行时切换见[主题配置](./theming.md)。
+完整配置与运行时切换见[主题配置](./getting-started.md)。
 
 ## 应用全局全面屏
 
@@ -77,7 +77,6 @@ Future<void> main() async {
 | 默认按钮 | `HyperButton(label: '保存', onPressed: save)` |
 | 按钮外观 | 省略 type 为默认描边；type 控制 filled/icon；colorStyle 控制 primary/success/info/warning/danger，color 自定义颜色优先 |
 | 密码或多行输入 | `HyperTextField(type: 'password', ...)`、`HyperTextField(type: 'textarea', rows: 3, ...)` |
-| 表面材质 | `HyperUiTheme.app(material: HyperMaterial.soft, home: content)` |
 | 图片来源 | `HyperImage(type: 'network', source: url)`、`HyperImage(type: 'asset', source: path)` |
 | 徽标与提示 | `HyperBadge(type: 'tag', label: '完成')`、`HyperToast.show(context, '完成', type: 'success')` |
 | 单选与多选 | `HyperSelect(value: ..., onChanged: ...)`、`HyperSelect<T>(type: 'multiple', values: ..., onMultipleChanged: ...)` |
@@ -194,4 +193,54 @@ HyperSwitch(
 )
 ```
 
-继续阅读[主题与令牌](./theming.md)和[组件总览](../components/catalog.md)。
+继续阅读[主题与令牌](./getting-started.md)和[组件总览](../components/catalog.md)。
+
+
+## 基础外观 API
+
+普通组件使用实色表面，四类控件内置固定玻璃；基础宿主保留品牌色、深浅色和字体设置。
+
+```dart
+HyperUiTheme.app(home: const AppHome(), primary: const Color.fromRGBO(71, 111, 232, 1));
+```
+
+### HyperUiTheme.app
+
+| 参数 | 类型 | 必填 | 默认值 | 作用 |
+| --- | --- | --- | --- | --- |
+| home | Widget | 是 | — | 应用首页 |
+| title | String | 否 | Hyper UI | 应用标题 |
+| brightness | Brightness? | 否 | null | null 跟随系统，否则固定深浅色 |
+| primary | Color? | 否 | null | 品牌色；null 使用库默认色 |
+| fontFamily | String? | 否 | null | 字体族 |
+| builder | TransitionBuilder? | 否 | null | 应用宿主构建器 |
+
+### HyperUiTheme / HyperUiThemeData
+
+| 入口 | 参数 | 类型 | 必填 | 默认值 | 作用 |
+| --- | --- | --- | --- | --- | --- |
+| HyperUiTheme | key | Key? | 否 | null | Widget 标识 |
+| HyperUiTheme | data | HyperUiThemeData | 是 | — | 局部颜色、深浅色与字体 |
+| HyperUiTheme | child | Widget | 是 | — | 子树 |
+| HyperUiThemeData | brightness | Brightness | 是 | — | 深浅色 |
+| HyperUiThemeData | tokens | HyperUiThemeTokens | 是 | — | 语义颜色 |
+| HyperUiThemeData | fontFamily | String? | 否 | null | 字体族 |
+
+light / dark 工厂接收可选 primary: Color? 和 fontFamily: String?，默认均为 null。of(context) 读取当前宿主，无宿主时返回默认浅色。copyWith 接收可选 brightness、tokens、fontFamily，未传入时保留原值。textStyle 提供 14 字号、1.4 行高和当前前景色；内部实色表面按 brightness 生成，不可通过主题配置覆盖。
+
+
+## 固定玻璃组件的背景宿主
+
+TabBar、Slider、Switch、Dialog 不依赖全局材质开关。将背景与组件分别传给 HyperBackdrop，背景单独录制，避免取样前景自身。
+
+```dart
+HyperBackdrop(background: const ColoredBox(color: Color.fromRGBO(235, 240, 250, 1)), child: content)
+```
+
+| 参数 | 类型 | 必填 | 默认值 | 作用 |
+| --- | --- | --- | --- | --- |
+| key | Key? | 否 | null | Widget 标识 |
+| background | Widget | 是 | — | 独立录制的背景，不能包含玻璃前景 |
+| child | Widget | 是 | — | 覆盖在背景之上的组件 |
+
+宿主不增加留白、尺寸或安全区。未提供背景宿主时，TabBar 仍合成自身面板与标签，Switch/Slider 仍采样独立轨道，其他区域保留主题底色。Dialog 在路由中沿用调用处的背景来源。背景动画重绘时更新取样，销毁后释放图像。

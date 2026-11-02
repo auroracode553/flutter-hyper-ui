@@ -1,6 +1,5 @@
 library hyper_ui;
 
-export 'src/theme/hyper_material.dart';
 export 'src/components/hyper_pressable.dart';
 export 'src/components/hyper_typography.dart';
 export 'src/components/hyper_image.dart';
@@ -19,7 +18,7 @@ export 'src/components/hyper_action_sheet.dart';
 export 'src/components/hyper_drawer.dart';
 export 'src/components/hyper_feedback.dart';
 export 'src/components/hyper_loading.dart';
-export 'src/components/hyper_theme_mode_dialog.dart';
+export 'src/components/hyper_theme_dialog.dart';
 export 'src/components/hyper_update_dialog.dart';
 export 'src/components/hyper_update_models.dart';
 export 'src/components/hyper_popover.dart';
@@ -31,7 +30,6 @@ export 'src/components/hyper_business.dart';
 export 'src/components/hyper_notice_bar.dart';
 export 'src/utils/hyper_utils.dart' hide HyperSafeArea;
 export 'src/theme/hyper_ui_effects.dart';
-export 'src/theme/hyper_glass_theme.dart';
 
 export 'src/components/hyper_badge.dart';
 export 'src/components/hyper_button.dart';
@@ -57,3 +55,5 @@ export 'src/theme/hyper_ui_radii.dart';
 export 'src/theme/hyper_ui_spacing.dart';
 export 'src/theme/hyper_ui_theme.dart';
 export 'src/theme/hyper_ui_theme_tokens.dart';
+
+export 'src/components/hyper_glass_source.dart' show HyperBackdrop;

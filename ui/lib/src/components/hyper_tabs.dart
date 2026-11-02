@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/hyper_ui_radii.dart';
 import '../theme/hyper_ui_effects.dart';
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_spacing.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 import 'hyper_glass.dart';
@@ -99,7 +99,7 @@ class HyperTabs<T> extends StatelessWidget {
                         width: cellWidth,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: HyperGlassTheme.of(context).selection,
+                          color: HyperSurfaceTheme.of(context).selection,
                           borderRadius: BorderRadius.circular(HyperUiRadii.sm),
                         ),
                       ),
@@ -142,7 +142,7 @@ class _HyperTabsItem<T> extends StatelessWidget {
         ? tokens.foreground
         : tokens.mutedForeground;
     final background = selected && paintSelection
-        ? HyperGlassTheme.of(context).selection
+        ? HyperSurfaceTheme.of(context).selection
         : HyperPalette.transparent;
 
     return HyperPressable(

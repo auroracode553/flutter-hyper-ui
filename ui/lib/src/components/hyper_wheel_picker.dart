@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 
 /// A reusable wheel with Hyper's own selection surface.
@@ -21,7 +21,7 @@ class HyperWheelPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[

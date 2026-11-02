@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../theme/hyper_ui_theme_tokens.dart';
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import 'hyper_glass.dart';
 import 'hyper_button.dart';
 
@@ -62,7 +62,7 @@ class _HyperNoticeBarState extends State<HyperNoticeBar>
   @override
   Widget build(BuildContext context) {
     final tokens = HyperUiThemeTokens.of(context);
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     final reduce = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final style = TextStyle(fontSize: 14, color: tokens.primary);
     return HyperGlass(

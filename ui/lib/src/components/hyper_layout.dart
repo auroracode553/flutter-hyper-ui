@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../theme/hyper_glass_theme.dart';
+import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
 
 class HyperDivider extends StatelessWidget {
@@ -112,7 +112,7 @@ class _HyperSkeletonState extends State<HyperSkeleton>
     if (widget.type != 'text' && widget.type != 'card') {
       throw ArgumentError.value(widget.type, 'type', 'Invalid skeleton type');
     }
-    final glass = HyperGlassTheme.of(context);
+    final glass = HyperSurfaceTheme.of(context);
     Widget block(double height, {double? width}) => _SkeletonBlock(
       animation: _shimmer,
       height: height,

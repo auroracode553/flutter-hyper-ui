@@ -28,7 +28,7 @@ class _ThemeModeDialogComponentExampleState
       ),
       HyperButton(
         label: '主题设置',
-        onPressed: () => HyperThemeModeDialog.show(
+        onPressed: () => HyperThemeDialog.show(
           context,
           value: _mode,
           onChanged: (value) => setState(() => _mode = value),
