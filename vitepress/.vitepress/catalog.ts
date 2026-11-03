@@ -283,7 +283,7 @@ export const componentGroups: ComponentGroup[] = [
       demo('upload', '上传状态与重试', 'upload_example.dart', 680, '模拟选择、上传进度、取消、失败、重试与禁用，不依赖平台插件。'),
     ],
     components: [
-      component('HyperTextField', 'hyper_text_field.dart', '纯文本输入控件：支持单行/多行、密码、清空、前后缀插槽、字数统计与错误态，默认不带标题和图标。', {
+      component('HyperTextField', 'hyper_text_field.dart', '16 圆角矩形输入控件：支持单行/多行、密码、清空、前后缀插槽、字数统计与错误态，默认不带标题和图标。', {
         propsDocs: [
           { name: 'value', description: '受控文本，与 Compose 同名；不同时传 controller 或 initialValue' },
           { name: 'controller', description: '文本编辑控制器，为空时按 initialValue 内部维护' },
@@ -309,7 +309,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'validator', description: '表单校验函数' },
           { name: 'initialValue', description: '无 controller 时的初始值' },
         ],
-        preview: demo('component-text-field', 'HyperTextField 输入框', 'component_form_examples.dart', 860, '展示基础、清空、密码、前后缀、多行、计数、禁用只读与错误态。', 'TextFieldComponentExample'),
+        preview: demo('component-text-field', 'HyperTextField 输入框', 'component_form_examples.dart', 860, '16 圆角，展示基础、清空、密码、前后缀、多行、计数、禁用只读与错误态。', 'TextFieldComponentExample'),
       }),
       component('HyperFormField', 'hyper_form_field.dart', '为任意输入控件统一排列标题、必填标记、辅助文案和错误提示。', {
         propsDocs: [

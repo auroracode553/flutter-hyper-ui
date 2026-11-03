@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../theme/hyper_surface_theme.dart';
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_theme_tokens.dart';
+import '../theme/hyper_ui_radii.dart';
 import '../interaction/press_feedback.dart';
 import 'hyper_tooltip.dart';
 
@@ -209,7 +210,8 @@ class _HyperTextFieldState extends State<HyperTextField>
         : _focusNode.hasFocus
         ? tokens.primary
         : tokens.input;
-    final radius = BorderRadius.circular(20);
+    // 单行与多行共用字段轮廓，圆角不随输入高度扩展为胶囊。
+    const radius = BorderRadius.all(Radius.circular(HyperUiRadii.sm));
     final editor = EditableText(
       key: editableTextKey,
       // 统一由框架选择手势处理点击、长按和拖选；每次点击都会请求键盘，

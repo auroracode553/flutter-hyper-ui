@@ -5,6 +5,8 @@ description: Hyper UI 通用 Flutter 组件目录与实时交互预览
 
 <CatalogOverview />
 
+HyperTextField 的单行与多行输入统一采用 16 逻辑像素圆角矩形；完整参数和交互预览见 [HyperTextField](text-field.md)。
+
 点击操作使用 HyperButton、HyperCard 或 HyperListTile 等公开组件的 onPressed。共用按压反馈仅由库内部维护；自定义 Popover 触发内容可通过 Flutter 手势组件打开浮层，示例见 [HyperPopover](popover.md)。
 
 Switch 保留 52×32 轨道和 28 可见圆形滑块，使用内部源码实现按压高光、高光与弹簧切换；尺寸、标签行和点击提交规则保持稳定。

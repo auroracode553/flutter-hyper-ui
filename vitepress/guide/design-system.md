@@ -180,7 +180,7 @@ TabBar、Slider、Switch、Dialog 的固定玻璃位于 hyper_control_surface.da
 
 同一容器内优先使用相邻间距级别，避免出现大量彼此无关的魔法数字。
 
-间距 xxs / xs / sm / md / lg / xl / xxl 分别为 4 / 8 / 12 / 16 / 20 / 24 / 32；itemGap 为 8。圆角 full 为 999。这些是令牌，不要求所有控件强行使用同一个圆角；例如输入框 20、Dialog 26、ActionSheet 30、按钮高度的一半都属于现有专用规则。
+间距 xxs / xs / sm / md / lg / xl / xxl 分别为 4 / 8 / 12 / 16 / 20 / 24 / 32；itemGap 为 8。圆角 full 为 999。这些是令牌，不要求所有控件强行使用同一个圆角；例如输入框 16、Dialog 26、ActionSheet 30、按钮高度的一半都属于现有专用规则。
 
 ### 紧凑组件的尺寸
 
@@ -267,7 +267,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 
 | 组件与文档 | 实现文件 | 当前样式与功能 |
 | --- | --- | --- |
-| [HyperTextField](../components/text-field.md) | hyper_text_field.dart | EditableText 加自绘表面，圆角 20；字号 16；横向边距 18、纵向 9，textarea 纵向再加 3；保留错误、聚焦和禁用边框逻辑 |
+| [HyperTextField](../components/text-field.md) | hyper_text_field.dart | EditableText 加自绘表面，单行与多行均为圆角 16 的矩形，不随行数或状态变化；字号 16；横向边距 18、纵向 9，textarea 纵向再加 3；保留错误、聚焦和禁用边框逻辑 |
 | [HyperFormField](../components/form-field.md) | hyper_form_field.dart | label、必填星号、trailing、child、helperText、errorText；错误优先于说明，不代管输入值和表单提交 |
 | [HyperCheckbox](../components/checkbox.md) | hyper_selection_controls.dart | 21 方框、圆角 7、1.5 描边；支持 tristate；无标签交互区 44，有标签由无卡片的 plain 列表行处理点击 |
 | [HyperRadio](../components/radio.md) | hyper_selection_controls.dart | 21 圆环，未选描边 1.5、选中描边 6；value / groupValue；有标签由整行点击，无标签独立可交互时保留 44 触摸区 |

@@ -63,7 +63,7 @@ Hyper UI 是独立、无业务依赖的通用组件库。普通组件表面使�
 
 HyperNavBar.scrolledUnder 默认 false，优先使用显式主滚动作用域，否则接入 Scaffold 观察者；true 强制显示。type=standard 保留 44px 操作行，type=simple 仅真实状态栏/挖孔高度。二者复用 HyperScrollGradient，以 160ms 过渡显示主题渐变，无模糊或像素采样；前景清晰，背景透传手势，不占据正文视口，关闭动画时即时切换。
 - 操作：`HyperButton`、`HyperSlideMenu`、`HyperPopupMenu`、`HyperFilterBar`。
-- 表单：`HyperTextField`、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
+- 表单：`HyperTextField`（单行与多行统一 16 逻辑像素圆角）、`HyperSwitch`、`HyperCheckbox`、`HyperRadio`、`HyperSlider`、`HyperSelect`、`HyperDropdown`。
 
 - 数据与菜单：`HyperBadge`（type 为 status/tag/count）、`HyperProgress`、`HyperListTile`、`HyperMenuGroup`、`HyperCard`。
 - 反馈：`HyperToast`、`HyperDialog`、`HyperLoading`（type 选择十款原生动画，默认随机，固定 2× 节奏）、`HyperSkeleton`。

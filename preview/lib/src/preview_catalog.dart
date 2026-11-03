@@ -253,7 +253,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-text-field',
       title: 'HyperTextField',
-      description: '输入、辅助与错误状态。',
+      description: '16 圆角矩形输入，覆盖单行、多行与错误状态。',
       loadLibrary: () => example_component_form_examples.loadLibrary(),
       builder: (_) =>
           example_component_form_examples.TextFieldComponentExample(),
