@@ -18,6 +18,7 @@ class HyperGlassPainter extends CustomPainter {
     required this.brightness,
     required this.highlight,
     required this.baseColor,
+    this.dialogBaseColor,
     this.tintSource,
     this.tint,
     this.scaleSource,
@@ -37,6 +38,7 @@ class HyperGlassPainter extends CustomPainter {
       brightness,
       highlight;
   final Color baseColor;
+  final Color? dialogBaseColor;
   final HyperGlassSourceController? tintSource, scaleSource;
   final Color? tint;
   final Offset sourceScale;
@@ -49,8 +51,18 @@ class HyperGlassPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (size.isEmpty) return;
+    final bounds = Offset.zero & size;
+    final dialogColor = dialogBaseColor;
     final target = targetKey.currentContext?.findRenderObject();
-    if (target is! RenderBox || !target.attached || size.isEmpty) return;
+    if (target is! RenderBox ||
+        !target.attached ||
+        (dialogColor != null && sources.isEmpty)) {
+      if (dialogColor != null) {
+        canvas.drawRect(bounds, Paint()..color = dialogColor);
+      }
+      return;
+    }
     final padding = compactSampling ? 0.0 : (blur * 3 + edge).ceilToDouble();
     final extent = Size(size.width + padding * 2, size.height + padding * 2);
     final recording = ui.PictureRecorder();
@@ -63,6 +75,7 @@ class HyperGlassPainter extends CustomPainter {
         Offset.zero & extent,
         Paint()..imageFilter = ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur),
       );
+    var hasSample = false;
     for (final source in sources) {
       final image = source.image;
       final boundary = source.boundary;
@@ -71,6 +84,7 @@ class HyperGlassPainter extends CustomPainter {
           !boundary.attached ||
           !boundary.hasSize)
         continue;
+      hasSample = true;
       final paint = Paint()..filterQuality = FilterQuality.medium;
       if (source == tintSource && tint != null)
         paint.colorFilter = ColorFilter.mode(tint!, BlendMode.srcIn);
@@ -93,6 +107,12 @@ class HyperGlassPainter extends CustomPainter {
     }
     if (blur > 0) sampleCanvas.restore();
     final picture = recording.endRecording();
+    if (dialogColor != null && !hasSample) {
+      picture.dispose();
+      disposeSample();
+      canvas.drawRect(bounds, Paint()..color = dialogColor);
+      return;
+    }
     final image = picture.toImageSync(
       (extent.width * ratio).ceil(),
       (extent.height * ratio).ceil(),
@@ -123,7 +143,7 @@ class HyperGlassPainter extends CustomPainter {
         shader!.setFloat(index, values[index]);
       }
       shader!.setImageSampler(0, image);
-      canvas.drawRect(Offset.zero & size, Paint()..shader = shader);
+      canvas.drawRect(bounds, Paint()..shader = shader);
     } else {
       canvas.drawImageRect(
         image,
@@ -133,8 +153,15 @@ class HyperGlassPainter extends CustomPainter {
           size.width * ratio,
           size.height * ratio,
         ),
-        Offset.zero & size,
+        bounds,
         Paint(),
+      );
+    }
+    if (dialogColor != null) {
+      // 只混入已模糊的取样，避免将原页面文字直接透到面板中。
+      canvas.drawRect(
+        bounds,
+        Paint()..color = dialogColor.withValues(alpha: 0.88),
       );
     }
     previous?.dispose();

@@ -173,6 +173,7 @@ class _CalendarMonthPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size bounds) {
+    if (bounds.isEmpty) return;
     final width = bounds.width / 7;
     final height = bounds.height / 6;
     final diameter = math.max(
@@ -185,7 +186,21 @@ class _CalendarMonthPainter extends CustomPainter {
         ),
       ),
     );
-    final text = TextPainter(textDirection: direction, textScaler: textScaler);
+    const dayStyle = TextStyle(fontSize: 14, height: 1.2);
+    final text = TextPainter(
+      textDirection: direction,
+      textScaler: textScaler,
+      maxLines: 1,
+      text: TextSpan(
+        text: '88',
+        style: dayStyle.copyWith(fontWeight: FontWeight.w700),
+      ),
+    )..layout();
+    // 用同一个缩放比例显示一位和两位数，日期始终在自己的格内绘制。
+    final dayScale = math.min(
+      1.0,
+      math.min(width / text.width, height / text.height),
+    );
     for (var day = 1; day <= count; day++) {
       final date = DateTime(month.year, month.month, day);
       final index = offset + day - 1;
@@ -222,9 +237,7 @@ class _CalendarMonthPainter extends CustomPainter {
       }
       text.text = TextSpan(
         text: '$day',
-        style: TextStyle(
-          fontSize: 14,
-          height: 1.2,
+        style: dayStyle.copyWith(
           color: active
               ? tokens.primaryForeground
               : enabled
@@ -235,8 +248,13 @@ class _CalendarMonthPainter extends CustomPainter {
           fontWeight: active ? FontWeight.w700 : FontWeight.w500,
         ),
       );
-      text.layout(maxWidth: width);
-      text.paint(canvas, center - Offset(text.width / 2, text.height / 2));
+      text.layout();
+      final scale = math.min(dayScale, width / text.width);
+      canvas.save();
+      canvas.translate(center.dx, center.dy);
+      canvas.scale(scale);
+      text.paint(canvas, Offset(-text.width / 2, -text.height / 2));
+      canvas.restore();
     }
     text.dispose();
   }

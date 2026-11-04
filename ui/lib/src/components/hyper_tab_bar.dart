@@ -58,13 +58,14 @@ class HyperTabBar extends StatefulWidget {
   /// 单独动作入口的固定直径，不与多项按钮组等高。
   static const double singleDiameter = 48;
 
-  /// 悬浮和贴底多项按钮组的默认内容高度，组件内可随字体扩展。
+  /// 多项按钮组默认高；非悬浮动作模式作为含安全区的整体最小高度。
   static const double height = 56;
   final List<HyperTabItem> items;
   final int? selectedIndex;
   final ValueChanged<int> onChanged;
   final String type;
   final int badgeCount;
+  /// 仅控制悬浮栏；非悬浮栏固定由 HyperSafeArea 保护操作行。
   final bool safeArea;
   final bool floating;
   final bool Function(HyperTabItem)? itemEnabled;
@@ -145,6 +146,7 @@ class _HyperTabBarState extends State<HyperTabBar> {
     }
     final tokens = HyperUiThemeTokens.of(context);
     final activeColor = widget.color ?? tokens.primary;
+    final dockedActions = !widget.floating && widget.selectedIndex == null;
     // 单动作固定为 48 圆形入口；只有多项按钮组按标签字体扩展默认高度。
     final textHeight = MediaQuery.textScalerOf(context).scale(12) * 1.08;
     final barHeight = widget.type == 'single'
@@ -179,23 +181,32 @@ class _HyperTabBarState extends State<HyperTabBar> {
       );
     } else {
       var itemWidth = 76.0;
+      var actionContentHeight = 0.0;
       for (final item in widget.items) {
         final label = TextPainter(
           text: TextSpan(
             text: item.label,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+            style: dockedActions
+                ? DefaultTextStyle.of(context).style.copyWith(
+                    fontSize: 12,
+                    height: 1.08,
+                    fontWeight: FontWeight.w500,
+                  )
+                : const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
           ),
           textDirection: Directionality.of(context),
           textScaler: MediaQuery.textScalerOf(context),
         )..layout();
         itemWidth = math.max(itemWidth, label.width + 32);
+        actionContentHeight = math.max(actionContentHeight, label.height + 24);
         label.dispose();
       }
       bar = SizedBox(
         width: widget.floating
             ? itemWidth * widget.items.length + 2 * _inset
             : double.infinity,
-        height: barHeight,
+        // 动作图文为 23 图标 + 1 间距 + 实际缩放后的文字行，不再固定撑高 56。
+        height: dockedActions ? actionContentHeight : barHeight,
         child: LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth;
@@ -387,11 +398,17 @@ class _HyperTabBarState extends State<HyperTabBar> {
       );
     }
     bar = Padding(padding: widget.margin, child: bar);
-    bar = widget.safeArea ? SafeArea(top: false, child: bar) : bar;
-    // 贴底背景包含底部安全区，业务宿主不再补底板或重复 SafeArea。
-    return widget.floating
-        ? bar
-        : ColoredBox(color: tokens.background, child: bar);
+    if (widget.floating) {
+      return widget.safeArea ? SafeArea(top: false, child: bar) : bar;
+    }
+    // 最小高度在安全区外约束；图文与系统区共同决定总高，不再做 56 + 安全区。
+    return ColoredBox(
+      color: tokens.background,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: dockedActions ? barHeight : 0),
+        child: HyperSafeArea(edge: HyperSafeAreaEdge.bottom, child: bar),
+      ),
+    );
   }
 }
 

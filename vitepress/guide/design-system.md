@@ -290,7 +290,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | [HyperScrollGradient](../components/scroll-gradient.md) | hyper_scroll_gradient.dart、hyper_scroll_gradient_surface.dart、hyper_nav_bar_scroll_scope.dart、hyper_nav_bar_scroll_observer.dart | 与 Navbar 共用 160ms 主题渐变；读取已有主滚动来源，不采样正文，不增加栏高与安全区 |
 | [HyperNavBar / HyperNavBarScrollScope](../components/nav-bar.md) | hyper_nav_bar.dart，材质与滚动状态复用 HyperScrollGradient | 默认 custom、高 44、水平边距 16、顶部 SafeArea；固定形态使用现有返回／更多／保存；顶部透明，滚动下方内容时显示渐隐背景，不增加底部分隔线 |
 | [HyperFilterBar](../components/filter-bar.md) | hyper_filter_bar.dart | 横向分类筛选；普通项浅底与 1dp 弱边线，选中 8% 主题色底、18% 主题色细线与主题色文字，无阴影，整栏周围透明；单项最小高 32、宽 48，内边距 12×6、间距 6；业务持有 selectedIndex，内部滚动保持选中项可见 |
-| [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | 默认 multiple，悬浮 / 贴底按钮组默认高 56，仅按钮组按标签字体扩展；single 独立入口固定直径 48；floating 默认 true，false 为全宽平直贴底与零默认边距；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4），安全区由库处理；选择模式仍拖动预览、松手提交 |
+| [HyperTabBar](../components/tab-bar.md) | hyper_tab_bar.dart | 默认 multiple，悬浮 / 贴底按钮组默认高 56，仅按钮组按标签字体扩展；single 独立入口固定直径 48；floating 默认 true，false 为全宽平直贴底与零默认边距，内部固定使用 HyperSafeArea(bottom) 抬起操作行且底色延伸到底边；safeArea 仅控制悬浮栏；selectedIndex=null 为无选中块、可重复点击且不响应拖动的动作模式；itemEnabled 禁用单项（透明度 0.4）；选择模式仍拖动预览、松手提交 |
 | [HyperPagination](../components/pagination.md) | hyper_pagination.dart | page 从 1 开始，空数据为 page 0 / pageCount 0；默认 maxVisiblePages 5；水平可滚动，首尾和省略号按范围呈现；上下页为默认图标按钮，数字项保留专用选中态 |
 | [HyperSlideMenu](../components/slide-menu.md) | hyper_slide_menu.dart | 逻辑 start / end 操作区，默认每项宽 64、圆角 18；保留跟手、越界阻尼、速度投影与弹簧；展开时屏蔽正文操作，点击操作先收起再通知调用方 |
 | [HyperActionSheet](../components/action-sheet.md) | hyper_action_sheet.dart | show 展示自定义内容，choose 展示 HyperAction 列表；圆角 30、内边距 16、最大高为键盘避让后可用高度的 85%；选中、禁用、危险色和取消按钮分别保留 |
@@ -385,9 +385,13 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 
 HyperTabBar 独立入口与导航的外缘使用与 Kotlin 相同的 0.5 描边及高光透明度，描边沿真实轮廓并裁去外半边；不以内缩粗亮边增加视觉重量。HyperTabBar 多项支持 2–5 项，默认左右外边距为 12；选中镜片可见高度为按钮组内容高度减 8，默认 48、上下各 4，点击区域覆盖整项；组合入口间距为 8，栏外最多另放 1 个独立入口，与内部最多 5 项分别计数，不删减导航项。HyperTabBar 尺寸由库按形态管理：`type: 'single'` 是固定直径 48 逻辑像素的独立圆形动作入口；`type: 'multiple'` 的按钮组（悬浮或贴底）默认内容高度 56，仅按钮组按标签字体在库内扩展。单独入口必须比按钮组小，禁止为“统一高度”将 single 改成 56，也禁止业务页面通过 SizedBox、约束或缩放实现 48。与 Compose 端保持一致，并排时在共同 Row 中垂直居中，保留各自默认尺寸；悬浮多项默认顶部间距 8、底部间距 20。正文使用宿主实测底部净空，不按默认尺寸估算占位。
 
+非悬浮 TabBar 的动作模式（floating=false、selectedIndex=null）按图文实际高度测量，56 为包含 HyperSafeArea 的整栏最小高度；默认零 margin 时总高取该最小值与“图文高度 + 未消费的安全区”的较大值，大字体沿用原最小高度扩展规则。命中区域只覆盖安全区上方，真实系统 Insets 与最小安全区不缩减；悬浮及选择模式仍保留原有居中布局。
+
 按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
 
 
 页面水平外边距由调用方统一提供。独立 plain 行和独立 glass 行保留左右各 14dp 的行内留白；仅在 HyperMenuGroup 或已有表面作用域中复用父表面的 plain 行不叠加水平留白。列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留水平 14dp、垂直 4dp。
 
 固定玻璃的取样宿主为 HyperBackdrop。背景源在绘制后的帧尾录制，节点重绘时更新，销毁后释放图像；镜片不包含在源内，避免递归。原生与 Web 使用 Flutter FragmentProgram 执行同一圆弧折射和七波段色散。若着色器加载失败，保留取样图像、表面与交互。录制与镜片参数均不改变布局、命中或回调。
+
+Dialog 默认底色由白色以浅色 88%、深色 14% 混合到不透明的主题画布色。面板以 88% 底色覆盖已模糊的取样，无法取样时直接绘制不透明底色，避免底层文字透出。日期与更新面板共用这套规则。

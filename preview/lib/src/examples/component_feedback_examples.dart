@@ -193,7 +193,7 @@ class SkeletonComponentExample extends StatelessWidget {
 
 // doc-region DialogComponentExample
 class DialogComponentExample extends StatelessWidget {
-  // 保留正文与结果回调，通过正式液态面板展示模糊和高光。
+  // 复用正式对话框，查看说明文字上方的高遮蔽玻璃。
   const DialogComponentExample({super.key});
 
   Widget _label(String text) => Padding(

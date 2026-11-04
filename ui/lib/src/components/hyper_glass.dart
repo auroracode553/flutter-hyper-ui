@@ -10,6 +10,7 @@ import 'hyper_surface_scope.dart';
 /// [HyperGlass] 只负责材质、裁切与触控反馈。业务间距由外部决定，避免基础材质
 /// 与卡片、菜单等高阶组件互相耦合。
 class HyperGlass extends StatelessWidget {
+  /// 创建内部表面，保留调用方的布局与回调。
   const HyperGlass({
     super.key,
     required this.child,
@@ -21,6 +22,7 @@ class HyperGlass extends StatelessWidget {
     this.shadows,
     this.color,
     this.onPressed,
+    this.onLongPressed,
     this.clipBehavior = Clip.antiAlias,
   }) : _isCard = false,
        assert(
@@ -42,23 +44,38 @@ class HyperGlass extends StatelessWidget {
     this.showBorder = false,
     this.color,
     this.onPressed,
+    this.onLongPressed,
     this.clipBehavior = Clip.antiAlias,
   }) : type = 'regular',
        shadows = null,
        _isCard = true;
 
+  /// 承载的正文内容。
   final Widget child;
+  /// 内容内边距。
   final EdgeInsetsGeometry padding;
+  /// 表面圆角半径。
   final double radius;
+  /// 组件形态。
   final String type;
+  /// 自定义语义基色。
   final Color? color;
+  /// 显式边框颜色。
   final Color? borderColor;
+  /// 是否显示普通边框。
   final bool showBorder;
+  /// 显式覆盖的表面阴影。
   final List<BoxShadow>? shadows;
+  /// 点击时触发，可独立于长按启用。
   final VoidCallback? onPressed;
+  /// 长按表面时触发，可独立于点击启用。
+  final VoidCallback? onLongPressed;
+  /// 内容裁切方式。
   final Clip clipBehavior;
+  /// 是否使用内容卡片阴影层级。
   final bool _isCard;
 
+  /// 根据当前主题和参数构建组件界面。
   @override
   Widget build(BuildContext context) {
     if (type != 'subtle' &&
@@ -97,9 +114,10 @@ class HyperGlass extends StatelessWidget {
       child: surface,
     );
 
-    if (onPressed != null) {
+    if (onPressed != null || onLongPressed != null) {
       result = PressFeedback(
         onPressed: onPressed,
+        onLongPressed: onLongPressed,
         borderRadius: shape,
         child: result,
       );
@@ -122,6 +140,7 @@ class HyperGlass extends StatelessWidget {
     );
   }
 
+  /// 结合主题与高对比状态解析表面颜色。
   Color _surfaceColor(
     HyperSurfaceTheme glass,
     HyperUiThemeTokens tokens,
