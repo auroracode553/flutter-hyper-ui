@@ -719,7 +719,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
           { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 12、顶部 8、底部 20' },
         ],
-        preview: { ...demo('component-tab-bar', 'HyperTabBar 交互预览', 'component_tab_bar_examples.dart', 680, '栏内最多五项，栏外最多一个独立消息入口；示例以 Kotlin 文档为准，保持选中块原高度。', 'TabBarComponentExample'), fullScreen: true },
+        preview: { ...demo('component-tab-bar', 'HyperTabBar 交互预览', 'component_tab_bar_examples.dart', 680, '栏内最多五项，栏外最多一个独立消息入口；点击时整栏保持原比例，镜片轻微放大与短回弹，横向增幅最多 8%。', 'TabBarComponentExample'), fullScreen: true },
       }),
       component('HyperTabs / HyperTabsItem', 'hyper_tabs.dart', '受控分段选择，等宽选中底板平滑移动，非等宽选项使用背景色过渡。', {
         propsDocs: [

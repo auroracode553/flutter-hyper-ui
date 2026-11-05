@@ -156,9 +156,9 @@ Flutter 的 HyperCard、HyperMenuGroup、独立卡片形态的 HyperListTile、H
 
 拖过边界时使用渐进阻力而非硬停止。系统启用“减少动态效果”后，弹簧与位移动画会直接收敛到目标状态。
 
-SlideMenu 的速度投影时间为 0.09 秒，展开判断使用操作区宽度的 35%，吸附弹簧 mass / stiffness / damping 为 1 / 470 / 42。HyperTabBar 连续预览手指位置，松手通过 onChanged 提交；选中块使用 mass / stiffness / damping 为 1 / 1000 / 63.2455532 的临界阻尼弹簧定位，不预测业务选中值。Slider 点击和外部更新共用同一弹簧，拖动直接跟手。TabBar 有效按下及切换途中，悬浮 Bar 仅在绘制层按 1 + 16 / 栏宽 × 进度舒展，镜片以 78/56 为缩放目标、横纵 dampingRatio 0.6/0.7、stiffness 250 回弹；接近目标后释放。拖动整栏最多偏移 ±4，松手用 1/300 弹簧回正。贴底栏不做整栏变换，Slider 不放大；静态尺寸、点击区及布局不变。减少动态效果时直接定位并关闭舒展与偏移。
+SlideMenu 的速度投影时间为 0.09 秒，展开判断使用操作区宽度的 35%，吸附弹簧 mass / stiffness / damping 为 1 / 470 / 42。HyperTabBar 连续预览手指位置，松手通过 onChanged 提交；选中块使用 mass / stiffness / damping 为 1 / 1000 / 63.2455532 的临界阻尼弹簧定位，不预测业务选中值。Slider 点击和外部更新共用同一弹簧，拖动直接跟手。TabBar 点击及切换途中整栏保持原比例；镜片按压目标为横向 1.04、纵向 1.08，横纵弹簧 dampingRatio 0.85/0.9、stiffness 400，接近目标后短回弹。按总行程归一化的速度经 0.85/400 弹簧平滑，绝对值除以 10 并限制至 0–1；横向附加最多 3%、纵向压缩最多 1.5%，最终横纵缩放限制为 0.98–1.08/0.98–1.10，左右一致。拖动整栏最多偏移 ±4，松手用 1/300 弹簧回正。贴底栏不做整栏变换，Slider 不放大；静态尺寸、点击区及布局不变。减少动态效果时直接定位并关闭镜片缩放与拖动偏移。
 
-TabBar、Slider、Switch、Dialog 的固定玻璃位于 hyper_control_surface.dart，hyper_glass_source.dart 管理独立图像源，hyper_glass_painter.dart 合成图像并执行 shaders/hyper_glass.frag 的圆角折射与色散；hyper_spring_motion.dart 管理通用视觉值，hyper_tab_bar_motion.dart 管理底栏的舒展、速度形变与回正。保留原有尺寸、点击范围、外边距、安全区、按压高光与弹簧动效。Slider 保持 20 的滑块和无默认品牌描边；Dialog 保持 250ms 过渡。
+TabBar、Slider、Switch、Dialog 的固定玻璃位于 hyper_control_surface.dart，hyper_glass_source.dart 管理独立图像源，hyper_glass_painter.dart 合成图像并执行 shaders/hyper_glass.frag 的圆角折射与色散；hyper_spring_motion.dart 管理通用视觉值，hyper_tab_bar_motion.dart 管理镜片缩放、速度形变与拖动回正。保留原有尺寸、点击范围、外边距、安全区、按压高光与弹簧动效。Slider 保持 20 的滑块和无默认品牌描边；Dialog 保持 250ms 过渡。
 
 ### 空间一致性
 

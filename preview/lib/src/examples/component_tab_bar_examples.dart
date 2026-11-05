@@ -3,7 +3,7 @@ import 'package:flutter_hyper_ui/hyper_ui.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 // doc-region TabBarComponentExample
-/// 对应 Kotlin 文档的多项导航；外置入口保持 48，外缘描边与高光复用正式组件。
+/// 对应 Kotlin 文档的多项导航；点击时整栏保持原比例，镜片轻微放大与短回弹使用正式组件。
 class TabBarComponentExample extends StatelessWidget {
   const TabBarComponentExample({super.key});
 

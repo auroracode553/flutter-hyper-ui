@@ -1,6 +1,6 @@
 # Hyper UI · Flutter Hyper UI
 
-[Button](vitepress/components/button.md)、[TabBar](vitepress/components/tab-bar.md)、[Slider](vitepress/components/slider.md)、[Switch](vitepress/components/switch.md) 与 [Dialog](vitepress/components/dialog.md) 内置固定玻璃表面，TabBar 支持整栏按压舒展、镜片弹性回弹与拖动偏移回正，仅变换绘制层。TabBar 栏内限制 2–5 项，栏外最多另放一个独立入口；两端示例以 Kotlin 文档为基准，默认左右留白 12、镜片默认可见高 48；TabBar 外缘使用与 Kotlin 相同的 0.5 描边和高光；保持 48/56 的底栏规格、20 的滑块直径与现有弹窗尺寸。
+[Button](vitepress/components/button.md)、[TabBar](vitepress/components/tab-bar.md)、[Slider](vitepress/components/slider.md)、[Switch](vitepress/components/switch.md) 与 [Dialog](vitepress/components/dialog.md) 内置固定玻璃表面，TabBar 点击时整栏保持原比例，保留镜片轻微放大与短回弹（横向增幅最多 8%）、拖动偏移回正，仅变换绘制层。TabBar 栏内限制 2–5 项，栏外最多另放一个独立入口；两端示例以 Kotlin 文档为基准，默认左右留白 12、镜片默认可见高 48；TabBar 外缘使用与 Kotlin 相同的 0.5 描边和高光；保持 48/56 的底栏规格、20 的滑块直径与现有弹窗尺寸。
 
 Switch 保留 52×32 轨道与 28 静止滑块，轨道采用 Button 共用的主题色/中性玻璃、滑块轻透白色；保留 1.5 倍弹性扩张、速度形变、Ambient 与横向拖动吸附。
 

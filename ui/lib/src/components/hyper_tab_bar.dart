@@ -256,92 +256,84 @@ class _HyperTabBarState extends State<HyperTabBar> {
                       final panelOffset = widget.floating
                           ? motion.panelOffset(width)
                           : 0.0;
-                      final panelScale = widget.floating
-                          ? 1 + 16 / width * motion.progress
-                          : 1.0;
+                      // 整栏只保留拖动偏移；按压缩放仅作用于选中镜片。
                       return Stack(
                         clipBehavior: Clip.none,
                         children: [
                           Positioned.fill(
                             child: Transform.translate(
                               offset: Offset(panelOffset, 0),
-                              child: Transform.scale(
-                                scale: panelScale,
-                                child: Stack(
-                                  children: [
-                                    // 背景与标签分别录制，镜片只合成一次标签，避免弹性缩放时重影。
-                                    Positioned.fill(
-                                      child: HyperGlassSource(
-                                        controller: _panelSource,
-                                        child: _TabBarSurface(
-                                          floating: widget.floating,
-                                          height: barHeight,
-                                          child: CustomPaint(
-                                            painter: HyperTabBarHighlight(
-                                              motion.progress,
-                                              motion.position,
-                                              widget.items.length,
-                                              _inset,
-                                            ),
-                                            child: const SizedBox.expand(),
+                              child: Stack(
+                                children: [
+                                  // 背景与标签分别录制，镜片只合成一次标签，避免弹性缩放时重影。
+                                  Positioned.fill(
+                                    child: HyperGlassSource(
+                                      controller: _panelSource,
+                                      child: _TabBarSurface(
+                                        floating: widget.floating,
+                                        height: barHeight,
+                                        child: CustomPaint(
+                                          painter: HyperTabBarHighlight(
+                                            motion.progress,
+                                            motion.position,
+                                            widget.items.length,
+                                            _inset,
                                           ),
+                                          child: const SizedBox.expand(),
                                         ),
                                       ),
                                     ),
-                                    Positioned.fill(
-                                      left: _inset,
-                                      right: _inset,
-                                      child: HyperGlassSource(
-                                        controller: _labelsSource,
-                                        child: Row(
-                                          textDirection: TextDirection.ltr,
-                                          children: [
-                                            for (
-                                              var index = 0;
-                                              index < widget.items.length;
-                                              index++
-                                            )
-                                              Expanded(
-                                                child: Opacity(
-                                                  opacity:
-                                                      _enabled(_logical(index))
-                                                      ? 1
-                                                      : 0.4,
-                                                  child: PressFeedback(
-                                                    enabled: _enabled(
-                                                      _logical(index),
-                                                    ),
-                                                    pressedScale: 1,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          barHeight / 2,
-                                                        ),
-                                                    onPressed: () => _select(
-                                                      _logical(index),
-                                                    ),
-                                                    child: _TabLabel(
-                                                      item:
-                                                          widget.items[_logical(
-                                                            index,
-                                                          )],
-                                                      selected:
-                                                          index ==
-                                                          selected?.round(),
-                                                      color:
-                                                          index ==
-                                                              selected?.round()
-                                                          ? activeColor
-                                                          : tokens.foreground,
-                                                    ),
+                                  ),
+                                  Positioned.fill(
+                                    left: _inset,
+                                    right: _inset,
+                                    child: HyperGlassSource(
+                                      controller: _labelsSource,
+                                      child: Row(
+                                        textDirection: TextDirection.ltr,
+                                        children: [
+                                          for (
+                                            var index = 0;
+                                            index < widget.items.length;
+                                            index++
+                                          )
+                                            Expanded(
+                                              child: Opacity(
+                                                opacity:
+                                                    _enabled(_logical(index))
+                                                    ? 1
+                                                    : 0.4,
+                                                child: PressFeedback(
+                                                  enabled: _enabled(
+                                                    _logical(index),
+                                                  ),
+                                                  pressedScale: 1,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        barHeight / 2,
+                                                      ),
+                                                  onPressed: () =>
+                                                      _select(_logical(index)),
+                                                  child: _TabLabel(
+                                                    item: widget
+                                                        .items[_logical(index)],
+                                                    selected:
+                                                        index ==
+                                                        selected?.round(),
+                                                    color:
+                                                        index ==
+                                                            selected?.round()
+                                                        ? activeColor
+                                                        : tokens.foreground,
                                                   ),
                                                 ),
                                               ),
-                                          ],
-                                        ),
+                                            ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),

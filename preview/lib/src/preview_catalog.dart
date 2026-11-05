@@ -375,7 +375,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-tab-bar', fullScreen: true,
       title: 'HyperTabBar 交互预览',
-      description: '与 Kotlin 文档示例一致；栏内最多五项，栏外一个 48 独立入口；轮廓与高光遵循 Kotlin，保留原选中块高度。',
+      description: '与 Kotlin 文档示例一致；栏内最多五项，栏外一个 48 独立入口；点击时整栏保持原比例，镜片轻微放大与短回弹，横向增幅最多 8%。',
       loadLibrary: () => example_tab_bar.loadLibrary(),
       builder: (_) => example_tab_bar.TabBarComponentExample(),
     ),

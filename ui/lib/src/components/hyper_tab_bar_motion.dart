@@ -82,7 +82,7 @@ class _HyperTabBarMotionState extends State<HyperTabBarMotion>
   }
 
   void _syncPress() {
-    // 点击切换时保持舒展，接近受控目标后再释放，避免抬手瞬间收缩。
+    // 点击切换时保持镜片缩放，接近受控目标后再释放，避免抬手瞬间收缩。
     final active =
         !_reducedMotion &&
         (widget.pressed ||
@@ -91,8 +91,8 @@ class _HyperTabBarMotionState extends State<HyperTabBarMotion>
     if (active == _active) return;
     _active = active;
     _spring(_press, active ? 1 : 0, 1, 1000);
-    _spring(_scaleX, active ? 78 / 56 : 1, 0.6, 250);
-    _spring(_scaleY, active ? 78 / 56 : 1, 0.7, 250);
+    _spring(_scaleX, active ? 1.04 : 1, 0.85, 400);
+    _spring(_scaleY, active ? 1.08 : 1, 0.9, 400);
   }
 
   void _positionTick() {
@@ -102,7 +102,7 @@ class _HyperTabBarMotionState extends State<HyperTabBarMotion>
         : 0.0;
     if ((velocity - _velocityTarget).abs() > 0.01) {
       _velocityTarget = velocity;
-      _spring(_velocity, velocity, 0.5, 300, threshold: 0.01);
+      _spring(_velocity, velocity, 0.85, 400, threshold: 0.01);
     }
   }
 
@@ -129,7 +129,7 @@ class _HyperTabBarMotionState extends State<HyperTabBarMotion>
     } else if (oldWidget.pressed) {
       _spring(_travel, 0, 1, 300, threshold: 0.5);
       _velocityTarget = 0;
-      _spring(_velocity, 0, 0.5, 300, threshold: 0.01);
+      _spring(_velocity, 0, 0.85, 400, threshold: 0.01);
     }
   }
 
@@ -158,16 +158,20 @@ class _HyperTabBarMotionState extends State<HyperTabBarMotion>
       _velocity,
       _travel,
     ]),
-    builder: (context, _) => widget.builder(
-      context,
-      HyperTabBarMotionFrame(
-        _position.value,
-        _press.value.clamp(0, 1),
-        _scaleX.value / (1 - (_velocity.value / 10 * 0.75).clamp(-0.2, 0.2)),
-        _scaleY.value * (1 - (_velocity.value / 10 * 0.25).clamp(-0.2, 0.2)),
-        _travel.value,
-      ),
-    ),
+    builder: (context, _) {
+      // 形变只取速度大小，双向一致；按压与速度叠加后仍限制幅度，避免跨项切换时拉长镜片。
+      final speed = (_velocity.value.abs() / 10).clamp(0.0, 1.0);
+      return widget.builder(
+        context,
+        HyperTabBarMotionFrame(
+          _position.value,
+          _press.value.clamp(0, 1),
+          (_scaleX.value * (1 + 0.03 * speed)).clamp(0.98, 1.08),
+          (_scaleY.value * (1 - 0.015 * speed)).clamp(0.98, 1.10),
+          _travel.value,
+        ),
+      );
+    },
   );
 }
 
