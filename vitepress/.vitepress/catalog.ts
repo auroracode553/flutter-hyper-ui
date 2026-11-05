@@ -506,7 +506,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-toast', 'HyperToast 轻提示', 'component_feedback_examples.dart', 380, '四种语义色调、操作按钮与显示时长。', 'ToastComponentExample'),
       }),
-      component('HyperDialog', 'hyper_feedback.dart', '固定玻璃面板与居中轻缩放过渡，窗口两侧各留 24，面板最大宽 420。', {
+      component('HyperDialog', 'hyper_feedback.dart', '高遮蔽玻璃面板与居中轻缩放过渡，窗口两侧各留 24，面板最大宽 420。', {
         propsDocs: [
           { name: 'title', description: '标题' },
           { name: 'message', description: '提示文字' },
@@ -528,7 +528,7 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-theme-dialog', 'HyperThemeDialog', 'component_theme_mode_dialog_example.dart', 420, '紧凑三选项、当前值与关闭行为。', 'ThemeModeDialogComponentExample'),
       }),
-      component('HyperUpdateDialog', 'hyper_update_dialog.dart', 'Dialog 玻璃面板，保留更新状态与关闭限制', {
+      component('HyperUpdateDialog', 'hyper_update_dialog.dart', '与 Dialog 共用高遮蔽玻璃面板，更新状态由调用方管理。', {
         propsDocs: [
           { name: 'status', description: '受控更新状态，默认 HyperUpdateStatus.idle；状态由业务层切换' },
           { name: 'currentVersion', description: '当前安装版本；未提供、checking 或 error 时隐藏，其他状态直接排版不套卡片' },
@@ -706,15 +706,15 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: { ...demo('component-nav-bar', '滚动渐变导航栏', 'component_nav_bar_example.dart', 680, '切换 standard / simple，向上滚动显示渐变，回到顶部恢复透明。', 'NavBarComponentExample'), fullScreen: true },
       }),
-      component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '悬浮或全宽贴底底栏，支持可重复动作、单项禁用与独立角标入口。', {
+      component('HyperTabBar / HyperTabItem', 'hyper_tab_bar.dart', '悬浮或全宽贴底底栏；非悬浮栏内置 HyperSafeArea 保护操作行，支持可重复动作、单项禁用与独立角标入口。', {
         propsDocs: [
-          { name: 'type', description: "'multiple' 多项按钮组默认高 56（默认）或 'single' 固定直径 48 的独立圆形入口，单位为逻辑像素" },
+          { name: 'type', description: "'multiple' 多项按钮组默认高 56（非悬浮动作模式为含安全区的整栏最小高度）或 'single' 固定直径 48，单位为逻辑像素" },
           { name: 'items', description: '多项模式只接受 2–5 项；单项模式恰好 1 项，仅显示图标' },
           { name: 'selectedIndex', description: '当前选中索引；null 为无选中块、可重复点击且不响应拖动的动作模式' },
           { name: 'onChanged', description: '点击回调；单项模式传入索引 0' },
           { name: 'badgeCount', description: '单项模式的数量角标，默认 0 不显示，超过 99 显示 99+' },
-          { name: 'safeArea', description: '是否适配安全区，默认 true' },
-          { name: 'floating', description: '默认 true 保留悬浮；false 为 multiple 全宽平直贴底，默认零边距' },
+          { name: 'safeArea', description: '仅控制悬浮栏的安全区，默认 true；非悬浮栏固定使用 HyperSafeArea 保护操作行' },
+          { name: 'floating', description: '默认 true 保留悬浮；false 为 multiple 全宽平直贴底、零默认边距；动作图文按实际高度测量，安全区纳入整体最小高度' },
           { name: 'itemEnabled', description: '各项可用性，默认全部可用；禁用项停止点击和拖动提交' },
           { name: 'color', description: '选中图文颜色，默认主题强调色' },
           { name: 'margin', description: '外边距；非悬浮和单项默认 0，悬浮多项默认水平 12、顶部 8、底部 20' },

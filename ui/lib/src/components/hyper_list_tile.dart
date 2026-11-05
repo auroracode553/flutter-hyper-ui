@@ -14,6 +14,7 @@ import 'hyper_surface_scope.dart';
 ///
 /// Inside [HyperMenuGroup], the group owns the surface automatically.
 class HyperListTile extends StatelessWidget {
+  /// 创建列表行，禁用时停止点击和长按通知。
   const HyperListTile({
     super.key,
     this.type = 'auto',
@@ -26,6 +27,7 @@ class HyperListTile extends StatelessWidget {
     this.titleColor,
     this.trailing,
     this.onPressed,
+    this.onLongPressed,
     this.selected = false,
     this.enabled = true,
     this.showChevron = true,
@@ -34,22 +36,39 @@ class HyperListTile extends StatelessWidget {
          'HyperListTile.type must be auto, plain, or glass.',
        );
 
+  /// 组件形态。
   final String type;
+  /// 标题文字。
   final String title;
+  /// 副标题文字。
   final String? subtitle;
+  /// 补充元信息文字。
   final String? meta;
+  /// 前置自定义内容。
   final Widget? leading;
+  /// 前置图标。
   final IconData? leadingIcon;
+  /// 前置图标颜色。
   final Color? leadingColor;
+  /// 标题颜色。
   final Color? titleColor;
+  /// 尾部自定义内容。
   final Widget? trailing;
+  /// 点击时触发，可独立于长按启用。
   final VoidCallback? onPressed;
+  /// 长按行时触发，禁用时停止通知。
+  final VoidCallback? onLongPressed;
+  /// 是否显示选中状态。
   final bool selected;
+  /// 是否允许交互。
   final bool enabled;
+  /// 是否在可点击时显示右侧箭头。
   final bool showChevron;
 
+  /// 是否存在前置内容或图标。
   bool get _hasLeading => leading != null || leadingIcon != null;
 
+  /// 根据当前主题和参数构建组件界面。
   @override
   Widget build(BuildContext context) {
     if (type != 'auto' && type != 'plain' && type != 'glass') {
@@ -144,6 +163,7 @@ class HyperListTile extends StatelessWidget {
     if (plain) {
       return PressFeedback(
         onPressed: enabled ? onPressed : null,
+        onLongPressed: enabled ? onLongPressed : null,
         enabled: enabled,
         pressedScale: 0.992,
         borderRadius: radius,
@@ -156,12 +176,14 @@ class HyperListTile extends StatelessWidget {
       showBorder: selected,
       padding: const EdgeInsets.symmetric(vertical: 3),
       onPressed: enabled ? onPressed : null,
+        onLongPressed: enabled ? onLongPressed : null,
       color: selected ? glass.surfaceStrong : null,
       borderColor: selected ? tokens.primary.withAlpha(90) : null,
       child: row,
     );
   }
 
+  /// 根据主题颜色构建前置内容。
   Widget _buildLeading(HyperUiThemeTokens tokens, HyperSurfaceTheme glass) {
     if (leading != null) return leading!;
     final color = leadingColor ?? tokens.primary;

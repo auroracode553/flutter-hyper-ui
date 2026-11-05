@@ -16,6 +16,7 @@ class TabBarComponentExample extends StatelessWidget {
 class DockedTabBarComponentExample extends StatelessWidget {
   const DockedTabBarComponentExample({super.key});
 
+  // 正式 TabBar 按图文与安全区测量总高，示例不额外添加占位或 SafeArea。
   @override
   Widget build(BuildContext context) => const _TabBarScene(actions: true);
 }
@@ -57,6 +58,7 @@ class _TabBarSceneState extends State<_TabBarScene> {
     final actions = widget.actions;
     final label = single ? _message.label : _items[_selected].label;
     final navigation = HyperTabBar(
+      // 悬浮栏在并排宿主中共用间距；非悬浮栏固定由内部 HyperSafeArea 避让。
       safeArea: false,
       margin: EdgeInsets.zero,
       type: single ? 'single' : 'multiple',

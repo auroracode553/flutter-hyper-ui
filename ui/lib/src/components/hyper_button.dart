@@ -14,6 +14,7 @@ import 'hyper_tooltip.dart';
 
 /// Self-drawn button with a small default API and an optional content slot.
 class HyperButton extends StatelessWidget {
+  /// 创建按钮，content 形态仅接收自定义主体与交互参数。
   const HyperButton({
     super.key,
     this.type,
@@ -21,6 +22,7 @@ class HyperButton extends StatelessWidget {
     this.label,
     this.content,
     this.onPressed,
+    this.onLongPressed,
 
     this.icon,
     this.trailingIcon,
@@ -31,8 +33,8 @@ class HyperButton extends StatelessWidget {
     this.color,
     this.backgroundColor,
   }) : assert(
-         type == null || type == 'filled' || type == 'icon',
-         'HyperButton.type must be null, filled, or icon.',
+         type == null || type == 'filled' || type == 'icon' || type == 'content',
+         'HyperButton.type must be null, filled, icon, or content.',
        ),
        assert(
          colorStyle == null ||
@@ -52,21 +54,37 @@ class HyperButton extends StatelessWidget {
          'HyperButton icon type uses icon, content, or loading instead of label.',
        );
 
+  /// 按钮文字，与自定义主体互斥。
   final String? label;
+  /// 自定义按钮主体；content 形态由其决定尺寸与排版。
   final Widget? content;
+  /// 点击时触发，可独立于长按启用。
   final VoidCallback? onPressed;
+  /// 长按按钮时触发，可独立于点击启用。
+  final VoidCallback? onLongPressed;
+  /// 组件形态。
   final String? type;
+  /// 按钮预设语义配色。
   final String? colorStyle;
 
+  /// 前置或独立按钮图标。
   final IconData? icon;
+  /// 后置图标。
   final IconData? trailingIcon;
+  /// 是否允许交互。
   final bool enabled;
+  /// 是否显示加载状态并暂停操作。
   final bool loading;
+  /// 是否按默认按钮规格填满可用宽度。
   final bool expanded;
+  /// 悬停或长按提示文字。
   final String? tooltip;
+  /// 自定义语义基色。
   final Color? color;
+  /// 按钮背景覆盖色。
   final Color? backgroundColor;
 
+  /// 根据当前主题和参数构建组件界面。
   @override
   Widget build(BuildContext context) {
     if (label != null && content != null) {
@@ -79,6 +97,28 @@ class HyperButton extends StatelessWidget {
         'HyperButton icon type uses icon, content, or loading instead of label.',
       );
     }
+    if (type == 'content') {
+      if (content == null || label != null || icon != null ||
+          trailingIcon != null || loading || colorStyle != null ||
+          color != null || backgroundColor != null || expanded) {
+        throw ArgumentError(
+          'HyperButton content type requires content and does not accept '
+          'label, icons, loading, colors, or expanded.',
+        );
+      }
+      final interactive = enabled &&
+          (onPressed != null || onLongPressed != null);
+      Widget child = PressFeedback(
+        onPressed: interactive ? onPressed : null,
+        onLongPressed: interactive ? onLongPressed : null,
+        enabled: interactive,
+        child: content!,
+      );
+      if (tooltip != null && tooltip!.isNotEmpty) {
+        child = HyperTooltip(message: tooltip!, child: child);
+      }
+      return child;
+    }
     final variant = switch (type) {
       null => _ButtonVariant.standard,
       'filled' => _ButtonVariant.filled,
@@ -87,7 +127,9 @@ class HyperButton extends StatelessWidget {
     };
     final tokens = HyperUiThemeTokens.of(context);
     final glass = HyperSurfaceTheme.of(context);
-    final disabled = !enabled || onPressed == null;
+    final disabled = !enabled ||
+        (onPressed == null && onLongPressed == null);
+    /// 是否显示加载状态并暂停操作。
     final blocked = disabled || loading;
     final metrics = _HyperButtonMetrics.standard;
     final hasLabel = label != null && label!.isNotEmpty;
@@ -111,7 +153,9 @@ class HyperButton extends StatelessWidget {
       color: color,
       colorStyle: colorStyle,
     );
+    /// 按钮前景色。
     final foreground = visual.foreground;
+    /// 按钮背景色。
     final background = backgroundColor ?? visual.background;
     final isSquare = isIconOnly;
     final borderRadius = BorderRadius.circular(metrics.height / 2);
@@ -178,6 +222,7 @@ class HyperButton extends StatelessWidget {
               : Border.all(color: visual.border!, width: disabled ? 1 : 0.5),
           child: PressFeedback(
             onPressed: blocked ? null : onPressed,
+            onLongPressed: blocked ? null : onLongPressed,
             enabled: !blocked,
             pressedScale: 1,
             pressedOpacity: 1,
@@ -205,6 +250,7 @@ class HyperButton extends StatelessWidget {
     return content ?? Icon(icon!);
   }
 
+  /// 使用解析后的前景色构建按钮主体。
   Widget _buildContent(Color foreground) {
     final labelContent =
         content ?? Text(label!, maxLines: 1, overflow: TextOverflow.ellipsis);
@@ -232,7 +278,9 @@ class HyperButton extends StatelessWidget {
   }
 }
 
+/// 按钮的唯一标准尺寸规格。
 class _HyperButtonMetrics {
+  /// 创建标准按钮尺寸集合。
   const _HyperButtonMetrics({
     required this.height,
     required this.minWidth,
@@ -242,15 +290,21 @@ class _HyperButtonMetrics {
     required this.labelIconSize,
   });
 
+  /// 按钮标准高度。
   final double height;
+  /// 文字按钮最小宽度。
   final double minWidth;
+  /// 标准按钮水平留白。
   final double horizontal;
+  /// 按钮文字字号。
   final double fontSize;
+  /// 独立图标尺寸。
   final double iconOnlyIconSize;
 
   /// 带文字时前置/后置图标的默认尺寸，随字号联动。
   final double labelIconSize;
 
+  /// 所有标准玻璃按钮共用的唯一尺寸。
   static const standard = _HyperButtonMetrics(
     height: 38,
     minWidth: 68,
@@ -261,17 +315,23 @@ class _HyperButtonMetrics {
   );
 }
 
+/// 根据主题与状态解析的按钮颜色。
 class _HyperButtonVisual {
+  /// 保存解析后的按钮前景、背景与描边。
   const _HyperButtonVisual({
     required this.background,
     required this.foreground,
     required this.border,
   });
 
+  /// 按钮背景色。
   final Color background;
+  /// 按钮前景色。
   final Color foreground;
+  /// 可选语义描边颜色。
   final Color? border;
 
+  /// 根据主题、按钮形态和禁用状态解析颜色。
   static _HyperButtonVisual resolve({
     required HyperUiThemeTokens tokens,
     required HyperSurfaceTheme glass,
@@ -332,4 +392,5 @@ class _HyperButtonVisual {
   }
 }
 
+/// 标准玻璃按钮的显示形态。
 enum _ButtonVariant { standard, filled, icon }

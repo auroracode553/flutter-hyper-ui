@@ -382,7 +382,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-tab-bar-docked', fullScreen: true,
       title: '非悬浮动作栏：重复点击与禁用项',
-      description: '与 Kotlin 文档示例一致；栏内最多五项，栏外一个 48 独立入口；轮廓与高光遵循 Kotlin，保留原选中块高度。',
+      description: '与 Kotlin 文档示例一致；56 为含安全区的整栏最小高度，图文与 HyperSafeArea 按需撑高，支持重复点击与禁用项。',
       loadLibrary: () => example_tab_bar.loadLibrary(),
       builder: (_) => example_tab_bar.DockedTabBarComponentExample(),
     ),
@@ -518,7 +518,7 @@ class PreviewCatalog {
     _componentPreview(
       'component-date-picker',
       'HyperDatePicker',
-      'Dialog 固定玻璃面板，日期选择在退出后返回。',
+      '与 Dialog 共用高遮蔽玻璃面板，日期选择在退出后返回。',
       () => example_component_form_examples.loadLibrary(),
       (_) => example_component_form_examples.DatePickerComponentExample(),
     ),
@@ -532,7 +532,7 @@ class PreviewCatalog {
     _componentPreview(
       'component-dialog',
       'HyperDialog',
-      '玻璃确认对话框。',
+      '高遮蔽玻璃确认对话框。',
       () => example_component_feedback_examples.loadLibrary(),
       (_) => example_component_feedback_examples.DialogComponentExample(),
     ),
@@ -546,7 +546,7 @@ class PreviewCatalog {
     _componentPreview(
       'component-update-dialog',
       'HyperUpdateDialog',
-      'Dialog 固定玻璃面板与受控更新状态。',
+      '高遮蔽玻璃面板与受控更新状态，可用「已是最新」查看模态效果。',
       () => example_component_update_dialog_example.loadLibrary(),
       (_) =>
           example_component_update_dialog_example.UpdateDialogComponentExample(),

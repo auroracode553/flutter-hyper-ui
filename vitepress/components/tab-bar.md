@@ -23,7 +23,11 @@ import { exampleSourceFor } from '../.vitepress/theme/example-source';
 
 ## 非悬浮动作栏
 
-`floating: false` 使用库内全宽平直表面，没有悬浮胶囊、圆角、外侧留白或浮层阴影；默认 margin 为零，safeArea 默认 true。与悬浮多项按钮组共用默认内容高度 56，仅按钮组按标签字体在库内扩展；single 独立入口固定直径 48。安全区位于内容尺寸之外。放入 Scaffold.bottomNavigationBar 时采用普通正文避让，不叠加底板、额外 SafeArea 或固定底栏高度。
+`floating: false` 使用库内全宽平直表面，没有悬浮胶囊、圆角、外侧留白或浮层阴影，默认 margin 为零。内部固定使用 HyperSafeArea(edge: HyperSafeAreaEdge.bottom) 保护操作行，safeArea 参数仅控制悬浮栏，不关闭非悬浮栏的保护。竖屏底部采用真实系统区与最小 20 的最大值，横屏只避实际底部系统区，同侧嵌套只消费一次，不包含 IME。
+
+非悬浮动作模式（floating=false、selectedIndex=null）以 56 为包含安全区的整栏最小高度，图文按实际高度测量；默认零 margin 时，总高为 max(56, 图文高度 + 未消费的底部安全区)，大字体延续原最小高度扩展规则。悬浮多项与贴底选择模式仍使用默认 56 的内容行，single 独立入口固定直径 48。
+
+非悬浮栏的底色连同安全区延伸到底边，可点击内容只位于安全区上方。放入 Scaffold.bottomNavigationBar 时使用 extendBody: true 保持正文全屏；末尾余量只使用宿主实测遮挡量并放在滚动内容内，不叠加底板、额外 SafeArea 或固定底栏高度。
 
 ```dart
 HyperTabBar(
@@ -36,6 +40,8 @@ HyperTabBar(
 ```
 
 空选中值不绘制常驻选中块，每次有效点击都会回调，适合浏览器前进、后退和菜单操作。非空选中值保持原有选择行为，重复点击当前项不回调，拖动松手提交。两种模式中的禁用项均不触发操作。
+
+非悬浮动作模式按同一行中最高的图文测量内容，各项共享内容行高和点击区域，不强制在安全区上方保留 56。真实系统 Insets 与最小安全区照常生效，系统手势区不接收菜单点击；悬浮栏与有选中值的导航模式继续使用原有居中布局。
 
 ## 单项入口
 
@@ -134,6 +140,6 @@ single 使用库内 HyperTabBar.singleDiameter = 48 的固定直径，multiple �
 | 默认值 | 类型 | 必填 | 值 | 作用 |
 | --- | --- | --- | --- | --- |
 | HyperTabBar.singleDiameter | double | 否 | 48 | single 独立圆形入口的固定直径，单位为逻辑像素 |
-| HyperTabBar.height | double | 否 | 56 | multiple 悬浮 / 贴底按钮组默认内容高度，单位为逻辑像素；字体扩展由库内部处理 |
+| HyperTabBar.height | double | 否 | 56 | multiple 默认内容高度；非悬浮动作模式为含安全区的整栏最小高度，单位为逻辑像素；字体扩展由库内部处理 |
 
 HyperBackdrop(background: 背景, child: 组件) 定义独立取样来源，不是材质档位。组件自身固定使用玻璃；背景、容器、标签与镜片分开录制，镜片不进入自己的背景。

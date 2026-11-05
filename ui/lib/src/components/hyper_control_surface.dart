@@ -109,6 +109,18 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
     const white = Color.fromRGBO(255, 255, 255, 1),
         black = Color.fromRGBO(0, 0, 0, 1);
     final tint = light ? white : white.withValues(alpha: 0.34);
+    final defaultDialog =
+        role == HyperControlSurfaceRole.dialog && widget.color == null;
+    final pageBackground = theme.tokens.background;
+    final sampleBackground = defaultDialog
+        ? pageBackground.withValues(alpha: 1)
+        : pageBackground;
+    final dialogBaseColor = defaultDialog
+        ? Color.alphaBlend(
+            white.withValues(alpha: light ? 0.88 : 0.14),
+            sampleBackground,
+          )
+        : null;
     final blur = switch (role) {
       HyperControlSurfaceRole.navigation ||
       HyperControlSurfaceRole.button => controlStyle.blur,
@@ -151,7 +163,7 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
         alpha: (widget.color ?? white).a * (1 - pressed),
       ),
       HyperControlSurfaceRole.dialog =>
-        widget.color ?? tint.withValues(alpha: light ? 0.6 : 0.272),
+        widget.color ?? const Color.fromRGBO(0, 0, 0, 0),
       _ =>
         widget.color ??
             tint.withValues(
@@ -188,7 +200,8 @@ class _HyperControlSurfaceState extends State<HyperControlSurface> {
           : fixedStyle != null
           ? fixedStyle.highlight * 2
           : strength,
-      baseColor: theme.tokens.background,
+      baseColor: sampleBackground,
+      dialogBaseColor: dialogBaseColor,
       tintSource: widget.tintSource,
       tint: widget.tint,
       scaleSource: widget.scaleSource,
