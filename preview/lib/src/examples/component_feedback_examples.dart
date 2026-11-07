@@ -194,7 +194,7 @@ class SkeletonComponentExample extends StatelessWidget {
 
 // doc-region DialogComponentExample
 class DialogComponentExample extends StatelessWidget {
-  // 复用正式对话框，查看说明文字上方的高遮蔽玻璃。
+  // 复用正式对话框，核对长正文的顶部安全区、滚动和完整遮罩。
   const DialogComponentExample({super.key});
 
   Widget _label(String text) => Padding(
@@ -242,12 +242,15 @@ class DialogComponentExample extends StatelessWidget {
             context,
             title: '版本更新',
             // content 插槽可放任意组件，优先于 message。
-            content: const Column(
+            content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('本次更新内容：'),
-                SizedBox(height: 8),
-                Text('· 新增 HyperTextField 组件文档\n· 示例支持明暗主题切换'),
+                const Text('本次更新内容：'),
+                const SizedBox(height: 8),
+                const Text('· 新增 HyperTextField 组件文档\n· 示例支持明暗主题切换'),
+                // 沿用自定义正文入口验证长内容，不新增弹窗类型或操作入口。
+                for (var index = 1; index <= 16; index++)
+                  Text('· 更新说明 $index：内容较长时可滚动查看，标题与操作保持在窗口安全范围内。'),
               ],
             ),
             confirmLabel: '知道了',

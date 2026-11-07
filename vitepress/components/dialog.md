@@ -5,6 +5,8 @@ description: HyperDialog 组件与公开 API
 
 <ComponentDoc component-id="dialog" />
 
+面板内容独立避让真实窗口安全区与键盘，保留 24 外间距及原有宽度、按钮和滚动行为。长正文不会把标题顶入状态栏；遮罩仍覆盖整屏。现有自定义正文示例包含长内容，可检查滚动与完整遮罩。
+
 ## 表单校验
 
 canConfirm 是可选的提交前校验回调。返回 false 时保持弹窗，可结合 FormState.validate 展示输入错误；未传入时按默认行为返回 true 并关闭。自定义正文中的键盘提交动作可以在校验通过后返回确认结果，正文控制器应在 confirm 返回后释放。

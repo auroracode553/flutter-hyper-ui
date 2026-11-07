@@ -78,10 +78,18 @@ class _PreviewContent extends StatelessWidget {
       onReady: onReady,
       onError: onError,
     );
-    final viewport = item.fullScreen ? content : SingleChildScrollView(
-      padding: const EdgeInsets.all(HyperUiSpacing.pagePadding),
-      child: content,
-    );
+    final viewport = item.fullScreen
+        ? content
+        : SingleChildScrollView(
+            // 首屏净空只放进普通内容的滚动区，根 Overlay 保持整块手机视口。
+            padding: EdgeInsets.fromLTRB(
+              HyperUiSpacing.pagePadding,
+              HyperUiSpacing.pagePadding + MediaQuery.paddingOf(context).top,
+              HyperUiSpacing.pagePadding,
+              HyperUiSpacing.pagePadding,
+            ),
+            child: content,
+          );
     final glassScene = item.id.startsWith('component-tab-bar') || const {'buttons','component-button','component-slider','component-switch','component-dialog','component-checkbox','component-radio','component-date-picker','component-tabs','component-drawer','component-dropdown','component-toast','component-progress','component-update-dialog'}.contains(item.id);
     return glassScene ? PreviewGlassBackground(child:viewport) : viewport;
   }

@@ -4,6 +4,7 @@ import 'package:flutter_hyper_ui/hyper_ui.dart';
 
 // doc-region TooltipComponentExample
 class TooltipComponentExample extends StatelessWidget {
+  /// 使用顶部普通内容入口验证提示翻转；滚动与大字号仍受窗口安全边界限制。
   const TooltipComponentExample({super.key});
 
   @override
@@ -24,7 +25,8 @@ class TooltipComponentExample extends StatelessWidget {
         ),
         const SizedBox(height: HyperUiSpacing.lg),
         HyperTooltip(
-          message: '这是一段较长的说明，会在可用宽度内自动换行。',
+          // 复用现有长说明入口，让正常手机视口也能验证向下翻转和边界限制。
+          message: '较长的补充提示会自动换行，顶部空间不足时向下显示，内容始终限制在窗口安全区域内。' * 8,
           child: HyperButton(label: '查看权限说明', onPressed: () {}),
         ),
       ],

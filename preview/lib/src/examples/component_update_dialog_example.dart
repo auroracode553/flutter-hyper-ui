@@ -29,6 +29,7 @@ class _UpdateDialogComponentExampleState
     }
     setState(() => _dialogOpen = true);
     try {
+      // 安全区使用真实模态入口验证，页面中的内嵌状态不代替窗口验证。
       await HyperUpdateDialog.show<void>(
         context,
         builder: (dialogContext) => ListenableBuilder(

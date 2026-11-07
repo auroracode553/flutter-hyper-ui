@@ -98,8 +98,7 @@ async function copyCode() {
         <div
           ref="previewTarget"
           class="demo-block__flutter-host"
-          :class="{ 'is-page': fullScreen }"
-          :data-safe-area-top="fullScreen && previewWidth === 'mobile' ? 52 : 0"
+          :data-safe-area-top="previewWidth === 'mobile' ? 52 : 0"
           :data-safe-area-bottom="fullScreen && previewWidth === 'mobile' ? 24 : 0"
         />
         <div

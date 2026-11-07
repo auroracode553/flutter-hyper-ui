@@ -44,6 +44,9 @@ class _HyperTooltipState extends State<HyperTooltip>
   Timer? _hoverTimer;
   Offset _position = Offset.zero;
   double _availableWidth = 240;
+
+  /// 提示内容可使用的安全高度，超长说明也不能越过窗口安全边界。
+  double _availableHeight = double.infinity;
   bool _showBelow = false;
   bool _hovering = false;
   bool _focused = false;
@@ -67,7 +70,9 @@ class _HyperTooltipState extends State<HyperTooltip>
 
   void _refreshOverlay() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _overlayEntry?.markNeedsBuild();
+      if (!mounted || _overlayEntry == null) return;
+      if (_motion.isOpen) _show();
+      _overlayEntry?.markNeedsBuild();
     });
   }
 
@@ -75,12 +80,22 @@ class _HyperTooltipState extends State<HyperTooltip>
     if (!mounted || !widget.enabled || widget.message.isEmpty) return;
     final box = _anchorKey.currentContext?.findRenderObject() as RenderBox?;
     if (box == null || !box.hasSize) return;
-    final origin = box.localToGlobal(Offset.zero);
-    final screen = MediaQuery.sizeOf(context);
-    final maximumWidth = math.min(
-      widget.maxWidth,
-      math.max(24.0, screen.width - 24),
-    );
+    final overlayContext = Overlay.of(context).context;
+    final overlayBox = overlayContext.findRenderObject() as RenderBox?;
+    if (overlayBox == null || !overlayBox.hasSize) return;
+    final origin = box.localToGlobal(Offset.zero, ancestor: overlayBox);
+    final screen = overlayBox.size;
+    final media = MediaQuery.of(overlayContext);
+    final minimumLeft = media.padding.left + 12;
+    final minimumTop = media.padding.top + 12;
+    final right = screen.width - media.padding.right - 12;
+    final bottom =
+        screen.height -
+        math.max(media.padding.bottom, media.viewInsets.bottom) -
+        12;
+    final availableHeight = math.max(0.0, bottom - minimumTop);
+    if (right - minimumLeft <= 20 || availableHeight <= 0) return;
+    final maximumWidth = math.min(widget.maxWidth, right - minimumLeft);
     final painter = TextPainter(
       text: TextSpan(
         text: widget.message,
@@ -91,16 +106,20 @@ class _HyperTooltipState extends State<HyperTooltip>
       textWidthBasis: TextWidthBasis.longestLine,
     )..layout(maxWidth: math.max(1.0, maximumWidth - 20));
     final width = math.min(maximumWidth, painter.width + 20);
-    final tooltipHeight = painter.height + 14;
+    final tooltipHeight = math.min(painter.height + 14, availableHeight);
     painter.dispose();
     final left = (origin.dx + (box.size.width - width) / 2)
-        .clamp(12.0, screen.width - width - 12)
+        .clamp(minimumLeft, math.max(minimumLeft, right - width))
         .toDouble();
-    final below = origin.dy < tooltipHeight + 8;
-    final top = below ? origin.dy + box.size.height + 8 : origin.dy - 8;
+    final above = origin.dy - 8 - tooltipHeight;
+    final below = above < minimumTop;
+    final top = (below ? origin.dy + box.size.height + 8 : above)
+        .clamp(minimumTop, math.max(minimumTop, bottom - tooltipHeight))
+        .toDouble();
     setState(() {
-      _position = Offset(left, top);
+      _position = Offset(left, below ? top : top + tooltipHeight);
       _availableWidth = width;
+      _availableHeight = availableHeight;
       _showBelow = below;
       _originX = ((origin.dx + box.size.width / 2 - left) / width * 2 - 1)
           .clamp(-1.0, 1.0)
@@ -182,7 +201,10 @@ class _HyperTooltipState extends State<HyperTooltip>
                 beginScale: 0.97,
                 origin: () => Alignment(_originX, _showBelow ? -1 : 1),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: _availableWidth),
+                  constraints: BoxConstraints(
+                    maxWidth: _availableWidth,
+                    maxHeight: _availableHeight,
+                  ),
                   child: HyperGlass(
                     radius: 12,
                     type: 'prominent',

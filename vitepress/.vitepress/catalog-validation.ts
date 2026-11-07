@@ -112,9 +112,17 @@ export function validateCatalog(
         ? entry.source.slice(3)
         : `components/${entry.source}`;
       const diskPath = resolve(repositoryRoot, 'ui/lib/src', relativeSource);
-      const exportStatement = `export 'src/${relativeSource.replaceAll('\\', '/')}';`;
+      // 显式 show 导出与整文件导出都参与契约校验，不能因格式差异阻止预览生成。
+      const exportPath = `src/${relativeSource.replaceAll('\\', '/')}`;
+      const matchingExport = [...publicEntry.matchAll(/export\s+'([^']+)'(?:\s+(show|hide)\s+([^;]+))?\s*;/g)]
+        .find((match) => match[1] === exportPath);
+      const symbols = entry.name.split('/').map((name) => name.trim().replace(/<.*>/, ''));
+      const exportNames = matchingExport?.[3]?.split(',').map((name) => name.trim()) ?? [];
+      const exportsSymbols = matchingExport && symbols.every((symbol) =>
+        matchingExport[2] === 'show' ? exportNames.includes(symbol)
+          : matchingExport[2] !== 'hide' || !exportNames.includes(symbol));
       if (!existsSync(diskPath)) sourceErrors.push(`${entry.name}: 源文件不存在 (${relativeSource})`);
-      else if (!publicEntry.includes(exportStatement)) sourceErrors.push(`${entry.name}: 未从 hyper_ui.dart 导出`);
+      else if (!exportsSymbols) sourceErrors.push(`${entry.name}: 未从 hyper_ui.dart 导出`);
       else {
         const source = readFileSync(diskPath, 'utf8');
         for (const rawSymbol of entry.name.split('/')) {

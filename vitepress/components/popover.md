@@ -5,6 +5,8 @@ description: HyperPopover 组件与公开 API
 
 <ComponentDoc component-id="popover" />
 
+浮层在完整窗口的安全范围内定位、翻转并限制尺寸，顶部边界包括状态栏与缺口；背景和触发器布局不受根全面屏策略影响。自带滚动列表继续使用 scrollable: false。
+
 ## 状态与触发
 
 visible、onClose、child 和 content 必填。调用方持有 visible；onClose 请求调用方将其设为 false。child 只提供锚点，不再额外包一层点击区域，因此可由按钮、字段内部操作或长按决定何时打开；内容中的操作也直接更新同一个 visible。点击外部或系统返回先关闭气泡，保留当前页面。

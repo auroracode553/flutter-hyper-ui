@@ -1,9 +1,22 @@
 import 'package:flutter/widgets.dart';
+
 import 'hyper_glass_source.dart';
 
 import '../theme/hyper_ui_theme.dart';
 import '../theme/hyper_ui_effects.dart';
 import '../utils/hyper_overlay_motion.dart';
+
+/// 只保护居中面板的内容，遮罩仍由全屏宿主绘制；[padding] 保留各弹窗原有外间距。
+Widget buildHySafeModalContent(
+  BuildContext context, {
+  required EdgeInsetsGeometry padding,
+  required Widget child,
+}) => SafeArea(
+  child: Padding(
+    padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+    child: Padding(padding: padding, child: child),
+  ),
+);
 
 /// Hosts a Hyper surface in a route and keeps the caller's theme available.
 Future<T?> showHyperModal<T>(

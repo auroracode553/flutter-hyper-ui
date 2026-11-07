@@ -30,6 +30,8 @@
 
 ## 接入顺序
 
+菜单、Tooltip、Dialog、ThemeDialog、UpdateDialog 的模态入口负责各自内容的窗口安全区和必要键盘避让；业务不计算固定状态栏高度，也不为修复浮层去打开根安全区或给遮罩增加 Padding。文档预览与真机使用同一规则，嵌入式面板的正常外观不代替模态入口验证。
+
 1. 先完成上面的必读顺序，再按[快速开始](./getting-started.md)接入依赖、HyperUiTheme 和应用全局全面屏。
 2. 复制 [TabBar 的共用悬浮宿主](../components/tab-bar.md#悬浮页面宿主)，保存为 `lib/widgets/app_floating_tab_scaffold.dart`。已有等价宿主时复用现有实现，并同步调整模板中的名称和路径。
 3. 将下面的模板合并到**业务项目根目录**的 `AGENTS.md`。

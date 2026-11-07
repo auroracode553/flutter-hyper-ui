@@ -239,7 +239,8 @@ abstract final class HyperDialog {
 
     return showHyperModal<bool>(
       context,
-      builder: (dialogContext) => Padding(
+      builder: (dialogContext) => buildHySafeModalContent(
+        dialogContext,
         // 弹窗与屏幕边缘保持间距，宽屏时仍限制内容宽度。
         padding: const EdgeInsets.all(24),
         child: ConstrainedBox(

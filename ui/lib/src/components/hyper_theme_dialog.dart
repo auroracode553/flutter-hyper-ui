@@ -71,7 +71,8 @@ class HyperThemeDialog extends StatelessWidget {
         ),
       ),
     );
-    return Padding(
+    return buildHySafeModalContent(
+      context,
       padding: const EdgeInsets.all(24),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 420),

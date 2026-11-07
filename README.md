@@ -1,5 +1,7 @@
 # Hyper UI · Flutter Hyper UI
 
+菜单、Tooltip 和居中弹窗按窗口安全区约束内容，遮罩与背景保持整屏。文档手机预览向根 Overlay 传递顶部 Insets，不裁短 Flutter 视口；普通示例的首屏净空只放进滚动内容。两端字段与提示面板在无有效玻璃采样时保留稳定主题底色。
+
 Dropdown / PopupMenu 分别保留浮层外框 5 与行内水平 14 留白；无语义配色的 filled 与 icon 共用中性玻璃着色。主题三态选择使用 HyperThemeDialog。
 
 HyperDrawer 内部使用 HyperSafeArea 保护顶部标题、关闭按钮及正文，背景保持全高；抽屉列表行保留左右各 14 的内容留白，不需要业务重复包顶部安全区。
