@@ -234,9 +234,13 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-safe-area', 'HyperSafeArea', 'component_safe_area_example.dart', 440, '方向、系统区与嵌套交互。', 'SafeAreaComponentExample'),
       }),
-      component('HyperPageContentSliver', 'hyper_page_content.dart', '页面内容 sliver：统一内容边距，宽屏（桌面/平板）下居中限宽，手机端占满。可放入 CustomScrollView。', {
+      component('HyperPageContentSliver / HyperPageSection', 'hyper_page_content.dart', '统一页面留白、分组与列表间距；固定区和弹层内自动复用已有留白，滚动区支持懒加载与宽屏限宽。', {
         propsDocs: [
-          { name: 'child', description: '页面内容' },
+          { name: 'child', description: '普通 sliver 或固定内容区的主体' },
+          { name: 'children', description: 'sections 的页面分组或 Section.column 的固定区子项；间距分别由库提供 16 / 8' },
+          { name: 'sliver', description: 'sliver 构造器的按需构建内容，保留原有滚动生命周期' },
+          { name: 'itemCount / itemBuilder', description: 'list 构造器的条目数量与按需构建回调；条目间距默认 8' },
+          { name: 'bottomObstruction', description: '滚动末尾的额外业务遮挡避让，默认 0，不修改页面默认边距' },
           { name: 'padding', description: '内容区边距，默认 EdgeInsets.fromLTRB(16, 12, 16, 40)' },
           { name: 'maxWidth', description: '宽屏下居中内容的最大宽度，默认 800；手机端屏幕更窄时不生效' },
         ],
@@ -600,7 +604,7 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'dismissOnBackPress', description: '系统返回键关闭，默认 true' },
           { name: 'gesturesEnabled', description: '允许横向滑动关闭，默认 true' },
         ],
-        preview: demo('component-drawer', 'HyperDrawer 抽屉', 'component_feedback_examples.dart', 460, '右侧抽屉返回值、左侧抽屉与底部操作区。', 'DrawerComponentExample'),
+        preview: demo('component-drawer', 'HyperDrawer 抽屉', 'component_feedback_examples.dart', 460, '顶部安全区、选中行内留白、右侧返回值与左侧底部操作区。', 'DrawerComponentExample'),
       }),
       component('HyperActionSheet / HyperAction', 'hyper_action_sheet.dart', '竖直滑入滑出的自定义底部弹层与操作菜单，支持危险项和禁用项。', {
         propsDocs: [

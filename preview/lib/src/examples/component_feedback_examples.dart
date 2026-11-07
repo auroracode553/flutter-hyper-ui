@@ -74,7 +74,7 @@ class DrawerComponentExample extends StatefulWidget {
 class _DrawerComponentExampleState extends State<DrawerComponentExample> {
   String _result = '尚未选择';
 
-  /// 右侧抽屉：选择后通过 Navigator.pop 返回泛型结果。
+  /// 右侧抽屉：核对顶部避让与选中行内留白，选择后返回泛型结果。
   Future<void> _openEnd() async {
     final result = await HyperDrawer.show<String>(
       context,
@@ -86,6 +86,7 @@ class _DrawerComponentExampleState extends State<DrawerComponentExample> {
           for (final label in const ['产品设计', '移动端', '文档站'])
             HyperListTile(
               title: label,
+              selected: _result == label,
               showChevron: true,
               onPressed: () => Navigator.pop(drawerContext, label),
             ),

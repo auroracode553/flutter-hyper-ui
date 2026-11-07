@@ -107,32 +107,28 @@ class PageContentComponentExample extends StatelessWidget {
             ),
             child: CustomScrollView(
               slivers: [
-                HyperPageContentSliver(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 10,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: const [
-                      HyperListTile(
-                        leadingIcon: LucideIcons.star,
-                        leadingColor: Color(0xFFF59E0B),
-                        title: '第一项',
-                        subtitle: '统一边距',
-                      ),
-                      HyperListTile(
-                        leadingIcon: LucideIcons.heart,
-                        leadingColor: Color(0xFFEF4444),
-                        title: '第二项',
-                        subtitle: '宽屏自动居中限宽',
-                      ),
-                      HyperListTile(
-                        leadingIcon: LucideIcons.settings,
-                        leadingColor: Color(0xFF6B7280),
-                        title: '第三项',
-                        subtitle: '手机端占满宽度',
-                      ),
-                    ],
-                  ),
+                HyperPageContentSliver.list(
+                  itemCount: 3,
+                  itemBuilder: (context, index) => const [
+                    HyperListTile(
+                      leadingIcon: LucideIcons.star,
+                      leadingColor: Color(0xFFF59E0B),
+                      title: '第一项',
+                      subtitle: '统一边距',
+                    ),
+                    HyperListTile(
+                      leadingIcon: LucideIcons.heart,
+                      leadingColor: Color(0xFFEF4444),
+                      title: '第二项',
+                      subtitle: '宽屏自动居中限宽',
+                    ),
+                    HyperListTile(
+                      leadingIcon: LucideIcons.settings,
+                      leadingColor: Color(0xFF6B7280),
+                      title: '第三项',
+                      subtitle: '手机端占满宽度',
+                    ),
+                  ][index],
                 ),
               ],
             ),

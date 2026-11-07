@@ -46,7 +46,8 @@ export 'src/components/hyper_text_field.dart';
 export 'src/components/hyper_tone.dart';
 export 'src/components/hyper_nav_bar.dart';
 export 'src/components/hyper_scroll_gradient.dart';
-export 'src/components/hyper_page_content.dart';
+export 'src/components/hyper_page_content.dart'
+    show HyperPageSection, HyperPageContentSliver;
 export 'src/theme/hyper_ui_colors.dart';
 export 'src/theme/hyper_palette.dart';
 export 'src/theme/hyper_ui_context.dart';

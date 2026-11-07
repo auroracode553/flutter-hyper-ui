@@ -263,7 +263,7 @@ HyperNumberStepper 的加减、HyperPagination 的上一页和下一页只指定
 | [HyperMenuGroup](../components/menu-group.md) | hyper_lists.dart | 圆角 18，外层绘制一次材质，内部条目由缩进分隔线分开；标题和说明在表面外，不额外包每行卡片 |
 | [HyperEmptyState](../components/empty-state.md) | hyper_empty_state.dart | 可选 56 图标容器、标题、说明和 action 插槽；不替调用方创建动作或加载业务数据 |
 | [HyperSkeleton](../components/skeleton.md) | hyper_layout.dart | text / card，默认 rows 3；灰色占位和动画用于加载状态，不是按钮灰底 |
-| [HyperPageContentSliver](../components/page-content-sliver.md) | hyper_page_content.dart | CustomScrollView 内容 sliver；默认 padding 为 16 / 12 / 16 / 40，居中最大宽 800，不自行管理页面导航 |
+| [HyperPageContentSliver / HyperPageSection](../components/page-content-sliver.md) | hyper_page_content.dart | 滚动页默认留白 16 / 12 / 16 / 40、限宽 800；sections 组间距 16、list 项间距 8；固定区 Section 默认水平 16、垂直 12，column 项间距 8。嵌套内容和 ActionSheet 内自动复用父级留白，业务页不重复包 Padding 或覆写默认值；bottomObstruction 只负责额外业务遮挡 |
 
 ### 表单与选择
 
@@ -376,6 +376,8 @@ utils/hyper_utils.dart 提供 HyperScreen、HyperKeyboard、HyperSafeArea、Hype
 - 没有显式作用域的普通 Scaffold，由 Navbar 内部订阅最近的 ScrollNotificationObserver，框架将初始/恢复/尺寸指标通知转换成滚动通知；仅处理 depth=0 的竖向视口。显式作用域与 source 优先，不重复订阅；绑定变化时清理旧观察者，帧尾合并状态，只重建导航。WebView 的滚动不属于该通道，不擅自添加业务 Bridge 监听。自动感知不新增渲染盒，不改正文或底栏布局。
 - 两端导航背景均从屏幕顶部覆盖状态栏，安全区在背景内部，只有标题与按钮避让。Android 文档预览注入模拟系统 Insets，导航与正文共用同一来源；不得把模拟留白放到整个导航栏外部，也不得在正文重复累加。
 - 保留现有 RTL、字体缩放、键盘焦点及减少动画处理；不为统一外观删掉这些分支。内部共享按压反馈不决定组件外观。
+
+抽屉顶部统一由 HyperSafeArea 保护标题、关闭按钮与正文，不依赖根全面屏开关；背景铺满窗口，调用方不重复补顶部净空。抽屉只标记共用表面，不接管行内留白，HyperListTile 继续保留左右各 14；选中底色不删除，其他组件的表面与留白规则不随之改变。
 
 ## 两端对齐与维护验证
 

@@ -69,63 +69,73 @@ class _DrawerSurfaceState extends State<_DrawerSurface>
             math.max(0.0, constraints.maxWidth - 56),
           );
           final body = HyperSurfaceScope(
+            // 抽屉背景不提供行内留白，列表行保留自身左右缩进与选中底色。
+            sharesHorizontalPadding: false,
             child: HyperControlSurface(
               radius: 0,
               role: HyperControlSurfaceRole.drawer,
               child: Padding(
                 padding: MediaQuery.viewInsetsOf(context),
                 child: SafeArea(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (widget.title != null)
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                            16,
-                            8,
-                            8,
-                            8,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  widget.title!,
-                                  style: TextStyle(
-                                    color: tokens.foreground,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
+                  top: false,
+                  child: HyperSafeArea(
+                    edge: HyperSafeAreaEdge.top,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (widget.title != null)
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                              16,
+                              8,
+                              8,
+                              8,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    widget.title!,
+                                    style: TextStyle(
+                                      color: tokens.foreground,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              HyperButton(
-                                type: 'icon',
-                                icon: LucideIcons.x,
-                                tooltip: '关闭',
-                                onPressed: _close,
-                              ),
-                            ],
+                                HyperButton(
+                                  type: 'icon',
+                                  icon: LucideIcons.x,
+                                  tooltip: '关闭',
+                                  onPressed: _close,
+                                ),
+                              ],
+                            ),
                           ),
+                        Expanded(
+                          child: widget.scrollable
+                              ? SingleChildScrollView(
+                                  padding: widget.contentPadding,
+                                  child: Builder(
+                                    builder: widget.contentBuilder,
+                                  ),
+                                )
+                              : Padding(
+                                  padding: widget.contentPadding,
+                                  child: Builder(
+                                    builder: widget.contentBuilder,
+                                  ),
+                                ),
                         ),
-                      Expanded(
-                        child: widget.scrollable
-                            ? SingleChildScrollView(
-                                padding: widget.contentPadding,
-                                child: widget.contentBuilder(context),
-                              )
-                            : Padding(
-                                padding: widget.contentPadding,
-                                child: widget.contentBuilder(context),
-                              ),
-                      ),
-                      if (widget.footerBuilder != null) ...[
-                        const HyperDivider(),
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: widget.footerBuilder!(context),
-                        ),
+                        if (widget.footerBuilder != null) ...[
+                          const HyperDivider(),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Builder(builder: widget.footerBuilder!),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),

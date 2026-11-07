@@ -20,6 +20,14 @@
 
 独立顶部渐变使用 [HyperScrollGradient](../components/scroll-gradient.md)，Navbar 共用同一实现和主滚动作用域，不采样正文。HyperNavBar.type 仅区分 standard（标准操作行）和 simple（真实状态栏/挖孔，无标题与操作行）；standard 的内容布局由 layout 选择。首屏净空只进入滚动内容，不增加永久占位。
 
+## 统一页面内容留白
+
+普通滚动页面使用 `CustomScrollView` 与 `HyperPageContentSliver.sections`，只传页面分组；数据列表使用 `.list`，仅传条目数量与构建回调。需要直接承接 `SliverList`、`SliverGrid` 时使用 `.sliver`。不要在各页覆写 padding，也不要复制 EdgeInsets 或仅将数字换成令牌。
+
+固定筛选区、侧栏相邻控件在共同父级使用一次 `HyperPageSection.column`；单块固定内容使用 `HyperPageSection`。卡片、菜单、字段和按钮的内部边距使用组件默认值。库内内容区和 ActionSheet 会标记已经提供的留白，嵌套内容自动复用，不重复叠加。
+
+`bottomObstruction` 仅传入固定业务控件造成的额外滚动末尾遮挡，不能用来调整装饰边距。系统安全区、键盘、树形层级缩进继续由相应机制负责。
+
 ## 接入顺序
 
 1. 先完成上面的必读顺序，再按[快速开始](./getting-started.md)接入依赖、HyperUiTheme 和应用全局全面屏。

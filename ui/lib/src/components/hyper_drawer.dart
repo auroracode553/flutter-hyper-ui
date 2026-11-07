@@ -11,6 +11,7 @@ import 'hyper_button.dart';
 import 'hyper_control_surface.dart';
 import 'hyper_glass_source.dart';
 import 'hyper_layout.dart';
+import 'hyper_safe_area.dart';
 import 'hyper_surface_scope.dart';
 
 part 'hyper_drawer_surface.dart';
@@ -20,6 +21,7 @@ enum HyperDrawerPlacement { start, end }
 
 /// 贴边全高的模态抽屉；内容与返回结果由调用方提供。
 abstract final class HyperDrawer {
+  /// 展开抽屉，标题、关闭按钮和正文由内部顶部安全区统一保护。
   static Future<T?> show<T>(
     BuildContext context, {
     required WidgetBuilder contentBuilder,

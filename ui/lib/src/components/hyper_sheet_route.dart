@@ -6,6 +6,7 @@ import 'hyper_glass.dart';
 import 'hyper_control_surface.dart';
 import 'hyper_surface_scope.dart';
 import 'hyper_modal.dart';
+import 'hyper_page_content.dart';
 
 /// 内部底部面板路由：动作面板与日期选择复用尺寸、滚动、IME 和退出生命周期。
 Future<T?> showHySheet<T>(
@@ -70,7 +71,7 @@ Future<T?> showHySheet<T>(
                               ),
                             ),
                           ),
-                        builder(sheetContext),
+                        HyperPageInsetScope(child: builder(sheetContext)),
                       ],
                     ),
                   ),

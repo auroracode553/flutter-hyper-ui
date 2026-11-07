@@ -2,6 +2,8 @@
 
 Dropdown / PopupMenu 分别保留浮层外框 5 与行内水平 14 留白；无语义配色的 filled 与 icon 共用中性玻璃着色。主题三态选择使用 HyperThemeDialog。
 
+HyperDrawer 内部使用 HyperSafeArea 保护顶部标题、关闭按钮及正文，背景保持全高；抽屉列表行保留左右各 14 的内容留白，不需要业务重复包顶部安全区。
+
 [Button](vitepress/components/button.md)、[TabBar](vitepress/components/tab-bar.md)、[Slider](vitepress/components/slider.md)、[Switch](vitepress/components/switch.md) 与 [Dialog](vitepress/components/dialog.md) 内置固定玻璃表面，TabBar 点击时整栏保持原比例，保留镜片轻微放大与短回弹（横向增幅最多 8%）、拖动偏移回正，仅变换绘制层。TabBar 栏内限制 2–5 项，栏外最多另放一个独立入口；两端示例以 Kotlin 文档为基准，默认左右留白 12、镜片默认可见高 48；TabBar 外缘使用与 Kotlin 相同的 0.5 描边和高光；保持 48/56 的底栏规格、20 的滑块直径与现有弹窗尺寸。
 
 Switch 保留 52×32 轨道与 28 静止滑块，轨道采用 Button 共用的主题色/中性玻璃、滑块轻透白色；保留 1.5 倍弹性扩张、速度形变、Ambient 与横向拖动吸附。
