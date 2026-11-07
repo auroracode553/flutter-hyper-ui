@@ -84,9 +84,13 @@ class HyperListTile extends StatelessWidget {
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
       constraints: const BoxConstraints(minHeight: 46),
-      // 仅复用父表面时共享其留白，独立平铺行仍保护选中背景内的内容。
+      // 表面复用与留白分别判断，浮层的外框间距不替代选中背景内的内容留白。
       padding: EdgeInsets.symmetric(
-        horizontal: plain && hasParentSurface ? 0 : 14,
+        horizontal: plain &&
+                hasParentSurface &&
+                HyperSurfaceScope.sharesPadding(context)
+            ? 0
+            : 14,
         vertical: 8,
       ),
       decoration: BoxDecoration(

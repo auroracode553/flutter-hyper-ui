@@ -157,8 +157,10 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
     return anchor.localToGlobal(Offset.zero, ancestor: overlay) & anchor.size;
   }
 
+  /// 浮层只提供外框间距，列表行继续保留独立的内容缩进。
   Widget _surface(Widget child) => widget.fixedGlass
       ? HyperSurfaceScope(
+          sharesHorizontalPadding: false,
           child: HyperControlSurface(
             radius: 18,
             role: HyperControlSurfaceRole.panel,
@@ -169,7 +171,10 @@ class _HyperAnchoredSurfaceState extends State<_HyperAnchoredSurface>
           radius: 18,
           type: 'prominent',
           padding: widget.padding,
-          child: child,
+          child: HyperSurfaceScope(
+            sharesHorizontalPadding: false,
+            child: child,
+          ),
         );
 
   @override

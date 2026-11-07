@@ -162,6 +162,7 @@ class DropdownComponentExample extends StatefulWidget {
 }
 
 class _DropdownComponentExampleState extends State<DropdownComponentExample> {
+  // 切换选项时核对选中背景内左右各 14 留白，浮层外框继续保持 5。
   String? _value = 'recent';
   String? _owner;
   int _pageSize = 20;

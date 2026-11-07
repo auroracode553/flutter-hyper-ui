@@ -18,7 +18,7 @@ class _ButtonsExampleState extends State<ButtonsExample> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 文字按钮默认按内容收缩。
+        // 文字按钮默认按内容收缩；与图标、无语义色 filled 共用中性玻璃着色。
         Wrap(
           spacing: HyperUiSpacing.xs,
           runSpacing: HyperUiSpacing.xs,

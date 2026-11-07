@@ -69,7 +69,7 @@ class HyperPopupMenu<T> extends StatelessWidget {
     width: measureHyperMenuWidth(
       context,
       labels: actions.map((action) => action.label),
-      horizontalSpace: actions.any((action) => action.icon != null) ? 84 : 38,
+      horizontalSpace: actions.any((action) => action.icon != null) ? 114 : 68,
     ),
     maxHeight: MediaQuery.sizeOf(context).height * .4,
     padding: const EdgeInsets.all(5),

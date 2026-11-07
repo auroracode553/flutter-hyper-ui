@@ -7,6 +7,8 @@ description: Hyper UI 按钮组件
 
 ## 默认样式
 
+未指定 color / colorStyle 的 filled 与 icon 使用同一中性玻璃着色；显式语义色或背景覆盖仍按调用方配置绘制。文字、图标和加载环共用前景与按压链路。
+
 交互预览按 Kotlin ButtonDemo 的分组、文案、图标和 8/16 间距展示，仅保留一个禁用文字按钮。点击默认按钮可切换“处理中”的加载状态；处理中按钮在加载时拦截点击，空闲时点击再次进入加载。
 
 省略 type 时采用中性玻璃按钮，主操作显式使用 filled 与 colorStyle = primary；另一种显示类型为 icon；语义配色由 colorStyle 指定 primary、success、info、warning、danger。关闭和取消不需要传 type。

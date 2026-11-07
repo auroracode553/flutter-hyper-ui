@@ -1,5 +1,7 @@
 # UI 样式与功能实现基线
 
+锚定菜单的 5 外框留白不替代行内容留白：Dropdown / PopupMenu 保留左右各 14 的行内缩进及选中背景。无语义配色的 filled 按钮与 icon 共用中性玻璃着色，显式语义色和自定义背景继续保留。
+
 普通设置菜单使用 HyperMenuGroup + HyperListTile 默认样式；独立文字标题由 Text 组合，菜单组 title 保持 14 字号、w700 排版。页面垂直留白 12、完整分组间距 16，分别读取 HyperUiSpacing.pageVertical / sectionVertical。业务预览与功能绘制独立保留。
 
 三选项主题设置统一使用 HyperThemeDialog：跟随系统、浅色、深色，36 最小行高、4 垂直内边距、21 圆环，无额外行间距或关闭按钮；普通 Radio 标签行与菜单行高保持独立。

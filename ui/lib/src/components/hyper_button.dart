@@ -214,7 +214,8 @@ class HyperButton extends StatelessWidget {
           color: disabled
               ? background
               : backgroundColor ??
-                    (variant == _ButtonVariant.filled
+                    (variant == _ButtonVariant.filled &&
+                            (color != null || colorStyle != null)
                         ? background.withValues(alpha: background.a * 0.9)
                         : null),
           border: visual.border == null
