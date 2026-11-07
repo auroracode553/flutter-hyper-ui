@@ -10,6 +10,7 @@ import '../utils/hyper_progress_value.dart';
 import 'hyper_badge.dart';
 import 'hyper_button.dart';
 import 'hyper_control_surface.dart';
+import 'hyper_glass_source.dart';
 import 'hyper_layout.dart';
 import 'hyper_modal.dart';
 import 'hyper_navigation.dart';
@@ -190,7 +191,7 @@ class HyperUpdateDialog extends StatelessWidget {
     };
   }
 
-  /// 按窗口安全高度限制面板，正文内部滚动，底部操作保留在滚动区域之外。
+  /// 按窗口安全高度限制面板，固定页头和底部操作，仅中间正文滚动。
   @override
   Widget build(BuildContext context) {
     if (status == HyperUpdateStatus.idle) return const SizedBox.shrink();
@@ -206,6 +207,8 @@ class HyperUpdateDialog extends StatelessWidget {
         ? downloadProgress!.fraction
         : normalizeHyperProgress(progress);
     final media = MediaQuery.of(context);
+    // 面板继续采样页面；内部按钮只能采样独立录制的面板背景，不能跳过面板读取页面图案。
+    final pageSource = HyperGlassSourceScope.maybeOf(context);
     // 内嵌于页面滚动容器时也必须有高度上限；弹层父级更紧的约束继续生效。
     final panelMaxHeight = math.max(
       0.0,
@@ -223,63 +226,82 @@ class HyperUpdateDialog extends StatelessWidget {
           maxWidth: maxWidth,
           maxHeight: panelMaxHeight,
         ),
-        child: HyperControlSurface(
-          role: HyperControlSurfaceRole.dialog,
-          radius: HyperUiRadii.lg,
+        child: HyperBackdrop(
+          background: HyperControlSurface(
+            role: HyperControlSurfaceRole.dialog,
+            radius: HyperUiRadii.lg,
+            sources: [if (pageSource != null) pageSource],
+            child: const SizedBox.expand(),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // 日志与进度可以滚动，操作区固定在底部，长内容仍可直接更新。
+              // 页头独立于滚动区，长日志滚动后仍可关闭弹窗。
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  HyperUiSpacing.xl,
+                  HyperUiSpacing.xl,
+                  HyperUiSpacing.xl,
+                  HyperUiSpacing.lg,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        '软件更新',
+                        style: TextStyle(
+                          color: tokens.mutedForeground,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    if (!_locked && onClose != null)
+                      HyperButton(
+                        type: 'icon',
+                        icon: LucideIcons.x,
+                        tooltip: '关闭',
+                        onPressed: onClose,
+                      ),
+                  ],
+                ),
+              ),
               Flexible(
                 fit: FlexFit.loose,
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(HyperUiSpacing.xl),
+                  padding: const EdgeInsets.fromLTRB(
+                    HyperUiSpacing.xl,
+                    0,
+                    HyperUiSpacing.xl,
+                    HyperUiSpacing.xl,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '软件更新',
-                              style: TextStyle(
-                                color: tokens.mutedForeground,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          if (!_locked && onClose != null)
-                            HyperButton(
-                              type: 'icon',
-                              icon: LucideIcons.x,
-                              tooltip: '关闭',
-                              onPressed: onClose,
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: HyperUiSpacing.lg),
                       // 错误状态只展示具体原因，不重复状态图标、标题和版本信息。
                       if (!isError) ...<Widget>[
-                        Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: _UpdateEmblem(
-                            icon: _icon,
-                            color: color,
-                            busy: _busy,
-                          ),
-                        ),
-                        const SizedBox(height: HyperUiSpacing.lg),
-                        Text(
-                          title ?? _title,
-                          style: TextStyle(
-                            color: tokens.foreground,
-                            fontSize: 24,
-                            height: 1.2,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                title ?? _title,
+                                style: TextStyle(
+                                  color: tokens.foreground,
+                                  fontSize: 24,
+                                  height: 1.2,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: HyperUiSpacing.sm),
+                            _UpdateEmblem(
+                              icon: _icon,
+                              color: color,
+                              busy: _busy,
+                            ),
+                          ],
                         ),
                         const SizedBox(height: HyperUiSpacing.xs),
                       ],

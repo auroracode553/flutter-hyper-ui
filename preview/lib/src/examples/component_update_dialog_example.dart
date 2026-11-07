@@ -21,6 +21,18 @@ class _UpdateDialogComponentExampleState
   /// 是否展示超出窗口高度的日志，用于核对面板内部滚动。
   bool _longContent = false;
 
+  /// 内嵌面板的显隐独立于更新任务，稍后关闭不会重置下载状态。
+  bool _inlineVisible = true;
+
+  /// 收起内嵌预览，保留页面持有的更新任务。
+  void _closeInline() => setState(() => _inlineVisible = false);
+
+  /// 使用已有状态标签恢复内嵌预览并切换展示状态。
+  void _previewStatus(HyperUpdateStatus status) {
+    setState(() => _inlineVisible = true);
+    _controller.preview(status);
+  }
+
   Future<void> _open({bool latest = false, bool fail = false}) async {
     if (_dialogOpen) return;
     // 关闭后重新打开已有下载，不重新检查、不创建第二个任务。
@@ -30,7 +42,10 @@ class _UpdateDialogComponentExampleState
             _controller.status != HyperUpdateStatus.readyToInstall)) {
       _controller.check(latest: latest, fail: fail);
     }
-    setState(() => _dialogOpen = true);
+    setState(() {
+      _dialogOpen = true;
+      _inlineVisible = true;
+    });
     try {
       // 安全区使用真实模态入口验证，页面中的内嵌状态不代替窗口验证。
       await HyperUpdateDialog.show<void>(
@@ -143,7 +158,7 @@ class _UpdateDialogComponentExampleState
                 type: 'tag',
                 label: _label(status),
                 selected: _controller.status == status,
-                onPressed: () => _controller.preview(status),
+                onPressed: () => _previewStatus(status),
               ),
           ],
         ),
@@ -169,7 +184,7 @@ class _UpdateDialogComponentExampleState
         const SizedBox(height: HyperUiSpacing.lg),
         HyperListTile(
           title: '长更新日志',
-          subtitle: '在弹窗内滚动查看完整日志，底部操作保持可见',
+          subtitle: '页头和操作固定，正文内滚动查看完整日志',
           trailing: HyperSwitch(
             value: _longContent,
             onChanged: _dialogOpen
@@ -178,7 +193,11 @@ class _UpdateDialogComponentExampleState
           ),
         ),
         const SizedBox(height: HyperUiSpacing.lg),
-        Align(alignment: Alignment.topCenter, child: _dialog()),
+        if (_inlineVisible)
+          Align(
+            alignment: Alignment.topCenter,
+            child: _dialog(onClose: _closeInline),
+          ),
         const SizedBox(height: HyperUiSpacing.sm),
         const HyperText(
           '示例任务由页面持有。关闭弹窗后下载继续，重新打开可查看进度；取消按钮终止下载。',
