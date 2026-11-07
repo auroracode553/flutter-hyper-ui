@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -188,6 +190,7 @@ class HyperUpdateDialog extends StatelessWidget {
     };
   }
 
+  /// 按窗口安全高度限制面板，正文内部滚动，底部操作保留在滚动区域之外。
   @override
   Widget build(BuildContext context) {
     if (status == HyperUpdateStatus.idle) return const SizedBox.shrink();
@@ -202,12 +205,24 @@ class HyperUpdateDialog extends StatelessWidget {
     final amount = downloading && downloadProgress != null
         ? downloadProgress!.fraction
         : normalizeHyperProgress(progress);
+    final media = MediaQuery.of(context);
+    // 内嵌于页面滚动容器时也必须有高度上限；弹层父级更紧的约束继续生效。
+    final panelMaxHeight = math.max(
+      0.0,
+      media.size.height -
+          media.viewPadding.top -
+          math.max(media.viewPadding.bottom, media.viewInsets.bottom) -
+          HyperUiSpacing.lg * 2,
+    );
 
     // 安装过程与必要更新不允许通过返回键绕过；完成后恢复关闭能力。
     return PopScope(
       canPop: !_locked,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth),
+        constraints: BoxConstraints(
+          maxWidth: maxWidth,
+          maxHeight: panelMaxHeight,
+        ),
         child: HyperControlSurface(
           role: HyperControlSurfaceRole.dialog,
           radius: HyperUiRadii.lg,

@@ -18,6 +18,9 @@ class _UpdateDialogComponentExampleState
   bool _mandatory = false;
   bool _dialogOpen = false;
 
+  /// 是否展示超出窗口高度的日志，用于核对面板内部滚动。
+  bool _longContent = false;
+
   Future<void> _open({bool latest = false, bool fail = false}) async {
     if (_dialogOpen) return;
     // 关闭后重新打开已有下载，不重新检查、不创建第二个任务。
@@ -43,10 +46,22 @@ class _UpdateDialogComponentExampleState
     }
   }
 
+  /// 复用同一组短日志或长日志验证内嵌面板与真实弹层。
   HyperUpdateDialog _dialog({VoidCallback? onClose}) => HyperUpdateDialog(
     status: _controller.status,
     currentVersion: _controller.currentVersion,
-    release: UpdateDemoController.release,
+    release: _longContent
+        ? HyperUpdateRelease(
+            version: UpdateDemoController.release.version,
+            releaseDate: UpdateDemoController.release.releaseDate,
+            sizeLabel: UpdateDemoController.release.sizeLabel,
+            highlights: [
+              ...UpdateDemoController.release.highlights,
+              for (var index = 1; index <= 20; index++)
+                '更新说明 $index：优化功能与交互细节，向下滚动可查看全部日志。',
+            ],
+          )
+        : UpdateDemoController.release,
     progress: _controller.installProgress,
     downloadProgress: _controller.status == HyperUpdateStatus.downloading
         ? _controller.downloadProgress
@@ -149,6 +164,17 @@ class _UpdateDialogComponentExampleState
           trailing: HyperSwitch(
             value: _controller.unknownTotal,
             onChanged: _controller.setUnknownTotal,
+          ),
+        ),
+        const SizedBox(height: HyperUiSpacing.lg),
+        HyperListTile(
+          title: '长更新日志',
+          subtitle: '在弹窗内滚动查看完整日志，底部操作保持可见',
+          trailing: HyperSwitch(
+            value: _longContent,
+            onChanged: _dialogOpen
+                ? null
+                : (value) => setState(() => _longContent = value),
           ),
         ),
         const SizedBox(height: HyperUiSpacing.lg),

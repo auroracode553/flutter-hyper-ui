@@ -1,5 +1,7 @@
 # Hyper UI · Flutter Hyper UI
 
+UpdateDialog 的模态与内嵌面板均按窗口安全高度收缩；长日志在面板内上下滚动，底部操作固定。预览提供「长更新日志」开关。
+
 菜单、Tooltip 和居中弹窗按窗口安全区约束内容，遮罩与背景保持整屏。文档手机预览向根 Overlay 传递顶部 Insets，不裁短 Flutter 视口；普通示例的首屏净空只放进滚动内容。两端字段与提示面板在无有效玻璃采样时保留稳定主题底色。
 
 Dropdown / PopupMenu 分别保留浮层外框 5 与行内水平 14 留白；无语义配色的 filled 与 icon 共用中性玻璃着色。主题三态选择使用 HyperThemeDialog。
