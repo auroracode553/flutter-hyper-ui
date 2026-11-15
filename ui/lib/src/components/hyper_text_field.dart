@@ -227,6 +227,8 @@ class _HyperTextFieldState extends State<HyperTextField>
       ),
       cursorColor: tokens.primary,
       backgroundCursorColor: tokens.mutedForeground,
+      // EditableText 不继承 TextField 的选区颜色；缺省时拖选存在但不可见。
+      selectionColor: tokens.primary.withValues(alpha: 0.25),
       keyboardType: widget.keyboardType ?? _keyboardTypeFor(widget.type),
       textInputAction:
           widget.textInputAction ?? _textInputActionFor(widget.type),
