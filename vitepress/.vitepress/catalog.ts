@@ -203,17 +203,18 @@ export const componentGroups: ComponentGroup[] = [
       }),
       component('HyperCard', 'hyper_card.dart', '默认无描边、使用双层柔阴影，具有标题、操作区、正文、底部和选中态的内容容器。', {
         propsDocs: [
-          { name: 'child', description: '正文内容组件' },
+          { name: 'child', description: '正文内容组件；HyperCard.expanded 必填，在有限高度中占用标题和底部以外的剩余空间' },
           { name: 'title', description: '标题' },
           { name: 'subtitle', description: '副标题' },
           { name: 'leading', description: '前置组件' },
           { name: 'actions', description: '操作区组件列表，默认空数组' },
           { name: 'footer', description: '底部组件' },
-          { name: 'padding', description: '内边距' },
+          { name: 'padding', description: '内边距，默认四边 HyperUiSpacing.cardPadding（16）' },
           { name: 'onPressed', description: '点击回调' },
+          { name: 'onLongPressed', description: '长按回调' },
           { name: 'selected', description: '是否选中，默认 false' },
         ],
-        preview: demo('component-card', 'HyperCard 结构', 'component_surface_examples.dart', 560, '完整结构、选中态与无标题纯内容。', 'CardComponentExample'),
+        preview: demo('component-card', 'HyperCard 结构', 'component_surface_examples.dart', 860, '完整结构、选中态、纯内容与弹性正文。', 'CardComponentExample'),
       }),
     ],
   },
@@ -783,9 +784,9 @@ export const componentGroups: ComponentGroup[] = [
         ],
         preview: demo('component-progress', 'HyperProgress 进度', 'component_navigation_examples.dart', 360, '线性粗细、环形和不定进度。', 'ProgressComponentExample'),
       }),
-      component('HyperListTile', 'hyper_list_tile.dart', '支持图标、头像、标签、元信息和自定义尾部；独立行保留水平 14dp 内边距，复用父表面时共享留白。', {
+      component('HyperListTile', 'hyper_list_tile.dart', '支持图标、头像、标签、元信息和自定义尾部；独立、分组、卡片及弹层内始终保留水平 14dp 行内留白。', {
         propsDocs: [
-          { name: 'type', description: '表面类型：auto / plain / glass，默认 auto；独立 plain 行保留水平内边距，组内 plain 行共享父表面留白' },
+          { name: 'type', description: '表面类型：auto / plain / glass，默认 auto；父表面只影响绘制，所有形态保留水平 14dp 行内留白' },
           { name: 'title', description: '标题' },
           { name: 'subtitle', description: '副标题' },
           { name: 'meta', description: '元信息文字' },
@@ -798,15 +799,16 @@ export const componentGroups: ComponentGroup[] = [
           { name: 'enabled', description: '是否启用，默认 true' },
           { name: 'showChevron', description: '是否显示右箭头，默认 true' },
         ],
-        preview: demo('component-list-tile', 'HyperListTile 列表项', 'component_navigation_examples.dart', 400, '基础、选中/禁用与自定义插槽（showChevron）。', 'ListTileComponentExample'),
+        preview: demo('component-list-tile', 'HyperListTile 列表项', 'component_navigation_examples.dart', 800, '独立、分组及卡片内的选中/未选中行，内容留白与插槽。', 'ListTileComponentExample'),
       }),
-      component('HyperMenuGroup', 'hyper_lists.dart', '设置页、个人中心和详情页通用的玻璃分组菜单，水平留白由调用方统一提供。', {
+      component('HyperMenuGroup', 'hyper_lists.dart', '设置页、个人中心和详情页通用的分组菜单，外框四边 4dp，行内内容留白独立保留。', {
         propsDocs: [
-          { name: 'children', description: 'HyperListTile 等分组内容' },
+          { name: 'children', description: '默认构造的 HyperListTile 等分组内容' },
+          { name: 'sliver', description: 'HyperMenuGroup.sliver 必填，接收懒加载 SliverList 或 SliverGrid，共用一层表面；分隔线与键由调用方管理' },
           { name: 'title', description: '分组标题' },
           { name: 'subtitle', description: '分组副标题' },
         ],
-        preview: demo('component-menu-group', 'HyperMenuGroup 分组菜单', 'component_navigation_examples.dart', 420, '只展示设置页式分组菜单。', 'MenuGroupComponentExample'),
+        preview: demo('component-menu-group', 'HyperMenuGroup 分组菜单', 'component_navigation_examples.dart', 420, '通过 sliver 构造展示与普通菜单组一致的表面和留白。', 'MenuGroupComponentExample'),
       }),
       component('HyperSlideMenu / HyperSlideAction', 'hyper_slide_menu.dart', '支持 RTL、速度投影、弹簧吸附与边界阻尼的侧滑菜单。', {
         propsDocs: [

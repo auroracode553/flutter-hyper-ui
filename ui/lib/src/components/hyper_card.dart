@@ -11,24 +11,34 @@ import '../theme/hyper_surface_theme.dart';
 class HyperCard extends StatelessWidget {
   /// 承载的正文内容。
   final Widget? child;
+
   /// 标题文字。
   final String? title;
+
   /// 副标题文字。
   final String? subtitle;
+
   /// 前置自定义内容。
   final Widget? leading;
+
   /// 标题右侧的操作组件。
   final List<Widget> actions;
+
   /// 底部补充内容。
   final Widget? footer;
+
   /// 内容内边距。
   final EdgeInsetsGeometry padding;
+
   /// 点击时触发，可独立于长按启用。
   final VoidCallback? onPressed;
+
   /// 长按卡片时触发，可独立于点击启用。
   final VoidCallback? onLongPressed;
+
   /// 是否显示选中状态。
   final bool selected;
+  final bool _expandChild;
 
   /// 创建内容卡片，点击与长按回调由调用方注入。
   const HyperCard({
@@ -43,7 +53,24 @@ class HyperCard extends StatelessWidget {
     this.onPressed,
     this.onLongPressed,
     this.selected = false,
-  });
+  }) : _expandChild = false;
+
+  /// 在有限高度中撑满卡片，标题与底部固定，仅正文占用剩余空间。
+  /// 正文可直接承接 ListView 或由 Expanded 组成的业务工作区。
+  const HyperCard.expanded({
+    super.key,
+    required Widget child,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions = const [],
+    this.footer,
+    this.padding = const EdgeInsets.all(HyperUiSpacing.cardPadding),
+    this.onPressed,
+    this.onLongPressed,
+    this.selected = false,
+  }) : child = child,
+       _expandChild = true;
 
   /// 是否需要展示卡片标题区域。
   bool get _hasHeader {
@@ -61,13 +88,14 @@ class HyperCard extends StatelessWidget {
     final content = Padding(
       padding: padding,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: _expandChild ? MainAxisSize.max : MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_hasHeader) _buildHeader(context),
           if (_hasHeader && child != null)
             const SizedBox(height: HyperUiSpacing.sm),
-          if (child != null) child!,
+          if (child != null)
+            if (_expandChild) Expanded(child: child!) else child!,
           if (footer != null) ...[
             const SizedBox(height: HyperUiSpacing.sm),
             HyperDivider(color: tokens.border),

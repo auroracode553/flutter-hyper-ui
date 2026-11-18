@@ -38,30 +38,43 @@ class HyperListTile extends StatelessWidget {
 
   /// 组件形态。
   final String type;
+
   /// 标题文字。
   final String title;
+
   /// 副标题文字。
   final String? subtitle;
+
   /// 补充元信息文字。
   final String? meta;
+
   /// 前置自定义内容。
   final Widget? leading;
+
   /// 前置图标。
   final IconData? leadingIcon;
+
   /// 前置图标颜色。
   final Color? leadingColor;
+
   /// 标题颜色。
   final Color? titleColor;
+
   /// 尾部自定义内容。
   final Widget? trailing;
+
   /// 点击时触发，可独立于长按启用。
   final VoidCallback? onPressed;
+
   /// 长按行时触发，禁用时停止通知。
   final VoidCallback? onLongPressed;
+
   /// 是否显示选中状态。
   final bool selected;
+
   /// 是否允许交互。
   final bool enabled;
+
   /// 是否在可点击时显示右侧箭头。
   final bool showChevron;
 
@@ -84,15 +97,9 @@ class HyperListTile extends StatelessWidget {
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
       constraints: const BoxConstraints(minHeight: 46),
-      // 表面复用与留白分别判断，浮层的外框间距不替代选中背景内的内容留白。
-      padding: EdgeInsets.symmetric(
-        horizontal: plain &&
-                hasParentSurface &&
-                HyperSurfaceScope.sharesPadding(context)
-            ? 0
-            : 14,
-        vertical: 8,
-      ),
+      // 父级只接管表面绘制，不能取消选中背景内部的内容留白。
+      // 所有状态使用相同间距，切换选中时文字和尾部操作不移动。
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: selected ? glass.selection : HyperPalette.transparent,
         borderRadius: radius,
@@ -180,7 +187,7 @@ class HyperListTile extends StatelessWidget {
       showBorder: selected,
       padding: const EdgeInsets.symmetric(vertical: 3),
       onPressed: enabled ? onPressed : null,
-        onLongPressed: enabled ? onLongPressed : null,
+      onLongPressed: enabled ? onLongPressed : null,
       color: selected ? glass.surfaceStrong : null,
       borderColor: selected ? tokens.primary.withAlpha(90) : null,
       child: row,

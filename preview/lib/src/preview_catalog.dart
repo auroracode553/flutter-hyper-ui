@@ -238,7 +238,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-card',
       title: 'HyperCard',
-      description: '单一卡片的内容结构。',
+      description: '普通卡片与有限高度中的弹性正文、固定底部。',
       loadLibrary: () => example_component_surface_examples.loadLibrary(),
       builder: (_) => example_component_surface_examples.CardComponentExample(),
     ),
@@ -403,7 +403,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-list-tile',
       title: 'HyperListTile',
-      description: '列表项的常见状态，水平留白由预览宿主统一提供。',
+      description: '独立、分组与卡片内的列表行，始终保留 14dp 行内留白。',
       loadLibrary: () => example_component_navigation_examples.loadLibrary(),
       builder: (_) =>
           example_component_navigation_examples.ListTileComponentExample(),
@@ -411,7 +411,7 @@ class PreviewCatalog {
     PreviewItem(
       id: 'component-menu-group',
       title: 'HyperMenuGroup',
-      description: '设置页式分组菜单，标题和行不叠加水平缩进。',
+      description: '懒加载分组与选中切换，行内留白独立于共用表面。',
       loadLibrary: () => example_component_navigation_examples.loadLibrary(),
       builder: (_) =>
           example_component_navigation_examples.MenuGroupComponentExample(),

@@ -69,8 +69,7 @@ class _DrawerSurfaceState extends State<_DrawerSurface>
             math.max(0.0, constraints.maxWidth - 56),
           );
           final body = HyperSurfaceScope(
-            // 抽屉背景不提供行内留白，列表行保留自身左右缩进与选中底色。
-            sharesHorizontalPadding: false,
+            // 共用背景不改变列表行的内容留白与选中底色。
             child: HyperControlSurface(
               radius: 0,
               role: HyperControlSurfaceRole.drawer,

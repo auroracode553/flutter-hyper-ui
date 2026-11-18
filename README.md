@@ -221,3 +221,5 @@ HyperTabBar 尺寸由库按形态管理：single 独立入口固定直径 48 逻
 页面水平外边距由调用方统一提供。独立 plain 行和独立 glass 行保留左右各 14dp 的行内留白；仅在 HyperMenuGroup 或已有表面作用域中复用父表面的 plain 行不叠加水平留白。列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留水平 14dp、垂直 4dp。
 
 Checkbox、Radio、DatePicker、Tabs、Drawer、Dropdown、Toast、Progress 与 UpdateDialog 按角色复用内部固定玻璃，尺寸与状态归属保持稳定；Tabs 与确定进度采用临界阻尼弹簧，Toast 保留退出绘制。参数与平台回退见各组件页。
+
+HyperListTile 在独立、分组、卡片及弹层中都保留左右各 14dp 的行内留白。共用表面只避免重复绘制卡片，不消费选中背景内部的内容留白；选中和未选中行保持同样的内容位置。HyperMenuGroup 外框四边均为 4dp，与行内内容留白分别负责。

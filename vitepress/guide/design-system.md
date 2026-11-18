@@ -62,6 +62,10 @@ UpdateDialog 的高度同时服从父级约束和窗口安全高度（系统区�
 
 `HyperMenuGroup` 绘制一次外层表面，内部 `HyperListTile` 自动只绘制状态；其他分组表面内可用 `HyperListTile(type: 'plain', ...)`。
 
+Flutter 长列表可使用 HyperMenuGroup.sliver 承接原生 SliverList / SliverGrid，保持同一分组表面和默认留白。条目按需构建，分隔线与稳定键由调用方提供；这是 Flutter 布局入口，不改变普通菜单组或其他平台的默认样式。
+
+Flutter 中需要撑满有限高度的卡片使用 HyperCard.expanded，标题与 footer 保持固定，child 通过框架 Expanded 占用剩余空间，可承接 ListView 或聊天工作区。普通 HyperCard 继续按内容收缩；两种布局共用相同材质、圆角、默认内边距、分隔线和选中态。
+
 实色表面来自内部 theme/hyper_surface_theme.dart：surface、surfaceStrong、surfaceSubtle 均不透明；没有全局材质档位或表面透明度配置。Button 等指定控件的固定玻璃独立于普通表面令牌。语义颜色来自 HyperUiThemeTokens，表面层级不承担业务含义。
 
 HyperUiTheme.app 默认跟随系统亮暗，基准文字为 14、行高 1.4，基准图标为 24。内部表面层级仅控制实色层次与阴影，默认圆角为 24；subtle 不带默认阴影，高对比时强化边框。
@@ -400,7 +404,7 @@ HyperTabBar 独立入口与导航的外缘使用与 Kotlin 相同的 0.5 描边�
 按需安全区统一使用 HyperSafeArea（top / bottom），竖屏底部采用系统区与库内最小 20 的最大值，横屏只避实际底部系统区；同侧嵌套不会重复占位，根画布继续全面屏。组件不会改变键盘或业务控件高度。
 
 
-页面水平外边距由调用方统一提供。独立 plain 行和独立 glass 行保留左右各 14dp 的行内留白；仅在 HyperMenuGroup 或已有表面作用域中复用父表面的 plain 行不叠加水平留白。列表行保留垂直 8dp，独立表面保留垂直 3dp，菜单组保留水平 14dp、垂直 4dp。
+页面水平外边距由调用方统一提供。HyperListTile 的 auto、plain 与 glass 行均保留左右各 14dp、垂直 8dp 的内容留白，选中和未选中使用相同布局。HyperMenuGroup、HyperCard、折叠面板及弹层仅复用表面绘制，不取消行内留白；分组外框统一使用四边各 4dp 留白保护行背景边缘，不能替代选中背景内部的内容留白。独立表面的额外垂直留白仍为 3dp。
 
 固定玻璃的取样宿主为 HyperBackdrop。背景源在绘制后的帧尾录制，节点重绘时更新，销毁后释放图像；镜片不包含在源内，避免递归。原生与 Web 使用 Flutter FragmentProgram 执行同一圆弧折射和七波段色散。若着色器加载失败，保留取样图像、表面与交互。录制与镜片参数均不改变布局、命中或回调。
 

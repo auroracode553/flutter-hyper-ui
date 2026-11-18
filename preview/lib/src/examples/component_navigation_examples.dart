@@ -47,6 +47,24 @@ class ListTileComponentExample extends StatelessWidget {
           trailing: HyperBadge(type: 'tag', label: '管理员'),
           showChevron: false,
         ),
+        const SizedBox(height: HyperUiSpacing.md),
+        _label('组内选中与未选中行（行内留白保持一致）'),
+        HyperMenuGroup(
+          children: [
+            HyperListTile(title: '已选择的项目', selected: true, onPressed: () {}),
+            HyperListTile(title: '其他项目', onPressed: () {}),
+          ],
+        ),
+        const SizedBox(height: HyperUiSpacing.md),
+        _label('卡片内选中行（父表面不取消行内留白）'),
+        HyperCard(
+          child: HyperListTile(
+            title: '卡片中的选中行',
+            selected: true,
+            leadingIcon: LucideIcons.circleCheckBig,
+            onPressed: () {},
+          ),
+        ),
       ],
     );
   }
@@ -54,32 +72,46 @@ class ListTileComponentExample extends StatelessWidget {
 // end-doc-region ListTileComponentExample
 
 // doc-region MenuGroupComponentExample
-class MenuGroupComponentExample extends StatelessWidget {
-  // 标题与组内行、分隔线共用宿主水平留白。
+class MenuGroupComponentExample extends StatefulWidget {
   const MenuGroupComponentExample({super.key});
 
   @override
+  State<MenuGroupComponentExample> createState() =>
+      _MenuGroupComponentExampleState();
+}
+
+class _MenuGroupComponentExampleState extends State<MenuGroupComponentExample> {
+  int _selected = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return const HyperMenuGroup(
-      title: '设置',
-      subtitle: '账户与应用偏好',
-      children: [
-        HyperListTile(
-          title: '账户与安全',
-          subtitle: '密码、设备与登录记录',
-          leadingIcon: LucideIcons.shield,
-        ),
-        HyperListTile(
-          title: '外观与显示',
-          subtitle: '主题、字号与动态效果',
-          leadingIcon: LucideIcons.palette,
-        ),
-        HyperListTile(
-          title: '关于',
-          meta: 'v1.0.0',
-          leadingIcon: LucideIcons.info,
-        ),
-      ],
+    return SizedBox(
+      height: 300,
+      child: CustomScrollView(
+        primary: false,
+        slivers: [
+          HyperMenuGroup.sliver(
+            title: '设置',
+            subtitle: '账户与应用偏好',
+            sliver: SliverList.separated(
+              itemCount: 3,
+              separatorBuilder: (_, _) => const HyperDivider(),
+              itemBuilder: (_, index) => HyperListTile(
+                title: const ['账户与安全', '外观与显示', '关于'][index],
+                subtitle: const ['密码、设备与登录记录', '主题、字号与动态效果', null][index],
+                meta: index == 2 ? 'v1.0.0' : null,
+                leadingIcon: const [
+                  LucideIcons.shield,
+                  LucideIcons.palette,
+                  LucideIcons.info,
+                ][index],
+                selected: _selected == index,
+                onPressed: () => setState(() => _selected = index),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

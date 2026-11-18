@@ -45,6 +45,21 @@ class CardComponentExample extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         const HyperCard(child: Text('没有标题与副标题时，卡片只作为内容容器使用。')),
+        const SizedBox(height: HyperUiSpacing.lg),
+        _label('有限高度中的弹性正文与固定底部'),
+        SizedBox(
+          height: 220,
+          child: HyperCard.expanded(
+            title: '弹性正文',
+            footer: const Text('底部保持固定，正文独立滚动'),
+            child: ListView.builder(
+              primary: false,
+              itemCount: 12,
+              itemBuilder: (_, index) =>
+                  HyperListTile(title: '列表项 ${index + 1}'),
+            ),
+          ),
+        ),
       ],
     );
   }

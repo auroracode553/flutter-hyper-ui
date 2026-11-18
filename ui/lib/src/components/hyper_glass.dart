@@ -52,28 +52,57 @@ class HyperGlass extends StatelessWidget {
 
   /// 承载的正文内容。
   final Widget child;
+
   /// 内容内边距。
   final EdgeInsetsGeometry padding;
+
   /// 表面圆角半径。
   final double radius;
+
   /// 组件形态。
   final String type;
+
   /// 自定义语义基色。
   final Color? color;
+
   /// 显式边框颜色。
   final Color? borderColor;
+
   /// 是否显示普通边框。
   final bool showBorder;
+
   /// 显式覆盖的表面阴影。
   final List<BoxShadow>? shadows;
+
   /// 点击时触发，可独立于长按启用。
   final VoidCallback? onPressed;
+
   /// 长按表面时触发，可独立于点击启用。
   final VoidCallback? onLongPressed;
+
   /// 内容裁切方式。
   final Clip clipBehavior;
+
   /// 是否使用内容卡片阴影层级。
   final bool _isCard;
+
+  /// 普通卡片与懒加载分组共用材质；布局实现不复制主题配方。
+  static BoxDecoration cardDecoration(
+    BuildContext context, {
+    double radius = 24,
+  }) {
+    final glass = HyperSurfaceTheme.of(context);
+    final tokens = HyperUiThemeTokens.of(context);
+    final highContrast = MediaQuery.maybeOf(context)?.highContrast ?? false;
+    return BoxDecoration(
+      color: highContrast ? tokens.card : glass.surface,
+      borderRadius: BorderRadius.circular(radius),
+      border: highContrast
+          ? Border.all(color: tokens.foreground.withAlpha(150))
+          : null,
+      boxShadow: glass.cardShadows,
+    );
+  }
 
   /// 根据当前主题和参数构建组件界面。
   @override
@@ -96,13 +125,18 @@ class HyperGlass extends StatelessWidget {
             : Color.alphaBlend(glass.edgeShade, glass.edgeHighlight));
 
     Widget surface = DecoratedBox(
-      decoration: BoxDecoration(
-        color: surfaceColor,
-        borderRadius: shape,
-        border: showBorder || highContrast
-            ? Border.all(color: effectiveBorder)
-            : null,
-      ),
+      decoration: _isCard && color == null && borderColor == null && !showBorder
+          ? cardDecoration(
+              context,
+              radius: radius,
+            ).copyWith(boxShadow: const [])
+          : BoxDecoration(
+              color: surfaceColor,
+              borderRadius: shape,
+              border: showBorder || highContrast
+                  ? Border.all(color: effectiveBorder)
+                  : null,
+            ),
       child: HyperSurfaceScope(
         child: Padding(padding: padding, child: child),
       ),
